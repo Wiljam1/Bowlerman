@@ -72,7 +72,7 @@ PRIVATE void draw(Application theApp)
 
     for (int y = 0; y < WINDOW_HEIGHT; ++y)
     {
-	    if (y % 5)
+	    if (y % 2)
 	    {
 		    SDL_RenderDrawPoint(theApp->renderer, WINDOW_WIDTH / 2, y);
 	    }
