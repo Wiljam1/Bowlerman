@@ -10,7 +10,7 @@ int main(int argc, char *argv[]){
     SDL_Renderer* renderer;
     SDL_Window *window = SDL_CreateWindow("Hello SDL WORLD", 
     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT,
-    SDL_WINDOW_ALLOW_HIGHDPI)
+    SDL_WINDOW_ALLOW_HIGHDPI);
     // We must call SDL_CreateRenderer in order for draw calls to affect this window.
         renderer = SDL_CreateRenderer(window, -1, 0);
 
