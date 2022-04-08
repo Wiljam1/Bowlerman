@@ -9,7 +9,8 @@
 
 const int WIDTH = 800, HEIGHT = 600;
 
-int init(void){
+int init(void)
+{
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Renderer* renderer;
     SDL_Window *window = SDL_CreateWindow("Hello SDL WORLD", 
