@@ -1,9 +1,10 @@
 #include <stdio.h>
-#include "init.h"
+#include "application.h"
 
-int main(int argc, char *argv[]){
-    
-    init();
-
+int main()
+{
+    Application theApp = createApplication();
+    applicationUpdate(theApp);
+    destoryApplication(theApp);
     return 0;
 }
