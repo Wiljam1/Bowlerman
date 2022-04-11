@@ -36,6 +36,26 @@ PUBLIC Game createGame()
     return newGame;
 }
 
+PUBLIC void gameUpdate(Game newGame)
+{
+    bool keep_window_open = true;
+    while(keep_window_open)
+    {
+        while(SDL_PollEvent(&newGame->window_event) > 0)
+        {
+            SDL_Event test = newGame->window_event;
+            
+            switch(newGame->window_event.type)
+            {
+                case SDL_QUIT:
+                    keep_window_open = false;
+                    break;
+            }
+        }
+    }
+}
+
+
 PUBLIC void destoryGame(Game theGame)
 {
     SDL_DestroyRenderer(theGame->renderer);
