@@ -1,10 +1,7 @@
 #include <stdio.h>
-#include "application.h"
 
 int main()
-{
-    Application theApp = createApplication();
-    applicationUpdate(theApp);
-    destoryApplication(theApp);
+{ 
+    printf("Hello World.\n");
     return 0;
 }
