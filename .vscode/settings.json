@@ -1,5 +1,6 @@
 {
     "files.associations": {
         "sdl_image.h": "c"
-    }
+    },
+    "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }
