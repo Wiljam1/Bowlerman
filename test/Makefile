@@ -5,7 +5,7 @@ main.o:
 application.o:
 	gcc -c application.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 clean_windows:
-	rm *.o
+	del /Q /F main.exe *.o
 
 
 mac: main.o application.o 
