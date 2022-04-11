@@ -38,6 +38,7 @@ PUBLIC Game createGame()
     
     newGame->renderer = SDL_CreateRenderer(newGame->window, -1, 0);
     newGame->window_surface = SDL_GetWindowSurface(newGame->window);
+    loadMedia(newGame, "grass00.bmp");
     return newGame;
 }
 
