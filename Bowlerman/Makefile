@@ -6,7 +6,7 @@ game.o:
 	gcc -c game.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 clean_windows:
 	del /Q /F main.exe *.o
-
+	
 mac: main.o game.o 
 	gcc -o main main.o game.o -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
 main.o:
