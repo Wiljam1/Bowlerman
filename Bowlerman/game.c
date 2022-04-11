@@ -92,6 +92,7 @@ PRIVATE void updateMedia(Game newGame)
 
 PUBLIC void destroyGame(Game theGame)
 {
+    SDL_DestroyTexture(theGame->texture);
     SDL_DestroyRenderer(theGame->renderer);
     SDL_FreeSurface(theGame->window_surface);
     SDL_DestroyWindow(theGame->window);
