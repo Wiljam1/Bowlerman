@@ -7,7 +7,6 @@ game.o:
 clean_windows:
 	del /Q /F main.exe *.o
 
-
 mac: main.o game.o 
 	gcc -o main main.o game.o -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
 main.o:

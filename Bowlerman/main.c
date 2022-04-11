@@ -1,8 +1,11 @@
 #include <stdio.h>
+#include <SDL2/SDL.h>
 #include "game.h"
 
-int main()
+int main(int argc, char *argv[])
 { 
-    printf("Hello World.\n");
+    Game bowlerman = createGame();
+    SDL_Delay(20000);
+    destoryGame(bowlerman);
     return 0;
 }
