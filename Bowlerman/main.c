@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 { 
     Game bowlerman = createGame();
-    SDL_Delay(20000);
+    SDL_Delay(5000);        // Delay så fönstret inte stängs ner direkt.
     destoryGame(bowlerman);
     return 0;
 }

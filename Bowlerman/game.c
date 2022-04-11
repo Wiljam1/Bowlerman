@@ -23,7 +23,7 @@ PUBLIC Game createGame()
     Game newGame = malloc(sizeof(struct game_type));
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
-        printf("Failed to initialize the SDL2 library\n");
+        printf("Failed to initialize SDL2: %s\n", SDL_GetError());
     }
     newGame->window= SDL_CreateWindow("Bowlerman 0.1", 
                                        SDL_WINDOWPOS_CENTERED, 
