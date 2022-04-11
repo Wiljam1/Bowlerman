@@ -2,19 +2,24 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include "game.h"
 
 #define PUBLIC /* empty */
 #define PRIVATE static
+#define LENGTH 100
 
 const int HEIGHT = 1280;
 const int WIDTH = 720;
+
+PRIVATE void updateMedia(Game newGame);
 
 struct game_type
 {
     SDL_Window  *window;
     SDL_Surface *window_surface;
     SDL_Renderer *renderer;
+    SDL_Texture *texture;
     SDL_Event    window_event;
 };
 
@@ -52,11 +57,39 @@ PUBLIC void gameUpdate(Game newGame)
                     break;
             }
         }
+        updateMedia(newGame);
+        SDL_Delay(1000/60);
     }
 }
 
+PUBLIC int loadMedia(Game newGame, char fileLocation[])
+{
+    bool success = true;
 
-PUBLIC void destoryGame(Game theGame)
+    char finalDest[LENGTH+1] = "resources/";
+    //Create error-check here sometime in the future
+    strcat(finalDest, fileLocation);
+
+    newGame->window_surface = IMG_Load(finalDest);
+    if(newGame->window_surface == NULL)
+    {
+        printf("Failed to load surface! SDL_Error: %s\n", SDL_GetError());
+        success = false;
+    }
+    newGame->texture = SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
+    SDL_FreeSurface(newGame->window_surface);
+
+    return success;
+}
+
+PRIVATE void updateMedia(Game newGame)
+{
+    SDL_RenderClear(newGame->renderer);
+    SDL_RenderCopy(newGame->renderer, newGame->texture, NULL, NULL);
+    SDL_RenderPresent(newGame->renderer);
+}
+
+PUBLIC void destroyGame(Game theGame)
 {
     SDL_DestroyRenderer(theGame->renderer);
     SDL_FreeSurface(theGame->window_surface);

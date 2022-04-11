@@ -5,7 +5,8 @@
 int main(int argc, char *argv[])
 { 
     Game bowlerman = createGame();
-    SDL_Delay(2000);        // Delay så fönstret inte stängs ner direkt.
-    destoryGame(bowlerman);
+    loadMedia(bowlerman, "grass00.bmp");
+    gameUpdate(bowlerman);
+    destroyGame(bowlerman);
     return 0;
 }
