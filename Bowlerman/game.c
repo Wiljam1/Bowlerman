@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "game.h"
+#include "player.h"
 
 #define PUBLIC /* empty */
 #define PRIVATE static
@@ -19,7 +20,7 @@ struct game_type
     SDL_Window  *window;
     SDL_Surface *window_surface;
     SDL_Renderer *renderer;
-    SDL_Texture *texture;
+    SDL_Texture *background;
     SDL_Event    window_event;
 };
 
@@ -38,7 +39,11 @@ PUBLIC Game createGame()
     
     newGame->renderer = SDL_CreateRenderer(newGame->window, -1, 0);
     newGame->window_surface = SDL_GetWindowSurface(newGame->window);
-    loadMedia(newGame, "grass00.bmp");
+
+    loadBackground(newGame, "grass00.bmp");
+    
+    Player player1 = initPlayer();
+
     return newGame;
 }
 
@@ -63,22 +68,18 @@ PUBLIC void gameUpdate(Game newGame)
     }
 }
 
-PUBLIC int loadMedia(Game newGame, char fileLocation[])
+// INTE KLAR funktion!
+PUBLIC int loadMedia(Game newGame)
 {
     bool success = true;
 
-    char finalDest[LENGTH+1] = "resources/";
-    //Create error-check here sometime in the future
-    strcat(finalDest, fileLocation);
-
-    newGame->window_surface = IMG_Load(finalDest);
+    newGame->window_surface = IMG_Load("resources/grass00.bmp");
     if(newGame->window_surface == NULL)
     {
         printf("Failed to load surface! SDL_Error: %s\n", SDL_GetError());
         success = false;
     }
-    newGame->texture = SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
-    SDL_FreeSurface(newGame->window_surface);
+    newGame->background = SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
 
     return success;
 }
@@ -86,13 +87,14 @@ PUBLIC int loadMedia(Game newGame, char fileLocation[])
 PRIVATE void updateMedia(Game newGame)
 {
     SDL_RenderClear(newGame->renderer);
-    SDL_RenderCopy(newGame->renderer, newGame->texture, NULL, NULL);
+    SDL_RenderCopy(newGame->renderer, newGame->background, NULL, NULL);
+    //SDL_RenderCopy(newGame->renderer, newGame->player, destination, NULL);
     SDL_RenderPresent(newGame->renderer);
 }
 
 PUBLIC void destroyGame(Game theGame)
 {
-    SDL_DestroyTexture(theGame->texture);
+    SDL_DestroyTexture(theGame->background);
     SDL_DestroyRenderer(theGame->renderer);
     SDL_FreeSurface(theGame->window_surface);
     SDL_DestroyWindow(theGame->window);
