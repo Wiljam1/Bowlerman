@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 #include "game.h"
 #include "player.h"
@@ -69,7 +70,23 @@ PUBLIC void gameUpdate(Game newGame)
 }
 
 // INTE KLAR funktion!
-PUBLIC int loadMedia(Game newGame)
+PUBLIC int loadBackground(Game newGame, char fileLocation[])
+{
+    bool success = true;
+
+    newGame->window_surface = IMG_Load("resources/grass00.bmp");
+    if(newGame->window_surface == NULL)
+    {
+        printf("Failed to load surface! SDL_Error: %s\n", SDL_GetError());
+        success = false;
+    }
+    newGame->background = SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
+
+    return success;
+}
+
+// INTE KLAR funktion!
+PUBLIC int loadMedia(Game newGame, char fileLocation[])
 {
     bool success = true;
 

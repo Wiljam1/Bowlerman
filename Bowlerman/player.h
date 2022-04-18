@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 typedef struct playerController *Player;
-Player initPlayer();
+Player initPlayer(float xPos, float yPos);
 
 float getPlayerXPos(Player p);
 float getPlayerYPos(Player p);

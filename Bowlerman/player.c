@@ -1,5 +1,6 @@
 #include "player.h"
 #include "game.h"
+#include <stdlib.h>
 
 #define PUBLIC /* empty */
 #define PRIVATE static
