@@ -77,7 +77,7 @@ int processEvents(Game newGame)
     return keep_window_open;
 }
 
-PUBLIC void gameUpdate(Game newGame)
+PUBLIC void gameUpdate(Game newGame) //game loop
 {
     bool keep_window_open = true;
     while(keep_window_open)
