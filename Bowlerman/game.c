@@ -33,11 +33,10 @@ struct game_type
 }; 
 
 PRIVATE void createGameMedia(Game newGame){
-    newGame->background = loadBackground(newGame, "grass00.bmp");
+    newGame->background = (SDL_Texture *) loadBackground(newGame, "grass00.bmp");
     SDL_FreeSurface(newGame->window_surface);
-    newGame->player_texture = loadBackground(newGame, "pin2.png");
+    newGame->player_texture = (SDL_Texture *) loadBackground(newGame, "pin2.png");
     SDL_FreeSurface(newGame->window_surface);
-
 }
 
 PUBLIC Game createGame()
@@ -61,22 +60,31 @@ PUBLIC Game createGame()
     return newGame;
 }
 
+int processEvents(Game newGame)
+{
+    bool keep_window_open = true;
+    while(SDL_PollEvent(&newGame->window_event) > 0)
+    {
+        SDL_Event test = newGame->window_event;
+        
+        switch(newGame->window_event.type)
+        {
+            case SDL_QUIT:
+                keep_window_open = false;
+                break;
+        }
+    }
+    return keep_window_open;
+}
+
 PUBLIC void gameUpdate(Game newGame)
 {
     bool keep_window_open = true;
     while(keep_window_open)
     {
-        while(SDL_PollEvent(&newGame->window_event) > 0)
-        {
-            SDL_Event test = newGame->window_event;
-            
-            switch(newGame->window_event.type)
-            {
-                case SDL_QUIT:
-                    keep_window_open = false;
-                    break;
-            }
-        }
+        //Check for events
+        keep_window_open = processEvents(newGame);
+
         /*
         SDL_Rect playerRectangle;   //struct to hold the position and size of the sprite
         SDL_QueryTexture(newGame->background, NULL, NULL, &playerRectangle.w, &playerRectangle.h);  //get and scale the dimensions of texture
@@ -103,7 +111,7 @@ PUBLIC SDL_Texture *loadBackground(Game newGame, char fileLocation[])
 }
 
 //  KLAR funktion!
-PUBLIC SDL_Texture * loadMedia(Game newGame, char fileLocation[])
+PUBLIC int loadMedia(Game newGame, char fileLocation[])
 {
     bool success = true;
     char fileLocationInResources[100]="resources/";
