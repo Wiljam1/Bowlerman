@@ -8,46 +8,54 @@ int main(int argc, char *argv[])
     srand((int)time(NULL));
     TTF_Init(); //Init font system
     Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
-    GameState gameState;
+    GameState game;
     SDL_Window *window = SDL_CreateWindow("Game Window",            // Window title
                                         SDL_WINDOWPOS_UNDEFINED,        // x position
                                         SDL_WINDOWPOS_UNDEFINED,        // y pos
                                         WIDTH,                          // width in pixels
                                         HEIGHT,                         // height in pixels
                                         0);                             // flags
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    gameState.renderer = renderer;
-    loadGame(&gameState);
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    game.renderer = renderer;
+    loadGame(&game);
     //----------------------------------------------------------------------------------
     //Event/GAME loop
     bool done = false;
     while(!done)
     {
         //Check for events
-        done = processEvents(window, &gameState);
+        done = processEvents(window, &game);
 
-        process(&gameState);
-        collisionDetect(&gameState);
+        process(&game);
+        collisionDetect(&game);
 
         //Render display
-        doRender(renderer, &gameState);
+        doRender(renderer, &game);
 
         //Frames
         SDL_Delay(10);
     }
     //----------------------------------------------------------------------------------
+    //Clean up
+    closeGame(&game, window);
+
+    return EXIT_SUCCESS;
+}
+
+void closeGame(GameState *game, SDL_Window *window)
+{
     //Shutdown game and unload all memory
-    SDL_DestroyTexture(gameState.wall);
-    SDL_DestroyTexture(gameState.manFrames[0]);
-    SDL_DestroyTexture(gameState.manFrames[1]);
-    SDL_DestroyTexture(gameState.manFrames[2]);
-    SDL_DestroyTexture(gameState.manFrames[3]);
-    if(gameState.label != NULL)
-        TTF_CloseFont(gameState.font);
+    SDL_DestroyTexture(game->wall);
+    SDL_DestroyTexture(game->manFrames[0]);
+    SDL_DestroyTexture(game->manFrames[1]);
+    SDL_DestroyTexture(game->manFrames[2]);
+    SDL_DestroyTexture(game->manFrames[3]);
+    if(game->label != NULL)
+        TTF_CloseFont(game->font);
 
     //Close and destroy the window
     SDL_DestroyWindow(window);
-    SDL_DestroyRenderer(renderer);
+    SDL_DestroyRenderer(game->renderer);
 
     //Mix_FreeMusic(&gameState.bgMusic);
     //Mix_FreeChunk(&gameState.dieSound);
@@ -56,8 +64,6 @@ int main(int argc, char *argv[])
     TTF_Quit();
     Mix_CloseAudio();
     SDL_Quit();
-
-    return EXIT_SUCCESS;
 }
 
 void process(GameState *game) //Handle game logic (bomb explode??)
@@ -87,7 +93,7 @@ void collisionDetect(GameState *game)
 {
 
     for(int i = 0; i < WALLCOUNT/4; i++){
-        if(collide2d(game->man.x, game->man.y, game->bricks[i].x, game->bricks[i].y, MANSIZE, MANSIZE, WALLSIZE, WALLSIZE/2)){
+        if(collide2d(game->man.x, game->man.y, game->bricks[i].x, game->bricks[i].y, MANSIZE, MANSIZE, WALLSIZE, WALLSIZE)){
             game->man.isDead = true;
             //Mix_HaltChannel(game->musicChannel);
             break;
@@ -164,81 +170,15 @@ void loadGame(GameState *game)
 
     game->wall = loadImage(game, surface,"images/wall.png");
     game->alley = loadImage(game, surface, "images/alley.png");
-
-    // surface = IMG_Load("images/alley.png");
-    // if(surface == NULL){
-    //     printf("Error loading surface image!\n");
-    //     SDL_Quit();
-    //     exit(1);
-    // }
-    // game->alley = SDL_CreateTextureFromSurface(game->renderer, surface);
-    // SDL_FreeSurface(surface);
-
-    surface = IMG_Load("images/blood.png");
-    if(surface == NULL){
-        printf("Error loading surface image!\n");
-        SDL_Quit();
-        exit(1);
-    }
-    game->blood = SDL_CreateTextureFromSurface(game->renderer, surface);
+    game->blood = loadImage(game, surface, "images/blood.png");
+    game->brick = loadImage(game, surface, "images/brick.png");
+    game->pin = loadImage(game, surface, "images/pin.png");
+    game->manFrames[0] = loadImage(game, surface, "images/man-stand.png");
+    game->manFrames[1] = loadImage(game, surface, "images/man-run1.png");
+    game->manFrames[2] = loadImage(game, surface, "images/man-run2.png");
+    game->manFrames[3] = loadImage(game, surface, "images/man-run3.png");
     SDL_FreeSurface(surface);
 
-    //Load brick texture
-    surface = IMG_Load("images/brick.png");
-    if(surface == NULL){
-        printf("Error loading brick image!\n");
-        SDL_Quit();
-        exit(1);
-    }
-    game->brick = SDL_CreateTextureFromSurface(game->renderer, surface);
-    SDL_FreeSurface(surface);
-
-    surface = IMG_Load("images/pin.png");
-    if(surface == NULL){
-        printf("Error loading brick image!\n");
-        SDL_Quit();
-        exit(1);
-    }
-    game->pin = SDL_CreateTextureFromSurface(game->renderer, surface);
-    SDL_FreeSurface(surface);
-
-    //Load running man and create texture
-    surface = IMG_Load("images/man-stand.png");
-    if(surface == NULL){
-        printf("Error loading surface image!\n");
-        SDL_Quit();
-        exit(1);
-    }
-    game->manFrames[0] = SDL_CreateTextureFromSurface(game->renderer, surface);
-    SDL_FreeSurface(surface);
-    ////////////////////////////////
-    surface = IMG_Load("images/man-run1.png");
-    if(surface == NULL){
-        printf("Error loading surface image!\n");
-        SDL_Quit();
-        exit(1);
-    }
-    game->manFrames[1] = SDL_CreateTextureFromSurface(game->renderer, surface);
-    SDL_FreeSurface(surface);
-    ///////////////////////////////////
-    surface = IMG_Load("images/man-run2.png");
-    if(surface == NULL){
-        printf("Error loading surface image!\n");
-        SDL_Quit();
-        exit(1);
-    }
-    game->manFrames[2] = SDL_CreateTextureFromSurface(game->renderer, surface);
-    SDL_FreeSurface(surface);
-    ///////////////////////////////////
-    surface = IMG_Load("images/man-run3.png");
-    if(surface == NULL){
-        printf("Error loading surface image!\n");
-        SDL_Quit();
-        exit(1);
-    }
-    game->manFrames[3] = SDL_CreateTextureFromSurface(game->renderer, surface);
-    SDL_FreeSurface(surface);
-    ///////////////////////////////////
     game->font = TTF_OpenFont("fonts/Restoe Iboe.ttf", 48);
     if(!game->font){
         printf("Error loading font!\n");
@@ -272,24 +212,24 @@ void loadGame(GameState *game)
             game->walls[i].y = HEIGHT-WALLSIZE;
         }
         else if(i < 40){
-            game->walls[i].x = i*WALLSIZE-1280;
+            game->walls[i].x = i*WALLSIZE-WIDTH;
             game->walls[i].y = 0;
         }
         else if(i < 60){
             game->walls[i].x = 0;
-            game->walls[i].y = i*WALLSIZE-2560;
+            game->walls[i].y = i*WALLSIZE-WIDTH*2;
         }
         else if(i < 80){
             game->walls[i].x = WIDTH-WALLSIZE;
-            game->walls[i].y = i*WALLSIZE-3840;
+            game->walls[i].y = i*WALLSIZE-WIDTH*3;
         }
         else{
             game->walls[i].x = rand() % WIDTH - 128;
             game->walls[i].y = rand() % HEIGHT - 128;
         }
     }
-    //Init bricks
-    for(int i = 0; i < WALLCOUNT/8; i++){
+    //Init pins
+    for(int i = 0; i < WALLCOUNT/10; i++){
         game->bricks[i].w = WALLSIZE;
         game->bricks[i].h = WALLSIZE;
         game->bricks[i].x = rand() % WIDTH - 128;
@@ -333,6 +273,7 @@ bool processEvents(SDL_Window *window, GameState *game)
         }
     }
 
+    //OLD MOVEMENT UNDER HERE
     // const Uint8 *state = SDL_GetKeyboardState(NULL);
     // if(state[SDL_SCANCODE_LEFT] && game->man.canMoveLeft == true){
     //     game->man.x -= SPEED;
@@ -439,6 +380,7 @@ void doRender(SDL_Renderer *renderer, GameState *game)
             SDL_RenderCopyEx(renderer, game->blood, NULL, &rect, 0, NULL, (game->time%40<10));
         }
 
+        //Homemade scuffed animation
         static int animationTick = 0, frame = 0;
         static bool flip = false;
         SDL_RenderCopyEx(renderer, game->manFrames[frame], NULL, &rect, 0, NULL, (flip));

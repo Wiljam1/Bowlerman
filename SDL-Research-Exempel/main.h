@@ -84,5 +84,6 @@ void process(GameState *game);
 int collide2d(float x1, float y1, float x2, float y2, float wt1, float ht1, float wt2, float ht2);
 void collisionDetect(GameState *game);
 void doRender(SDL_Renderer *renderer, GameState *game);
+void closeGame(GameState *game, SDL_Window *window);
 
 #endif
