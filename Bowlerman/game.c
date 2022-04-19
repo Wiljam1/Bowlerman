@@ -11,8 +11,8 @@
 #define PRIVATE static
 #define LENGTH 100
 
-const int HEIGHT = 1280;
-const int WIDTH = 720;
+const int WIDTH = 800; 
+const int HEIGHT = 450;
 
 PRIVATE void updateMedia(Game newGame);
 
@@ -22,6 +22,7 @@ struct game_type
     SDL_Surface *window_surface;
     SDL_Renderer *renderer;
     SDL_Texture *background;
+    SDL_Texture *player_texture;
     SDL_Event    window_event;
 };
 
@@ -35,16 +36,16 @@ PUBLIC Game createGame()
     newGame->window= SDL_CreateWindow("Bowlerman 0.1", 
                                        SDL_WINDOWPOS_CENTERED, 
                                        SDL_WINDOWPOS_CENTERED, 
-                                       HEIGHT, WIDTH, 
+                                       WIDTH, HEIGHT, 
                                        SDL_WINDOW_SHOWN);
     
-    newGame->renderer = SDL_CreateRenderer(newGame->window, -1, 0);
+    newGame->renderer = SDL_CreateRenderer(newGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     newGame->window_surface = SDL_GetWindowSurface(newGame->window);
 
-    loadBackground(newGame, "grass00.bmp");
+    newGame->background= loadBackground(newGame, "grass00.bmp");
+    //newGame->player_texture = loadBackground(newGame, "pin2.jpg");
     
-    Player player1 = initPlayer();
-
+    Player player1 = initPlayer(500, 500);   //x and y coordinates
     return newGame;
 }
 
@@ -64,8 +65,18 @@ PUBLIC void gameUpdate(Game newGame)
                     break;
             }
         }
+        /*
+        SDL_Surface* surface = IMG_Load("resources/pin.jpg");
+        SDL_Texture* tex = SDL_CreateTextureFromSurface(rend, surface);
+        SDL_FreeSurface(surface);
+
+        SDL_Rect playerRectangle;   //struct to hold the position and size of the sprite
+        SDL_QueryTexture(newGame->background, NULL, NULL, &playerRectangle.w, &playerRectangle.h);  //get and scale the dimensions of texture
+        playerRectangle.w /=7;                             //scales down width by 7
+        playerRectangle.h /=7;                             //scales down height by 7
+*/
         updateMedia(newGame);
-        SDL_Delay(1000/60);
+        SDL_Delay(1000/60); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
 }
 
@@ -73,24 +84,24 @@ PUBLIC void gameUpdate(Game newGame)
 PUBLIC int loadBackground(Game newGame, char fileLocation[])
 {
     bool success = true;
-
-    newGame->window_surface = IMG_Load("resources/grass00.bmp");
+    char fileLocationInResources[100]="resources/";
+    strcat(fileLocationInResources, fileLocation);
+    newGame->window_surface = IMG_Load(fileLocationInResources);
     if(newGame->window_surface == NULL)
     {
         printf("Failed to load surface! SDL_Error: %s\n", SDL_GetError());
         success = false;
     }
-    newGame->background = SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
-
-    return success;
+    return SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);;
 }
 
 // INTE KLAR funktion!
 PUBLIC int loadMedia(Game newGame, char fileLocation[])
 {
     bool success = true;
-
-    newGame->window_surface = IMG_Load("resources/grass00.bmp");
+    char fileLocationInResources[100]="resources/";
+    strcat(fileLocationInResources, fileLocation);
+    newGame->window_surface = IMG_Load(fileLocationInResources);
     if(newGame->window_surface == NULL)
     {
         printf("Failed to load surface! SDL_Error: %s\n", SDL_GetError());

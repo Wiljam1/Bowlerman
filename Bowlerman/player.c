@@ -15,6 +15,7 @@ struct playerController
     float xPos;
     float yPos;
     float speed;
+    //SDL_Rect playerRectangle;   //struct to hold the position and size of the sprite
 };
 
 PUBLIC Player initPlayer(float xPos, float yPos)
