@@ -136,43 +136,43 @@ void collisionDetect(GameState *game)
     }
 }
 
-// void loadImage(GameState *game, GameState *texture, char imgLocation[STRSIZE])
-// {
-//     //Load images and create rendering textures from them
-//     SDL_Surface *surface = NULL;
-//     surface = IMG_Load(imgLocation);
-//     if(surface == NULL){
-//         printf("Error loading surface image!\n SDL_Error: %s\n", SDL_GetError());
-//         SDL_Quit();
-//         exit(1);
-//     }
-//     game->tex = //?????
-//     SDL_FreeSurface(surface);
-// }
+SDL_Texture *loadImage(GameState *game, SDL_Surface *surface, char imgLocation[STRSIZE])
+{
+    //Load images and create rendering textures from them
+    surface = IMG_Load(imgLocation);
+    if(surface == NULL){
+        printf("Error loading surface image!\n SDL_Error: %s\n", SDL_GetError());
+        SDL_Quit();
+        exit(1);
+    }
+    return SDL_CreateTextureFromSurface(game->renderer, surface);
+    SDL_FreeSurface(surface);
+}
 
 void loadGame(GameState *game)
 {
     SDL_Surface *surface = NULL;
-    //Load images and create rendering textures from them
-    surface = IMG_Load("images/wall.png");
-    if(surface == NULL){
-        printf("Error loading surface image!\n");
-        SDL_Quit();
-        exit(1);
-    }
-    game->wall = SDL_CreateTextureFromSurface(game->renderer, surface);
-    SDL_FreeSurface(surface);
+    // //Load images and create rendering textures from them
+    // surface = IMG_Load("images/wall.png");
+    // if(surface == NULL){
+    //     printf("Error loading surface image!\n");
+    //     SDL_Quit();
+    //     exit(1);
+    // }
+    // game->wall = SDL_CreateTextureFromSurface(game->renderer, surface);
+    // SDL_FreeSurface(surface);
 
-    //game->wall = loadImage(&game, game->wall, "images/wall.png");
+    game->wall = loadImage(game, surface,"images/wall.png");
+    game->alley = loadImage(game, surface, "images/alley.png");
 
-    surface = IMG_Load("images/alley.png");
-    if(surface == NULL){
-        printf("Error loading surface image!\n");
-        SDL_Quit();
-        exit(1);
-    }
-    game->alley = SDL_CreateTextureFromSurface(game->renderer, surface);
-    SDL_FreeSurface(surface);
+    // surface = IMG_Load("images/alley.png");
+    // if(surface == NULL){
+    //     printf("Error loading surface image!\n");
+    //     SDL_Quit();
+    //     exit(1);
+    // }
+    // game->alley = SDL_CreateTextureFromSurface(game->renderer, surface);
+    // SDL_FreeSurface(surface);
 
     surface = IMG_Load("images/blood.png");
     if(surface == NULL){

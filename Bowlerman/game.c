@@ -15,16 +15,30 @@ const int WIDTH = 800;
 const int HEIGHT = 450;
 
 PRIVATE void updateMedia(Game newGame);
+PRIVATE void createGameMedia(Game newGame);
 
 struct game_type
 {
     SDL_Window  *window;
     SDL_Surface *window_surface;
+
+    //Renderer
     SDL_Renderer *renderer;
+
+    //Images
     SDL_Texture *background;
     SDL_Texture *player_texture;
+    
     SDL_Event    window_event;
-};
+}; 
+
+PRIVATE void createGameMedia(Game newGame){
+    newGame->background = loadBackground(newGame, "grass00.bmp");
+    SDL_FreeSurface(newGame->window_surface);
+    newGame->player_texture = loadBackground(newGame, "pin2.png");
+    SDL_FreeSurface(newGame->window_surface);
+
+}
 
 PUBLIC Game createGame()
 {
@@ -42,9 +56,7 @@ PUBLIC Game createGame()
     newGame->renderer = SDL_CreateRenderer(newGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     newGame->window_surface = SDL_GetWindowSurface(newGame->window);
 
-    newGame->background= loadBackground(newGame, "grass00.bmp");
-    //newGame->player_texture = loadBackground(newGame, "pin2.jpg");
-    
+    createGameMedia(newGame);
     Player player1 = initPlayer(500, 500);   //x and y coordinates
     return newGame;
 }
@@ -66,22 +78,17 @@ PUBLIC void gameUpdate(Game newGame)
             }
         }
         /*
-        SDL_Surface* surface = IMG_Load("resources/pin.jpg");
-        SDL_Texture* tex = SDL_CreateTextureFromSurface(rend, surface);
-        SDL_FreeSurface(surface);
-
         SDL_Rect playerRectangle;   //struct to hold the position and size of the sprite
         SDL_QueryTexture(newGame->background, NULL, NULL, &playerRectangle.w, &playerRectangle.h);  //get and scale the dimensions of texture
         playerRectangle.w /=7;                             //scales down width by 7
         playerRectangle.h /=7;                             //scales down height by 7
 */
         updateMedia(newGame);
-        SDL_Delay(1000/60); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
+        SDL_Delay(10); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
 }
 
-// INTE KLAR funktion!
-PUBLIC int loadBackground(Game newGame, char fileLocation[])
+PUBLIC SDL_Texture *loadBackground(Game newGame, char fileLocation[])
 {
     bool success = true;
     char fileLocationInResources[100]="resources/";
@@ -92,11 +99,11 @@ PUBLIC int loadBackground(Game newGame, char fileLocation[])
         printf("Failed to load surface! SDL_Error: %s\n", SDL_GetError());
         success = false;
     }
-    return SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);;
+    return SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
 }
 
-// INTE KLAR funktion!
-PUBLIC int loadMedia(Game newGame, char fileLocation[])
+//  KLAR funktion!
+PUBLIC SDL_Texture * loadMedia(Game newGame, char fileLocation[])
 {
     bool success = true;
     char fileLocationInResources[100]="resources/";
@@ -123,6 +130,7 @@ PRIVATE void updateMedia(Game newGame)
 PUBLIC void destroyGame(Game theGame)
 {
     SDL_DestroyTexture(theGame->background);
+    SDL_DestroyTexture(theGame->player_texture);
     SDL_DestroyRenderer(theGame->renderer);
     SDL_FreeSurface(theGame->window_surface);
     SDL_DestroyWindow(theGame->window);
