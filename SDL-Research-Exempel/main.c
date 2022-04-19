@@ -78,8 +78,6 @@ void process(GameState *game) //Handle game logic (bomb explode??)
 
     //Only do stuff here if game is on
     if(game->statusState == STATUS_STATE_GAME && !game->man.isDead){
-        //man things
-        Man *man = &game->man;
         
     }
 }
@@ -87,6 +85,48 @@ void process(GameState *game) //Handle game logic (bomb explode??)
 int collide2d(float x1, float y1, float x2, float y2, float wt1, float ht1, float wt2, float ht2)
 {
     return (!((x1 > (x2+wt2)) || (x2 > (x1+wt1)) || (y1 > (y2+ht2)) || (y2 > (y1+ht1))));
+}
+
+bool checkCollision(SDL_Rect a, SDL_Rect b)
+{
+    //The sides of the rectangles
+    int leftA, leftB, rightA, rightB, topA, topB, bottomA, bottomB;
+
+    //Calculate the sides of rect A
+    leftA = a.x;
+    rightA = a.x + a.w;
+    topA = a.y;
+    bottomA = a.y + a.h;
+
+    //Calculate the sides of rect B
+    leftB = b.x;
+    rightB = b.x + b.w;
+    topB = b.y;
+    bottomB = b.y + b.h;
+
+    //If any of the sides from A are outside of B
+    if( bottomA <= topB )
+    {
+        return false;
+    }
+
+    if( topA >= bottomB )
+    {
+        return false;
+    }
+
+    if( rightA <= leftB )
+    {
+        return false;
+    }
+
+    if( leftA >= rightB )
+    {
+        return false;
+    }
+
+    //If none of the sides from A are outside B
+    return true;
 }
 
 void collisionDetect(GameState *game)
@@ -99,44 +139,76 @@ void collisionDetect(GameState *game)
             break;
         }
     }
+    // //Check for collision with any walls or if went too far left or right (Lazyfoo Lesson 27)
+    // for(int i = 0; i < WALLCOUNT; i++){
+    //     if( (game->man.x < 0) || (game->man.x + MANSIZE > WIDTH) || (checkCollision(game->man.collisionBox, game->walls[i].collisionBox)) ){
+    //         //Move back
+    //         game->man.x -= SPEED;
+    //         game->man.collisionBox.x = game->man.x;
+    //     }
+    // }
 
     //Check for collision with any walls
     for(int i = 0; i < WALLCOUNT; i++)
     {
-        float mw = MANSIZE, mh = MANSIZE;
-        float mx = game->man.x, my = game->man.y;
-        float wx = game->walls[i].x, wy = game->walls[i].y, 
-              ww = game->walls[i].w, wh = game->walls[i].h;
+        float mW = MANSIZE, mH = MANSIZE;
+        float mX = game->man.x, mY = game->man.y;
+        float wX = game->walls[i].x, wY = game->walls[i].y, 
+              wW = game->walls[i].w, wH = game->walls[i].h;
 
-        if(my+mh > wy && my < wy+wh){
+        if(mY+mH > wY && mY < wY+wH){
             //Rubbing against right edge
-            if(mx < wx+ww && mx+mw > wx+ww){
+            if(mX < wX+wW && mX+mW > wX+wW){
                 //Correct x
-                game->man.x = wx+ww;
-                mx = wx+ww;
-                //game->man.canMoveRight = false;
+                //game->man.x = wX+wW;
+                if(game->man.isMovingDiagonal == true){
+                    game->man.x +=DIAGSPEED;
+                    game->man.y +=DIAGSPEED;
+                }
+                else
+                    game->man.x +=SPEED;
+                mX = wX+wW;
+                printf("Right Edge\n");
             }
             //Rubbing against left edge
-            else if(mx+mw > wx && mx < wx){
+            else if(mX+mW > wX && mX < wX){
                 //Correct x
-                game->man.x = wx-mw;
-                mx = wx-mw;
-                //game->man.canMoveLeft = false;
+                //game->man.x = wX-mW;
+                if(game->man.isMovingDiagonal == true){
+                    game->man.x -=DIAGSPEED;
+                    game->man.y -=DIAGSPEED;
+                }
+                else
+                    game->man.x -=SPEED;
+                mX = wX-mW;
+                printf("Left Edge\n");
             }
         }
 
-        if(mx+mw > wx && mx < wx+ww){
+        if(mX+mW > wX && mX < wX+wW){
             //Are we bumping our head?
-            if(my < wy+wh && my > wy){
+            if(mY < wY+wH && mY > wY){
                 //correct y
-                game->man.y = wy+wh;
-                //game->man.canMoveUp = false;
+                //game->man.y = wY+wH;
+                if(game->man.isMovingDiagonal == true){
+                    game->man.x +=DIAGSPEED;
+                    game->man.y +=DIAGSPEED;
+                }
+                else
+                    game->man.y +=SPEED;
+                printf("Bumping head\n");
             }
             //Are we standing on the wall?
-            else if(my+mh > wy && my < wy){
+            else if(mY+mH > wY && mY < wY){
                 //correct y
-                game->man.y = wy-mh;
-                //game->man.canMoveDown = false;
+                //game->man.y = wY-mH;
+                if(game->man.isMovingDiagonal == true){
+                    game->man.x -=DIAGSPEED;
+                    game->man.y -=DIAGSPEED;
+                }
+                else
+                    game->man.y -=SPEED;
+                printf("Standing on wall\n");
             }
         }
     }
@@ -152,7 +224,6 @@ SDL_Texture *loadImage(GameState *game, SDL_Surface *surface, char imgLocation[S
         exit(1);
     }
     return SDL_CreateTextureFromSurface(game->renderer, surface);
-    SDL_FreeSurface(surface);
 }
 
 void loadGame(GameState *game)
@@ -167,7 +238,6 @@ void loadGame(GameState *game)
     // }
     // game->wall = SDL_CreateTextureFromSurface(game->renderer, surface);
     // SDL_FreeSurface(surface);
-
     game->wall = loadImage(game, surface,"images/wall.png");
     game->alley = loadImage(game, surface, "images/alley.png");
     game->blood = loadImage(game, surface, "images/blood.png");
@@ -189,12 +259,8 @@ void loadGame(GameState *game)
     //Load struct start values
     game->label = NULL;
     game->man.isDead = false;
-    game->man.x = 320-40;
-    game->man.y = 240-40;
-    game->man.canMoveUp = true;
-    game->man.canMoveDown = true;
-    game->man.canMoveLeft = true;
-    game->man.canMoveRight = true;
+    game->man.x = 500;
+    game->man.y = 300;
     game->man.isMoving = false;
     game->man.isMovingLeft = false;
     game->man.isMovingRight = false;
@@ -209,19 +275,19 @@ void loadGame(GameState *game)
 
         if(i < 20){
             game->walls[i].x = i*WALLSIZE;
-            game->walls[i].y = HEIGHT-WALLSIZE;
+            game->walls[i].y = 0;
         }
         else if(i < 40){
             game->walls[i].x = i*WALLSIZE-WIDTH;
-            game->walls[i].y = 0;
+            game->walls[i].y = HEIGHT-WALLSIZE;
         }
         else if(i < 60){
             game->walls[i].x = 0;
-            game->walls[i].y = i*WALLSIZE-WIDTH*2;
+            game->walls[i].y = i*WALLSIZE-HEIGHT*4;
         }
         else if(i < 80){
             game->walls[i].x = WIDTH-WALLSIZE;
-            game->walls[i].y = i*WALLSIZE-WIDTH*3;
+            game->walls[i].y = i*WALLSIZE-HEIGHT*6;
         }
         else{
             game->walls[i].x = rand() % WIDTH - 128;
@@ -242,6 +308,7 @@ bool processEvents(SDL_Window *window, GameState *game)
 {
     // The window is open: enter game loop (SDL_PollEvent)
     bool done = false;
+
     SDL_Event event;
     while(SDL_PollEvent(&event)){
         switch(event.type){
@@ -256,6 +323,9 @@ bool processEvents(SDL_Window *window, GameState *game)
                 switch(event.key.keysym.sym){
                     case SDLK_ESCAPE:
                         done = 1;
+                    break;
+                    case SDLK_r:                          //RESURRECT
+                        game->man.isDead = false;
                     break;
                 }
             break;
@@ -303,6 +373,7 @@ bool processEvents(SDL_Window *window, GameState *game)
         game->man.isMoving = true;
         game->man.isMovingLeft = true;
         game->man.isMovingRight = false;
+        game->man.isMovingDiagonal = true;
     }
     else if (state[SDL_SCANCODE_D] && state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A])
     {
@@ -311,6 +382,7 @@ bool processEvents(SDL_Window *window, GameState *game)
         game->man.isMoving = true;
         game->man.isMovingLeft = false;
         game->man.isMovingRight = true;
+        game->man.isMovingDiagonal = true;
     }
     else if (state[SDL_SCANCODE_D] && state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A])
     {
@@ -319,6 +391,7 @@ bool processEvents(SDL_Window *window, GameState *game)
         game->man.isMoving = true;
         game->man.isMovingLeft = false;
         game->man.isMovingRight = true;
+        game->man.isMovingDiagonal = true;
     }
     else if (state[SDL_SCANCODE_A] && state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_D])
     {
@@ -327,6 +400,7 @@ bool processEvents(SDL_Window *window, GameState *game)
         game->man.isMoving = true;
         game->man.isMovingLeft = true;
         game->man.isMovingRight = false;
+        game->man.isMovingDiagonal = true;
     }
     else
     {
@@ -336,16 +410,19 @@ bool processEvents(SDL_Window *window, GameState *game)
             game->man.isMoving = true;
             game->man.isMovingLeft = true;
             game->man.isMovingRight = false;
+            game->man.isMovingDiagonal = false;
         }
         if (state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
         {
             game->man.y -= SPEED;
             game->man.isMoving = true;
+            game->man.isMovingDiagonal = false;
         }
         if (state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_W])
         {
             game->man.y += SPEED;
             game->man.isMoving = true;
+            game->man.isMovingDiagonal = false;
         }
         if (state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A])
         {
@@ -353,6 +430,7 @@ bool processEvents(SDL_Window *window, GameState *game)
             game->man.isMoving = true;
             game->man.isMovingLeft = false;
             game->man.isMovingRight = true;
+            game->man.isMovingDiagonal = false;
         }
     }
     return done;
@@ -369,14 +447,13 @@ void doRender(SDL_Renderer *renderer, GameState *game)
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, game->alley, NULL, NULL);
 
-
         SDL_SetRenderDrawColor(renderer, 255,255,255,255);
 
         SDL_Rect rect = {game->man.x, game->man.y, MANSIZE, MANSIZE};
 
         //Draw blood when dead
         if(game->man.isDead){
-            SDL_Rect rect = {game->man.x-MANSIZE/2+20, game->man.y-MANSIZE/2+20, 64, 64};
+            SDL_Rect rect = {game->man.x, game->man.y, 48, 48};
             SDL_RenderCopyEx(renderer, game->blood, NULL, &rect, 0, NULL, (game->time%40<10));
         }
 
