@@ -15,6 +15,8 @@ const int WIDTH = 800;
 const int HEIGHT = 450;
 
 PRIVATE void updateMedia(Game newGame);
+PRIVATE void updateAllMedia(Game newGame);
+PRIVATE void updateBackground(Game newGame);
 PRIVATE void createGameMedia(Game newGame);
 
 struct game_type
@@ -33,13 +35,13 @@ struct game_type
 }; 
 
 PRIVATE void createGameMedia(Game newGame){
-    newGame->background = loadBackground(newGame, "grass00.bmp");
+    newGame->background = (SDL_Texture *) loadMedia(newGame, "grass00.bmp");
     SDL_FreeSurface(newGame->window_surface);
-    newGame->player_texture = loadBackground(newGame, "pin2.png");
+    newGame->player_texture = (SDL_Texture *) loadMedia(newGame, "pin2.png");
     SDL_FreeSurface(newGame->window_surface);
-
 }
 
+//initializes game
 PUBLIC Game createGame()
 {
     Game newGame = malloc(sizeof(struct game_type));
@@ -56,39 +58,49 @@ PUBLIC Game createGame()
     newGame->renderer = SDL_CreateRenderer(newGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     newGame->window_surface = SDL_GetWindowSurface(newGame->window);
 
-    createGameMedia(newGame);
-    Player player1 = initPlayer(500, 500);   //x and y coordinates
     return newGame;
 }
 
-PUBLIC void gameUpdate(Game newGame)
+//handles processes, like keyboard-inputs etc
+int processEvents(Game newGame)
 {
+    bool keep_window_open = true;
+    while(SDL_PollEvent(&newGame->window_event) > 0)
+    {
+        SDL_Event test = newGame->window_event;
+        
+        switch(newGame->window_event.type)
+        {
+            case SDL_QUIT:
+                keep_window_open = false;
+                break;
+        }
+    }
+    return keep_window_open;
+}
+
+PUBLIC void gameUpdate(Game newGame) //game loop
+{
+    createGameMedia(newGame); //loads in textures
+    Player player0 = initPlayer(500, 500);   //x and y coordinates
+    initPlayerRect(&playerRect[0], player0); //inits playerRect[0] to position of player0
+
+
+    //gameloop:
     bool keep_window_open = true;
     while(keep_window_open)
     {
-        while(SDL_PollEvent(&newGame->window_event) > 0)
-        {
-            SDL_Event test = newGame->window_event;
-            
-            switch(newGame->window_event.type)
-            {
-                case SDL_QUIT:
-                    keep_window_open = false;
-                    break;
-            }
-        }
-        /*
-        SDL_Rect playerRectangle;   //struct to hold the position and size of the sprite
-        SDL_QueryTexture(newGame->background, NULL, NULL, &playerRectangle.w, &playerRectangle.h);  //get and scale the dimensions of texture
-        playerRectangle.w /=7;                             //scales down width by 7
-        playerRectangle.h /=7;                             //scales down height by 7
-*/
-        updateMedia(newGame);
+        //Check for events
+        keep_window_open = processEvents(newGame);
+
+        //updates all renders
+        updateAllMedia(newGame); 
         SDL_Delay(10); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
 }
 
-PUBLIC SDL_Texture *loadBackground(Game newGame, char fileLocation[])
+//loads media into texture
+PUBLIC SDL_Texture *loadMedia(Game newGame, char fileLocation[])   //loadmedia
 {
     bool success = true;
     char fileLocationInResources[100]="resources/";
@@ -102,29 +114,28 @@ PUBLIC SDL_Texture *loadBackground(Game newGame, char fileLocation[])
     return SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
 }
 
-//  KLAR funktion!
-PUBLIC SDL_Texture * loadMedia(Game newGame, char fileLocation[])
+//updates all renders: background and players etc.
+PRIVATE void updateAllMedia(Game newGame)
 {
-    bool success = true;
-    char fileLocationInResources[100]="resources/";
-    strcat(fileLocationInResources, fileLocation);
-    newGame->window_surface = IMG_Load(fileLocationInResources);
-    if(newGame->window_surface == NULL)
-    {
-        printf("Failed to load surface! SDL_Error: %s\n", SDL_GetError());
-        success = false;
-    }
-    newGame->background = SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
+    SDL_RenderClear(newGame->renderer); //clear renderer
 
-    return success;
+    updateBackground(newGame);
+    updateMedia(newGame);
+
+    SDL_RenderPresent(newGame->renderer); //present renderer
 }
 
+//renders background
+PRIVATE void updateBackground(Game newGame)
+{
+    SDL_RenderCopy(newGame->renderer, newGame->background, NULL, NULL);
+}
+
+//renders media (like players etc)
 PRIVATE void updateMedia(Game newGame)
 {
-    SDL_RenderClear(newGame->renderer);
     SDL_RenderCopy(newGame->renderer, newGame->background, NULL, NULL);
-    //SDL_RenderCopy(newGame->renderer, newGame->player, destination, NULL);
-    SDL_RenderPresent(newGame->renderer);
+    //SDL_RenderCopy(newGame->renderer, newGame->player_texture, destination, NULL);
 }
 
 PUBLIC void destroyGame(Game theGame)
@@ -132,7 +143,6 @@ PUBLIC void destroyGame(Game theGame)
     SDL_DestroyTexture(theGame->background);
     SDL_DestroyTexture(theGame->player_texture);
     SDL_DestroyRenderer(theGame->renderer);
-    SDL_FreeSurface(theGame->window_surface);
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();
 }
