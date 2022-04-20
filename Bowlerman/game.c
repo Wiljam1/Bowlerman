@@ -34,6 +34,7 @@ struct game_type
     SDL_Event    window_event;
 }; 
 
+//loads images into textures
 PRIVATE void createGameMedia(Game newGame){
     newGame->background = (SDL_Texture *) loadMedia(newGame, "grass00.bmp");
     SDL_FreeSurface(newGame->window_surface);
@@ -57,7 +58,6 @@ PUBLIC Game createGame()
     
     newGame->renderer = SDL_CreateRenderer(newGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     newGame->window_surface = SDL_GetWindowSurface(newGame->window);
-
     return newGame;
 }
 
@@ -79,12 +79,24 @@ int processEvents(Game newGame)
     return keep_window_open;
 }
 
-PUBLIC void gameUpdate(Game newGame) //game loop
+//initializes startvalues for game
+PRIVATE void initGame(Game newGame)
 {
     createGameMedia(newGame); //loads in textures
-    Player player0 = initPlayer(500, 500);   //x and y coordinates
+    Player player0 = initPlayer(50, 100);   //x and y coordinates
     initPlayerRect(&playerRect[0], player0); //inits playerRect[0] to position of player0
+    
+    //get and scale the dimensions of texture
+    SDL_QueryTexture(newGame->player_texture, NULL, NULL, &playerRect[0].w, &playerRect[0].h);
+    playerRect[0].w /=6;              //scales down width by 7
+    playerRect[0].h /=6;              //scales down height by 7
 
+}
+
+//game loop
+PUBLIC void gameUpdate(Game newGame) 
+{
+    initGame(newGame); //initializes startvalues. coordinates etc.
 
     //gameloop:
     bool keep_window_open = true;
