@@ -6,8 +6,8 @@
 typedef struct playerController *Player;
 Player initPlayer(float xPos, float yPos);
 
-float getPlayerXPos(Player p);
-float getPlayerYPos(Player p);
+float getPlayerXPosition(Player p);
+float getPlayerYPosition(Player p);
 int getPlayerHeight();
 int getPlayerWidth();
 

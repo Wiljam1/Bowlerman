@@ -2,6 +2,7 @@
 #include "game.h"
 #include <stdlib.h>
 
+
 #define PUBLIC /* empty */
 #define PRIVATE static
 
@@ -29,6 +30,7 @@ PUBLIC Player initPlayer(float xPos, float yPos)
     return p;
 }
 
+
 PUBLIC int getPlayerHeight()
 {
     return HEIGHT;
@@ -36,6 +38,14 @@ PUBLIC int getPlayerHeight()
 PUBLIC int getPlayerWidth()
 {
     return WIDTH;
+}
+PUBLIC float getPlayerXPosition(Player player)
+{
+    return player->xPos;
+}
+PUBLIC float getPlayerYPosition(Player player)
+{
+    return player->yPos;
 }
 
 // PUBLIC void destroyPlayer(Player player)

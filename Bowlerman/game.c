@@ -15,6 +15,8 @@ const int WIDTH = 800;
 const int HEIGHT = 450;
 
 PRIVATE void updateMedia(Game newGame);
+PRIVATE void updateAllMedia(Game newGame);
+PRIVATE void updateBackground(Game newGame);
 PRIVATE void createGameMedia(Game newGame);
 
 struct game_type
@@ -55,8 +57,6 @@ PUBLIC Game createGame()
     newGame->renderer = SDL_CreateRenderer(newGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     newGame->window_surface = SDL_GetWindowSurface(newGame->window);
 
-    createGameMedia(newGame);
-    Player player1 = initPlayer(500, 500);   //x and y coordinates
     return newGame;
 }
 
@@ -79,19 +79,24 @@ int processEvents(Game newGame)
 
 PUBLIC void gameUpdate(Game newGame) //game loop
 {
+    createGameMedia(newGame); //loads in textures
+    Player player1 = initPlayer(500, 500);   //x and y coordinates
+    SDL_Rect playerRect;
+    playerRect.h = getPlayerHeight();
+    playerRect.w = getPlayerWidth();
+    playerRect.y = getPlayerYPosition(player1);
+    playerRect.x = getPlayerYPosition(player1);
+
+
+    //gameloop:
     bool keep_window_open = true;
     while(keep_window_open)
     {
         //Check for events
         keep_window_open = processEvents(newGame);
 
-        /*
-        SDL_Rect playerRectangle;   //struct to hold the position and size of the sprite
-        SDL_QueryTexture(newGame->background, NULL, NULL, &playerRectangle.w, &playerRectangle.h);  //get and scale the dimensions of texture
-        playerRectangle.w /=7;                             //scales down width by 7
-        playerRectangle.h /=7;                             //scales down height by 7
-*/
-        updateMedia(newGame);
+        //updates all renders
+        updateAllMedia(newGame); 
         SDL_Delay(10); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
 }
@@ -127,12 +132,26 @@ PUBLIC int loadMedia(Game newGame, char fileLocation[])
     return success;
 }
 
+//updates all renders: background and players etc.
+PRIVATE void updateAllMedia(Game newGame)
+{
+    SDL_RenderClear(newGame->renderer); //clear renderer
+
+    updateBackground(newGame);
+    updateMedia(newGame);
+
+    SDL_RenderPresent(newGame->renderer); //present renderer
+}
+
+PRIVATE void updateBackground(Game newGame)
+{
+    SDL_RenderCopy(newGame->renderer, newGame->background, NULL, NULL);
+}
+
 PRIVATE void updateMedia(Game newGame)
 {
-    SDL_RenderClear(newGame->renderer);
     SDL_RenderCopy(newGame->renderer, newGame->background, NULL, NULL);
-    //SDL_RenderCopy(newGame->renderer, newGame->player, destination, NULL);
-    SDL_RenderPresent(newGame->renderer);
+    //SDL_RenderCopy(newGame->renderer, newGame->player_texture, destination, NULL);
 }
 
 PUBLIC void destroyGame(Game theGame)
