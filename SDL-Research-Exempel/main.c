@@ -66,6 +66,11 @@ void closeGame(GameState *game, SDL_Window *window)
     SDL_Quit();
 }
 
+void moveRandomPin(GameState *game)
+{
+    
+}
+
 void process(GameState *game) //Handle game logic (bomb explode??)
 {
     //add time
@@ -74,6 +79,12 @@ void process(GameState *game) //Handle game logic (bomb explode??)
     if(game->time > 120){
         shutdownStatusLives(game);
         game->statusState = STATUS_STATE_GAME;
+    }
+
+    //Enemy AI
+    if((rand() % 160) > 158){
+        printf("woop %d\n", rand() % 160);
+        moveRandomPin(&game);
     }
 
     //Only do stuff here if game is on
@@ -131,28 +142,31 @@ bool checkCollision(SDL_Rect a, SDL_Rect b)
 
 void collisionDetect(GameState *game)
 {
+    float mW = MANSIZE, mH = MANSIZE;
+    float mX = game->man.x, mY = game->man.y;
+    
+    //Don't move out of window!
+    if(mX < 0)                //Left edge
+        game->man.x += SPEED;
+    if(mX+mW > WIDTH)         //Right edge
+        game->man.x -= SPEED;
+    if(mY < 0)                //Top edge
+        game->man.y += SPEED;
+    if(mY+mH > HEIGHT)        //Bottom edge
+        game->man.y -= SPEED;
 
+    //Collision with enemies
     for(int i = 0; i < WALLCOUNT/4; i++){
-        if(collide2d(game->man.x, game->man.y, game->bricks[i].x, game->bricks[i].y, MANSIZE, MANSIZE, WALLSIZE, WALLSIZE)){
+        if(collide2d(game->man.x, game->man.y, game->bricks[i].x, game->bricks[i].y, MANSIZE, MANSIZE, 256/8, 800/8)){
             game->man.isDead = true;
             //Mix_HaltChannel(game->musicChannel);
             break;
         }
     }
-    // //Check for collision with any walls or if went too far left or right (Lazyfoo Lesson 27)
-    // for(int i = 0; i < WALLCOUNT; i++){
-    //     if( (game->man.x < 0) || (game->man.x + MANSIZE > WIDTH) || (checkCollision(game->man.collisionBox, game->walls[i].collisionBox)) ){
-    //         //Move back
-    //         game->man.x -= SPEED;
-    //         game->man.collisionBox.x = game->man.x;
-    //     }
-    // }
 
     //Check for collision with any walls
     for(int i = 0; i < WALLCOUNT; i++)
     {
-        float mW = MANSIZE, mH = MANSIZE;
-        float mX = game->man.x, mY = game->man.y;
         float wX = game->walls[i].x, wY = game->walls[i].y, 
               wW = game->walls[i].w, wH = game->walls[i].h;
 
@@ -343,96 +357,103 @@ bool processEvents(SDL_Window *window, GameState *game)
         }
     }
 
-    //OLD MOVEMENT UNDER HERE
+    int velX = 0;
+    int velY = 0;
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    if(state[SDL_SCANCODE_A]){
+        velX += -SPEED;
+        game->man.isMoving = true;
+        game->man.isMovingLeft = true;
+        game->man.isMovingRight = false;
+    }
+    if(state[SDL_SCANCODE_D]){
+        velX += SPEED;
+        game->man.isMoving = true;
+        game->man.isMovingLeft = false;
+        game->man.isMovingRight = true;
+    }
+    if(velX ==0){
+        if(state[SDL_SCANCODE_W]){
+            velY += -SPEED;
+            game->man.isMoving = true;
+        }
+        if(state[SDL_SCANCODE_S]){
+            velY += SPEED;
+            game->man.isMoving = true;
+        }
+    }
+    game->man.x += velX;
+    game->man.y += velY;
+
+    //Diagonal movement, not in use
     // const Uint8 *state = SDL_GetKeyboardState(NULL);
-    // if(state[SDL_SCANCODE_LEFT] && game->man.canMoveLeft == true){
-    //     game->man.x -= SPEED;
+    // if (state[SDL_SCANCODE_A] && state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D])
+    // {
+    //     game->man.x -= DIAGSPEED;
+    //     game->man.y -= DIAGSPEED;
     //     game->man.isMoving = true;
     //     game->man.isMovingLeft = true;
     //     game->man.isMovingRight = false;
+    //     game->man.isMovingDiagonal = true;
     // }
-    // if(state[SDL_SCANCODE_RIGHT] && game->man.canMoveRight == true){
-    //     game->man.x += SPEED;
+    // else if (state[SDL_SCANCODE_D] && state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A])
+    // {
+    //     game->man.x += DIAGSPEED;
+    //     game->man.y -= DIAGSPEED;
     //     game->man.isMoving = true;
     //     game->man.isMovingLeft = false;
     //     game->man.isMovingRight = true;
+    //     game->man.isMovingDiagonal = true;
     // }
-    // if(state[SDL_SCANCODE_UP] && game->man.canMoveUp == true){
-    //     game->man.y -= SPEED;
+    // else if (state[SDL_SCANCODE_D] && state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A])
+    // {
+    //     game->man.x += DIAGSPEED;
+    //     game->man.y += DIAGSPEED;
     //     game->man.isMoving = true;
+    //     game->man.isMovingLeft = false;
+    //     game->man.isMovingRight = true;
+    //     game->man.isMovingDiagonal = true;
     // }
-    // if(state[SDL_SCANCODE_DOWN] && game->man.canMoveDown == true){
-    //     game->man.y += SPEED;
+    // else if (state[SDL_SCANCODE_A] && state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_D])
+    // {
+    //     game->man.x -= DIAGSPEED;
+    //     game->man.y += DIAGSPEED;
     //     game->man.isMoving = true;
+    //     game->man.isMovingLeft = true;
+    //     game->man.isMovingRight = false;
+    //     game->man.isMovingDiagonal = true;
     // }
-    const Uint8 *state = SDL_GetKeyboardState(NULL);
-    if (state[SDL_SCANCODE_A] && state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D])
-    {
-        game->man.x -= DIAGSPEED;
-        game->man.y -= DIAGSPEED;
-        game->man.isMoving = true;
-        game->man.isMovingLeft = true;
-        game->man.isMovingRight = false;
-        game->man.isMovingDiagonal = true;
-    }
-    else if (state[SDL_SCANCODE_D] && state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A])
-    {
-        game->man.x += DIAGSPEED;
-        game->man.y -= DIAGSPEED;
-        game->man.isMoving = true;
-        game->man.isMovingLeft = false;
-        game->man.isMovingRight = true;
-        game->man.isMovingDiagonal = true;
-    }
-    else if (state[SDL_SCANCODE_D] && state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A])
-    {
-        game->man.x += DIAGSPEED;
-        game->man.y += DIAGSPEED;
-        game->man.isMoving = true;
-        game->man.isMovingLeft = false;
-        game->man.isMovingRight = true;
-        game->man.isMovingDiagonal = true;
-    }
-    else if (state[SDL_SCANCODE_A] && state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_D])
-    {
-        game->man.x -= DIAGSPEED;
-        game->man.y += DIAGSPEED;
-        game->man.isMoving = true;
-        game->man.isMovingLeft = true;
-        game->man.isMovingRight = false;
-        game->man.isMovingDiagonal = true;
-    }
-    else
-    {
-        if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D])
-        {
-            game->man.x -= SPEED;
-            game->man.isMoving = true;
-            game->man.isMovingLeft = true;
-            game->man.isMovingRight = false;
-            game->man.isMovingDiagonal = false;
-        }
-        if (state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
-        {
-            game->man.y -= SPEED;
-            game->man.isMoving = true;
-            game->man.isMovingDiagonal = false;
-        }
-        if (state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_W])
-        {
-            game->man.y += SPEED;
-            game->man.isMoving = true;
-            game->man.isMovingDiagonal = false;
-        }
-        if (state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A])
-        {
-            game->man.x += SPEED;
-            game->man.isMoving = true;
-            game->man.isMovingLeft = false;
-            game->man.isMovingRight = true;
-            game->man.isMovingDiagonal = false;
-        }
-    }
+    // else
+    // {
+    //     if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D])
+    //     {
+    //         game->man.x -= SPEED;
+    //         game->man.isMoving = true;
+    //         game->man.isMovingLeft = true;
+    //         game->man.isMovingRight = false;
+    //         game->man.isMovingDiagonal = false;
+    //     }
+    //     if (state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
+    //     {
+    //         game->man.y -= SPEED;
+    //         game->man.isMoving = true;
+    //         game->man.isMovingDiagonal = false;
+    //     }
+    //     if (state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_W])
+    //     {
+    //         game->man.y += SPEED;
+    //         game->man.isMoving = true;
+    //         game->man.isMovingDiagonal = false;
+    //     }
+    //     if (state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A])
+    //     {
+    //         game->man.x += SPEED;
+    //         game->man.isMoving = true;
+    //         game->man.isMovingLeft = false;
+    //         game->man.isMovingRight = true;
+    //         game->man.isMovingDiagonal = false;
+    //     }
+    // }
     return done;
 }
 
@@ -475,7 +496,7 @@ void doRender(SDL_Renderer *renderer, GameState *game)
         else if(game->man.isMoving == false) frame = 0; 
         if(frame >= 4) frame = 1;
 
-        //Draw image
+        //Draw walls
         for (int i = 0; i < WALLCOUNT; i++)
         {
             SDL_Rect wallRect = {game->walls[i].x, game->walls[i].y, WALLSIZE, WALLSIZE};
