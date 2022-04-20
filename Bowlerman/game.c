@@ -80,12 +80,9 @@ int processEvents(Game newGame)
 PUBLIC void gameUpdate(Game newGame) //game loop
 {
     createGameMedia(newGame); //loads in textures
-    Player player1 = initPlayer(500, 500);   //x and y coordinates
-    SDL_Rect playerRect;
-    playerRect.h = getPlayerHeight();
-    playerRect.w = getPlayerWidth();
-    playerRect.y = getPlayerYPosition(player1);
-    playerRect.x = getPlayerYPosition(player1);
+    Player player0 = initPlayer(500, 500);   //x and y coordinates
+    //playerRect[0]=initPlayerRect(playerRect[0], player0); //inits playerRect
+    initPlayerRect(&playerRect[0], player0); //inits playerRect[0] to position of player0
 
 
     //gameloop:
@@ -115,7 +112,7 @@ PUBLIC SDL_Texture *loadBackground(Game newGame, char fileLocation[])
     return SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
 }
 
-//  KLAR funktion!
+//  onödig funktion. ta bort
 PUBLIC int loadMedia(Game newGame, char fileLocation[])
 {
     bool success = true;
@@ -159,7 +156,6 @@ PUBLIC void destroyGame(Game theGame)
     SDL_DestroyTexture(theGame->background);
     SDL_DestroyTexture(theGame->player_texture);
     SDL_DestroyRenderer(theGame->renderer);
-    SDL_FreeSurface(theGame->window_surface);
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();
 }
