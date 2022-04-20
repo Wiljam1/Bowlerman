@@ -29,15 +29,21 @@
 
 typedef struct 
 {
-    float x, y;
+    int x, y;
     short life;
     char *name;
-    bool isDead, canMoveDown, canMoveLeft, canMoveRight, canMoveUp, isMoving, isMovingLeft, isMovingRight;
+    bool isDead, isMoving, isMovingLeft, isMovingRight, isMovingDiagonal;
+    
+    //Man collisionBox!
+    SDL_Rect collisionBox;
 }   Man;
 
 typedef struct
 {
     int x, y, w, h;
+
+    //Wall collisionBox!
+    SDL_Rect collisionBox;
 } Wall;
 
 typedef struct
@@ -55,7 +61,7 @@ typedef struct
     Brick bricks[WALLCOUNT];
 
     //Images
-    SDL_Texture *wall;
+    SDL_Texture *wall;  //Gör en array av bilderna
     SDL_Texture *brick;
     SDL_Texture *alley;
     SDL_Texture *pin;
@@ -78,11 +84,15 @@ typedef struct
 
 } GameState;
 
+SDL_Texture *loadImage(GameState *game, SDL_Surface *surface, char imgLocation[STRSIZE]);
 void loadGame(GameState *game);
 bool processEvents(SDL_Window *window, GameState *game);
 void process(GameState *game);
+bool checkCollision(SDL_Rect a, SDL_Rect b);
 int collide2d(float x1, float y1, float x2, float y2, float wt1, float ht1, float wt2, float ht2);
 void collisionDetect(GameState *game);
 void doRender(SDL_Renderer *renderer, GameState *game);
+void closeGame(GameState *game, SDL_Window *window);
+
 
 #endif
