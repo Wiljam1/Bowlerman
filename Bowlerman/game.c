@@ -15,7 +15,7 @@ const int WIDTH = 800;
 const int HEIGHT = 450;
 
 PRIVATE void updateMedia(Game newGame);
-PRIVATE void updateAllMedia(Game newGame);
+PRIVATE void updateAllMedia(Game newGame, SDL_Rect playerRect);
 PRIVATE void updateBackground(Game newGame);
 PRIVATE void createGameMedia(Game newGame);
 
@@ -94,7 +94,7 @@ PUBLIC void gameUpdate(Game newGame) //game loop
         keep_window_open = processEvents(newGame);
 
         //updates all renders
-        updateAllMedia(newGame); 
+        updateAllMedia(newGame, playerRect[0]); 
         SDL_Delay(10); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
 }
@@ -115,12 +115,13 @@ PUBLIC SDL_Texture *loadMedia(Game newGame, char fileLocation[])   //loadmedia
 }
 
 //updates all renders: background and players etc.
-PRIVATE void updateAllMedia(Game newGame)
+PRIVATE void updateAllMedia(Game newGame, SDL_Rect playerRect)
 {
     SDL_RenderClear(newGame->renderer); //clear renderer
 
     updateBackground(newGame);
-    updateMedia(newGame);
+    SDL_RenderCopy(newGame->renderer, newGame->player_texture, NULL, &playerRect);
+    //updateMedia(newGame);
 
     SDL_RenderPresent(newGame->renderer); //present renderer
 }
