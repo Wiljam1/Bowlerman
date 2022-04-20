@@ -18,6 +18,11 @@ SDL_Rect playerRect[4];
 //inits a player_rect with the x-and-y-position of player
 void initPlayerRect(SDL_Rect *playerRect, Player player1); 
 
+#define PLAYERSPEED 5
+void playerMoveRight(Player player1);
+void playerMoveLeft(Player player1);
+void playerMoveDown(Player player1);
+void playerMoveUp(Player player1);
 
 
 //void destroyPlayer();
