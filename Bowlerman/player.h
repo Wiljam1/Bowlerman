@@ -7,15 +7,19 @@
 typedef struct playerController *Player;
 Player initPlayer(float xPos, float yPos);
 
-//inits a player_rect with the x-and-y-position of player
-void initPlayerRect(SDL_Rect *playerRect, Player player1); 
-
 float getPlayerXPosition(Player p);
 float getPlayerYPosition(Player p);
 int getPlayerHeight();
 int getPlayerWidth();
 
-SDL_Rect playerRect[4];
+
+//rect for player
+SDL_Rect playerRect[4]; 
+//inits a player_rect with the x-and-y-position of player
+void initPlayerRect(SDL_Rect *playerRect, Player player1); 
+
+
+
 //void destroyPlayer();
 
 #endif

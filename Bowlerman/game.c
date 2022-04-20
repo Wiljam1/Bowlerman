@@ -83,8 +83,9 @@ int processEvents(Game newGame)
 PRIVATE void initGame(Game newGame)
 {
     createGameMedia(newGame); //loads in textures
-    Player player0 = initPlayer(50, 100);   //x and y coordinates
-    initPlayerRect(&playerRect[0], player0); //inits playerRect[0] to position of player0
+    Player player[3]; //declares 4 players.
+    player[0] = initPlayer(50, 100);   //sets x and y coordinates
+    initPlayerRect(&playerRect[0], player[0]); //inits playerRect[0] to position of player0
     
     //get and scale the dimensions of texture
     SDL_QueryTexture(newGame->player_texture, NULL, NULL, &playerRect[0].w, &playerRect[0].h);
@@ -107,6 +108,7 @@ PUBLIC void gameUpdate(Game newGame)
 
         //updates all renders
         updateAllMedia(newGame, playerRect[0]); 
+
         SDL_Delay(10); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
 }
