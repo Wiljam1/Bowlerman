@@ -101,7 +101,7 @@ PUBLIC void gameUpdate(Game newGame) //game loop
     }
 }
 
-PUBLIC SDL_Texture *loadBackground(Game newGame, char fileLocation[])
+PUBLIC SDL_Texture *loadBackground(Game newGame, char fileLocation[])   //loadmedia
 {
     bool success = true;
     char fileLocationInResources[100]="resources/";
@@ -159,7 +159,6 @@ PUBLIC void destroyGame(Game theGame)
     SDL_DestroyTexture(theGame->background);
     SDL_DestroyTexture(theGame->player_texture);
     SDL_DestroyRenderer(theGame->renderer);
-    SDL_FreeSurface(theGame->window_surface);
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();
 }
