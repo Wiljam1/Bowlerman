@@ -1,6 +1,8 @@
 #include "player.h"
 #include "game.h"
 #include <stdlib.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 
 #define PUBLIC /* empty */
@@ -10,6 +12,8 @@ PRIVATE int HEIGHT = 300;
 PRIVATE int WIDTH = 150;
 
 PUBLIC void loadPlayer();
+PUBLIC Player initPlayer(float xPos, float yPos);
+PUBLIC void initPlayerRect(SDL_Rect *playerRect, Player player1);
 
 struct playerController
 {
@@ -18,6 +22,17 @@ struct playerController
     float speed;
     //SDL_Rect playerRectangle;   //struct to hold the position and size of the sprite
 };
+
+PUBLIC SDL_Rect playerRect[4];
+
+PUBLIC void initPlayerRect(SDL_Rect * playerRect, Player player1)
+{
+    playerRect->h = getPlayerHeight();
+    playerRect->w = getPlayerWidth();
+    playerRect->y = getPlayerYPosition(player1);
+    playerRect->x = getPlayerYPosition(player1);
+}
+
 
 PUBLIC Player initPlayer(float xPos, float yPos)
 {
