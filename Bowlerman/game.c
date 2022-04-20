@@ -98,7 +98,7 @@ PUBLIC void gameUpdate(Game newGame) //game loop
     }
 }
 
-PUBLIC SDL_Texture *loadBackground(Game newGame, char fileLocation[])
+PUBLIC SDL_Texture *loadBackground(Game newGame, char fileLocation[])   //loadmedia
 {
     bool success = true;
     char fileLocationInResources[100]="resources/";
