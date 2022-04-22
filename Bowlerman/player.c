@@ -45,8 +45,8 @@ PUBLIC Player initPlayer(float xPos, float yPos)
     p->left=0;
     p->xVel=0;
     p->yVel=0;
-    p->xPos = p->xPosOld = 0;
-    p->yPos = p->yPosOld = 0;
+    p->xPos = p->xPosOld = xPos;
+    p->yPos = p->yPosOld = yPos;
     p->speed = 1;
 
     return p;
