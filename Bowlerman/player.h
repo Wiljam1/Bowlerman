@@ -4,7 +4,9 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "game.h"
+
+//nånting konstigt med player.h elr player.c, tror att de blir inkluderade två gånger
+//Får en massa errors när man flyttar runt saker här "already defined blah blah blah"
 
 typedef struct playerController *Player;
 

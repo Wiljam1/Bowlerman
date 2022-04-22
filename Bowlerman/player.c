@@ -10,8 +10,8 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 
-PRIVATE int PLAYERHEIGHT = 150;
-PRIVATE int PLAYERWIDTH = 75;
+PRIVATE int PLAYERHEIGHT = 100;
+PRIVATE int PLAYERWIDTH = 50;
 PRIVATE int PLAYERSPEED = 300;     // speed in pixels/second
 
 
@@ -31,7 +31,7 @@ PUBLIC void initPlayerRect(SDL_Rect * playerRect, Player player1)
     playerRect->h = getPlayerHeight();
     playerRect->w = getPlayerWidth();
     playerRect->y = getPlayerYPosition(player1);
-    playerRect->x = getPlayerYPosition(player1);
+    playerRect->x = getPlayerXPosition(player1);
 }
 
 

@@ -7,6 +7,7 @@
 #include "game.h"
 #include "player.h"
 #include "collissionDetection.h"
+#include "sorter.h"
 
 #define PUBLIC /* empty */
 #define PRIVATE static
@@ -19,7 +20,7 @@ const int WIDTH = 800;
 const int HEIGHT = 450;
 
 
-PRIVATE void updateMedia(Game newGame, SDL_Rect playerRect[]);
+PRIVATE void updateMedia(Game newGame, SDL_Rect playerRect[], Player *player, int renderOrder[]);
 PRIVATE void createGameMedia(Game newGame);
 
 struct game_type
@@ -152,22 +153,21 @@ PRIVATE void initGame(Game newGame, Player *player)
 
 
     //inits x-ammount of players based on "playerAmmount"-variable (global variable)
-    player[0] = initPlayer(00, 0);   //sets x and y coordinates and resets values.
+    player[0] = initPlayer(5, 5);   //sets x and y coordinates and resets values.
     initPlayerRect(&playerRect[0], player[0]); //inits playerRect[0] to position of player0
     
     if(playerAmmount>1){
-        player[1] = initPlayer(50, 50);   //sets x and y coordinates and resets values.
+        player[1] = initPlayer(750, 300);   //sets x and y coordinates and resets values.
         initPlayerRect(&playerRect[1], player[1]); //inits playerRect[0] to position of player0
     }
     if(playerAmmount>2){
-        player[2] = initPlayer(80, 80);   //sets x and y coordinates and resets values.
+        player[2] = initPlayer(0, 300);   //sets x and y coordinates and resets values.
         initPlayerRect(&playerRect[2], player[2]); //inits playerRect[0] to position of player0
     }
     if(playerAmmount>3){
-        player[3] = initPlayer(100, 100);   //sets x and y coordinates and resets values.
+        player[3] = initPlayer(750, 0);   //sets x and y coordinates and resets values.
         initPlayerRect(&playerRect[3], player[3]); //inits playerRect[0] to position of player0
     }
-
   
     //get and scale the dimensions of texture (based on how many players are online)
     for(int i=0; i<playerAmmount; i++)
@@ -187,8 +187,9 @@ PUBLIC void gameUpdate(Game newGame)
 {
     Player player[playerAmmount-1];   //declares x-ammounts of players depending on "playerAmmount"
     initGame(newGame, player); //initializes startvalues. coordinates etc.
+    int renderOrder[4]={0,1,2,3}; //what order to render players
 
-
+   
     //gameloop:
     bool keep_window_open = true;
     while(keep_window_open)
@@ -200,7 +201,8 @@ PUBLIC void gameUpdate(Game newGame)
         //handleEvents();
 
         //renders to screen
-        updateMedia(newGame, playerRect); 
+        //bubble sort of players x-position
+        updateMedia(newGame, playerRect, player, renderOrder); 
 
         SDL_Delay(10); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
@@ -222,17 +224,19 @@ PUBLIC SDL_Texture *loadMedia(Game newGame, char fileLocation[])   //loadmedia
 }
 
 //renders background and players etc.
-PRIVATE void updateMedia(Game newGame, SDL_Rect playerRect[])
+PRIVATE void updateMedia(Game newGame, SDL_Rect playerRect[], Player *player, int renderOrder[])
 {
     SDL_RenderClear(newGame->renderer); //clear renderer
 
     //updates/renders background
     SDL_RenderCopy(newGame->renderer, newGame->background, NULL, NULL);
 
-    //bubble sort of players x-position
-    // renders players. Depends on global variable "playerAmmount"
+    //bubble-sort the players y-position into the array "renderOrder"
+    arraySorter(player, playerAmmount, renderOrder);
+
+    // renders players
     for(int i=0; i<playerAmmount; i++){
-        SDL_RenderCopy(newGame->renderer, newGame->player_texture[i], NULL, &playerRect[i]);
+        SDL_RenderCopy(newGame->renderer, newGame->player_texture[renderOrder[i]], NULL, &playerRect[renderOrder[i]]);
     }
     
     SDL_RenderPresent(newGame->renderer); //present renderer
