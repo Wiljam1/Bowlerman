@@ -6,13 +6,18 @@
 #include <string.h>
 #include "game.h"
 #include "player.h"
+#include "collissionDetection.h"
 
 #define PUBLIC /* empty */
 #define PRIVATE static
 #define LENGTH 100
 
+int playerAmmount=0;    //how many players are online
+int playerID=-1;        //the players ID. startvalue "-1"- for troubleshooting.
+
 const int WIDTH = 800; 
 const int HEIGHT = 450;
+
 
 PRIVATE void updateMedia(Game newGame, SDL_Rect playerRect[]);
 PRIVATE void createGameMedia(Game newGame);
@@ -52,7 +57,7 @@ PUBLIC Game createGame()
 }
 
 //handles processes, like keyboard-inputs etc
-int checkEvents(Game newGame, PlayerMovement playerMoving)
+int checkEvents(Game newGame, Player *player)
 {
     bool keep_window_open = true;
     while(SDL_PollEvent(&newGame->window_event) > 0)
@@ -69,19 +74,19 @@ int checkEvents(Game newGame, PlayerMovement playerMoving)
                 {
                 case SDL_SCANCODE_W:
                 case SDL_SCANCODE_UP:
-                    playerMoving->up = 1;
+                    player[0]->up = 1;
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
-                    playerMoving->left = 1;
+                    player[0]->left = 1;
                     break;
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
-                    playerMoving->down = 1;
+                    player[0]->down = 1;
                     break;
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
-                    playerMoving->right = 1;
+                    player[0]->right = 1;
                     break;
                 }
                 break;
@@ -90,19 +95,19 @@ int checkEvents(Game newGame, PlayerMovement playerMoving)
                 {
                 case SDL_SCANCODE_W:
                 case SDL_SCANCODE_UP:
-                    playerMoving->up = 0;
+                    player[0]->up = 0;
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
-                    playerMoving->left = 0;
+                    player[0]->left = 0;
                     break;
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
-                    playerMoving->down = 0;
+                    player[0]->down = 0;
                     break;
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
-                    playerMoving->right = 0;
+                    player[0]->right = 0;
                     break;
                 }
                 break;
@@ -110,17 +115,19 @@ int checkEvents(Game newGame, PlayerMovement playerMoving)
     }
 
     // determine velocity of player
-    determinePlayerVelocity(playerMoving);
+    determinePlayerVelocity(player[0]);
 
     // update (client-side) player positions
-    updatePlayerClientPosition(playerMoving);
+    updatePlayerClientPosition(player[0]);
 
-    // set the positions in the struct
-    playerRect[0].x = (int) playerMoving->xPos;
-    playerRect[0].y = (int ) playerMoving ->yPos;
+    // send and retrive positions via server
 
-    //check if within bounds
-    //write in: collissiondetection.c
+    //check if within bounds. write in: collissiondetection.c
+
+    // set the positions of the player in the struct
+    playerRect[0].x = (int) player[0]->xPos;
+    playerRect[0].y = (int ) player[0]->yPos;
+
 
     return keep_window_open;
 }
@@ -134,11 +141,10 @@ PRIVATE void initGame(Game newGame)
     newGame->player_texture = (SDL_Texture *) loadMedia(newGame, "pin2.png");
     SDL_FreeSurface(newGame->window_surface);
 
+    //check server what ID you have.
+    //getPlayerID();
 
-    Player player[3]; //declares 4 players.
-    player[0] = initPlayer(50, 100);   //sets x and y coordinates
-    initPlayerRect(&playerRect[0], player[0]); //inits playerRect[0] to position of player0
-    
+  
     //get and scale the dimensions of texture
     SDL_QueryTexture(newGame->player_texture, NULL, NULL, &playerRect[0].w, &playerRect[0].h);
     playerRect[0].w /=4;              //scales down width by 4
@@ -152,17 +158,16 @@ PRIVATE void initGame(Game newGame)
 PUBLIC void gameUpdate(Game newGame) 
 {
     initGame(newGame); //initializes startvalues. coordinates etc.
+    Player player[3]; //declares 4 players.
+    player[0] = initPlayer(50, 100);   //sets x and y coordinates and resets values.
+    initPlayerRect(&playerRect[0], player[0]); //inits playerRect[0] to position of player0
     
-    PlayerMovement playerMoving;     //keep track of where player is moving
-    resetPlayerMoving(playerMoving); //player is no longer moving
-    
-
     //gameloop:
     bool keep_window_open = true;
     while(keep_window_open)
     {
         //Check for events
-        keep_window_open = checkEvents(newGame, playerMoving);
+        keep_window_open = checkEvents(newGame, player);
         
         //handles events
         //handleEvents();
