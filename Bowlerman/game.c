@@ -33,7 +33,7 @@ struct game_type
 
     //Images
     SDL_Texture *background;
-    SDL_Texture *player_texture[3];     //4  players
+    SDL_Texture *player_texture[4];     //4  players, måste stå 4 annars blir de segmentation fault.
     
     SDL_Event    window_event;
 }; 
@@ -89,6 +89,8 @@ int checkEvents(Game newGame, Player *player)
                 case SDL_SCANCODE_RIGHT:
                     player[playerID]->right = 1;
                     break;
+                default:
+                    break;
                 }
                 break;
             case SDL_KEYUP:
@@ -109,6 +111,8 @@ int checkEvents(Game newGame, Player *player)
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
                     player[playerID]->right = 0;
+                    break;
+                default:
                     break;
                 }
                 break;
