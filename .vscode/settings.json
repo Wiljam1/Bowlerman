@@ -1,11 +1,6 @@
 {
     "files.associations": {
-        "sdl_image.h": "c",
-        "player.h": "c",
-        "stdlib.h": "c",
-        "sdl.h": "c",
-        "collissiondetection.h": "c",
-        "game.h": "c"
+        "sdl_image.h": "c"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }
