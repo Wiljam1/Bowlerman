@@ -139,7 +139,7 @@ PRIVATE void initGame(Game newGame, Player *player)
     //loads in textures
     newGame->background = (SDL_Texture *) loadMedia(newGame, "grass00.bmp");
     SDL_FreeSurface(newGame->window_surface);
-    newGame->player_texture[0] = (SDL_Texture *) loadMedia(newGame, "pin2.png");
+    newGame->player_texture[0] = (SDL_Texture *) loadMedia(newGame, "bowlermantestskins/bowman00.png");
     SDL_FreeSurface(newGame->window_surface);
     newGame->player_texture[1] = (SDL_Texture *) loadMedia(newGame, "pin2.png");
     SDL_FreeSurface(newGame->window_surface);
