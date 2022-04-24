@@ -1,6 +1,7 @@
 #ifndef game_h
 #define game_h
 #include <SDL2/SDL.h>
+#include "player.h"
 
 typedef struct game_type *Game;
 Game createGame();              // Struct for app initialization
