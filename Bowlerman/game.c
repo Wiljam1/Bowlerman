@@ -14,36 +14,19 @@
 #define PRIVATE static
 #define LENGTH 100
 
-#define PLAYERAMOUNT 4    //how many players are online
-int playerID=0;        //the players ID. 
 
 PRIVATE void loadBomb(Game theGame);
 
 const int WIDTH = 800; 
 const int HEIGHT = 450;
 
-struct game_type
-{
-    SDL_Window  *window;
-    SDL_Surface *window_surface;
+PRIVATE void updateMedia(Game theGame);
+PRIVATE void createGameMedia(Game newGame);
+PRIVATE bool checkEvents(Game newGame);
 
-    //Player
-    Player player[PLAYERAMOUNT];
-
-    //Renderer
-    SDL_Renderer *renderer;
-
-    //Images
-    SDL_Texture *background;
-    SDL_Texture *player_texture[4];     //4  players, måste stå 4 annars blir de segmentation fault.
-    SDL_Texture *bomb_texture;
-    SDL_Texture *wall;
-
-    SDL_Event    window_event;
-}; 
 
 //initializes game
-PUBLIC Game createWindow()
+PUBLIC Game initializeGameWindow()
 {
     Game theGame = malloc(sizeof(struct game_type));
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -133,7 +116,7 @@ bool checkEvents(Game theGame)
                 switch (event.key.keysym.scancode)
                 {
                 // case SDL_SCANCODE_W: case SDL_SCANCODE_UP:
-                //     theGame->player[playerID].up = 0;
+                //     theGame->player[theGame->playerID].up = 0;
                 //     break;
                 case SDL_SCANCODE_SPACE:
                     loadBomb(theGame);
@@ -162,32 +145,32 @@ void manageMovementInputs(Game theGame)
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if(state[SDL_SCANCODE_A] && state[SDL_SCANCODE_D]){
         if(currentDirection == 1)
-            velX = -theGame->player[playerID].speed;
+            velX = -theGame->player[theGame->playerID].speed;
         else if(currentDirection == -1)
-            velX = theGame->player[playerID].speed;
+            velX = theGame->player[theGame->playerID].speed;
     }
     else if(state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D]){
         currentDirection = -1;
-        velX = -theGame->player[playerID].speed;
+        velX = -theGame->player[theGame->playerID].speed;
     }
     else if(state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A]){
         currentDirection = 1;
-        velX = theGame->player[playerID].speed;
+        velX = theGame->player[theGame->playerID].speed;
     }
     if(velX == 0){
         if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_S]){
             if(currentDirection == 2)
-                velY = theGame->player[playerID].speed;
+                velY = theGame->player[theGame->playerID].speed;
             else if(currentDirection == 3)
-                velY = -theGame->player[playerID].speed;
+                velY = -theGame->player[theGame->playerID].speed;
         }
         else if(state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
             currentDirection = 2;
-            velY = -theGame->player[playerID].speed;
+            velY = -theGame->player[theGame->playerID].speed;
         }
         else if(state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_W]){
             currentDirection = 3;
-            velY = theGame->player[playerID].speed;
+            velY = theGame->player[theGame->playerID].speed;
         }
     }
 
@@ -204,7 +187,7 @@ void updatePlayerPos(Game theGame, int playerID, int velX, int velY)
 //game loop
 PUBLIC void gameUpdate(Game theGame) 
 {
-    Player player[PLAYERAMOUNT];   //declares x-ammounts of players depending on "playerAmmount"
+    Player player[theGame->playerAmount];   //declares x-ammounts of players depending on "playerAmmount"
     initGame(theGame); //initializes startvalues. coordinates etc.
     //int renderOrder[4]={0,1,2,3}; //what order to render players
 
@@ -258,7 +241,7 @@ void renderTextures(Game theGame)
 
 
     // renders players
-    for(int i=0; i<PLAYERAMOUNT; i++){
+    for(int i=0; i<theGame->playerAmount; i++){
         SDL_Rect rect = {theGame->player[i].xPos, theGame->player[i].yPos, theGame->player->width, theGame->player->height};
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i], 0, &rect, 0, NULL, 0);
     }

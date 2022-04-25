@@ -4,10 +4,37 @@
 #include <SDL2/SDL.h>
 #include "player.h"
 
+
+struct game_type
+{
+    //player
+    int playerAmount;    //how many players are online
+    int playerID;        //the players ID. 
+    Player player[4];
+   
+
+
+    SDL_Window  *window;
+    SDL_Surface *window_surface;
+
+    //Renderer
+    SDL_Renderer *renderer;
+
+    //Images
+    SDL_Texture *background;
+    SDL_Texture *player_texture[4];     //4  players, måste stå 4 annars blir de segmentation fault.
+    
+    SDL_Event    window_event;
+
+   
+}; 
+
 typedef struct game_type *Game;
-Game createWindow();              // Struct for app initialization
-void initGame(Game theGame);
-SDL_Texture *loadTextures(Game newGame, char fileLocation[]); // Load any image you want in the resources/ folder!
+
+
+
+Game initializeGameWindow();              // Struct for app initialization
+SDL_Texture *loadMedia(Game newGame, char fileLocation[]); // Load any image you want in the resources/ folder!
 void gameUpdate(Game newGame);  // Game loop
 bool checkEvents(Game theGame);
 void manageMovementInputs(Game theGame);
