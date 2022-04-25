@@ -66,10 +66,10 @@ void closeGame(GameState *game, SDL_Window *window)
     SDL_Quit();
 }
 
-void moveRandomPin(GameState *game)
-{
+// void moveRandomPin(GameState *game)
+// {
     
-}
+// }
 
 void process(GameState *game) //Handle game logic (bomb explode??)
 {
@@ -84,7 +84,7 @@ void process(GameState *game) //Handle game logic (bomb explode??)
     //Enemy AI
     if((rand() % 160) > 158){
         printf("woop %d\n", rand() % 160);
-        moveRandomPin(&game);
+        //moveRandomPin(&game);
     }
 
     //Only do stuff here if game is on

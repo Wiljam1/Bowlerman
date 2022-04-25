@@ -19,10 +19,6 @@ int playerID=0;        //the players ID.
 const int WIDTH = 800; 
 const int HEIGHT = 450;
 
-PRIVATE void updateMedia(Game theGame);
-PRIVATE void createGameMedia(Game newGame);
-PRIVATE bool checkEvents(Game newGame);
-
 struct game_type
 {
     SDL_Window  *window;
@@ -61,7 +57,7 @@ PUBLIC Game createGame()
 }
 
 //handles processes, like keyboard-inputs etc
-PRIVATE bool checkEvents(Game theGame)
+bool checkEvents(Game theGame)
 {
     //Enter game loop (SDL_PollEvent)
     bool done = false;
@@ -101,6 +97,16 @@ PRIVATE bool checkEvents(Game theGame)
         }
     }
 
+    //Manage movement inputs
+    manageMovementInputs(theGame);
+
+    // send and retrive positions via server
+
+    return done;
+}
+
+void manageMovementInputs(Game theGame)
+{
     // Om du ska fortsätta göra movement bättre; 
     // https://stackoverflow.com/questions/39929853/priority-when-2-keys-are-pressed-at-the-same-time-script-for-a-game
     // Det är samma princip men mycket mer if-satser för att täcka alla fall av samtidiga knapptryck.
@@ -138,26 +144,25 @@ PRIVATE bool checkEvents(Game theGame)
         }
     }
 
+    updatePlayerPos(theGame, playerID, velX, velY);
+}
+
+void updatePlayerPos(Game theGame, int playerID, int velX, int velY)
+{
     // update (client-side) player positions
     theGame->player[playerID].xPos += velX;
     theGame->player[playerID].yPos += velY;
-
-    updatePlayerPos(playerID, velX, velY);
-
-    // send and retrive positions via server
-
-    return done;
 }
 
 //initializes startvalues for game
-PRIVATE void initGame(Game theGame)
+void initGame(Game theGame)
 {
     //loads in textures
-    theGame->background = (SDL_Texture *) loadMedia(theGame, "grass00.bmp");
-    theGame->player_texture[0] = (SDL_Texture *) loadMedia(theGame, "bowlermantestskins/bowman00.png");
-    theGame->player_texture[1] = (SDL_Texture *) loadMedia(theGame, "pin2.png");
-    theGame->player_texture[2] = (SDL_Texture *) loadMedia(theGame, "pin2.png");
-    theGame->player_texture[3] = (SDL_Texture *) loadMedia(theGame, "pin2.png");
+    theGame->background = (SDL_Texture *) loadTextures(theGame, "alley.png");
+    theGame->player_texture[0] = (SDL_Texture *) loadTextures(theGame, "bowlermantestskins/bowman00.png");
+    theGame->player_texture[1] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
+    theGame->player_texture[2] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
+    theGame->player_texture[3] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     SDL_FreeSurface(theGame->window_surface);
 
     //check server what ID you have.
@@ -209,14 +214,14 @@ PUBLIC void gameUpdate(Game theGame)
         //Send/receive data to server
 
         //render display
-        updateMedia(theGame); 
+        renderTextures(theGame); 
 
         SDL_Delay(10); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
 }
 
 //loads media into texture
-PUBLIC SDL_Texture *loadMedia(Game newGame, char fileLocation[])   //loadmedia
+PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[])   //loadmedia
 {
     bool success = true;
     char fileLocationInResources[100]="resources/";
@@ -231,7 +236,7 @@ PUBLIC SDL_Texture *loadMedia(Game newGame, char fileLocation[])   //loadmedia
 }
 
 //renders background and players etc.
-PRIVATE void updateMedia(Game theGame)
+void renderTextures(Game theGame)
 {
     SDL_RenderClear(theGame->renderer); //clear renderer
     //updates/renders background
