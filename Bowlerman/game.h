@@ -13,8 +13,6 @@ struct game_type
     Player player[4];
    
 
-//Rectangles
-    SDL_Rect bombRect;
 
     SDL_Window  *window;
     SDL_Surface *window_surface;
