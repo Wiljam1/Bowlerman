@@ -266,7 +266,7 @@ void renderTextures(Game theGame)
     SDL_RenderClear(theGame->renderer); //clear renderer
     //updates/renders background
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, NULL);
-    //render bombs
+    //render bombs ***********KRASCHAR****************
     //SDL_RenderCopyEx(theGame->renderer, theGame->bomb_texture, &bowlingballAnimation[0],NULL, 0, NULL, SDL_FLIP_NONE);
     
 
@@ -286,10 +286,8 @@ void renderTextures(Game theGame)
 PUBLIC void destroyGame(Game theGame)
 {
     SDL_DestroyTexture(theGame->background);
-    SDL_DestroyTexture(theGame->player_texture[0][0]);
-    SDL_DestroyTexture(theGame->player_texture[1][0]);
-    SDL_DestroyTexture(theGame->player_texture[2][0]);
-    SDL_DestroyTexture(theGame->player_texture[3][0]);
+    for (int i = 0; i < 4; i++)
+        SDL_DestroyTexture(theGame->player_texture[i][0]);
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();
