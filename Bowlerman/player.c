@@ -7,15 +7,6 @@
 #include "game.h"
 #include "collissionDetection.h"
 
-
-// PUBLIC void initPlayerRect(Game theGame)
-// {
-//     playerRect.h = getPlayerHeight(p);
-//     playerRect->w = getPlayerWidth(p);
-//     playerRect->y = getPlayerYPosition(p);
-//     playerRect->x = getPlayerXPosition(p);
-// }
-
 PUBLIC Player initPlayer(float xPos, float yPos)
 {
     malloc(sizeof(struct playerController));
