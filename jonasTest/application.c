@@ -20,9 +20,10 @@ struct Application_type{
 PRIVATE void update(Application theApp, double delta_time);
 PRIVATE void draw(Application theApp);
 
-PUBLIC Application createApplication(){
+PUBLIC Application createApplication()
+{
     Application s = malloc(sizeof(struct Application_type));
-    if(SDL_Init(SDL_INIT_VIDEO) < 0)
+    if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) < 0)
     {
         printf("Failed to initialize the SDL2 library\n");
     }
@@ -37,7 +38,8 @@ PUBLIC Application createApplication(){
 
 }
 
-PUBLIC void applicationUpdate(Application theApp){
+PUBLIC void applicationUpdate(Application theApp)
+{
     bool keep_window_open = true;
     while(keep_window_open)
     {
