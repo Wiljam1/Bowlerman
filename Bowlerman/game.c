@@ -13,11 +13,13 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 #define LENGTH 100
+#define PLAYERTEXTURES 13
 
 #define PLAYERAMOUNT 4    //how many players are online
 int playerID=0;        //the players ID. 
 
-void loadBomb(Game theGame);
+PRIVATE void loadBomb(Game theGame);
+PRIVATE void LoadPlayerTextures(Game theGame, int ID, char sourceText[40]);
 
 const int WIDTH = 800; 
 const int HEIGHT = 450;
@@ -39,7 +41,7 @@ struct game_type
 
     //Images
     SDL_Texture *background;
-    SDL_Texture *player_texture[4];     //4  players, måste stå 4 annars blir de segmentation fault.
+    SDL_Texture *player_texture[PLAYERAMOUNT][PLAYERTEXTURES];     //4  players, måste stå 4 annars blir de segmentation fault.
     SDL_Texture *bomb_texture;
     SDL_Texture *wall;
 
@@ -64,17 +66,33 @@ PUBLIC Game createWindow()
     theGame->window_surface = SDL_GetWindowSurface(theGame->window);
     return theGame;
 }
+PRIVATE void LoadPlayerTextures(Game theGame, int ID, char sourceText[40])
+{
+    char txt[40];
+    strcpy(txt, sourceText);
+    for (int i = 0; i < 12; i++)
+    {
+        theGame->player_texture[ID][i] = (SDL_Texture *)loadTextures(theGame, txt);
+        printf("%s\n", txt);
+        txt[26]++;
+        if (txt[26] == '9')
+        {
+            txt[25] = '1';
+            txt[26] = '0';
+        }
+    }
+    SDL_FreeSurface(theGame->window_surface);
+}
 
 //initializes startvalues for game
 void initGame(Game theGame)
 {
     //loads in textures
     theGame->background = (SDL_Texture *) loadTextures(theGame, "alley.png");
-    theGame->player_texture[0] = (SDL_Texture *) loadTextures(theGame, "bowlermantestskins/bowman00.png");
-    theGame->player_texture[1] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
-    theGame->player_texture[2] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
-    theGame->player_texture[3] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
-    theGame->bomb_texture = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_BLue.png");
+    theGame->player_texture[0][0] = (SDL_Texture *) loadTextures(theGame, "bowlermantestskins/bowman00.png");
+    theGame->player_texture[1][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
+    theGame->player_texture[2][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
+    theGame->player_texture[3][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     SDL_FreeSurface(theGame->window_surface);
 
     //check server what ID you have.
@@ -218,14 +236,12 @@ PUBLIC void gameUpdate(Game theGame)
     Player player[PLAYERAMOUNT];   //declares x-ammounts of players depending on "playerAmmount"
     initGame(theGame); //initializes startvalues. coordinates etc.
     //int renderOrder[4]={0,1,2,3}; //what order to render players
-
     //gameloop:
     bool done = false;
     while(!done)
     {
         //Check for events
         done = checkEvents(theGame);
-
         //Process events (time based stuff)
 
         //Collisiondetection
@@ -234,7 +250,7 @@ PUBLIC void gameUpdate(Game theGame)
 
         //render display
         renderTextures(theGame); 
-
+        
         SDL_Delay(10); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
 }
@@ -260,11 +276,8 @@ void renderTextures(Game theGame)
     SDL_RenderClear(theGame->renderer); //clear renderer
     //updates/renders background
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, NULL);
-
-    //render bombs
+    //render bombs ***********KRASCHAR****************
     SDL_RenderCopy(theGame->renderer, theGame->bomb_texture, &bowlingballAnimation[ 0 ], &theGame->possition_ball);
-
-    //SDL_RenderCopyEx(theGame->renderer, theGame->bomb_texture, &bowlingballAnimation[ 0 ], NULL, 0, NULL, SDL_FLIP_NONE);
 
     //bubble-sort the players y-position into the array "renderOrder"
     //arraySorter(player, PLAYERAMOUNT, renderOrder);
@@ -273,7 +286,7 @@ void renderTextures(Game theGame)
     // renders players
     for(int i=0; i<PLAYERAMOUNT; i++){
         SDL_Rect rect = {theGame->player[i].xPos, theGame->player[i].yPos, theGame->player->width, theGame->player->height};
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i], 0, &rect, 0, NULL, 0);
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][0], 0, &rect, 0, NULL, 0);
     }
     
     SDL_RenderPresent(theGame->renderer); //present renderer
@@ -282,10 +295,8 @@ void renderTextures(Game theGame)
 PUBLIC void destroyGame(Game theGame)
 {
     SDL_DestroyTexture(theGame->background);
-    SDL_DestroyTexture(theGame->player_texture[0]);
-    SDL_DestroyTexture(theGame->player_texture[1]);
-    SDL_DestroyTexture(theGame->player_texture[2]);
-    SDL_DestroyTexture(theGame->player_texture[3]);
+    for (int i = 0; i < 4; i++)
+        SDL_DestroyTexture(theGame->player_texture[i][0]);
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();
