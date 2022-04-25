@@ -13,7 +13,7 @@ struct game_type
     Player player[4];
    
 
-    //Rectangles
+//Rectangles
     SDL_Rect bombRect;
 
     SDL_Window  *window;
@@ -25,15 +25,18 @@ struct game_type
     //Images
     SDL_Texture *background;
     SDL_Texture *player_texture[4];     //4  players, måste stå 4 annars blir de segmentation fault.
-    SDL_Texture *bomb_texture;
     
     SDL_Event    window_event;
+
+   
 }; 
 
 typedef struct game_type *Game;
 
+
+
 Game initializeGameWindow();              // Struct for app initialization
-SDL_Texture *loadTextures(Game newGame, char fileLocation[]); // Load any image you want in the resources/ folder!
+SDL_Texture *loadMedia(Game newGame, char fileLocation[]); // Load any image you want in the resources/ folder!
 void gameUpdate(Game newGame);  // Game loop
 bool checkEvents(Game theGame);
 void manageMovementInputs(Game theGame);

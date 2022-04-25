@@ -53,17 +53,18 @@ void initGame(Game theGame)
     //check server what ID you have.
     //getPlayerID();
 
+
     //inits x-amount of players
     theGame->player[0] = initPlayer(5, 5);   //sets x and y coordinates and resets values.
     //initPlayerRect(theGame); //inits playerRect[0] to position of player0
     
-    if(theGame->playerAmount > 1){
+    if(PLAYERAMOUNT>1){
         theGame->player[1] = initPlayer(750, 300);   //sets x and y coordinates and resets values.
     }
-    if(theGame->playerAmount > 2){
+    if(PLAYERAMOUNT>2){
         theGame->player[2] = initPlayer(0, 300);   //sets x and y coordinates and resets values.
     }
-    if(theGame->playerAmount > 3){
+    if(PLAYERAMOUNT>3){
         theGame->player[3] = initPlayer(750, 0);   //sets x and y coordinates and resets values.
     }
   
@@ -168,7 +169,7 @@ void manageMovementInputs(Game theGame)
         }
     }
 
-    updatePlayerPos(theGame, theGame->playerID, velX, velY);
+    updatePlayerPos(theGame, playerID, velX, velY);
 }
 
 void updatePlayerPos(Game theGame, int playerID, int velX, int velY)
