@@ -8,29 +8,31 @@
 #include "collissionDetection.h"
 
 
-PUBLIC void initPlayerRect(SDL_Rect * playerRect, Player p)
-{
-    playerRect->h = getPlayerHeight(p);
-    playerRect->w = getPlayerWidth(p);
-    playerRect->y = getPlayerYPosition(p);
-    playerRect->x = getPlayerXPosition(p);
-}
+// PUBLIC void initPlayerRect(Game theGame)
+// {
+//     playerRect.h = getPlayerHeight(p);
+//     playerRect->w = getPlayerWidth(p);
+//     playerRect->y = getPlayerYPosition(p);
+//     playerRect->x = getPlayerXPosition(p);
+// }
 
 PUBLIC Player initPlayer(float xPos, float yPos)
 {
-    Player p = malloc(sizeof(struct playerController));
+    malloc(sizeof(struct playerController));
 
-    p->up = 0;
-    p->down = 0;
-    p->right = 0;
-    p->left = 0;
-    p->xVel = 0;
-    p->yVel = 0;
-    p->xPos = p->xPosOld = xPos;
-    p->yPos = p->yPosOld = yPos;
-    p->speed = 3;
-    p->height = 100;
-    p->width = 50;
+    Player p;
+
+    p.up = 0;
+    p.down = 0;
+    p.right = 0;
+    p.left = 0;
+    p.xVel = 0;
+    p.yVel = 0;
+    p.xPos = p.xPosOld = xPos;
+    p.yPos = p.yPosOld = yPos;
+    p.speed = 3;
+    p.height = 100;
+    p.width = 50;
 
     return p;
 }
@@ -38,35 +40,37 @@ PUBLIC Player initPlayer(float xPos, float yPos)
 
 PUBLIC int getPlayerHeight(Player p)
 {
-    return p->height;
+    return p.height;
 }
 PUBLIC int getPlayerWidth(Player p)
 {
-    return p->width;
+    return p.width;
 }
 PUBLIC float getPlayerXPosition(Player p)
 {
-    return p->xPos;
+    return p.xPos;
 }
 PUBLIC float getPlayerYPosition(Player p)
 {
-    return p->yPos;
+    return p.yPos;
 }
 
-PUBLIC void determinePlayerVelocity(Player p)
-{
-    p->xVel=0;
-    p->yVel=0;
-    if(p->up && !p->down) p->yVel = -p->speed;
-    if(p->down && !p->up) p->yVel = p->speed;
-    if(p->left && !p->right) p->xVel = -p->speed;
-    if(p->right && !p->left) p->xVel = p->speed;
-}
-PUBLIC void updatePlayerClientPosition(Player p)
-{
-    p->xPos += p->xVel;
-    p->yPos += p->yVel;
-}
+//REplaced by different movement-implementation
+
+// PUBLIC void determinePlayerVelocity(Player p)
+// {
+//     p->xVel=0;
+//     p->yVel=0;
+//     if(p->up && !p->down) p->yVel = -p->speed;
+//     if(p->down && !p->up) p->yVel = p->speed;
+//     if(p->left && !p->right) p->xVel = -p->speed;
+//     if(p->right && !p->left) p->xVel = p->speed;
+// }
+// PUBLIC void updatePlayerClientPosition(Player p)
+// {
+//     p->xPos += p->xVel;
+//     p->yPos += p->yVel;
+// }
 
 // PUBLIC void destroyPlayer(Player player)
 // {

@@ -13,21 +13,23 @@
 #define PRIVATE static
 #define LENGTH 100
 
-int playerAmmount=4;    //how many players are online
+#define PLAYERAMOUNT 4    //how many players are online
 int playerID=0;        //the players ID. 
 
 const int WIDTH = 800; 
 const int HEIGHT = 450;
 
-
-PRIVATE void updateMedia(Game newGame, SDL_Rect playerRect[], Player *player, int renderOrder[]);
+PRIVATE void updateMedia(Game theGame);
 PRIVATE void createGameMedia(Game newGame);
-PRIVATE bool checkEvents(Game newGame, Player *player);
+PRIVATE bool checkEvents(Game newGame);
 
 struct game_type
 {
     SDL_Window  *window;
     SDL_Surface *window_surface;
+
+    //Player
+    Player player[PLAYERAMOUNT];
 
     //Renderer
     SDL_Renderer *renderer;
@@ -59,22 +61,22 @@ PUBLIC Game createGame()
 }
 
 //handles processes, like keyboard-inputs etc
-PRIVATE bool checkEvents(Game newGame, Player *player)
+PRIVATE bool checkEvents(Game theGame)
 {
     //Enter game loop (SDL_PollEvent)
     bool done = false;
 
-    while(SDL_PollEvent(&newGame->window_event)){
-        SDL_Event event = newGame->window_event;
+    while(SDL_PollEvent(&theGame->window_event)){
+        SDL_Event event = theGame->window_event;
 
         switch(event.type){
             case SDL_QUIT:
                 done = true;
                 break;
             case SDL_WINDOWEVENT_CLOSE:
-                if(newGame->window){
-                    SDL_DestroyWindow(newGame->window);
-                    newGame->window = NULL;
+                if(theGame->window){
+                    SDL_DestroyWindow(theGame->window);
+                    theGame->window = NULL;
                     done = true;
                 }
             break;
@@ -83,18 +85,6 @@ PRIVATE bool checkEvents(Game newGame, Player *player)
                     case SDLK_ESCAPE:
                         done = true;  //Doesn't do anything right now
                     break;
-                    // case SDL_SCANCODE_W: case SDL_SCANCODE_UP:
-                    //     player[playerID]->up = 1;
-                    // break;
-                    // case SDL_SCANCODE_A: case SDL_SCANCODE_LEFT:
-                    //     player[playerID]->left = 1;
-                    // break;
-                    // case SDL_SCANCODE_S: case SDL_SCANCODE_DOWN:
-                    //     player[playerID]->down = 1;
-                    // break;
-                    // case SDL_SCANCODE_D: case SDL_SCANCODE_RIGHT:
-                    //     player[playerID]->right = 1;
-                    // break;
                     default: break;
                 }
                 break;
@@ -102,17 +92,8 @@ PRIVATE bool checkEvents(Game newGame, Player *player)
                 switch (event.key.keysym.scancode)
                 {
                 // case SDL_SCANCODE_W: case SDL_SCANCODE_UP:
-                //     player[playerID]->up = 0;
+                //     theGame->player[playerID].up = 0;
                 //     break;
-                // case SDL_SCANCODE_A: case SDL_SCANCODE_LEFT:
-                //     player[playerID]->left = 0;
-                //     break;
-                // case SDL_SCANCODE_S: case SDL_SCANCODE_DOWN:
-                //     player[playerID]->down = 0;
-                //     break;
-                // case SDL_SCANCODE_D: case SDL_SCANCODE_RIGHT:
-                //     player[playerID]->right = 0;
-                //    break;
                 default:
                     break;
                 }
@@ -128,123 +109,105 @@ PRIVATE bool checkEvents(Game newGame, Player *player)
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if(state[SDL_SCANCODE_A] && state[SDL_SCANCODE_D]){
         if(currentDirection == 1)
-            velX = -player[playerID]->speed;
+            velX = -theGame->player[playerID].speed;
         else if(currentDirection == -1)
-            velX = player[playerID]->speed;
+            velX = theGame->player[playerID].speed;
     }
     else if(state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D]){
         currentDirection = -1;
-        velX = -player[playerID]->speed;
+        velX = -theGame->player[playerID].speed;
     }
     else if(state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A]){
         currentDirection = 1;
-        velX = player[playerID]->speed;
+        velX = theGame->player[playerID].speed;
     }
     if(velX == 0){
         if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_S]){
             if(currentDirection == 2)
-                velY = player[playerID]->speed;
+                velY = theGame->player[playerID].speed;
             else if(currentDirection == 3)
-                velY = -player[playerID]->speed;
+                velY = -theGame->player[playerID].speed;
         }
         else if(state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
             currentDirection = 2;
-            velY = -player[playerID]->speed;
+            velY = -theGame->player[playerID].speed;
         }
         else if(state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_W]){
             currentDirection = 3;
-            velY = player[playerID]->speed;
+            velY = theGame->player[playerID].speed;
         }
     }
 
     // update (client-side) player positions
-    player[playerID]->xPos += velX;
-    player[playerID]->yPos += velY;
-
-    // determine velocity of player
-    //determinePlayerVelocity(player[playerID]);
+    theGame->player[playerID].xPos += velX;
+    theGame->player[playerID].yPos += velY;
 
     // send and retrive positions via server
-
-    //check if within bounds. write in: collissiondetection.c
-
-    // set the positions of the player in the struct
-    playerRect[playerID].x = (int) player[playerID]->xPos;
-    playerRect[playerID].y = (int) player[playerID]->yPos;
 
     return done;
 }
 
 //initializes startvalues for game
-PRIVATE void initGame(Game newGame, Player *player)
+PRIVATE void initGame(Game theGame)
 {
     //loads in textures
-    newGame->background = (SDL_Texture *) loadMedia(newGame, "grass00.bmp");
-    SDL_FreeSurface(newGame->window_surface);
-    newGame->player_texture[0] = (SDL_Texture *) loadMedia(newGame, "bowlermantestskins/bowman00.png");
-    SDL_FreeSurface(newGame->window_surface);
-    newGame->player_texture[1] = (SDL_Texture *) loadMedia(newGame, "pin2.png");
-    SDL_FreeSurface(newGame->window_surface);
-    newGame->player_texture[2] = (SDL_Texture *) loadMedia(newGame, "pin2.png");
-    SDL_FreeSurface(newGame->window_surface);
-    newGame->player_texture[3] = (SDL_Texture *) loadMedia(newGame, "pin2.png");
-    SDL_FreeSurface(newGame->window_surface);
+    theGame->background = (SDL_Texture *) loadMedia(theGame, "grass00.bmp");
+    theGame->player_texture[0] = (SDL_Texture *) loadMedia(theGame, "bowlermantestskins/bowman00.png");
+    theGame->player_texture[1] = (SDL_Texture *) loadMedia(theGame, "pin2.png");
+    theGame->player_texture[2] = (SDL_Texture *) loadMedia(theGame, "pin2.png");
+    theGame->player_texture[3] = (SDL_Texture *) loadMedia(theGame, "pin2.png");
+    SDL_FreeSurface(theGame->window_surface);
 
     //check server what ID you have.
     //getPlayerID();
 
 
-    //inits x-ammount of players based on "playerAmmount"-variable (global variable)
-    player[0] = initPlayer(5, 5);   //sets x and y coordinates and resets values.
-    initPlayerRect(&playerRect[0], player[0]); //inits playerRect[0] to position of player0
+    //inits x-amount of players
+    theGame->player[0] = initPlayer(5, 5);   //sets x and y coordinates and resets values.
+    //initPlayerRect(theGame); //inits playerRect[0] to position of player0
     
-    if(playerAmmount>1){
-        player[1] = initPlayer(750, 300);   //sets x and y coordinates and resets values.
-        initPlayerRect(&playerRect[1], player[1]); //inits playerRect[0] to position of player0
+    if(PLAYERAMOUNT>1){
+        theGame->player[1] = initPlayer(750, 300);   //sets x and y coordinates and resets values.
     }
-    if(playerAmmount>2){
-        player[2] = initPlayer(0, 300);   //sets x and y coordinates and resets values.
-        initPlayerRect(&playerRect[2], player[2]); //inits playerRect[0] to position of player0
+    if(PLAYERAMOUNT>2){
+        theGame->player[2] = initPlayer(0, 300);   //sets x and y coordinates and resets values.
     }
-    if(playerAmmount>3){
-        player[3] = initPlayer(750, 0);   //sets x and y coordinates and resets values.
-        initPlayerRect(&playerRect[3], player[3]); //inits playerRect[0] to position of player0
+    if(PLAYERAMOUNT>3){
+        theGame->player[3] = initPlayer(750, 0);   //sets x and y coordinates and resets values.
     }
   
-    //get and scale the dimensions of texture (based on how many players are online)
-    for(int i=0; i<playerAmmount; i++)
-    {
-        SDL_QueryTexture(newGame->player_texture[i], NULL, NULL, &playerRect[i].w, &playerRect[i].h);
-        playerRect[i].w /=7;              //scales down width by 4
-        playerRect[i].h /=7;              //scales down height by 4  
-    }
-    
-
-    
+    // //get and scale the dimensions of texture (based on how many players are online)
+    // for(int i=0; i<PLAYERAMOUNT; i++)
+    // {
+    //     SDL_QueryTexture(theGame->player_texture[i], NULL, NULL, &playerRect[i].w, &playerRect[i].h);
+    //     playerRect[i].w /=7;              //scales down width by 4
+    //     playerRect[i].h /=7;              //scales down height by 4  
+    // }
 
 }
 
 //game loop
-PUBLIC void gameUpdate(Game newGame) 
+PUBLIC void gameUpdate(Game theGame) 
 {
-    Player player[playerAmmount-1];   //declares x-ammounts of players depending on "playerAmmount"
-    initGame(newGame, player); //initializes startvalues. coordinates etc.
-    int renderOrder[4]={0,1,2,3}; //what order to render players
+    Player player[PLAYERAMOUNT];   //declares x-ammounts of players depending on "playerAmmount"
+    initGame(theGame); //initializes startvalues. coordinates etc.
+    //int renderOrder[4]={0,1,2,3}; //what order to render players
 
-   
     //gameloop:
     bool done = false;
     while(!done)
     {
         //Check for events
-        done = checkEvents(newGame, player);
+        done = checkEvents(theGame);
 
         //Process events (time based stuff)
 
         //Collisiondetection
 
+        //Send/receive data to server
+
         //render display
-        updateMedia(newGame, playerRect, player, renderOrder); 
+        updateMedia(theGame); 
 
         SDL_Delay(10); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
@@ -266,22 +229,24 @@ PUBLIC SDL_Texture *loadMedia(Game newGame, char fileLocation[])   //loadmedia
 }
 
 //renders background and players etc.
-PRIVATE void updateMedia(Game newGame, SDL_Rect playerRect[], Player *player, int renderOrder[])
+PRIVATE void updateMedia(Game theGame)
 {
-    SDL_RenderClear(newGame->renderer); //clear renderer
-
+    SDL_RenderClear(theGame->renderer); //clear renderer
     //updates/renders background
-    SDL_RenderCopy(newGame->renderer, newGame->background, NULL, NULL);
+    SDL_RenderCopy(theGame->renderer, theGame->background, NULL, NULL);
+
 
     //bubble-sort the players y-position into the array "renderOrder"
-    arraySorter(player, playerAmmount, renderOrder);
+    //arraySorter(player, PLAYERAMOUNT, renderOrder);
+
 
     // renders players
-    for(int i=0; i<playerAmmount; i++){
-        SDL_RenderCopy(newGame->renderer, newGame->player_texture[renderOrder[i]], NULL, &playerRect[renderOrder[i]]);
+    for(int i=0; i<PLAYERAMOUNT; i++){
+        SDL_Rect rect = {theGame->player[i].xPos, theGame->player[i].yPos, theGame->player->width, theGame->player->height};
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i], 0, &rect, 0, NULL, 0);
     }
     
-    SDL_RenderPresent(newGame->renderer); //present renderer
+    SDL_RenderPresent(theGame->renderer); //present renderer
 }
 
 PUBLIC void destroyGame(Game theGame)

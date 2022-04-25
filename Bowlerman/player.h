@@ -16,7 +16,7 @@
 //nånting konstigt med player.h elr player.c, tror att de blir inkluderade två gånger
 //Får en massa errors när man flyttar runt saker här "already defined blah blah blah"
 
-typedef struct playerController *Player;
+typedef struct playerController Player;
 
 //när jag har denna struct i player.c funkar koden inte i game.c jättekonstigt! fattar ej varför
 //jag tror det är för att programmet måste veta hur stor struct:en är (?)
@@ -33,7 +33,7 @@ struct playerController
     int width;
     char name[40];
     
-    //SDL_Rect playerRectangle;   //struct to hold the position and size of the sprite
+    //SDL_Rect playerRect;   //struct to hold the position and size of the sprite
 };
 
 //initiate player position with x and y coordinates
@@ -51,9 +51,6 @@ void determinePlayerVelocity(Player playerMoving);
 //ändrar spelarens (clientmässiga) position
 void updatePlayerClientPosition(Player playerMoving);
 
-
-//rect for player
-SDL_Rect playerRect[4]; 
 //inits a player_rect with the x-and-y-position of player
 void initPlayerRect(SDL_Rect *playerRect, Player player1); 
 
