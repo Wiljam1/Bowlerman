@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
     SDL_Init(SDL_INIT_EVERYTHING);
     srand((int)time(NULL));
     TTF_Init(); //Init font system
-    Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
+    //Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
     GameState game;
     SDL_Window *window = SDL_CreateWindow("Game Window",            // Window title
                                         SDL_WINDOWPOS_UNDEFINED,        // x position
@@ -62,7 +62,7 @@ void closeGame(GameState *game, SDL_Window *window)
 
     //Clean up
     TTF_Quit();
-    Mix_CloseAudio();
+    //Mix_CloseAudio();
     SDL_Quit();
 }
 

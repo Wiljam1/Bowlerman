@@ -22,6 +22,7 @@ const int HEIGHT = 450;
 
 PRIVATE void updateMedia(Game newGame, SDL_Rect playerRect[], Player *player, int renderOrder[]);
 PRIVATE void createGameMedia(Game newGame);
+PRIVATE bool checkEvents(Game newGame, Player *player);
 
 struct game_type
 {
@@ -58,58 +59,58 @@ PUBLIC Game createGame()
 }
 
 //handles processes, like keyboard-inputs etc
-int checkEvents(Game newGame, Player *player)
+PRIVATE bool checkEvents(Game newGame, Player *player)
 {
-    bool keep_window_open = true;
-    while(SDL_PollEvent(&newGame->window_event) > 0)
-    {
+    //Enter game loop (SDL_PollEvent)
+    bool done = false;
+
+    while(SDL_PollEvent(&newGame->window_event)){
         SDL_Event event = newGame->window_event;
-        
-        switch(newGame->window_event.type)
-        {
+
+        switch(event.type){
             case SDL_QUIT:
-                keep_window_open = false;
+                done = true;
                 break;
+            case SDL_WINDOWEVENT_CLOSE:
+                if(newGame->window){
+                    SDL_DestroyWindow(newGame->window);
+                    newGame->window = NULL;
+                    done = true;
+                }
+            break;
             case SDL_KEYDOWN:
-                switch (event.key.keysym.scancode)
-                {
-                case SDL_SCANCODE_W:
-                case SDL_SCANCODE_UP:
-                    player[playerID]->up = 1;
+                switch (event.key.keysym.scancode){
+                    case SDLK_ESCAPE:
+                        done = true;  //Doesn't do anything right now
                     break;
-                case SDL_SCANCODE_A:
-                case SDL_SCANCODE_LEFT:
-                    player[playerID]->left = 1;
+                    case SDL_SCANCODE_W: case SDL_SCANCODE_UP:
+                        player[playerID]->up = 1;
                     break;
-                case SDL_SCANCODE_S:
-                case SDL_SCANCODE_DOWN:
-                    player[playerID]->down = 1;
+                    case SDL_SCANCODE_A: case SDL_SCANCODE_LEFT:
+                        player[playerID]->left = 1;
                     break;
-                case SDL_SCANCODE_D:
-                case SDL_SCANCODE_RIGHT:
-                    player[playerID]->right = 1;
+                    case SDL_SCANCODE_S: case SDL_SCANCODE_DOWN:
+                        player[playerID]->down = 1;
                     break;
-                default:
+                    case SDL_SCANCODE_D: case SDL_SCANCODE_RIGHT:
+                        player[playerID]->right = 1;
                     break;
+                    default: break;
                 }
                 break;
             case SDL_KEYUP:
                 switch (event.key.keysym.scancode)
                 {
-                case SDL_SCANCODE_W:
-                case SDL_SCANCODE_UP:
+                case SDL_SCANCODE_W: case SDL_SCANCODE_UP:
                     player[playerID]->up = 0;
                     break;
-                case SDL_SCANCODE_A:
-                case SDL_SCANCODE_LEFT:
+                case SDL_SCANCODE_A: case SDL_SCANCODE_LEFT:
                     player[playerID]->left = 0;
                     break;
-                case SDL_SCANCODE_S:
-                case SDL_SCANCODE_DOWN:
+                case SDL_SCANCODE_S: case SDL_SCANCODE_DOWN:
                     player[playerID]->down = 0;
                     break;
-                case SDL_SCANCODE_D:
-                case SDL_SCANCODE_RIGHT:
+                case SDL_SCANCODE_D: case SDL_SCANCODE_RIGHT:
                     player[playerID]->right = 0;
                     break;
                 default:
@@ -134,7 +135,7 @@ int checkEvents(Game newGame, Player *player)
     playerRect[playerID].y = (int) player[playerID]->yPos;
 
 
-    return keep_window_open;
+    return done;
 }
 
 //initializes startvalues for game
@@ -195,17 +196,17 @@ PUBLIC void gameUpdate(Game newGame)
 
    
     //gameloop:
-    bool keep_window_open = true;
-    while(keep_window_open)
+    bool done = false;
+    while(!done)
     {
         //Check for events
-        keep_window_open = checkEvents(newGame, player);
-        
-        //handles events
-        //handleEvents();
+        done = checkEvents(newGame, player);
 
-        //renders to screen
-        //bubble sort of players x-position
+        //Process events (time based stuff)
+
+        //Collisiondetection
+
+        //render display
         updateMedia(newGame, playerRect, player, renderOrder); 
 
         SDL_Delay(10); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera

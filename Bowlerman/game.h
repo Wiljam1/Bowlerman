@@ -6,7 +6,7 @@
 typedef struct game_type *Game;
 Game createGame();              // Struct for app initialization
 SDL_Texture *loadMedia(Game newGame, char fileLocation[]); // Load any image you want in the resources/ folder!
-void gameUpdate(Game newGame);
+void gameUpdate(Game newGame);  // Game loop
 void destroyGame(Game theGame); // Function for easily destroying the application.
 
 #endif

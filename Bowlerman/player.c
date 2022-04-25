@@ -19,11 +19,6 @@ PUBLIC void loadPlayer();
 PUBLIC Player initPlayer(float xPos, float yPos);
 PUBLIC void initPlayerRect(SDL_Rect *playerRect, Player player1);
 
-
-
-
-
-
 PUBLIC SDL_Rect playerRect[4];
 
 PUBLIC void initPlayerRect(SDL_Rect * playerRect, Player player1)
@@ -33,7 +28,6 @@ PUBLIC void initPlayerRect(SDL_Rect * playerRect, Player player1)
     playerRect->y = getPlayerYPosition(player1);
     playerRect->x = getPlayerXPosition(player1);
 }
-
 
 PUBLIC Player initPlayer(float xPos, float yPos)
 {
