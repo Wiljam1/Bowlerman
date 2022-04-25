@@ -37,28 +37,69 @@ struct game_type
     SDL_Texture *background;
     SDL_Texture *player_texture[4];     //4  players, måste stå 4 annars blir de segmentation fault.
     SDL_Texture *bomb_texture;
+    SDL_Texture *wall;
 
     SDL_Event    window_event;
 }; 
 
 //initializes game
-PUBLIC Game createGame()
+PUBLIC Game createWindow()
 {
-    Game newGame = malloc(sizeof(struct game_type));
+    Game theGame = malloc(sizeof(struct game_type));
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
         printf("Failed to initialize SDL2: %s\n", SDL_GetError());
     }
-    newGame->window= SDL_CreateWindow("Bowlerman 0.1", 
+    theGame->window= SDL_CreateWindow("Bowlerman 0.1", 
                                        SDL_WINDOWPOS_CENTERED, 
                                        SDL_WINDOWPOS_CENTERED, 
                                        WIDTH, HEIGHT, 
                                        SDL_WINDOW_SHOWN);
     
-    newGame->renderer = SDL_CreateRenderer(newGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    newGame->window_surface = SDL_GetWindowSurface(newGame->window);
-    return newGame;
+    theGame->renderer = SDL_CreateRenderer(theGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    theGame->window_surface = SDL_GetWindowSurface(theGame->window);
+    return theGame;
 }
+
+//initializes startvalues for game
+void initGame(Game theGame)
+{
+    //loads in textures
+    theGame->background = (SDL_Texture *) loadTextures(theGame, "alley.png");
+    theGame->player_texture[0] = (SDL_Texture *) loadTextures(theGame, "bowlermantestskins/bowman00.png");
+    theGame->player_texture[1] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
+    theGame->player_texture[2] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
+    theGame->player_texture[3] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
+    SDL_FreeSurface(theGame->window_surface);
+
+    //check server what ID you have.
+    //getPlayerID();
+
+
+    //inits x-amount of players
+    theGame->player[0] = initPlayer(5, 5);   //sets x and y coordinates and resets values.
+    //initPlayerRect(theGame); //inits playerRect[0] to position of player0
+    
+    if(PLAYERAMOUNT>1){
+        theGame->player[1] = initPlayer(750, 300);   //sets x and y coordinates and resets values.
+    }
+    if(PLAYERAMOUNT>2){
+        theGame->player[2] = initPlayer(0, 300);   //sets x and y coordinates and resets values.
+    }
+    if(PLAYERAMOUNT>3){
+        theGame->player[3] = initPlayer(750, 0);   //sets x and y coordinates and resets values.
+    }
+  
+    // //get and scale the dimensions of texture (based on how many players are online)
+    // for(int i=0; i<PLAYERAMOUNT; i++)
+    // {
+    //     SDL_QueryTexture(theGame->player_texture[i], NULL, NULL, &playerRect[i].w, &playerRect[i].h);
+    //     playerRect[i].w /=7;              //scales down width by 4
+    //     playerRect[i].h /=7;              //scales down height by 4  
+    // }
+
+}
+
 
 //handles processes, like keyboard-inputs etc
 bool checkEvents(Game theGame)
@@ -158,45 +199,6 @@ void updatePlayerPos(Game theGame, int playerID, int velX, int velY)
     // update (client-side) player positions
     theGame->player[playerID].xPos += velX;
     theGame->player[playerID].yPos += velY;
-}
-
-//initializes startvalues for game
-void initGame(Game theGame)
-{
-    //loads in textures
-    theGame->background = (SDL_Texture *) loadTextures(theGame, "alley.png");
-    theGame->player_texture[0] = (SDL_Texture *) loadTextures(theGame, "bowlermantestskins/bowman00.png");
-    theGame->player_texture[1] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
-    theGame->player_texture[2] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
-    theGame->player_texture[3] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
-    SDL_FreeSurface(theGame->window_surface);
-
-    //check server what ID you have.
-    //getPlayerID();
-
-
-    //inits x-amount of players
-    theGame->player[0] = initPlayer(5, 5);   //sets x and y coordinates and resets values.
-    //initPlayerRect(theGame); //inits playerRect[0] to position of player0
-    
-    if(PLAYERAMOUNT>1){
-        theGame->player[1] = initPlayer(750, 300);   //sets x and y coordinates and resets values.
-    }
-    if(PLAYERAMOUNT>2){
-        theGame->player[2] = initPlayer(0, 300);   //sets x and y coordinates and resets values.
-    }
-    if(PLAYERAMOUNT>3){
-        theGame->player[3] = initPlayer(750, 0);   //sets x and y coordinates and resets values.
-    }
-  
-    // //get and scale the dimensions of texture (based on how many players are online)
-    // for(int i=0; i<PLAYERAMOUNT; i++)
-    // {
-    //     SDL_QueryTexture(theGame->player_texture[i], NULL, NULL, &playerRect[i].w, &playerRect[i].h);
-    //     playerRect[i].w /=7;              //scales down width by 4
-    //     playerRect[i].h /=7;              //scales down height by 4  
-    // }
-
 }
 
 //game loop

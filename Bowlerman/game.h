@@ -5,7 +5,7 @@
 #include "player.h"
 
 typedef struct game_type *Game;
-Game createGame();              // Struct for app initialization
+Game createWindow();              // Struct for app initialization
 void initGame(Game theGame);
 SDL_Texture *loadTextures(Game newGame, char fileLocation[]); // Load any image you want in the resources/ folder!
 void gameUpdate(Game newGame);  // Game loop
