@@ -93,6 +93,7 @@ void initGame(Game theGame)
     theGame->player_texture[1][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     theGame->player_texture[2][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     theGame->player_texture[3][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
+    theGame->bomb_texture = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_BLue.png");
     SDL_FreeSurface(theGame->window_surface);
 
     //check server what ID you have.
