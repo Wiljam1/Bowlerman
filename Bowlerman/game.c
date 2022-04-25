@@ -146,11 +146,15 @@ bool checkEvents(Game theGame)
                 }
             break;
             case SDL_KEYDOWN:
-                switch (event.key.keysym.scancode){
+                switch (event.key.keysym.sym){
                     case SDLK_ESCAPE:
-                        done = true;  //Doesn't do anything right now
+                        done = true; 
                     break;
-                    case SDL_SCANCODE_SPACE:
+                    default: break;
+                }
+                break;
+                switch (event.key.keysym.scancode){
+                    case SDL_SCANCODE_SPACE: 
                         theGame->possition_ball.y = theGame->player[0].yPos;
                         theGame->possition_ball.x = theGame->player[0].xPos;
                         theGame->possition_ball.h = 50;
@@ -163,12 +167,9 @@ bool checkEvents(Game theGame)
             case SDL_KEYUP:
                 switch (event.key.keysym.scancode)
                 {
-                // case SDL_SCANCODE_W: case SDL_SCANCODE_UP:
-                //     theGame->player[playerID].up = 0;
-                //     break;
-                
-                default:
-                    break;
+                    // case SDLK_w: case SDLK_UP:
+                    //     up = false;
+                    default: break;
                 }
                 break;
         }
@@ -184,42 +185,33 @@ bool checkEvents(Game theGame)
 
 void manageMovementInputs(Game theGame)
 {
+
     // Om du ska fortsätta göra movement bättre; 
     // https://stackoverflow.com/questions/39929853/priority-when-2-keys-are-pressed-at-the-same-time-script-for-a-game
     // Det är samma princip men mycket mer if-satser för att täcka alla fall av samtidiga knapptryck.
     int velX = 0, velY = 0;
-    static int currentDirection = 0;
+    
+    //bool left = false, right = false, up = false, down = false;
+
+    //static int currentDirection = 0;
+    
     const Uint8 *state = SDL_GetKeyboardState(NULL);
-    if(state[SDL_SCANCODE_A] && state[SDL_SCANCODE_D]){
-        if(currentDirection == 1)
-            velX = -theGame->player[playerID].speed;
-        else if(currentDirection == -1)
-            velX = theGame->player[playerID].speed;
-    }
-    else if(state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D]){
-        currentDirection = -1;
+
+    if(state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
         velX = -theGame->player[playerID].speed;
     }
-    else if(state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A]){
-        currentDirection = 1;
+    else if(state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
         velX = theGame->player[playerID].speed;
     }
     if(velX == 0){
-        if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_S]){
-            if(currentDirection == 2)
-                velY = theGame->player[playerID].speed;
-            else if(currentDirection == 3)
-                velY = -theGame->player[playerID].speed;
-        }
-        else if(state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
-            currentDirection = 2;
+        if(state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_S]){
             velY = -theGame->player[playerID].speed;
         }
-        else if(state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_W]){
-            currentDirection = 3;
+        else if(state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D]){
             velY = theGame->player[playerID].speed;
         }
     }
+
 
     updatePlayerPos(theGame, playerID, velX, velY);
 }
