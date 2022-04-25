@@ -8,6 +8,7 @@
 #include "player.h"
 #include "collissionDetection.h"
 #include "sorter.h"
+#include "bomb.h"
 
 #define PUBLIC /* empty */
 #define PRIVATE static
@@ -15,6 +16,8 @@
 
 #define PLAYERAMOUNT 4    //how many players are online
 int playerID=0;        //the players ID. 
+
+PRIVATE void loadBomb(Game theGame);
 
 const int WIDTH = 800; 
 const int HEIGHT = 450;
@@ -33,7 +36,8 @@ struct game_type
     //Images
     SDL_Texture *background;
     SDL_Texture *player_texture[4];     //4  players, måste stå 4 annars blir de segmentation fault.
-    
+    SDL_Texture *bomb_texture;
+
     SDL_Event    window_event;
 }; 
 
@@ -90,6 +94,8 @@ bool checkEvents(Game theGame)
                 // case SDL_SCANCODE_W: case SDL_SCANCODE_UP:
                 //     theGame->player[playerID].up = 0;
                 //     break;
+                case SDL_SCANCODE_SPACE:
+                    loadBomb(theGame);
                 default:
                     break;
                 }
@@ -242,6 +248,8 @@ void renderTextures(Game theGame)
     //updates/renders background
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, NULL);
 
+    //render bombs
+    SDL_RenderCopyEx(theGame->renderer, theGame->bomb_texture, &bowlingballAnimation[ 0 ],NULL, 0, NULL, SDL_FLIP_NONE);
 
     //bubble-sort the players y-position into the array "renderOrder"
     //arraySorter(player, PLAYERAMOUNT, renderOrder);
@@ -267,3 +275,105 @@ PUBLIC void destroyGame(Game theGame)
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();
 }
+
+
+
+PRIVATE void loadBomb(Game theGame)
+{
+    //SDL_Surface* gbowlingballSurface = IMG_Load("resources/Bowling_Ball_BLue.png");
+    //mbowlingball = SDL_CreateTextureFromSurface(gRenderer, gbowlingballSurface);
+    
+    theGame->bomb_texture = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_BLue.png");
+    SDL_FreeSurface(theGame->window_surface);
+
+    bowlingballAnimation[ 0 ].x =   0;
+    bowlingballAnimation[ 0 ].y =   0;
+    bowlingballAnimation[ 0 ].w = 256;
+    bowlingballAnimation[ 0 ].h = 256;
+
+    bowlingballAnimation[ 1 ].x = 256;
+    bowlingballAnimation[ 1 ].y =   0;
+    bowlingballAnimation[ 1 ].w = 256;
+    bowlingballAnimation[ 1 ].h = 256;
+
+    bowlingballAnimation[ 2 ].x = 512;
+    bowlingballAnimation[ 2 ].y =   0;
+    bowlingballAnimation[ 2 ].w = 256;
+    bowlingballAnimation[ 2 ].h = 256;
+
+    bowlingballAnimation[ 3 ].x = 768;
+    bowlingballAnimation[ 3 ].y =   0;
+    bowlingballAnimation[ 3 ].w = 256;
+    bowlingballAnimation[ 3 ].h = 256;
+
+    bowlingballAnimation[ 4 ].x =   0;
+    bowlingballAnimation[ 4 ].y = 256;
+    bowlingballAnimation[ 4 ].w = 256;
+    bowlingballAnimation[ 4 ].h = 256;
+
+    bowlingballAnimation[ 5 ].x = 256;
+    bowlingballAnimation[ 5 ].y = 256;
+    bowlingballAnimation[ 5 ].w = 256;
+    bowlingballAnimation[ 5 ].h = 256;
+
+    bowlingballAnimation[ 6 ].x = 512;
+    bowlingballAnimation[ 6 ].y = 256;
+    bowlingballAnimation[ 6 ].w = 256;
+    bowlingballAnimation[ 6 ].h = 256;
+
+    bowlingballAnimation[ 7 ].x = 768;
+    bowlingballAnimation[ 7 ].y = 256;
+    bowlingballAnimation[ 7 ].w = 256;
+    bowlingballAnimation[ 7 ].h = 256;
+
+    bowlingballAnimation[ 8 ].x =   0;
+    bowlingballAnimation[ 8 ].y = 512;
+    bowlingballAnimation[ 8 ].w = 256;
+    bowlingballAnimation[ 8 ].h = 256;
+
+    bowlingballAnimation[ 9 ].x = 256;
+    bowlingballAnimation[ 9 ].y = 512;
+    bowlingballAnimation[ 9 ].w = 256;
+    bowlingballAnimation[ 9 ].h = 256;
+
+    bowlingballAnimation[ 10 ].x = 512;
+    bowlingballAnimation[ 10 ].y = 512;
+    bowlingballAnimation[ 10 ].w = 256;
+    bowlingballAnimation[ 10 ].h = 256;
+
+    bowlingballAnimation[ 11 ].x = 768;
+    bowlingballAnimation[ 11 ].y = 512;
+    bowlingballAnimation[ 11 ].w = 256;
+    bowlingballAnimation[ 11 ].h = 256;
+
+    bowlingballAnimation[ 12 ].x =   0;
+    bowlingballAnimation[ 12 ].y = 768;
+    bowlingballAnimation[ 12 ].w = 256;
+    bowlingballAnimation[ 12 ].h = 256;
+
+    bowlingballAnimation[ 13 ].x = 256;
+    bowlingballAnimation[ 13 ].y = 768;
+    bowlingballAnimation[ 13 ].w = 256;
+    bowlingballAnimation[ 13 ].h = 256;
+
+    bowlingballAnimation[ 14 ].x = 512;
+    bowlingballAnimation[ 14 ].y = 768;
+    bowlingballAnimation[ 14 ].w = 256;
+    bowlingballAnimation[ 14 ].h = 256;
+
+    bowlingballAnimation[ 15 ].x = 768;
+    bowlingballAnimation[ 15 ].y = 768;
+    bowlingballAnimation[ 15 ].w = 256;
+    bowlingballAnimation[ 15 ].h = 256;
+
+    bowlingballAnimation[ 16 ].x =   0;
+    bowlingballAnimation[ 16 ].y =1024;
+    bowlingballAnimation[ 16 ].w = 256;
+    bowlingballAnimation[ 16 ].h = 256;
+
+    bowlingballAnimation[ 17 ].x = 256;
+    bowlingballAnimation[ 17 ].y =1024;
+    bowlingballAnimation[ 17 ].w = 256;
+    bowlingballAnimation[ 17 ].h = 256;
+}
+
