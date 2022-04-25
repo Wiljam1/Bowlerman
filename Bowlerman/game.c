@@ -83,36 +83,36 @@ PRIVATE bool checkEvents(Game newGame, Player *player)
                     case SDLK_ESCAPE:
                         done = true;  //Doesn't do anything right now
                     break;
-                    case SDL_SCANCODE_W: case SDL_SCANCODE_UP:
-                        player[playerID]->up = 1;
-                    break;
-                    case SDL_SCANCODE_A: case SDL_SCANCODE_LEFT:
-                        player[playerID]->left = 1;
-                    break;
-                    case SDL_SCANCODE_S: case SDL_SCANCODE_DOWN:
-                        player[playerID]->down = 1;
-                    break;
-                    case SDL_SCANCODE_D: case SDL_SCANCODE_RIGHT:
-                        player[playerID]->right = 1;
-                    break;
+                    // case SDL_SCANCODE_W: case SDL_SCANCODE_UP:
+                    //     player[playerID]->up = 1;
+                    // break;
+                    // case SDL_SCANCODE_A: case SDL_SCANCODE_LEFT:
+                    //     player[playerID]->left = 1;
+                    // break;
+                    // case SDL_SCANCODE_S: case SDL_SCANCODE_DOWN:
+                    //     player[playerID]->down = 1;
+                    // break;
+                    // case SDL_SCANCODE_D: case SDL_SCANCODE_RIGHT:
+                    //     player[playerID]->right = 1;
+                    // break;
                     default: break;
                 }
                 break;
             case SDL_KEYUP:
                 switch (event.key.keysym.scancode)
                 {
-                case SDL_SCANCODE_W: case SDL_SCANCODE_UP:
-                    player[playerID]->up = 0;
-                    break;
-                case SDL_SCANCODE_A: case SDL_SCANCODE_LEFT:
-                    player[playerID]->left = 0;
-                    break;
-                case SDL_SCANCODE_S: case SDL_SCANCODE_DOWN:
-                    player[playerID]->down = 0;
-                    break;
-                case SDL_SCANCODE_D: case SDL_SCANCODE_RIGHT:
-                    player[playerID]->right = 0;
-                    break;
+                // case SDL_SCANCODE_W: case SDL_SCANCODE_UP:
+                //     player[playerID]->up = 0;
+                //     break;
+                // case SDL_SCANCODE_A: case SDL_SCANCODE_LEFT:
+                //     player[playerID]->left = 0;
+                //     break;
+                // case SDL_SCANCODE_S: case SDL_SCANCODE_DOWN:
+                //     player[playerID]->down = 0;
+                //     break;
+                // case SDL_SCANCODE_D: case SDL_SCANCODE_RIGHT:
+                //     player[playerID]->right = 0;
+                //    break;
                 default:
                     break;
                 }
@@ -120,11 +120,49 @@ PRIVATE bool checkEvents(Game newGame, Player *player)
         }
     }
 
-    // determine velocity of player
-    determinePlayerVelocity(player[playerID]);
+    // Om du ska fortsätta göra movement bättre; 
+    // https://stackoverflow.com/questions/39929853/priority-when-2-keys-are-pressed-at-the-same-time-script-for-a-game
+    // Det är samma princip men mycket mer if-satser för att täcka alla fall av samtidiga knapptryck.
+    int velX = 0, velY = 0;
+    static int currentDirection = 0;
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    if(state[SDL_SCANCODE_A] && state[SDL_SCANCODE_D]){
+        if(currentDirection == 1)
+            velX = -player[playerID]->speed;
+        else if(currentDirection == -1)
+            velX = player[playerID]->speed;
+    }
+    else if(state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D]){
+        currentDirection = -1;
+        velX = -player[playerID]->speed;
+    }
+    else if(state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A]){
+        currentDirection = 1;
+        velX = player[playerID]->speed;
+    }
+    if(velX == 0){
+        if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_S]){
+            if(currentDirection == 2)
+                velY = player[playerID]->speed;
+            else if(currentDirection == 3)
+                velY = -player[playerID]->speed;
+        }
+        else if(state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
+            currentDirection = 2;
+            velY = -player[playerID]->speed;
+        }
+        else if(state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_W]){
+            currentDirection = 3;
+            velY = player[playerID]->speed;
+        }
+    }
 
     // update (client-side) player positions
-    updatePlayerClientPosition(player[playerID]);
+    player[playerID]->xPos += velX;
+    player[playerID]->yPos += velY;
+
+    // determine velocity of player
+    //determinePlayerVelocity(player[playerID]);
 
     // send and retrive positions via server
 
@@ -133,7 +171,6 @@ PRIVATE bool checkEvents(Game newGame, Player *player)
     // set the positions of the player in the struct
     playerRect[playerID].x = (int) player[playerID]->xPos;
     playerRect[playerID].y = (int) player[playerID]->yPos;
-
 
     return done;
 }

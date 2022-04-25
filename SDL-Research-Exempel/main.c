@@ -372,7 +372,7 @@ bool processEvents(SDL_Window *window, GameState *game)
         game->man.isMovingLeft = false;
         game->man.isMovingRight = true;
     }
-    if(velX ==0){
+    if(velX == 0){
         if(state[SDL_SCANCODE_W]){
             velY += -SPEED;
             game->man.isMoving = true;
