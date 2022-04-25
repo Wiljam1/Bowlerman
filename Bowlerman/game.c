@@ -142,6 +142,8 @@ PRIVATE bool checkEvents(Game theGame)
     theGame->player[playerID].xPos += velX;
     theGame->player[playerID].yPos += velY;
 
+    updatePlayerPos(playerID, velX, velY);
+
     // send and retrive positions via server
 
     return done;
