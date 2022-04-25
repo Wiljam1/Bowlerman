@@ -17,7 +17,7 @@
 #define PLAYERAMOUNT 4    //how many players are online
 int playerID=0;        //the players ID. 
 
-PRIVATE void loadBomb(Game theGame);
+void loadBomb(Game theGame);
 
 const int WIDTH = 800; 
 const int HEIGHT = 450;
@@ -29,6 +29,10 @@ struct game_type
 
     //Player
     Player player[PLAYERAMOUNT];
+
+    //bombs
+    SDL_Rect possition_ball;
+    SDL_Rect *bowlingballAnimation[18];
 
     //Renderer
     SDL_Renderer *renderer;
@@ -70,6 +74,7 @@ void initGame(Game theGame)
     theGame->player_texture[1] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     theGame->player_texture[2] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     theGame->player_texture[3] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
+    theGame->bomb_texture = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_BLue.png");
     SDL_FreeSurface(theGame->window_surface);
 
     //check server what ID you have.
@@ -126,6 +131,13 @@ bool checkEvents(Game theGame)
                     case SDLK_ESCAPE:
                         done = true;  //Doesn't do anything right now
                     break;
+                    case SDL_SCANCODE_SPACE:
+                        theGame->possition_ball.y = theGame->player[0].yPos;
+                        theGame->possition_ball.x = theGame->player[0].xPos;
+                        theGame->possition_ball.h = 50;
+                        theGame->possition_ball.w = 50;
+                        loadBomb(theGame);
+                    break;
                     default: break;
                 }
                 break;
@@ -135,8 +147,7 @@ bool checkEvents(Game theGame)
                 // case SDL_SCANCODE_W: case SDL_SCANCODE_UP:
                 //     theGame->player[playerID].up = 0;
                 //     break;
-                case SDL_SCANCODE_SPACE:
-                    loadBomb(theGame);
+                
                 default:
                     break;
                 }
@@ -251,7 +262,9 @@ void renderTextures(Game theGame)
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, NULL);
 
     //render bombs
-    SDL_RenderCopyEx(theGame->renderer, theGame->bomb_texture, &bowlingballAnimation[ 0 ],NULL, 0, NULL, SDL_FLIP_NONE);
+    SDL_RenderCopy(theGame->renderer, theGame->bomb_texture, &bowlingballAnimation[ 0 ], &theGame->possition_ball);
+
+    //SDL_RenderCopyEx(theGame->renderer, theGame->bomb_texture, &bowlingballAnimation[ 0 ], NULL, 0, NULL, SDL_FLIP_NONE);
 
     //bubble-sort the players y-position into the array "renderOrder"
     //arraySorter(player, PLAYERAMOUNT, renderOrder);
@@ -280,14 +293,8 @@ PUBLIC void destroyGame(Game theGame)
 
 
 
-PRIVATE void loadBomb(Game theGame)
+void loadBomb(Game theGame)
 {
-    //SDL_Surface* gbowlingballSurface = IMG_Load("resources/Bowling_Ball_BLue.png");
-    //mbowlingball = SDL_CreateTextureFromSurface(gRenderer, gbowlingballSurface);
-    
-    theGame->bomb_texture = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_BLue.png");
-    SDL_FreeSurface(theGame->window_surface);
-
     bowlingballAnimation[ 0 ].x =   0;
     bowlingballAnimation[ 0 ].y =   0;
     bowlingballAnimation[ 0 ].w = 256;

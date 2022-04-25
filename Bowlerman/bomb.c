@@ -10,44 +10,49 @@
 #include "sorter.h"
 #include "bomb.h"
 
-#define PUBLIC 
-#define PRIVATE static
 
-PRIVATE int BOWLINGBALL_WIDTH = 15;
-PRIVATE int BOWLINGBALL_HEIGHT = 15;
-
-PUBLIC SDL_Rect bowlingballAnimation[18];
-PUBLIC SDL_Rect possition_ball;
-
+/*
 struct Bowling_ball
 {
-    int BOWLINGBALL_POSITION_X;
-    int BOWLINGBALL_POSITION_Y;
-    int BOWLINGBALL_HEIGHT;
-    int BOWLINGBALL_WIDTH;
-    int BOWLINGBALL_FRAME;
+    int ;
+    int ;
+    int ;
+    int ;
+    int ;
 };
+*/
 
-
-PUBLIC Bowlingball createBowlingBall(Player player)
+/*
+PUBLIC Bowlingball createBowlingBall()
 {
     Bowlingball b = malloc(sizeof(struct Bowling_ball));
-    b->BOWLINGBALL_POSITION_X = getPlayerXPosition(player);
-    b->BOWLINGBALL_POSITION_Y = getPlayerYPosition(player);
-    b->BOWLINGBALL_FRAME = 0;
+    b.height = 80;
+    b.width = 50;
     return b;
 }
+*/
 
-PUBLIC void setBowlingBallPosition(Player player, Bowlingball ball)
-{
 
+/*
+SDL_Rect setBowlingBallPosition(Game theGame, Player player)
+{ 
+    //malloc(sizeof(struct SDL_Rect));
+    SDL_Rect possition_ball;
+    possition_ball.y = getPlayerYPosition(player);
+    possition_ball.x = getPlayerXPosition(player);
+    possition_ball.h = 50;
+    possition_ball.w = 50;
+    return possition_ball;
 }
+*/
 
+/*
 PUBLIC int getBowlingBallPositionX(Bowlingball ball){
     return ball->BOWLINGBALL_POSITION_X;
 }
+*/
 
-
+/*
 PUBLIC int getBowlingBallPositionY(Bowlingball ball){
     return ball->BOWLINGBALL_POSITION_Y;
 }
@@ -63,3 +68,5 @@ PUBLIC int getBowlingBallHeight(){
 PUBLIC int getBowlingBallFrame(Bowlingball ball){
     return ball->BOWLINGBALL_FRAME;
 }
+*/
+
