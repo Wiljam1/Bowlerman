@@ -75,25 +75,23 @@ void initGame(Game theGame)
     //check server what ID you have.
     //getPlayerID();
 
-    //detta ska ändras via servern sen.
-    theGame->playerAmmount=4;
 
     //inits x-amount of players
     theGame->player[0] = initPlayer(5, 5);   //sets x and y coordinates and resets values.
     //initPlayerRect(theGame); //inits playerRect[0] to position of player0
     
-    if(theGame->playerAmmount>1){
+    if(PLAYERAMOUNT>1){
         theGame->player[1] = initPlayer(750, 300);   //sets x and y coordinates and resets values.
     }
-    if(theGame->playerAmmount>2){
+    if(PLAYERAMOUNT>2){
         theGame->player[2] = initPlayer(0, 300);   //sets x and y coordinates and resets values.
     }
-    if(theGame->playerAmmount>3){
+    if(PLAYERAMOUNT>3){
         theGame->player[3] = initPlayer(750, 0);   //sets x and y coordinates and resets values.
     }
   
     // //get and scale the dimensions of texture (based on how many players are online)
-    // for(int i=0; i<theGame->playerAmmount; i++)
+    // for(int i=0; i<PLAYERAMOUNT; i++)
     // {
     //     SDL_QueryTexture(theGame->player_texture[i], NULL, NULL, &playerRect[i].w, &playerRect[i].h);
     //     playerRect[i].w /=7;              //scales down width by 4
@@ -166,10 +164,12 @@ void manageMovementInputs(Game theGame)
 
     // Om du ska fortsätta göra movement bättre; 
     // https://stackoverflow.com/questions/39929853/priority-when-2-keys-are-pressed-at-the-same-time-script-for-a-game
-    // Man kollar vilken direction gubben kollar åt och bestämmer sedan att ett knapptryck kan ta över om det är en ny direction.
-    //static int currentDirection = 0;
-
+    // Det är samma princip men mycket mer if-satser för att täcka alla fall av samtidiga knapptryck.
     int velX = 0, velY = 0;
+    
+    //bool left = false, right = false, up = false, down = false;
+
+    //static int currentDirection = 0;
     
     const Uint8 *state = SDL_GetKeyboardState(NULL);
 
@@ -199,98 +199,10 @@ void updatePlayerPos(Game theGame, int playerID, int velX, int velY)
     theGame->player[playerID].yPos += velY;
 }
 
-void collisionDetect(Game theGame)
-{
-    float mW = theGame->player[playerID].width, mH = theGame->player[playerID].height;
-    float mX = theGame->player[playerID].xPos, mY = theGame->player[playerID].yPos;
-    
-    //Don't move out of window!
-    if(mX < 0)                //Left edge
-        theGame->player[playerID].xPos += theGame->player[playerID].speed;
-    if(mX+mW > WIDTH)         //Right edge
-         theGame->player[playerID].xPos -= theGame->player[playerID].speed;
-    if(mY < 0)                //Top edge
-        theGame->player[playerID].yPos += theGame->player[playerID].speed;
-    if(mY+mH > HEIGHT)        //Bottom edge
-        theGame->player[playerID].yPos -= theGame->player[playerID].speed;
-
-    //Collision with enemies
-    // for(int i = 0; i < WALLCOUNT/4; i++){
-    //     if(collide2d(game->man.x, game->man.y, game->bricks[i].x, game->bricks[i].y, MANSIZE, MANSIZE, 256/8, 800/8)){
-    //         game->man.isDead = true;
-    //         //Mix_HaltChannel(game->musicChannel);
-    //         break;
-    //     }
-    // }
-
-    // //Check for collision with any walls
-    // for(int i = 0; i < WALLCOUNT; i++)
-    // {
-    //     float wX = game->walls[i].x, wY = game->walls[i].y, 
-    //           wW = game->walls[i].w, wH = game->walls[i].h;
-
-    //     if(mY+mH > wY && mY < wY+wH){
-    //         //Rubbing against right edge
-    //         if(mX < wX+wW && mX+mW > wX+wW){
-    //             //Correct x
-    //             //game->man.x = wX+wW;
-    //             if(game->man.isMovingDiagonal == true){
-    //                 game->man.x +=DIAGSPEED;
-    //                 game->man.y +=DIAGSPEED;
-    //             }
-    //             else
-    //                 game->man.x +=SPEED;
-    //             mX = wX+wW;
-    //             printf("Right Edge\n");
-    //         }
-    //         //Rubbing against left edge
-    //         else if(mX+mW > wX && mX < wX){
-    //             //Correct x
-    //             //game->man.x = wX-mW;
-    //             if(game->man.isMovingDiagonal == true){
-    //                 game->man.x -=DIAGSPEED;
-    //                 game->man.y -=DIAGSPEED;
-    //             }
-    //             else
-    //                 game->man.x -=SPEED;
-    //             mX = wX-mW;
-    //             printf("Left Edge\n");
-    //         }
-    //     }
-
-    //     if(mX+mW > wX && mX < wX+wW){
-    //         //Are we bumping our head?
-    //         if(mY < wY+wH && mY > wY){
-    //             //correct y
-    //             //game->man.y = wY+wH;
-    //             if(game->man.isMovingDiagonal == true){
-    //                 game->man.x +=DIAGSPEED;
-    //                 game->man.y +=DIAGSPEED;
-    //             }
-    //             else
-    //                 game->man.y +=SPEED;
-    //             printf("Bumping head\n");
-    //         }
-    //         //Are we standing on the wall?
-    //         else if(mY+mH > wY && mY < wY){
-    //             //correct y
-    //             //game->man.y = wY-mH;
-    //             if(game->man.isMovingDiagonal == true){
-    //                 game->man.x -=DIAGSPEED;
-    //                 game->man.y -=DIAGSPEED;
-    //             }
-    //             else
-    //                 game->man.y -=SPEED;
-    //             printf("Standing on wall\n");
-    //         }
-    //     }
-    // }
-}
-
 //game loop
 PUBLIC void gameUpdate(Game theGame) 
 {
-    Player player[MAXPLAYERS];   //declares x-ammounts of players
+    Player player[PLAYERAMOUNT];   //declares x-ammounts of players depending on "playerAmmount"
     initGame(theGame); //initializes startvalues. coordinates etc.
     //int renderOrder[4]={0,1,2,3}; //what order to render players
     //gameloop:
@@ -299,12 +211,9 @@ PUBLIC void gameUpdate(Game theGame)
     {
         //Check for events
         done = checkEvents(theGame);
-
         //Process events (time based stuff)
-        //process();
 
         //Collisiondetection
-        collisionDetect(theGame);
 
         //Send/receive data to server
 
@@ -340,11 +249,11 @@ void renderTextures(Game theGame)
     SDL_RenderCopy(theGame->renderer, theGame->bomb_texture, &bowlingballAnimation[ 0 ], &theGame->possition_ball);
 
     //bubble-sort the players y-position into the array "renderOrder"
-    //arraySorter(player, theGame->playerAmmount, renderOrder);
+    //arraySorter(player, PLAYERAMOUNT, renderOrder);
 
 
     // renders players
-    for(int i=0; i<theGame->playerAmmount; i++){
+    for(int i=0; i<PLAYERAMOUNT; i++){
         SDL_Rect rect = {theGame->player[i].xPos, theGame->player[i].yPos, theGame->player->width, theGame->player->height};
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][0], 0, &rect, 0, NULL, 0);
     }
