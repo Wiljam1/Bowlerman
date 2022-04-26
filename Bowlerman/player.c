@@ -28,20 +28,31 @@ PUBLIC Player initPlayer(float xPos, float yPos)
     return p;
 }
 
-void LoadPlayerTextures(Game theGame, int ID, char sourceText[40])
+PUBLIC void LoadPlayerTextures(Game theGame, int ID, char sourceText[10])
 {
-    char txt[40];
-    strcpy(txt, sourceText);
-    for (int i = 0; i < 12; i++)
+    if (strcmp(sourceText, "red"))
     {
-        theGame->player_texture[ID][i] = (SDL_Texture *)loadTextures(theGame, txt);
-        printf("%s\n", txt);
-        txt[26]++;
-        if (txt[26] == '9')
-        {
-            txt[25] = '1';
-            txt[26] = '0';
-        }
+        theGame->player_texture[0][0] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/redmanleft.png");
+        theGame->player_texture[0][1] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/redmandown.png");
+        theGame->player_texture[0][2] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/redmanup.png");
+    }
+    else if (strcmp(sourceText, "blue"))
+    {
+        theGame->player_texture[1][0] = (SDL_Texture *)loadTextures(theGame, "/resources/blueman/bluemanleft.png");
+        theGame->player_texture[1][1] = (SDL_Texture *)loadTextures(theGame, "/resources/blueman/bluemandown.png");
+        theGame->player_texture[1][2] = (SDL_Texture *)loadTextures(theGame, "/resources/blueman/bluemanup.png");
+    }
+    else if (strcmp(sourceText, "purple"))
+    {
+        theGame->player_texture[2][0] = (SDL_Texture *)loadTextures(theGame, "/resources/purpleman/purplemanleft.png");
+        theGame->player_texture[2][1] = (SDL_Texture *)loadTextures(theGame, "/resources/purpleman/purplemandown.png");
+        theGame->player_texture[2][2] = (SDL_Texture *)loadTextures(theGame, "/resources/purpleman/purplemanup.png");
+    }
+    else if (strcmp(sourceText, "yellow"))
+    {
+        theGame->player_texture[3][0] = (SDL_Texture *)loadTextures(theGame, "/resources/purpleman/purplemanleft.png");
+        theGame->player_texture[3][1] = (SDL_Texture *)loadTextures(theGame, "/resources/purpleman/purplemandown.png");
+        theGame->player_texture[3][2] = (SDL_Texture *)loadTextures(theGame, "/resources/purpleman/purplemanup.png");
     }
     SDL_FreeSurface(theGame->window_surface);
 }

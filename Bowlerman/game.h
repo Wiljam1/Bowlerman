@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include "player.h"
 
-#define PLAYERTEXTURES 13
+#define PLAYERTEXTURES 3
 #define PLAYERAMOUNT 4    //how many players are online
 
 struct game_type
@@ -14,6 +14,7 @@ struct game_type
 
     //Player
     Player player[PLAYERAMOUNT];
+    SDL_Rect playerAnimation[4][3];
 
     //bombs
     SDL_Rect possition_ball;
