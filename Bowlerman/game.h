@@ -24,7 +24,7 @@ struct game_type
     Player player[MAXPLAYERS];
     int playerID;        //the players ID. 
     int playerAmmount;  //ammount of players online
-    SDL_Rect *playerRect[4][3];
+    SDL_Rect playerRect[4][3];
 
     //Walls
     Wall wall[WALLAMOUNT];

@@ -33,8 +33,8 @@ void LoadPlayerTextures(Game theGame, int ID, char sourceText[10])
     if (strcmp(sourceText, "red"))
     {
         theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
-        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
-        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+        //theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+        //theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
     }
     else if (strcmp(sourceText, "blue"))
     {
@@ -60,7 +60,10 @@ void LoadPlayerTextures(Game theGame, int ID, char sourceText[10])
 
 void playerSprites(Game theGame)
 {
-   // theGame->playerRect[0][0].x = 10;
+    theGame->playerRect[0][0].h = 307;
+    theGame->playerRect[0][0].w = 259;
+    theGame->playerRect[0][0].x = 0;
+    theGame->playerRect[0][0].y = 0;
 }
 
 

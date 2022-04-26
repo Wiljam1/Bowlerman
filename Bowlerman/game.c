@@ -38,23 +38,6 @@ PUBLIC Game createWindow()
     theGame->window_surface = SDL_GetWindowSurface(theGame->window);
     return theGame;
 }
-PRIVATE void LoadPlayerTextures(Game theGame, int ID, char sourceText[40])
-{
-    char txt[40];
-    strcpy(txt, sourceText);
-    for (int i = 0; i < 12; i++)
-    {
-        theGame->player_texture[ID][i] = (SDL_Texture *)loadTextures(theGame, txt);
-        printf("%s\n", txt);
-        txt[26]++;
-        if (txt[26] == '9')
-        {
-            txt[25] = '1';
-            txt[26] = '0';
-        }
-    }
-    SDL_FreeSurface(theGame->window_surface);
-}
 
 //initializes startvalues for game
 void initGame(Game theGame)
