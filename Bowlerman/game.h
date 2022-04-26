@@ -29,7 +29,7 @@ struct game_type
     Wall wall[WALLAMOUNT];
 
     //bombs
-    SDL_Rect possition_ball;
+    Bowlingball bombs[PLAYERAMOUNT];
     SDL_Rect *bowlingballAnimation[18];
 
     //Renderer
@@ -38,7 +38,7 @@ struct game_type
     //Images
     SDL_Texture *background;
     SDL_Texture *player_texture[MAXPLAYERS][PLAYERTEXTURES];     //4  players, måste stå 4 annars blir de segmentation fault.
-    SDL_Texture *bomb_texture;
+    SDL_Texture *bomb_texture[PLAYERAMOUNT];
     SDL_Texture *textureWall;
 
     SDL_Event    window_event;

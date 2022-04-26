@@ -18,8 +18,8 @@ clean_windows:
 	del /Q /F main.exe *.o
 
 	
-mac: main.o game.o player.o sorter.o bomb.o wall.o
-	gcc -o main main.o game.o player.o sorter.o bomb.o wall.o -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
+mac: main.o game.o player.o sorter.o bomb.o wall.o collissionDetection.o
+	gcc -o main main.o game.o player.o sorter.o bomb.o wall.o collissionDetection.o -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
 main.o:
 	gcc -c main.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
 game.o:
@@ -32,5 +32,7 @@ bomb.o:
 	gcc -c bomb.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
 wall.o:
 	gcc -c wall.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
+collissionDetection.o:
+	gcc -c collissionDetection.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
 clean_mac:
 	rm *.o
