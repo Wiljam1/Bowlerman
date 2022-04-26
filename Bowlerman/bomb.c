@@ -23,8 +23,35 @@ PUBLIC Bowlingball initBomb(int playerID)
     b.possition.w = 50;
     b.possition.h = 50;
     b.speed = 0;
+    b.timervalue = 0;
     return b;
 }
+
+int initbowlingballtimer()
+{
+    static int lastTime=0, currentTime;
+
+    currentTime = SDL_GetTicks();
+    if (currentTime > lastTime + 3000)
+    {
+        printf("%d\n", currentTime);
+        lastTime = currentTime;
+        return 1;
+    }
+    return 0;
+}
+/*
+int checkbowlingballtimer(timervalue)
+{
+    int i=0, timeout=2000;
+    if (SDL_TICKS_PASSED(timervalue, timeout))
+    {
+        i=1;
+    }
+
+    return i;
+}
+*/
 
 PUBLIC void loadBomb()
 {

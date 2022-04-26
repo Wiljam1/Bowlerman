@@ -14,9 +14,13 @@ struct bowling_ball
     SDL_Rect possition;
     //int height;
     //int width;
+    int timervalue;
     int speed;
     //int frame;
 };
+
+int initbowlingballtimer();
+//int checkbowlingballtimer();
 
 SDL_Rect bowlingballAnimation[18];
 

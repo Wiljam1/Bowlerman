@@ -89,16 +89,16 @@ void initGame(Game theGame)
     int wallheight = 48;
     for(int i = 0; i < WALLAMOUNT; i++){
         theGame->wall[i] = initWalls(WALLAMOUNT, wallwidth, wallheight);
-        if(i < 17){
+        if(i < 20){
             theGame->wall[i] = wallPlace(i*wallwidth, 0);
         }
-        else if(i < 34){
+        else if(i < 40){
             theGame->wall[i] = wallPlace(i*wallwidth-WIDTH, HEIGHT-wallwidth);
         }
-        else if(i < 47){
+        else if(i < 60){
             theGame->wall[i] = wallPlace(0, i*wallwidth-HEIGHT*4);
         }
-        else if(i < 65){
+        else if(i < 80){
             theGame->wall[i] = wallPlace(WIDTH-wallwidth, i*wallwidth-HEIGHT*6);
         }
         else{
@@ -135,6 +135,7 @@ bool checkEvents(Game theGame)
                         theGame->bombs[playerID].possition.y = theGame->player[playerID].yPos;
                         theGame->bombs[playerID].possition.x = theGame->player[playerID].xPos;
                         loadBomb();
+                        theGame->bombs[playerID].timervalue = initbowlingballtimer();
                     break;
                     case SDLK_ESCAPE:
                         done = true; 
@@ -216,6 +217,10 @@ PUBLIC void gameUpdate(Game theGame)
         done = checkEvents(theGame);
 
         //Process events (time based stuff)
+        if (theGame->bombs[playerID].timervalue == 0)
+        {
+            theGame->bombs[playerID].timervalue = initbowlingballtimer();
+        }
         //process();
 
         //Collisiondetection
@@ -248,12 +253,15 @@ PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[])   //loadmedi
 //renders background and players etc.
 void renderTextures(Game theGame)
 {
+    
     SDL_RenderClear(theGame->renderer); //clear renderer
     //updates/renders background
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, NULL);
     //render bombs ***********KRASCHAR****************
-    SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].possition);
-
+    if (theGame->bombs[playerID].timervalue == 0)
+    {
+        SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].possition);
+    }
     //bubble-sort the players y-position into the array "renderOrder"
     //arraySorter(player, theGame->playerAmmount, renderOrder);
 
