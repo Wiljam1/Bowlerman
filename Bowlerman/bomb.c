@@ -11,9 +11,6 @@
 #include "bomb.h"
 
 
-
-
-
 PUBLIC Bowlingball initBomb(Game theGame, int playerID)
 {
     malloc(sizeof(struct bowling_ball));

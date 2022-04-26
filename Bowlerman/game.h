@@ -33,7 +33,7 @@ struct game_type
     SDL_Texture *wall;
 
     SDL_Event    window_event;
-}; 
+};
 typedef struct game_type *Game;
 Game createWindow();              // Struct for app initialization
 void initGame(Game theGame);

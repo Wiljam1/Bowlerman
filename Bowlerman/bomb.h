@@ -3,7 +3,6 @@
 #include <SDL2/SDL.h>
 #include "player.h"
 #include "game.h"
-
 struct bowling_ball typedef Bowlingball;
 
 struct bowling_ball
