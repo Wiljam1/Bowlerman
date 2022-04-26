@@ -60,7 +60,7 @@ void LoadPlayerTextures(Game theGame, int ID, char sourceText[10])
 
 void playerSprites(Game theGame)
 {
-    
+   // theGame->playerRect[0][0].x = 10;
 }
 
 
