@@ -58,6 +58,13 @@ void LoadPlayerTextures(Game theGame, int ID, char sourceText[10])
     SDL_FreeSurface(theGame->window_surface);
 }
 
+void playerSprites(Game theGame)
+{
+    
+}
+
+
+
 PUBLIC int getPlayerHeight(Player p)
 {
     return p.height;
