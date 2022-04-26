@@ -28,20 +28,32 @@ PUBLIC Player initPlayer(float xPos, float yPos)
     return p;
 }
 
-void LoadPlayerTextures(Game theGame, int ID, char sourceText[40])
+void LoadPlayerTextures(Game theGame, int ID, char sourceText[10])
 {
-    char txt[40];
-    strcpy(txt, sourceText);
-    for (int i = 0; i < 12; i++)
+    if (strcmp(sourceText, "red"))
     {
-        theGame->player_texture[ID][i] = (SDL_Texture *)loadTextures(theGame, txt);
-        printf("%s\n", txt);
-        txt[26]++;
-        if (txt[26] == '9')
-        {
-            txt[25] = '1';
-            txt[26] = '0';
-        }
+        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+    }
+    else if (strcmp(sourceText, "blue"))
+    {
+        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+    }
+    else if (strcmp(sourceText, "purple"))
+    {
+        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+
+    }
+    else if (strcmp(sourceText, "yellow"))
+    {
+        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
     }
     SDL_FreeSurface(theGame->window_surface);
 }
@@ -63,7 +75,7 @@ PUBLIC float getPlayerYPosition(Player p)
     return p.yPos;
 }
 
-//REplaced by different movement-implementation
+// REplaced by different movement-implementation
 
 // PUBLIC void determinePlayerVelocity(Player p)
 // {
@@ -82,5 +94,5 @@ PUBLIC float getPlayerYPosition(Player p)
 
 // PUBLIC void destroyPlayer(Player player)
 // {
-    
+
 // }
