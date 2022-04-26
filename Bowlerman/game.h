@@ -3,11 +3,11 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include "player.h"
-#include "bomb.h"
-
 
 #define PLAYERTEXTURES 13
-#define PLAYERAMOUNT 4    //how many players are online
+#define MAXPLAYERS 4    //how many players are online
+
+
 
 struct game_type
 {
@@ -15,10 +15,12 @@ struct game_type
     SDL_Surface *window_surface;
 
     //Player
-    Player player[PLAYERAMOUNT];
+    Player player[MAXPLAYERS];
+    int playerID;        //the players ID. 
+    int playerAmmount;  //ammount of players online
 
     //bombs
-    Bowlingball bombs[PLAYERAMOUNT];
+    SDL_Rect possition_ball;
     SDL_Rect *bowlingballAnimation[18];
 
     //Renderer
@@ -26,8 +28,8 @@ struct game_type
 
     //Images
     SDL_Texture *background;
-    SDL_Texture *player_texture[PLAYERAMOUNT][PLAYERTEXTURES];     //4  players
-    SDL_Texture *bomb_texture[PLAYERAMOUNT];
+    SDL_Texture *player_texture[MAXPLAYERS][PLAYERTEXTURES];     //4  players, måste stå 4 annars blir de segmentation fault.
+    SDL_Texture *bomb_texture;
     SDL_Texture *wall;
 
     SDL_Event    window_event;
@@ -39,7 +41,8 @@ SDL_Texture *loadTextures(Game newGame, char fileLocation[]); // Load any image 
 void gameUpdate(Game newGame);  // Game loop
 bool checkEvents(Game theGame);
 void manageMovementInputs(Game theGame);
-void updatePlayerPos(Game theGame, int playerID, int velX, int velY); //Flytta till player.c nångång
+void updatePlayerPos(Game theGame, int velX, int velY); //Flytta till player.c nångång
+void collisionDetect(Game theGame);
 void renderTextures(Game theGame);
 void destroyGame(Game theGame); // Function for easily destroying the application.
 
