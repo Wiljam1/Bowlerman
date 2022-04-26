@@ -270,7 +270,7 @@ void renderTextures(Game theGame)
 
     SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
 
-    // renders players
+    // renders player**** EMIL TESTAR HÄR*****
     
         SDL_Rect rect0 = {theGame->player[0].xPos, theGame->player[0].yPos, theGame->player->width, theGame->player->height};
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.redMan[0][0], &rect0, 0, NULL, 0);
