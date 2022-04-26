@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "game.h"
-#include "player.h"
 #include "collissionDetection.h"
 #include "sorter.h"
 #include "bomb.h"
@@ -14,16 +13,13 @@
 #define PRIVATE static
 #define LENGTH 100
 
-const int WIDTH = 800; 
+const int WIDTH = 800;  //Move eventually
 const int HEIGHT = 450;
 
-
+int playerID=0;        //the players ID. Move eventually
 
 PRIVATE void loadBomb(Game theGame);
 PRIVATE void LoadPlayerTextures(Game theGame, int ID, char sourceText[40]);
-
-
-
 
 //initializes game
 PUBLIC Game createWindow()
@@ -71,6 +67,7 @@ void initGame(Game theGame)
     theGame->player_texture[2][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     theGame->player_texture[3][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     theGame->bomb_texture = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_BLue.png");
+    theGame->textureWall = (SDL_Texture *) loadTextures(theGame, "wall.png");
     SDL_FreeSurface(theGame->window_surface);
 
     //check server what ID you have.
@@ -102,8 +99,13 @@ void initGame(Game theGame)
     //     playerRect[i].h /=7;              //scales down height by 4  
     // }
 
-}
+    //Init walls / map
+    for(int i = 0; i < WALLAMOUNT; i++){
+        theGame->wall[i] = initWalls(WALLAMOUNT, 64, 64);
+        theGame->wall[i] = wallPlace(i*64, i*32);
+    }
 
+}
 
 //handles processes, like keyboard-inputs etc
 bool checkEvents(Game theGame)

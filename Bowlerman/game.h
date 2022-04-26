@@ -3,11 +3,15 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include "player.h"
+#include "wall.h"
 
+//values to be set by menu in the future
 #define PLAYERTEXTURES 13
 #define MAXPLAYERS 4    //how many players are online
 
 
+#define PLAYERAMOUNT 4    //how many players are online
+#define WALLAMOUNT 100  
 
 struct game_type
 {
@@ -18,6 +22,9 @@ struct game_type
     Player player[MAXPLAYERS];
     int playerID;        //the players ID. 
     int playerAmmount;  //ammount of players online
+
+    //Walls
+    Wall wall[WALLAMOUNT];
 
     //bombs
     SDL_Rect possition_ball;
@@ -30,7 +37,7 @@ struct game_type
     SDL_Texture *background;
     SDL_Texture *player_texture[MAXPLAYERS][PLAYERTEXTURES];     //4  players, måste stå 4 annars blir de segmentation fault.
     SDL_Texture *bomb_texture;
-    SDL_Texture *wall;
+    SDL_Texture *textureWall;
 
     SDL_Event    window_event;
 };
