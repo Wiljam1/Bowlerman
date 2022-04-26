@@ -19,51 +19,27 @@ PUBLIC Player initPlayer(float xPos, float yPos)
     p.left = 0;
     p.xVel = 0;
     p.yVel = 0;
-    p.xPos = p.xPosOld = xPos;
-    p.yPos = p.yPosOld = yPos;
+    p.playerRect.x = p.xPos = p.xPosOld = xPos;
+    p.playerRect.y = p.yPos = p.yPosOld = yPos;
     p.speed = 4;
-    p.height = 60;
-    p.width = 40;
+    p.height = 100;
+    p.width = 100;
+
+     
+    p.playerRect.h = 100;
+    p.playerRect.w = 100;
 
     return p;
 }
 
-void LoadPlayerTextures(Game theGame, int ID, char sourceText[10])
+PlayerSprites getRedPlayer()
 {
-    if (strcmp(sourceText, "red"))
-    {
-        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
-        //theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
-        //theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
-    }
-    else if (strcmp(sourceText, "blue"))
-    {
-        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/blueman/");
-        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/blueman/");
-        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/blueman/");
-    }
-    else if (strcmp(sourceText, "purple"))
-    {
-        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/purpleman/");
-        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/purpleman/");
-        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/purpleman/");
-
-    }
-    else if (strcmp(sourceText, "yellow"))
-    {
-        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/yellowman/");
-        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/yellowman/");
-        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/yellowman/");
-    }
-    SDL_FreeSurface(theGame->window_surface);
-}
-
-void playerSprites(Game theGame)
-{
-    theGame->playerRect[0][0].h = 307;
-    theGame->playerRect[0][0].w = 259;
-    theGame->playerRect[0][0].x = 0;
-    theGame->playerRect[0][0].y = 0;
+    PlayerSprites p;
+    p.redMan[0][0].h = 307;
+    p.redMan[0][0].w = 287;
+    p.redMan[0][0].x = 0;
+    p.redMan[0][0].y = 0;
+    return p;
 }
 
 PUBLIC int getPlayerHeight(Player p)

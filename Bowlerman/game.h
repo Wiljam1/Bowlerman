@@ -24,6 +24,7 @@ struct game_type
     int playerID;        //the players ID. 
     int playerAmmount;  //ammount of players online
     SDL_Rect playerRect[4][3];
+    PlayerSprites pSprites;
 
     //Walls
     Wall wall[WALLAMOUNT];
