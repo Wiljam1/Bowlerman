@@ -63,17 +63,17 @@ void initGame(Game theGame)
     theGame->playerAmmount=4;
 
     //inits x-amount of players
-    theGame->player[0] = initPlayer(5, 5);   //sets x and y coordinates and resets values.
+    theGame->player[0] = initPlayer(70, 70);   //sets x and y coordinates and resets values.
     //initPlayerRect(theGame); //inits playerRect[0] to position of player0
     
     if(theGame->playerAmmount>1){
-        theGame->player[1] = initPlayer(750, 300);   //sets x and y coordinates and resets values.
+        theGame->player[1] = initPlayer(700, 300);   //sets x and y coordinates and resets values.
     }
     if(theGame->playerAmmount>2){
-        theGame->player[2] = initPlayer(0, 300);   //sets x and y coordinates and resets values.
+        theGame->player[2] = initPlayer(70, 300);   //sets x and y coordinates and resets values.
     }
     if(theGame->playerAmmount>3){
-        theGame->player[3] = initPlayer(750, 0);   //sets x and y coordinates and resets values.
+        theGame->player[3] = initPlayer(700, 70);   //sets x and y coordinates and resets values.
     }
   
     // //get and scale the dimensions of texture (based on how many players are online)
