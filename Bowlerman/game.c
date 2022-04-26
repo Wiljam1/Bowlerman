@@ -46,7 +46,6 @@ void initGame(Game theGame)
     theGame->background = (SDL_Texture *) loadTextures(theGame, "alley.png");
     theGame->player_texture[0][0] = (SDL_Texture *) loadTextures(theGame, "bowlermantestskins/bowman00.png");
     theGame->player_texture[1][0] = (SDL_Texture *) loadTextures(theGame, "redman/down.png");
-    theGame->pSprites = getRedPlayer();
     theGame->player_texture[2][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     theGame->player_texture[3][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     theGame->bomb_texture[0] = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_BLue.png");
@@ -55,6 +54,8 @@ void initGame(Game theGame)
     theGame->bomb_texture[3] = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_Yellow.png");
     theGame->textureWall = (SDL_Texture *) loadTextures(theGame, "wall.png");
     SDL_FreeSurface(theGame->window_surface);
+
+    theGame->pSprites = getRedPlayer();
 
     //check server what ID you have.
     //getPlayerID();
@@ -271,9 +272,10 @@ void renderTextures(Game theGame)
     SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
 
     // renders player**** EMIL TESTAR HÄR*****
-    
+        static int a = 0;
         SDL_Rect rect0 = {theGame->player[0].xPos, theGame->player[0].yPos, theGame->player->width, theGame->player->height};
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.redMan[0][0], &rect0, 0, NULL, 0);
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.redMan[0][a++], &rect0, 0, NULL, 0);
+        if (a > 7) a = 0;
 
         //SDL_Rect rect1 = {theGame->player[2].xPos, theGame->player[2].yPos, theGame->player->width, theGame->player->height};
         //SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->player->playerRect, &theGame->playerRect[0][0], 0, NULL, 0);
