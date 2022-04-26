@@ -18,7 +18,6 @@ const int HEIGHT = 450;
 
 int playerID=0;        //the players ID. Move eventually
 
-
 PRIVATE void LoadPlayerTextures(Game theGame, int ID, char sourceText[40]);
 
 //initializes game
@@ -103,9 +102,25 @@ void initGame(Game theGame)
     // }
 
     //Init walls / map
+    int wallwidth = 48;
+    int wallheight = 48;
     for(int i = 0; i < WALLAMOUNT; i++){
-        theGame->wall[i] = initWalls(WALLAMOUNT, 64, 64);
-        theGame->wall[i] = wallPlace(i*64, i*32);
+        theGame->wall[i] = initWalls(WALLAMOUNT, wallwidth, wallheight);
+        if(i < 20){
+            theGame->wall[i] = wallPlace(i*wallwidth, 0);
+        }
+        else if(i < 40){
+            theGame->wall[i] = wallPlace(i*wallwidth-WIDTH, HEIGHT-wallwidth);
+        }
+        else if(i < 60){
+            theGame->wall[i] = wallPlace(0, i*wallwidth-HEIGHT*4);
+        }
+        else if(i < 80){
+            theGame->wall[i] = wallPlace(WIDTH-wallwidth, i*wallwidth-HEIGHT*6);
+        }
+        else{
+
+        }
     }
 
 }
@@ -172,7 +187,6 @@ bool checkEvents(Game theGame)
 
 void manageMovementInputs(Game theGame)
 {
-
     // Om du ska fortsätta göra movement bättre; 
     // https://stackoverflow.com/questions/39929853/priority-when-2-keys-are-pressed-at-the-same-time-script-for-a-game
     // Man kollar vilken direction gubben kollar åt och bestämmer sedan att ett knapptryck kan ta över om det är en ny direction.
@@ -181,7 +195,6 @@ void manageMovementInputs(Game theGame)
     int velX = 0, velY = 0;
     
     const Uint8 *state = SDL_GetKeyboardState(NULL);
-
     if(state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
         velX = -theGame->player[theGame->playerID].speed;
     }
@@ -196,8 +209,6 @@ void manageMovementInputs(Game theGame)
             velY = theGame->player[theGame->playerID].speed;
         }
     }
-
-
     updatePlayerPos(theGame, velX, velY);
 }
 
@@ -207,8 +218,6 @@ void updatePlayerPos(Game theGame, int velX, int velY)
     theGame->player[theGame->playerID].xPos += velX;
     theGame->player[theGame->playerID].yPos += velY;
 }
-
-
 
 //game loop
 PUBLIC void gameUpdate(Game theGame) 
@@ -265,6 +274,12 @@ void renderTextures(Game theGame)
     //bubble-sort the players y-position into the array "renderOrder"
     //arraySorter(player, theGame->playerAmmount, renderOrder);
 
+    //Draw walls
+    for (int i = 0; i < WALLAMOUNT; i++)
+    {
+        SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
+        SDL_RenderCopy(theGame->renderer, theGame->textureWall, NULL, &wallRect);
+    }
 
     // renders players
     for(int i=0; i<theGame->playerAmmount; i++){

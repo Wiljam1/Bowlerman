@@ -14,13 +14,9 @@ Wall initWalls(int amount, int width, int height)
     //Wall w = malloc(sizeof(struct wall)); //Fixa nångång när vi vet mer om minnesallokering
     Wall w;
 
-    //Set id, width and height of walls being initialized.
-    for (int i = 0; i < amount; i++)
-    {
-        w.id = i;
-        w.w = width;
-        w.h = height;
-    }
+    w.id = amount;
+    w.w = width;
+    w.h = height;
 
     return w;
 }
