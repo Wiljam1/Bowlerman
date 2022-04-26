@@ -89,16 +89,16 @@ void initGame(Game theGame)
     int wallheight = 48;
     for(int i = 0; i < WALLAMOUNT; i++){
         theGame->wall[i] = initWalls(WALLAMOUNT, wallwidth, wallheight);
-        if(i < 20){
+        if(i < 17){
             theGame->wall[i] = wallPlace(i*wallwidth, 0);
         }
-        else if(i < 40){
+        else if(i < 34){
             theGame->wall[i] = wallPlace(i*wallwidth-WIDTH, HEIGHT-wallwidth);
         }
-        else if(i < 60){
+        else if(i < 47){
             theGame->wall[i] = wallPlace(0, i*wallwidth-HEIGHT*4);
         }
-        else if(i < 80){
+        else if(i < 65){
             theGame->wall[i] = wallPlace(WIDTH-wallwidth, i*wallwidth-HEIGHT*6);
         }
         else{
