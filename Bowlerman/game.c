@@ -255,7 +255,7 @@ void renderTextures(Game theGame)
     //render bombs ***********KRASCHAR****************
     if (theGame->bombs[playerID].timervalue == 0)
     {
-        SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].possition);
+        SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
     }
     //bubble-sort the players y-position into the array "renderOrder"
     //arraySorter(player, theGame->playerAmmount, renderOrder);
