@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "player.h"
 #include "game.h"
 #include "collissionDetection.h"
-
 PUBLIC Player initPlayer(float xPos, float yPos)
 {
     malloc(sizeof(struct playerController));
@@ -28,6 +28,23 @@ PUBLIC Player initPlayer(float xPos, float yPos)
     return p;
 }
 
+void LoadPlayerTextures(Game theGame, int ID, char sourceText[40])
+{
+    char txt[40];
+    strcpy(txt, sourceText);
+    for (int i = 0; i < 12; i++)
+    {
+        theGame->player_texture[ID][i] = (SDL_Texture *)loadTextures(theGame, txt);
+        printf("%s\n", txt);
+        txt[26]++;
+        if (txt[26] == '9')
+        {
+            txt[25] = '1';
+            txt[26] = '0';
+        }
+    }
+    SDL_FreeSurface(theGame->window_surface);
+}
 
 PUBLIC int getPlayerHeight(Player p)
 {

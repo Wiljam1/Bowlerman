@@ -13,9 +13,7 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 #define LENGTH 100
-#define PLAYERTEXTURES 13
 
-#define PLAYERAMOUNT 4    //how many players are online
 int playerID=0;        //the players ID. 
 
 PRIVATE void loadBomb(Game theGame);
@@ -24,29 +22,7 @@ PRIVATE void LoadPlayerTextures(Game theGame, int ID, char sourceText[40]);
 const int WIDTH = 800; 
 const int HEIGHT = 450;
 
-struct game_type
-{
-    SDL_Window  *window;
-    SDL_Surface *window_surface;
 
-    //Player
-    Player player[PLAYERAMOUNT];
-
-    //bombs
-    SDL_Rect possition_ball;
-    SDL_Rect *bowlingballAnimation[18];
-
-    //Renderer
-    SDL_Renderer *renderer;
-
-    //Images
-    SDL_Texture *background;
-    SDL_Texture *player_texture[PLAYERAMOUNT][PLAYERTEXTURES];     //4  players, måste stå 4 annars blir de segmentation fault.
-    SDL_Texture *bomb_texture;
-    SDL_Texture *wall;
-
-    SDL_Event    window_event;
-}; 
 
 //initializes game
 PUBLIC Game createWindow()
