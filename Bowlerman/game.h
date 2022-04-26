@@ -5,7 +5,6 @@
 #include "player.h"
 #include "bomb.h"
 
-
 #define PLAYERTEXTURES 13
 #define PLAYERAMOUNT 4    //how many players are online
 

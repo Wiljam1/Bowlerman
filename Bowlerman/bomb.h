@@ -21,8 +21,8 @@ struct bowling_ball
 
 SDL_Rect bowlingballAnimation[18];
 
-Bowlingball initBomb(Game theGame, int playerID);
-void loadBomb(Game theGame);
+Bowlingball initBomb(int playerID);
+void loadBomb();
 
 //SDL_Rect setBowlingBallPosition(Game theGame, Player player);
 

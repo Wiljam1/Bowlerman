@@ -14,19 +14,19 @@
 
 
 
-PUBLIC Bowlingball initBomb(Game theGame, int playerID)
+PUBLIC Bowlingball initBomb(int playerID)
 {
-    malloc(sizeof(struct bowling_ball));
+    //malloc(sizeof(struct bowling_ball));
     Bowlingball b;
-    b.possition.y = theGame->player[playerID].yPos;
-    b.possition.x = theGame->player[playerID].yPos;
+    b.possition.y = 0;
+    b.possition.x = 0;
     b.possition.w = 50;
     b.possition.h = 50;
     b.speed = 0;
     return b;
 }
 
-void loadBomb(Game theGame)
+PUBLIC void loadBomb()
 {
     bowlingballAnimation[ 0 ].x =   0;
     bowlingballAnimation[ 0 ].y =   0;

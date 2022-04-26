@@ -16,7 +16,8 @@
 
 int playerID=0;        //the players ID. 
 
-PRIVATE void loadBomb(Game theGame);
+void managecreatebomb(Game theGame, int playerID);
+
 PRIVATE void LoadPlayerTextures(Game theGame, int ID, char sourceText[40]);
 
 const int WIDTH = 800; 
@@ -129,7 +130,12 @@ bool checkEvents(Game theGame)
                     case SDLK_ESCAPE:
                         done = true; 
                     break;
-                    
+                    case SDLK_SPACE: 
+                    theGame->bombs[playerID] = initBomb(playerID);
+                    theGame->bombs[playerID].possition.y = theGame->player[playerID].yPos;
+                    theGame->bombs[playerID].possition.x = theGame->player[playerID].xPos;
+                    loadBomb();
+                    break;
                     default: break;
                 }
                 break;
@@ -141,10 +147,7 @@ bool checkEvents(Game theGame)
             case SDL_KEYUP:
                 switch (event.key.keysym.scancode)
                 {
-                    case SDL_SCANCODE_SPACE: 
-                        theGame->bombs[playerID] = initBomb(theGame, playerID);
-                        loadBomb(theGame);
-                    break;
+                
                     // case SDLK_w: case SDLK_UP:
                     //     up = false;
                     default: break;
@@ -248,7 +251,7 @@ void renderTextures(Game theGame)
     //updates/renders background
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, NULL);
     //render bombs ***********KRASCHAR****************
-    SDL_RenderCopy(theGame->renderer, theGame->bomb_texture, &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].possition);
+    SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].possition);
 
     //bubble-sort the players y-position into the array "renderOrder"
     //arraySorter(player, PLAYERAMOUNT, renderOrder);
