@@ -5,7 +5,7 @@
 #include "player.h"
 
 #define PLAYERTEXTURES 13
-#define PLAYERAMOUNT 4    //how many players are online
+#define MAXPLAYERS 4    //how many players are online
 
 struct game_type
 {
@@ -13,7 +13,9 @@ struct game_type
     SDL_Surface *window_surface;
 
     //Player
-    Player player[PLAYERAMOUNT];
+    Player player[MAXPLAYERS];
+
+    int playerAmmount;
 
     //bombs
     SDL_Rect possition_ball;
@@ -24,7 +26,7 @@ struct game_type
 
     //Images
     SDL_Texture *background;
-    SDL_Texture *player_texture[PLAYERAMOUNT][PLAYERTEXTURES];     //4  players, måste stå 4 annars blir de segmentation fault.
+    SDL_Texture *player_texture[MAXPLAYERS][PLAYERTEXTURES];     //4  players, måste stå 4 annars blir de segmentation fault.
     SDL_Texture *bomb_texture;
     SDL_Texture *wall;
 

@@ -75,23 +75,25 @@ void initGame(Game theGame)
     //check server what ID you have.
     //getPlayerID();
 
+    //detta ska ändras via servern sen.
+    theGame->playerAmmount=4;
 
     //inits x-amount of players
     theGame->player[0] = initPlayer(5, 5);   //sets x and y coordinates and resets values.
     //initPlayerRect(theGame); //inits playerRect[0] to position of player0
     
-    if(PLAYERAMOUNT>1){
+    if(theGame->playerAmmount>1){
         theGame->player[1] = initPlayer(750, 300);   //sets x and y coordinates and resets values.
     }
-    if(PLAYERAMOUNT>2){
+    if(theGame->playerAmmount>2){
         theGame->player[2] = initPlayer(0, 300);   //sets x and y coordinates and resets values.
     }
-    if(PLAYERAMOUNT>3){
+    if(theGame->playerAmmount>3){
         theGame->player[3] = initPlayer(750, 0);   //sets x and y coordinates and resets values.
     }
   
     // //get and scale the dimensions of texture (based on how many players are online)
-    // for(int i=0; i<PLAYERAMOUNT; i++)
+    // for(int i=0; i<theGame->playerAmmount; i++)
     // {
     //     SDL_QueryTexture(theGame->player_texture[i], NULL, NULL, &playerRect[i].w, &playerRect[i].h);
     //     playerRect[i].w /=7;              //scales down width by 4
@@ -288,7 +290,7 @@ void collisionDetect(Game theGame)
 //game loop
 PUBLIC void gameUpdate(Game theGame) 
 {
-    Player player[PLAYERAMOUNT];   //declares x-ammounts of players depending on "playerAmmount"
+    Player player[MAXPLAYERS];   //declares x-ammounts of players
     initGame(theGame); //initializes startvalues. coordinates etc.
     //int renderOrder[4]={0,1,2,3}; //what order to render players
     //gameloop:
@@ -338,11 +340,11 @@ void renderTextures(Game theGame)
     SDL_RenderCopy(theGame->renderer, theGame->bomb_texture, &bowlingballAnimation[ 0 ], &theGame->possition_ball);
 
     //bubble-sort the players y-position into the array "renderOrder"
-    //arraySorter(player, PLAYERAMOUNT, renderOrder);
+    //arraySorter(player, theGame->playerAmmount, renderOrder);
 
 
     // renders players
-    for(int i=0; i<PLAYERAMOUNT; i++){
+    for(int i=0; i<theGame->playerAmmount; i++){
         SDL_Rect rect = {theGame->player[i].xPos, theGame->player[i].yPos, theGame->player->width, theGame->player->height};
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][0], 0, &rect, 0, NULL, 0);
     }
