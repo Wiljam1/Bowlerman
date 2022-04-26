@@ -53,7 +53,7 @@ void LoadPlayerTextures(Game theGame, int ID, char sourceText[10])
     {
         theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/yellowman/");
         theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/yellowman/");
-        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/yelllowman/");
+        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/yellowman/");
     }
     SDL_FreeSurface(theGame->window_surface);
 }
