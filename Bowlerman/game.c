@@ -69,7 +69,10 @@ void initGame(Game theGame)
     theGame->player_texture[1][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     theGame->player_texture[2][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     theGame->player_texture[3][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
-    theGame->bomb_texture = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_BLue.png");
+    theGame->bomb_texture[0] = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_BLue.png");
+    theGame->bomb_texture[1] = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_Purple.png");
+    theGame->bomb_texture[2] = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_Red.png");
+    theGame->bomb_texture[3] = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_Yellow.png");
     SDL_FreeSurface(theGame->window_surface);
 
     //check server what ID you have.
@@ -126,23 +129,22 @@ bool checkEvents(Game theGame)
                     case SDLK_ESCAPE:
                         done = true; 
                     break;
+                    
                     default: break;
                 }
                 break;
                 switch (event.key.keysym.scancode){
-                    case SDL_SCANCODE_SPACE: 
-                        theGame->possition_ball.y = theGame->player[0].yPos;
-                        theGame->possition_ball.x = theGame->player[0].xPos;
-                        theGame->possition_ball.h = 50;
-                        theGame->possition_ball.w = 50;
-                        loadBomb(theGame);
-                    break;
+                    
                     default: break;
                 }
                 break;
             case SDL_KEYUP:
                 switch (event.key.keysym.scancode)
                 {
+                    case SDL_SCANCODE_SPACE: 
+                        theGame->bombs[playerID] = initBomb(theGame, playerID);
+                        loadBomb(theGame);
+                    break;
                     // case SDLK_w: case SDLK_UP:
                     //     up = false;
                     default: break;
@@ -246,7 +248,7 @@ void renderTextures(Game theGame)
     //updates/renders background
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, NULL);
     //render bombs ***********KRASCHAR****************
-    SDL_RenderCopy(theGame->renderer, theGame->bomb_texture, &bowlingballAnimation[ 0 ], &theGame->possition_ball);
+    SDL_RenderCopy(theGame->renderer, theGame->bomb_texture, &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].possition);
 
     //bubble-sort the players y-position into the array "renderOrder"
     //arraySorter(player, PLAYERAMOUNT, renderOrder);
@@ -273,96 +275,5 @@ PUBLIC void destroyGame(Game theGame)
 
 
 
-void loadBomb(Game theGame)
-{
-    bowlingballAnimation[ 0 ].x =   0;
-    bowlingballAnimation[ 0 ].y =   0;
-    bowlingballAnimation[ 0 ].w = 256;
-    bowlingballAnimation[ 0 ].h = 256;
 
-    bowlingballAnimation[ 1 ].x = 256;
-    bowlingballAnimation[ 1 ].y =   0;
-    bowlingballAnimation[ 1 ].w = 256;
-    bowlingballAnimation[ 1 ].h = 256;
-
-    bowlingballAnimation[ 2 ].x = 512;
-    bowlingballAnimation[ 2 ].y =   0;
-    bowlingballAnimation[ 2 ].w = 256;
-    bowlingballAnimation[ 2 ].h = 256;
-
-    bowlingballAnimation[ 3 ].x = 768;
-    bowlingballAnimation[ 3 ].y =   0;
-    bowlingballAnimation[ 3 ].w = 256;
-    bowlingballAnimation[ 3 ].h = 256;
-
-    bowlingballAnimation[ 4 ].x =   0;
-    bowlingballAnimation[ 4 ].y = 256;
-    bowlingballAnimation[ 4 ].w = 256;
-    bowlingballAnimation[ 4 ].h = 256;
-
-    bowlingballAnimation[ 5 ].x = 256;
-    bowlingballAnimation[ 5 ].y = 256;
-    bowlingballAnimation[ 5 ].w = 256;
-    bowlingballAnimation[ 5 ].h = 256;
-
-    bowlingballAnimation[ 6 ].x = 512;
-    bowlingballAnimation[ 6 ].y = 256;
-    bowlingballAnimation[ 6 ].w = 256;
-    bowlingballAnimation[ 6 ].h = 256;
-
-    bowlingballAnimation[ 7 ].x = 768;
-    bowlingballAnimation[ 7 ].y = 256;
-    bowlingballAnimation[ 7 ].w = 256;
-    bowlingballAnimation[ 7 ].h = 256;
-
-    bowlingballAnimation[ 8 ].x =   0;
-    bowlingballAnimation[ 8 ].y = 512;
-    bowlingballAnimation[ 8 ].w = 256;
-    bowlingballAnimation[ 8 ].h = 256;
-
-    bowlingballAnimation[ 9 ].x = 256;
-    bowlingballAnimation[ 9 ].y = 512;
-    bowlingballAnimation[ 9 ].w = 256;
-    bowlingballAnimation[ 9 ].h = 256;
-
-    bowlingballAnimation[ 10 ].x = 512;
-    bowlingballAnimation[ 10 ].y = 512;
-    bowlingballAnimation[ 10 ].w = 256;
-    bowlingballAnimation[ 10 ].h = 256;
-
-    bowlingballAnimation[ 11 ].x = 768;
-    bowlingballAnimation[ 11 ].y = 512;
-    bowlingballAnimation[ 11 ].w = 256;
-    bowlingballAnimation[ 11 ].h = 256;
-
-    bowlingballAnimation[ 12 ].x =   0;
-    bowlingballAnimation[ 12 ].y = 768;
-    bowlingballAnimation[ 12 ].w = 256;
-    bowlingballAnimation[ 12 ].h = 256;
-
-    bowlingballAnimation[ 13 ].x = 256;
-    bowlingballAnimation[ 13 ].y = 768;
-    bowlingballAnimation[ 13 ].w = 256;
-    bowlingballAnimation[ 13 ].h = 256;
-
-    bowlingballAnimation[ 14 ].x = 512;
-    bowlingballAnimation[ 14 ].y = 768;
-    bowlingballAnimation[ 14 ].w = 256;
-    bowlingballAnimation[ 14 ].h = 256;
-
-    bowlingballAnimation[ 15 ].x = 768;
-    bowlingballAnimation[ 15 ].y = 768;
-    bowlingballAnimation[ 15 ].w = 256;
-    bowlingballAnimation[ 15 ].h = 256;
-
-    bowlingballAnimation[ 16 ].x =   0;
-    bowlingballAnimation[ 16 ].y =1024;
-    bowlingballAnimation[ 16 ].w = 256;
-    bowlingballAnimation[ 16 ].h = 256;
-
-    bowlingballAnimation[ 17 ].x = 256;
-    bowlingballAnimation[ 17 ].y =1024;
-    bowlingballAnimation[ 17 ].w = 256;
-    bowlingballAnimation[ 17 ].h = 256;
-}
 

@@ -4,11 +4,25 @@
 #include "player.h"
 #include "game.h"
 
+struct bowling_ball typedef Bowlingball;
 
+struct bowling_ball
+{
+    //int id;   
+    //float yVel, xVel, xPos, yPos;
+    //float xPosOld;
+    //float yPosOld;
+    SDL_Rect possition;
+    //int height;
+    //int width;
+    int speed;
+    //int frame;
+};
 
 SDL_Rect bowlingballAnimation[18];
 
-
+Bowlingball initBomb(Game theGame, int playerID);
+void loadBomb(Game theGame);
 
 //SDL_Rect setBowlingBallPosition(Game theGame, Player player);
 
@@ -19,7 +33,7 @@ SDL_Rect bowlingballAnimation[18];
 //int getBowlingBallWidth();
 //int getBowlingBallHeight();
 //int getBowlingBallFrame(Bowlingball ball);
-//void loadBomb();
+
 
 
 

@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include "player.h"
+#include "bomb.h"
+
 
 #define PLAYERTEXTURES 13
 #define PLAYERAMOUNT 4    //how many players are online
@@ -16,7 +18,7 @@ struct game_type
     Player player[PLAYERAMOUNT];
 
     //bombs
-    SDL_Rect possition_ball;
+    Bowlingball bombs[PLAYERAMOUNT];
     SDL_Rect *bowlingballAnimation[18];
 
     //Renderer
@@ -24,8 +26,8 @@ struct game_type
 
     //Images
     SDL_Texture *background;
-    SDL_Texture *player_texture[PLAYERAMOUNT][PLAYERTEXTURES];     //4  players, måste stå 4 annars blir de segmentation fault.
-    SDL_Texture *bomb_texture;
+    SDL_Texture *player_texture[PLAYERAMOUNT][PLAYERTEXTURES];     //4  players
+    SDL_Texture *bomb_texture[PLAYERAMOUNT];
     SDL_Texture *wall;
 
     SDL_Event    window_event;
