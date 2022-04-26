@@ -251,7 +251,6 @@ void renderTextures(Game theGame)
     SDL_RenderClear(theGame->renderer); //clear renderer
     //updates/renders background
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, NULL);
-    //render bombs ***********KRASCHAR****************
     SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].possition);
 
     //bubble-sort the players y-position into the array "renderOrder"

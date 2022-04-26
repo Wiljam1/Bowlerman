@@ -36,6 +36,14 @@ struct playerController
     //SDL_Rect playerRect;   //struct to hold the position and size of the sprite
 };
 
+struct playerSprites
+{
+    SDL_Rect redMan[3][8];
+    SDL_Rect blueMan[3][8];
+    SDL_Rect purpleMan[3][8];
+    SDL_Rect yellowMan[3][8];
+};
+typedef struct playerSprites PlayerSprites;
 //initiate player position with x and y coordinates
 Player initPlayer(float xPos, float yPos);
 
