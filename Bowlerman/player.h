@@ -51,22 +51,17 @@ float getPlayerXPosition(Player p);
 float getPlayerYPosition(Player p);
 int getPlayerHeight();
 int getPlayerWidth();
+int getPlayerSpeed(Player p);
 
 
 //ändrar spelarens (clientmässiga) hastighet beroende på användarens tangentbordsintryckningar
-void determinePlayerVelocity(Player playerMoving);
+// void determinePlayerVelocity(Player playerMoving);
 
 //ändrar spelarens (clientmässiga) position
-void updatePlayerClientPosition(Player playerMoving);
+//void playerPositionUpdate(int x, int y);
 
 //inits a player_rect with the x-and-y-position of player
 void initPlayerRect(SDL_Rect *playerRect, Player player1); 
-
-//void playerMoveRight(Player player1);
-//void playerMoveLeft(Player player1);
-//void playerMoveDown(Player player1);
-//void playerMoveUp(Player player1);
-
 
 //void destroyPlayer();
 

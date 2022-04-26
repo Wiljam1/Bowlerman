@@ -11,7 +11,7 @@ struct bowling_ball
     //float yVel, xVel, xPos, yPos;
     //float xPosOld;
     //float yPosOld;
-    SDL_Rect possition;
+    SDL_Rect position;
     //int height;
     //int width;
     int speed;

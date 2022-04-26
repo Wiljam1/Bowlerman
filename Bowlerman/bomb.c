@@ -18,10 +18,10 @@ PUBLIC Bowlingball initBomb(int playerID)
 {
     //malloc(sizeof(struct bowling_ball));
     Bowlingball b;
-    b.possition.y = 0;
-    b.possition.x = 0;
-    b.possition.w = 50;
-    b.possition.h = 50;
+    b.position.y = 0;
+    b.position.x = 0;
+    b.position.w = 50;
+    b.position.h = 50;
     b.speed = 0;
     return b;
 }

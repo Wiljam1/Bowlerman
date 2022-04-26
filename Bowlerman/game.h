@@ -4,7 +4,6 @@
 #include <SDL2/SDL.h>
 #include "player.h"
 #include "bomb.h"
-
 #include "wall.h"
 
 //values to be set by menu in the future

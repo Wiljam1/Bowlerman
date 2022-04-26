@@ -85,8 +85,8 @@ void initGame(Game theGame)
     // }
 
     //Init walls / map
-    int wallwidth = 48;
-    int wallheight = 48;
+    int wallwidth = 48;  //Vet inte hur vi ska bestämma dehär variablerna riktigt,
+    int wallheight = 48; // Om de ens kommer användas
     for(int i = 0; i < WALLAMOUNT; i++){
         theGame->wall[i] = initWalls(WALLAMOUNT, wallwidth, wallheight);
         if(i < 17){
@@ -132,8 +132,8 @@ bool checkEvents(Game theGame)
                 switch (event.key.keysym.sym){
                     case SDLK_SPACE: 
                         theGame->bombs[playerID] = initBomb(playerID);
-                        theGame->bombs[playerID].possition.y = theGame->player[playerID].yPos;
-                        theGame->bombs[playerID].possition.x = theGame->player[playerID].xPos;
+                        theGame->bombs[playerID].position.y = getPlayerYPosition(theGame->player[playerID])+16;
+                        theGame->bombs[playerID].position.x = getPlayerXPosition(theGame->player[playerID])-5;
                         loadBomb();
                     break;
                     case SDLK_ESCAPE:
@@ -151,7 +151,6 @@ bool checkEvents(Game theGame)
             case SDL_KEYUP:
                 switch (event.key.keysym.scancode)
                 {
-                
                     // case SDLK_w: case SDLK_UP:
                     //     up = false;
                     default: break;
@@ -176,30 +175,26 @@ void manageMovementInputs(Game theGame)
     //static int currentDirection = 0;
 
     int velX = 0, velY = 0;
+    Player player = theGame->player[playerID];
     
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if(state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
-        velX = -theGame->player[theGame->playerID].speed;
+        velX = -getPlayerSpeed(player);
     }
     else if(state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
-        velX = theGame->player[theGame->playerID].speed;
+        velX = getPlayerSpeed(player);
     }
     if(velX == 0){
         if(state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_S]){
-            velY = -theGame->player[theGame->playerID].speed;
+            velY = -getPlayerSpeed(player);
         }
         else if(state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D]){
-            velY = theGame->player[theGame->playerID].speed;
+            velY = getPlayerSpeed(player);
         }
     }
-    updatePlayerPos(theGame, velX, velY);
-}
-
-void updatePlayerPos(Game theGame, int velX, int velY)
-{
-    // update (client-side) player positions
-    theGame->player[theGame->playerID].xPos += velX;
-    theGame->player[theGame->playerID].yPos += velY;
+    //Update player positions
+    theGame->player[playerID].xPos += velX;
+    theGame->player[playerID].yPos += velY;
 }
 
 //game loop
@@ -251,7 +246,6 @@ void renderTextures(Game theGame)
     SDL_RenderClear(theGame->renderer); //clear renderer
     //updates/renders background
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, NULL);
-    SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].possition);
 
     //bubble-sort the players y-position into the array "renderOrder"
     //arraySorter(player, theGame->playerAmmount, renderOrder);
@@ -263,12 +257,16 @@ void renderTextures(Game theGame)
         SDL_RenderCopy(theGame->renderer, theGame->textureWall, NULL, &wallRect);
     }
 
+    SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
+
     // renders players
     for(int i=0; i<theGame->playerAmmount; i++){
         SDL_Rect rect = {theGame->player[i].xPos, theGame->player[i].yPos, theGame->player->width, theGame->player->height};
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][0], 0, &rect, 0, NULL, 0);
     }
     
+    //Draw GUI last (top of screenlayers)
+
     SDL_RenderPresent(theGame->renderer); //present renderer
 }
 
@@ -281,5 +279,3 @@ PUBLIC void destroyGame(Game theGame)
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();
 }
-
-

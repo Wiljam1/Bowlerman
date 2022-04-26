@@ -21,7 +21,7 @@ PUBLIC Player initPlayer(float xPos, float yPos)
     p.yVel = 0;
     p.xPos = p.xPosOld = xPos;
     p.yPos = p.yPosOld = yPos;
-    p.speed = 3;
+    p.speed = 4;
     p.height = 60;
     p.width = 40;
 
@@ -66,8 +66,6 @@ void playerSprites(Game theGame)
     theGame->playerRect[0][0].y = 0;
 }
 
-
-
 PUBLIC int getPlayerHeight(Player p)
 {
     return p.height;
@@ -83,6 +81,10 @@ PUBLIC float getPlayerXPosition(Player p)
 PUBLIC float getPlayerYPosition(Player p)
 {
     return p.yPos;
+}
+PUBLIC int getPlayerSpeed(Player p)
+{
+    return p.speed;
 }
 
 // REplaced by different movement-implementation
