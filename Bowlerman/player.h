@@ -36,6 +36,14 @@ struct playerController
     //SDL_Rect playerRect;   //struct to hold the position and size of the sprite
 };
 
+struct playerSprites
+{
+    SDL_Rect redMan[3][8];
+    SDL_Rect blueMan[3][8];
+    SDL_Rect purpleMan[3][8];
+    SDL_Rect yellowMan[3][8];
+};
+typedef struct playerSprites PlayerSprites;
 //initiate player position with x and y coordinates
 Player initPlayer(float xPos, float yPos);
 
@@ -43,22 +51,17 @@ float getPlayerXPosition(Player p);
 float getPlayerYPosition(Player p);
 int getPlayerHeight();
 int getPlayerWidth();
+int getPlayerSpeed(Player p);
 
 
 //ändrar spelarens (clientmässiga) hastighet beroende på användarens tangentbordsintryckningar
-void determinePlayerVelocity(Player playerMoving);
+// void determinePlayerVelocity(Player playerMoving);
 
 //ändrar spelarens (clientmässiga) position
-void updatePlayerClientPosition(Player playerMoving);
+//void playerPositionUpdate(int x, int y);
 
 //inits a player_rect with the x-and-y-position of player
 void initPlayerRect(SDL_Rect *playerRect, Player player1); 
-
-//void playerMoveRight(Player player1);
-//void playerMoveLeft(Player player1);
-//void playerMoveDown(Player player1);
-//void playerMoveUp(Player player1);
-
 
 //void destroyPlayer();
 
