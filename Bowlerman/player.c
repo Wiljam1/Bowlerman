@@ -38,22 +38,22 @@ void LoadPlayerTextures(Game theGame, int ID, char sourceText[10])
     }
     else if (strcmp(sourceText, "blue"))
     {
-        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
-        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
-        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/blueman/");
+        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/blueman/");
+        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/blueman/");
     }
     else if (strcmp(sourceText, "purple"))
     {
-        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
-        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
-        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/purpleman/");
+        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/purpleman/");
+        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/purpleman/");
 
     }
     else if (strcmp(sourceText, "yellow"))
     {
-        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
-        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
-        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/redman/");
+        theGame->player_texture[ID][0] = (SDL_Texture *)loadTextures(theGame, "/resources/yellowman/");
+        theGame->player_texture[ID][1] = (SDL_Texture *)loadTextures(theGame, "/resources/yellowman/");
+        theGame->player_texture[ID][2] = (SDL_Texture *)loadTextures(theGame, "/resources/yelllowman/");
     }
     SDL_FreeSurface(theGame->window_surface);
 }
