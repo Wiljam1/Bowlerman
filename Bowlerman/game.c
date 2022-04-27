@@ -16,7 +16,7 @@
 const int WIDTH = 800;  //Move eventually
 const int HEIGHT = 450;
 
-int playerID=1;        //the players ID. Move eventually
+int playerID = 0;       //the players ID. Move eventually
 
 //initializes game
 PUBLIC Game createWindow()
@@ -44,6 +44,8 @@ void initGame(Game theGame)
     theGame->background = (SDL_Texture *) loadTextures(theGame, "alley.png");
     theGame->player_texture[0][0] = (SDL_Texture *) loadTextures(theGame, "bowlermantestskins/bowman00.png");
     theGame->player_texture[1][0] = (SDL_Texture *) loadTextures(theGame, "redman/down.png");
+    theGame->player_texture[1][1] = (SDL_Texture *) loadTextures(theGame, "redman/right.png");
+    theGame->player_texture[1][2] = (SDL_Texture *) loadTextures(theGame, "redman/up.png");
     theGame->player_texture[2][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     theGame->player_texture[3][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
     theGame->bomb_texture[0] = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_BLue.png");
@@ -142,16 +144,17 @@ bool checkEvents(Game theGame, char moveDirection[1])
                     case SDLK_ESCAPE: done = true; 
                         break;
                     case SDLK_w:
-                        moveDirection[0] = 's';
+                        moveDirection[0] = 'w';
                         break;
                     case SDLK_a:
-                        moveDirection[0] = 's';
+                        moveDirection[0] = 'a';
                         break;
                     case SDLK_s:
                         moveDirection[0] = 's';
-                    break;
+                        break;
                     case SDLK_d:
-                        moveDirection[0] = 's';
+                        moveDirection[0] = 'd';
+                        break;
                     default:
                         break;
                 }
@@ -161,6 +164,18 @@ bool checkEvents(Game theGame, char moveDirection[1])
                 {
                     // case SDLK_w: case SDLK_UP:
                     //     up = false;
+                    case SDLK_w:
+                        moveDirection[0] = 'w';
+                        break;
+                    case SDLK_a:
+                        moveDirection[0] = 'a';
+                        break;
+                    case SDLK_s:
+                        moveDirection[0] = 's';
+                        break;
+                    case SDLK_d:
+                        moveDirection[0] = 'd';
+                        break;
                     default:
                         moveDirection[0] = '0';
                         break;
@@ -213,7 +228,7 @@ void manageMovementInputs(Game theGame)
 //game loop
 PUBLIC void gameUpdate(Game theGame) 
 {
-    char moveDirection[1] = {'0'};
+    char moveDirection[1] = {'0'};  // Keeps track of player movement direction for sprite rendering
     Player player[MAXPLAYERS];   //declares x-ammounts of players
     initGame(theGame); //initializes startvalues. coordinates etc.
     //int renderOrder[4]={0,1,2,3}; //what order to render players
@@ -287,18 +302,33 @@ void renderTextures(Game theGame, char moveDirection[1])
     //SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
 
     // renders player**** EMIL TESTAR HÄR*****
-    static int a = 0;
-    SDL_Rect rect0 = {theGame->player[1].xPos, theGame->player[1].yPos, theGame->player->width, theGame->player->height};
-
-    if (moveDirection[0] == 's')
+    static int spriteTimer = 0;
+    if (spriteTimer > 10) spriteTimer = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
+    static int updateSprite = 0;
+    SDL_Rect playerRect = {theGame->player[playerID].xPos, theGame->player[playerID].yPos, theGame->player->width, theGame->player->height};
+    if (moveDirection[playerID] == 'w')
     {
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.redMan[0][a++], &rect0, 0, NULL, 0);
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][2], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
+        if (spriteTimer++ % 5 == 0) updateSprite++;
+    }
+    else if (moveDirection[playerID] == 'a')
+    {
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 1);
+        if (spriteTimer++ % 5 == 0) updateSprite++;
+    }
+    else if (moveDirection[playerID] == 's')
+    {
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
+        if (spriteTimer++ % 5 == 0) updateSprite++;
+    }
+    else if (moveDirection[playerID] == 'd')
+    {
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
+        if (spriteTimer++ % 5 == 0) updateSprite++;
     }
     else
-    {
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.redMan[0][0], &rect0, 0, NULL, 0);
-    }
-    if (a > 7) a = 0;
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.BowlerMan[0], &playerRect, 0, NULL, 0);
+    if (updateSprite > 7) updateSprite = 0;
 
     //SDL_Rect rect1 = {theGame->player[2].xPos, theGame->player[2].yPos, theGame->player->width, theGame->player->height};
     //SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->player->playerRect, &theGame->playerRect[0][0], 0, NULL, 0);
