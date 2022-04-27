@@ -49,11 +49,11 @@ Game createWindow();              // Struct for app initialization
 void initGame(Game theGame);
 SDL_Texture *loadTextures(Game newGame, char fileLocation[]); // Load any image you want in the resources/ folder!
 void gameUpdate(Game newGame);  // Game loop
-bool checkEvents(Game theGame);
+bool checkEvents(Game theGame, char moveDirection[]);
 void manageMovementInputs(Game theGame);
 void updatePlayerPos(Game theGame, int velX, int velY); //Flytta till player.c nångång
 void collisionDetect(Game theGame);
-void renderTextures(Game theGame);
+void renderTextures(Game theGame, char moveDirection[]);
 void destroyGame(Game theGame); // Function for easily destroying the application.
 
 #endif
