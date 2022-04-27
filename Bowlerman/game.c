@@ -302,10 +302,11 @@ void renderTextures(Game theGame, char moveDirection[1])
     //SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
 
     // renders player**** EMIL TESTAR HÄR*****
+    static int updateSprite = 0;
     static int spriteTimer = 0;
     if (spriteTimer > 10) spriteTimer = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
-    static int updateSprite = 0;
     SDL_Rect playerRect = {theGame->player[playerID].xPos, theGame->player[playerID].yPos, theGame->player->width, theGame->player->height};
+    
     if (moveDirection[playerID] == 'w')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][2], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
@@ -326,8 +327,7 @@ void renderTextures(Game theGame, char moveDirection[1])
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.BowlerMan[0], &playerRect, 0, NULL, 0);
+    else SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.BowlerMan[0], &playerRect, 0, NULL, 0);
     if (updateSprite > 7) updateSprite = 0;
 
     //SDL_Rect rect1 = {theGame->player[2].xPos, theGame->player[2].yPos, theGame->player->width, theGame->player->height};
