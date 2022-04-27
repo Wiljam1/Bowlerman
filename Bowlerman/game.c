@@ -16,9 +16,7 @@
 const int WIDTH = 800;  //Move eventually
 const int HEIGHT = 450;
 
-int playerID=0;        //the players ID. Move eventually
-
-PRIVATE void LoadPlayerTextures(Game theGame, int ID, char sourceText[40]);
+int playerID=1;        //the players ID. Move eventually
 
 //initializes game
 PUBLIC Game createWindow()
@@ -111,15 +109,15 @@ void initGame(Game theGame)
 }
 
 //handles processes, like keyboard-inputs etc
-bool checkEvents(Game theGame)
+bool checkEvents(Game theGame, char moveDirection[1])
 {
     //Enter game loop (SDL_PollEvent)
     bool done = false;
-
     while(SDL_PollEvent(&theGame->window_event)){
         SDL_Event event = theGame->window_event;
 
-        switch(event.type){
+        switch(event.type)
+        {
             case SDL_QUIT:
                 done = true;
                 break;
@@ -131,7 +129,8 @@ bool checkEvents(Game theGame)
                 }
             break;
             case SDL_KEYDOWN:
-                switch (event.key.keysym.sym){
+                switch (event.key.keysym.sym)
+                {
                     case SDLK_SPACE: 
                         theGame->bombs[playerID] = initBomb(playerID);
                         theGame->bombs[playerID].position.y = getPlayerYPosition(theGame->player[playerID])+16;
@@ -139,16 +138,21 @@ bool checkEvents(Game theGame)
                         loadBomb();
                         theGame->bombs[playerID].timervalue = initbowlingballtimer();
                     break;
-                    case SDLK_ESCAPE:
-                        done = true; 
+                    case SDLK_ESCAPE: done = true; 
+                        break;
+                    case SDLK_w:
+                        moveDirection[0] = 's';
+                        break;
+                    case SDLK_a:
+                        moveDirection[0] = 's';
+                        break;
+                    case SDLK_s:
+                        moveDirection[0] = 's';
                     break;
-                    
-                    default: break;
-                }
-                break;
-                switch (event.key.keysym.scancode){
-                    
-                    default: break;
+                    case SDLK_d:
+                        moveDirection[0] = 's';
+                    default:
+                        break;
                 }
                 break;
             case SDL_KEYUP:
@@ -156,11 +160,16 @@ bool checkEvents(Game theGame)
                 {
                     // case SDLK_w: case SDLK_UP:
                     //     up = false;
-                    default: break;
+                    default:
+                        moveDirection[0] = '0';
+                        break;
                 }
                 break;
+            default: 
+            break;
         }
     }
+    
 
     //Manage movement inputs
     manageMovementInputs(theGame);
@@ -203,6 +212,7 @@ void manageMovementInputs(Game theGame)
 //game loop
 PUBLIC void gameUpdate(Game theGame) 
 {
+    char moveDirection[1] = {'0'};
     Player player[MAXPLAYERS];   //declares x-ammounts of players
     initGame(theGame); //initializes startvalues. coordinates etc.
     //int renderOrder[4]={0,1,2,3}; //what order to render players
@@ -211,7 +221,7 @@ PUBLIC void gameUpdate(Game theGame)
     while(!done)
     {
         //Check for events
-        done = checkEvents(theGame);
+        done = checkEvents(theGame, moveDirection);
 
         //Process events (time based stuff)
         if (theGame->bombs[playerID].timervalue == 0)
@@ -226,7 +236,7 @@ PUBLIC void gameUpdate(Game theGame)
         //Send/receive data to server
 
         //render display
-        renderTextures(theGame); 
+        renderTextures(theGame, moveDirection); 
         
         SDL_Delay(10); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
@@ -248,17 +258,20 @@ PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[])   //loadmedi
 }
 
 //renders background and players etc.
-void renderTextures(Game theGame)
+void renderTextures(Game theGame, char moveDirection[1])
 {
-    
-    SDL_RenderClear(theGame->renderer); //clear renderer
+    //clear renderer
+    SDL_RenderClear(theGame->renderer);
+
     //updates/renders background
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, NULL);
+
     //render bombs
     if (theGame->bombs[playerID].timervalue == 0)
     {
         SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
     }
+
     //bubble-sort the players y-position into the array "renderOrder"
     //arraySorter(player, theGame->playerAmmount, renderOrder);
 
@@ -272,15 +285,23 @@ void renderTextures(Game theGame)
     SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
 
     // renders player**** EMIL TESTAR HÄR*****
-        static int a = 0;
-        SDL_Rect rect0 = {theGame->player[0].xPos, theGame->player[0].yPos, theGame->player->width, theGame->player->height};
+    static int a = 0;
+    SDL_Rect rect0 = {theGame->player[1].xPos, theGame->player[1].yPos, theGame->player->width, theGame->player->height};
+
+    if (moveDirection[0] == 's')
+    {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.redMan[0][a++], &rect0, 0, NULL, 0);
-        if (a > 7) a = 0;
+    }
+    else
+    {
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.redMan[0][0], &rect0, 0, NULL, 0);
+    }
+    if (a > 7) a = 0;
 
-        //SDL_Rect rect1 = {theGame->player[2].xPos, theGame->player[2].yPos, theGame->player->width, theGame->player->height};
-        //SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->player->playerRect, &theGame->playerRect[0][0], 0, NULL, 0);
+    //SDL_Rect rect1 = {theGame->player[2].xPos, theGame->player[2].yPos, theGame->player->width, theGame->player->height};
+    //SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->player->playerRect, &theGame->playerRect[0][0], 0, NULL, 0);
 
-        //SDL_RenderCopy(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.redMan[0][0], &theGame->player->playerRect);
+    //SDL_RenderCopy(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.redMan[0][0], &theGame->player->playerRect);
     
     //Draw GUI last (top of screenlayers)
 
