@@ -24,13 +24,17 @@ PUBLIC Bowlingball initBomb(int playerID)
     b.position.h = 50;
     b.speed = 0;
     b.timervalue = 0;
+    b.timerinit = 0;
     return b;
 }
 
-int initbowlingballtimer()
+int initbowlingballtimer(int startTime)
 {
     static int lastTime=0, currentTime;
-
+    if(startTime != 0)
+    {
+        lastTime = startTime;
+    }
     currentTime = SDL_GetTicks();
     if (currentTime > lastTime + 3000)
     {

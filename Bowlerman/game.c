@@ -136,7 +136,8 @@ bool checkEvents(Game theGame)
                         theGame->bombs[playerID].position.y = getPlayerYPosition(theGame->player[playerID])+16;
                         theGame->bombs[playerID].position.x = getPlayerXPosition(theGame->player[playerID])-5;
                         loadBomb();
-                        theGame->bombs[playerID].timervalue = initbowlingballtimer();
+                        theGame->bombs[playerID].timervalue = initbowlingballtimer(SDL_GetTicks());
+                        theGame->bombs[playerID].timerinit = 1;
                     break;
                     case SDLK_ESCAPE:
                         done = true; 
@@ -213,9 +214,10 @@ PUBLIC void gameUpdate(Game theGame)
         done = checkEvents(theGame);
 
         //Process events (time based stuff)
-        if (theGame->bombs[playerID].timervalue == 0)
+        if (theGame->bombs[playerID].timerinit == 1)
         {
-            theGame->bombs[playerID].timervalue = initbowlingballtimer();
+            theGame->bombs[playerID].timervalue = initbowlingballtimer(0);
+            if(theGame->bombs[playerID].timervalue == 1){theGame->bombs[playerID].timerinit = 0;}
         }
         //process();
 
@@ -268,7 +270,7 @@ void renderTextures(Game theGame)
         SDL_RenderCopy(theGame->renderer, theGame->textureWall, NULL, &wallRect);
     }
 
-    SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
+    //SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
 
     // renders player**** EMIL TESTAR HÄR*****
     
