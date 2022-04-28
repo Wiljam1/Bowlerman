@@ -145,18 +145,6 @@ bool checkEvents(Game theGame)
                     break;
                     case SDLK_ESCAPE: done = true; 
                         break;
-                    case SDLK_w:
-                        //theGame->moveDirection[0] = 'w';
-                        break;
-                    case SDLK_a:
-                        //theGame->moveDirection[0] = 'a';
-                        break;
-                    case SDLK_s:
-                        //theGame->moveDirection[0] = 's';
-                        break;
-                    case SDLK_d:
-                        //theGame->moveDirection[0] = 'd';
-                        break;
                     default:
                         break;
                 }
@@ -166,16 +154,8 @@ bool checkEvents(Game theGame)
                 {
                     // case SDLK_w: case SDLK_UP:
                     //     up = false;
-                    case SDLK_w:
-                        break;
-                    case SDLK_a:
-                        break;
-                    case SDLK_s:
-                        break;
-                    case SDLK_d:
-                        break;
                     default:
-                        theGame->moveDirection[0] = '0';
+                        //theGame->moveDirection[0] = '0';
                         break;
                 }
                 break;
@@ -222,6 +202,7 @@ void manageMovementInputs(Game theGame)
             theGame->moveDirection[0] = 's';
         }
     }
+    if (velX == 0 && velY == 0) theGame->moveDirection[0] = '0';
     //Update player positions
     theGame->player[playerID].xPos += velX;
     theGame->player[playerID].yPos += velY;
