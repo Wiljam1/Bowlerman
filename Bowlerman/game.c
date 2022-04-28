@@ -260,7 +260,10 @@ PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[])   //loadmedi
 //renders background and players etc.
 void renderTextures(Game theGame)
 {
+    //Define stuff to make function easier to read
     SDL_Renderer *renderer = theGame->renderer;
+    SDL_Texture *playerTexture = theGame->player_texture;
+    int id = theGame->playerID;
 
     //clear renderer
     SDL_RenderClear(renderer);
@@ -269,13 +272,10 @@ void renderTextures(Game theGame)
     SDL_RenderCopy(renderer, theGame->background, NULL, NULL);
 
     //render bombs
-    if (theGame->bombs[theGame->playerID].timervalue == 0)
+    if (theGame->bombs[id].timervalue == 0)
     {
-        SDL_RenderCopy(renderer, theGame->bomb_texture[theGame->playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[theGame->playerID].position);
+        SDL_RenderCopy(renderer, theGame->bomb_texture[id], &bowlingballAnimation[ 0 ], &theGame->bombs[id].position);
     }
-
-    //bubble-sort the players y-position into the array "renderOrder"
-    //arraySorter(player, theGame->playerAmmount, renderOrder);
 
     //Draw walls
     for (int i = 0; i < WALLAMOUNT; i++)
@@ -284,35 +284,33 @@ void renderTextures(Game theGame)
         SDL_RenderCopy(renderer, theGame->textureWall, NULL, &wallRect);
     }
 
-    //SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
-
     // renders player**** EMIL TESTAR HÄR*****
     static int updateSprite = 0;
     static int spriteTimer = 0;
     if (spriteTimer > 10) spriteTimer = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
-    SDL_Rect playerRect = {theGame->player[theGame->playerID].xPos, theGame->player[theGame->playerID].yPos, theGame->player->width, theGame->player->height};
+    SDL_Rect playerRect = {theGame->player[id].xPos, theGame->player[id].yPos, theGame->player->width, theGame->player->height};
     
-    if (theGame->player[theGame->playerID].moveDirection == 'w')
+    if (theGame->player[id].moveDirection == 'w')
     {
-        SDL_RenderCopyEx(renderer, theGame->player_texture[1][2], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
+        SDL_RenderCopyEx(renderer, theGame->playerTexture[1][2], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (theGame->player[theGame->playerID].moveDirection == 'a')
+    else if (theGame->player[id].moveDirection == 'a')
     {
-        SDL_RenderCopyEx(renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 1);
+        SDL_RenderCopyEx(renderer, theGame->playerTexture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 1);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (theGame->player[theGame->playerID].moveDirection == 's')
+    else if (theGame->player[id].moveDirection == 's')
     {
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
+        SDL_RenderCopyEx(renderer, theGame->playerTexture[1][0], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (theGame->player[theGame->playerID].moveDirection == 'd')
+    else if (theGame->player[id].moveDirection == 'd')
     {
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
+        SDL_RenderCopyEx(renderer, theGame->playerTexture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.BowlerMan[0], &playerRect, 0, NULL, 0);
+    else SDL_RenderCopyEx(renderer, theGame->playerTexture[1][0], &theGame->pSprites.BowlerMan[0], &playerRect, 0, NULL, 0);
     if (updateSprite > 7) updateSprite = 0;
 
     //SDL_Rect rect1 = {theGame->player[2].xPos, theGame->player[2].yPos, theGame->player->width, theGame->player->height};
@@ -322,7 +320,7 @@ void renderTextures(Game theGame)
     
     //Draw GUI last (top of screenlayers)
 
-    SDL_RenderPresent(theGame->renderer); //present renderer
+    SDL_RenderPresent(renderer); //present renderer
 }
 
 PUBLIC void destroyGame(Game theGame)
