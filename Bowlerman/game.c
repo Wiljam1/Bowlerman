@@ -262,7 +262,6 @@ void renderTextures(Game theGame)
 {
     //Define stuff to make function easier to read
     SDL_Renderer *renderer = theGame->renderer;
-    SDL_Texture *playerTexture = theGame->player_texture;
     int id = theGame->playerID;
 
     //clear renderer
@@ -292,25 +291,25 @@ void renderTextures(Game theGame)
     
     if (theGame->player[id].moveDirection == 'w')
     {
-        SDL_RenderCopyEx(renderer, theGame->playerTexture[1][2], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
+        SDL_RenderCopyEx(renderer, theGame->player_texture[1][2], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
     else if (theGame->player[id].moveDirection == 'a')
     {
-        SDL_RenderCopyEx(renderer, theGame->playerTexture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 1);
+        SDL_RenderCopyEx(renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 1);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
     else if (theGame->player[id].moveDirection == 's')
     {
-        SDL_RenderCopyEx(renderer, theGame->playerTexture[1][0], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
+        SDL_RenderCopyEx(renderer, theGame->player_texture[1][0], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
     else if (theGame->player[id].moveDirection == 'd')
     {
-        SDL_RenderCopyEx(renderer, theGame->playerTexture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
+        SDL_RenderCopyEx(renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else SDL_RenderCopyEx(renderer, theGame->playerTexture[1][0], &theGame->pSprites.BowlerMan[0], &playerRect, 0, NULL, 0);
+    else SDL_RenderCopyEx(renderer, theGame->player_texture[1][0], &theGame->pSprites.BowlerMan[0], &playerRect, 0, NULL, 0);
     if (updateSprite > 7) updateSprite = 0;
 
     //SDL_Rect rect1 = {theGame->player[2].xPos, theGame->player[2].yPos, theGame->player->width, theGame->player->height};
