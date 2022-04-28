@@ -34,6 +34,7 @@ struct playerController
     char name[40];
     
     SDL_Rect playerRect;   //struct to hold the position and size of the sprite
+    char moveDirection;  // Keeps track of player movement direction for sprite rendering
 };
 
 struct playerSprites

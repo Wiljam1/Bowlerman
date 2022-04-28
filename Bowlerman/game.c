@@ -40,8 +40,7 @@ PUBLIC Game createWindow()
 //initializes startvalues for game
 void initGame(Game theGame)
 {
-    //setting moveDirection start value
-    theGame->moveDirection[0] = '0';
+    
     //loads in textures
     theGame->background = (SDL_Texture *) loadTextures(theGame, "alley.png");
     theGame->player_texture[0][0] = (SDL_Texture *) loadTextures(theGame, "bowlermantestskins/bowman00.png");
@@ -188,23 +187,23 @@ void manageMovementInputs(Game theGame)
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if(state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
         velX = -getPlayerSpeed(player);
-        theGame->moveDirection[0] = 'a';
+        theGame->player[0].moveDirection = 'a';
     }
     else if(state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
         velX = getPlayerSpeed(player);
-        theGame->moveDirection[0] = 'd';
+        theGame->player[0].moveDirection = 'd';
     }
     if(velX == 0){
         if(state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_S]){
             velY = -getPlayerSpeed(player);
-            theGame->moveDirection[0] = 'w';
+            theGame->player[0].moveDirection = 'w';
         }
         else if(state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D]){
             velY = getPlayerSpeed(player);
-            theGame->moveDirection[0] = 's';
+            theGame->player[0].moveDirection = 's';
         }
     }
-    if (velX == 0 && velY == 0) theGame->moveDirection[0] = '0';
+    if (!velX && !velY) theGame->player[0].moveDirection = '0';
     //Update player positions
     theGame->player[theGame->playerID].xPos += velX;
     theGame->player[theGame->playerID].yPos += velY;
@@ -291,22 +290,22 @@ void renderTextures(Game theGame)
     if (spriteTimer > 10) spriteTimer = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
     SDL_Rect playerRect = {theGame->player[theGame->playerID].xPos, theGame->player[theGame->playerID].yPos, theGame->player->width, theGame->player->height};
     
-    if (theGame->moveDirection[theGame->playerID] == 'w')
+    if (theGame->player[playerID].moveDirection == 'w')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][2], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (theGame->moveDirection[theGame->playerID] == 'a')
+    else if (theGame->player[playerID].moveDirection == 'a')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 1);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (theGame->moveDirection[theGame->playerID] == 's')
+    else if (theGame->player[playerID].moveDirection == 's')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (theGame->moveDirection[theGame->playerID] == 'd')
+    else if (theGame->player[playerID].moveDirection == 'd')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
