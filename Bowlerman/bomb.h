@@ -17,10 +17,11 @@ struct bowling_ball
     int timervalue;
     int speed;
     int timerinit;
+    int explosioninit;
     //int frame;
 };
 
-int initbowlingballtimer(int startTime);
+int initbowlingballtimer(int startTime, int timeAmount);
 //int checkbowlingballtimer();
 
 SDL_Rect bowlingballAnimation[18];

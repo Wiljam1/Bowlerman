@@ -25,10 +25,11 @@ PUBLIC Bowlingball initBomb(int playerID)
     b.speed = 0;
     b.timervalue = 0;
     b.timerinit = 0;
+    b.explosioninit = 1;
     return b;
 }
 
-int initbowlingballtimer(int startTime)
+int initbowlingballtimer(int startTime, int timeAmount)
 {
     static int lastTime=0, currentTime;
     if(startTime != 0)
@@ -36,14 +37,14 @@ int initbowlingballtimer(int startTime)
         lastTime = startTime;
     }
     currentTime = SDL_GetTicks();
-    if (currentTime > lastTime + 3000)
+    if (currentTime > lastTime + timeAmount)
     {
-        printf("%d\n", currentTime);
         lastTime = currentTime;
         return 1;
     }
     return 0;
 }
+
 /*
 int checkbowlingballtimer(timervalue)
 {
