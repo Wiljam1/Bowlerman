@@ -37,7 +37,7 @@ PUBLIC Game createWindow()
                                        WIDTH, HEIGHT,
                                        SDL_WINDOW_SHOWN);
 
-    theGame->renderer = SDL_CreateRenderer(theGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    theGame->renderer = SDL_CreateRenderer(theGame->window, -1, SDL_RENDERER_SOFTWARE | SDL_RENDERER_PRESENTVSYNC);
     theGame->window_surface = SDL_GetWindowSurface(theGame->window);
     return theGame;
 }
@@ -49,11 +49,16 @@ void initGame(Game theGame)
     loadAllTextures(theGame);
     // check server what ID you have.
     // getPlayerID();
-    theGame->playerID = 0;
+    theGame->playerID = 1;
 
     // detta ska ändras via servern sen.
     theGame->playerAmmount = 4;
 
+    //allow bomb placement init
+    for (int i=0;i<4;i++)
+    {
+        theGame->allowBombPlacement[i] = 1;
+    }
     // inits x-amount of players
     theGame->player[0] = initPlayer(70, 70); // sets x and y coordinates and resets values.
     // initPlayerRect(theGame); //inits playerRect[0] to position of player0
@@ -133,11 +138,15 @@ bool checkEvents(Game theGame)
             switch (event.key.keysym.sym)
             {
             case SDLK_SPACE:
-                theGame->bombs[theGame->playerID] = initBomb(theGame->playerID);
-                theGame->bombs[theGame->playerID].position.y = getPlayerYPosition(theGame->player[theGame->playerID]) + 16;
-                theGame->bombs[theGame->playerID].position.x = getPlayerXPosition(theGame->player[theGame->playerID]) - 5;
-                theGame->bombs[theGame->playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000);
-                theGame->bombs[theGame->playerID].timerinit = 1;
+                if(theGame->allowBombPlacement[theGame->playerID] == 1)
+                {
+                    theGame->allowBombPlacement[theGame->playerID] = 0;
+                    theGame->bombs[theGame->playerID] = initBomb(theGame->playerID);
+                    theGame->bombs[theGame->playerID].position.y = getPlayerYPosition(theGame->player[theGame->playerID]) + 16;
+                    theGame->bombs[theGame->playerID].position.x = getPlayerXPosition(theGame->player[theGame->playerID]) - 5;
+                    theGame->bombs[theGame->playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000);
+                    theGame->bombs[theGame->playerID].timerinit = 1;
+                }
                 break;
             case SDLK_ESCAPE:
                 done = true;
@@ -232,12 +241,18 @@ PUBLIC void gameUpdate(Game theGame)
                 theGame->bombs[theGame->playerID].explosioninit = 0;
                 initExplosionPosition(theGame);
                 initbowlingballtimer(SDL_GetTicks(), 1000);
+                
                 }
         }
         if(theGame->bombs[theGame->playerID].explosioninit == 0)
         {
             theGame->bombs[theGame->playerID].explosioninit = initbowlingballtimer(0, 1000);
+            if(theGame->bombs[theGame->playerID].explosioninit == 1)
+            {
+                theGame->allowBombPlacement[theGame->playerID] = 1;
+            }
         }
+        
         // process();
 
         // Collisiondetection
