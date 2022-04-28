@@ -44,7 +44,7 @@ void initGame(Game theGame)
     loadAllTextures(theGame);
     //check server what ID you have.
     //getPlayerID();
-    theGame->playerID=0;
+    theGame->playerID=1;
 
     //detta ska ändras via servern sen.
     theGame->playerAmmount=4;
@@ -168,23 +168,23 @@ void manageMovementInputs(Game theGame)
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if(state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
         velX = -getPlayerSpeed(player);
-        theGame->player[0].moveDirection = 'a';
+        theGame->player[theGame->playerID].moveDirection = 'a';
     }
     else if(state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
         velX = getPlayerSpeed(player);
-        theGame->player[0].moveDirection = 'd';
+        theGame->player[theGame->playerID].moveDirection = 'd';
     }
     if(velX == 0){
         if(state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_S]){
             velY = -getPlayerSpeed(player);
-            theGame->player[0].moveDirection = 'w';
+            theGame->player[theGame->playerID].moveDirection = 'w';
         }
         else if(state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D]){
             velY = getPlayerSpeed(player);
-            theGame->player[0].moveDirection = 's';
+            theGame->player[theGame->playerID].moveDirection = 's';
         }
     }
-    if (!velX && !velY) theGame->player[0].moveDirection = '0';
+    if (!velX && !velY) theGame->player[theGame->playerID].moveDirection = '0';
     //Update player positions
     theGame->player[theGame->playerID].xPos += velX;
     theGame->player[theGame->playerID].yPos += velY;
@@ -282,16 +282,24 @@ PRIVATE void loadAllTextures(Game theGame)
 {
     //loads in textures
     theGame->background = (SDL_Texture *) loadTextures(theGame, "alley.png");
+    /*PLAYER ID 0*/
     theGame->player_texture[0][0] = (SDL_Texture *) loadTextures(theGame, "redman/down.png");
     theGame->player_texture[0][1] = (SDL_Texture *) loadTextures(theGame, "redman/right.png");
     theGame->player_texture[0][2] = (SDL_Texture *) loadTextures(theGame, "redman/up.png");
-    theGame->player_texture[1][0] = (SDL_Texture *) loadTextures(theGame, "bowlermantestskins/bowman00.png");
+    /*PLAYER ID 1*/
+    theGame->player_texture[1][0] = (SDL_Texture *) loadTextures(theGame, "redman/down.png");
+    theGame->player_texture[1][1] = (SDL_Texture *) loadTextures(theGame, "redman/right.png");
+    theGame->player_texture[1][2] = (SDL_Texture *) loadTextures(theGame, "redman/up.png");
+    /*PLAYER ID 2*/
     theGame->player_texture[2][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
+    /*PLAYER ID 3*/
     theGame->player_texture[3][0] = (SDL_Texture *) loadTextures(theGame, "pin2.png");
+    /*BOWLING BALLS*/
     theGame->bomb_texture[0] = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_BLue.png");
     theGame->bomb_texture[1] = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_Purple.png");
     theGame->bomb_texture[2] = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_Red.png");
     theGame->bomb_texture[3] = (SDL_Texture *) loadTextures(theGame, "Bowling_Ball_Yellow.png");
+    /*WALLS*/
     theGame->textureWall = (SDL_Texture *) loadTextures(theGame, "wall.png");
     SDL_FreeSurface(theGame->window_surface);
     //Load player sprites
@@ -303,8 +311,8 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
 {
     // renders player**** EMIL TESTAR HÄR*****
     static int updateSprite = 0;
-    static int spriteTimer = 0;
-    if (spriteTimer > 10) spriteTimer = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
+    static int spriteTimer[4] = {0};
+    if (spriteTimer[theGame->playerID] > 10) spriteTimer[theGame->playerID] = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
     SDL_Rect playerRect = {theGame->player[theGame->playerID].xPos, theGame->player[theGame->playerID].yPos, theGame->player->width, theGame->player->height};
     
     if (theGame->player[theGame->playerID].moveDirection == 'w'){
@@ -316,7 +324,7 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     } else if (theGame->player[theGame->playerID].moveDirection == 'd'){
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
     } else SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerMan[0], &playerRect, 0, NULL, 0);
-    if (spriteTimer++ % 5 == 0) updateSprite++;
+    if (spriteTimer[theGame->playerID]++ % 5 == 0) updateSprite++;
     if (updateSprite > 7) updateSprite = 0;
 }
 
