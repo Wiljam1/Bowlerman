@@ -59,6 +59,9 @@ void initGame(Game theGame)
 
     theGame->pSprites = getRedPlayer();
 
+    //Load bomb sprites
+    loadBomb();
+
     //check server what ID you have.
     //getPlayerID();
     theGame->playerID=0;
@@ -139,7 +142,6 @@ bool checkEvents(Game theGame)
                         theGame->bombs[playerID] = initBomb(playerID);
                         theGame->bombs[playerID].position.y = getPlayerYPosition(theGame->player[playerID])+16;
                         theGame->bombs[playerID].position.x = getPlayerXPosition(theGame->player[playerID])-5;
-                        loadBomb();
                         theGame->bombs[playerID].timervalue = initbowlingballtimer(SDL_GetTicks());
                         theGame->bombs[playerID].timerinit = 1;
                     break;
