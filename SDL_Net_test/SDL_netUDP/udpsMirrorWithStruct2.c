@@ -1,3 +1,4 @@
+
 #if 0
 #!/bin/sh
 gcc -Wall `sdl-config --cflags` udps.c -o udps `sdl-config --libs` -lSDL_net
@@ -52,6 +53,7 @@ int main(int argc, char **argv)
  
 	/* Main loop */
 	quit = 0;
+    int playerAmmount=2;
 	while (!quit)
 	{
 		/* Wait a packet. UDP_Recv returns != 0 if a packet is coming */
@@ -60,14 +62,25 @@ int main(int argc, char **argv)
 			printf("UDP Packet incoming\n");
 			printf("\tData:    %s\n", (char *)pRecive->data);
 			printf("\tAddress: %x %x\n", pRecive->address.host, pRecive->address.port);
-            for(int i=0; i<2; i++)
+            
+            //etablera vems IP-adress och port
+            if(IPclient[0] == 0 && portClient[0] == 0){
+                printf("Client 0\n");
+                IPclient[0] = pRecive->address.host;
+                portClient[0] = pRecive->address.port;
+            }else if(pRecive->address.port != portClient[0] && IPclient[1] == 0){
+                printf("Client 1\n");
+                IPclient[1] = pRecive->address.host;
+                portClient[1] = pRecive->address.port;
+            }
+
+            //skicka data 
+            else
             {
-                if(IPclient[i] == 0 && portClient[i] == 0){
-                    printf("Client %d\n", i);
-                    IPclient[i] = pRecive->address.host;
-                    portClient[i] = pRecive->address.port;  
-                }
-                else if (pRecive->address.port == portClient[i]){
+                for(int i=0; i<playerAmmount; i++)
+            {
+                //skicka data till alla utom den IP som skickade
+                if (pRecive->address.port == portClient[i]){
                     printf("Recived data\n");
                     for (int j=0; j<i; j++)
                     {
@@ -86,7 +99,7 @@ int main(int argc, char **argv)
                         }
                     }
 
-                    for (int j=i; j<2; j++)
+                    for (int j=i+1; j<playerAmmount; j++)
                     {
                         if(IPclient[j] != 0){
                             printf("Send to Client %d\n", j);
@@ -104,7 +117,7 @@ int main(int argc, char **argv)
                     }
                 }
             }
-            
+            }
 
 			/* Quit if packet contains "quit" */
 			if (strcmp((char *)pSent->data, "quit") == 0)

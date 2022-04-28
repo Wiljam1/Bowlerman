@@ -62,6 +62,8 @@ int main(int argc, char **argv)
 			printf("UDP Packet incoming\n");
 			printf("\tData:    %s\n", (char *)pRecive->data);
 			printf("\tAddress: %x %x\n", pRecive->address.host, pRecive->address.port);
+            
+            //etablera vems IP-adress och port
             if(IPclient1 == 0 && portClient1 == 0){
                 printf("Client 1\n");
                 IPclient1 = pRecive->address.host;
@@ -70,6 +72,9 @@ int main(int argc, char **argv)
                 printf("Client 2\n");
                 IPclient2 = pRecive->address.host;
                 portClient2 = pRecive->address.port;
+
+
+            //skicka data
             }else{
                 if (pRecive->address.port == portClient1){
                     printf("Recived data\n");
