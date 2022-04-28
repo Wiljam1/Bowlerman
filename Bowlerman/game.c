@@ -263,7 +263,7 @@ PUBLIC void gameUpdate(Game theGame)
         // render display
         renderTextures(theGame);
 
-        SDL_Delay(10); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
+        //SDL_Delay(10); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
 }
 

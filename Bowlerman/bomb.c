@@ -30,15 +30,15 @@ PUBLIC Bowlingball initBomb(int playerID)
 
 int initbowlingballtimer(int startTime, int timeAmount)
 {
-    static int lastTime=0, currentTime;
+    static int lastTime[4]={0}, currentTime[4] = {0};
     if(startTime != 0)
     {
-        lastTime = startTime;
+        lastTime[0] = startTime;
     }
-    currentTime = SDL_GetTicks();
-    if (currentTime > lastTime + timeAmount)
+    currentTime[0] = SDL_GetTicks();
+    if (currentTime[0] > lastTime[0] + timeAmount)
     {
-        lastTime = currentTime;
+        lastTime[0] = currentTime[0];
         return 1;
     }
     return 0;
