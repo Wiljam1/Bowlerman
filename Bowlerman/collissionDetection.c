@@ -21,13 +21,13 @@ PUBLIC void collisionDetect(Game theGame)
     
     //Don't move out of window!
     if(mX < 0)                //Left edge
-        theGame->player[theGame->playerID].xPos += theGame->player[theGame->playerID].speed;
+        theGame->player[theGame->playerID].xPos += s;
     if(mX+mW > WDITHH)         //Right edge
-         theGame->player[theGame->playerID].xPos -= theGame->player[theGame->playerID].speed;
+         theGame->player[theGame->playerID].xPos -= s;
     if(mY < 0)                //Top edge
-        theGame->player[theGame->playerID].yPos += theGame->player[theGame->playerID].speed;
+        theGame->player[theGame->playerID].yPos += s;
     if(mY+mH > HEIGHTT)        //Bottom edge
-        theGame->player[theGame->playerID].yPos -= theGame->player[theGame->playerID].speed;
+        theGame->player[theGame->playerID].yPos -= s;
 
     //Collision with enemies
     // for(int i = 0; i < WALLCOUNT/4; i++){
