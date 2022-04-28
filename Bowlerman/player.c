@@ -24,11 +24,12 @@ PUBLIC Player initPlayer(float xPos, float yPos)
     p.speed = 4;
     p.playerRect.h = p.height = 100;
     p.playerRect.w = p.width = 80;
+    p.moveDirection = '0';
 
     return p;
 }
 
-PlayerSprites getRedPlayer()
+PlayerSprites GetPlayerSprite()
 {
     PlayerSprites p;
     const int width = 184;
