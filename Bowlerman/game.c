@@ -17,10 +17,7 @@
 
 struct data
 { // data sent via UDP
-    int x;
-    int y;
-    int status;
-    int playerID;
+    int x, y, status, playerID;
     char moveDirection;
 };
 
@@ -229,6 +226,8 @@ void initGame(Game theGame)
 // handles processes, like keyboard-inputs etc
 bool checkEvents(Game theGame)
 {
+    Player player = theGame->player[theGame->playerIDLocal];
+
     // Enter game loop (SDL_PollEvent)
     bool done = false;
     while (SDL_PollEvent(&theGame->window_event))
@@ -252,16 +251,17 @@ bool checkEvents(Game theGame)
             switch (event.key.keysym.sym)
             {
             case SDLK_SPACE:
-                //Kan nog göras till en funktion
-                if (theGame->allowBombPlacement[theGame->playerIDLocal] == 1) // man måste veta vilken player här
+                // Kan nog göras till en funktion
+                // placeBomb();
+                if (theGame->allowBombPlacement[player.id] == 1) // man måste veta vilken player här
                 {
-                    theGame->allowBombPlacement[theGame->playerIDLocal] = 0;
-                    theGame->bombs[theGame->playerIDLocal] = initBomb(theGame->playerIDLocal);
-                    theGame->bombs[theGame->playerIDLocal].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[theGame->playerIDLocal]) + 56) - 40;
-                    theGame->bombs[theGame->playerIDLocal].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[theGame->playerIDLocal]) + 8);
-                    theGame->bombs[theGame->playerIDLocal].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, theGame->playerIDLocal); // också viktigt att veta vilken player
-                    theGame->bombs[theGame->playerIDLocal].timerinit = 1;           //detta värdet borde skickas som data till andra players
-                    theGame->bombs[theGame->playerIDLocal].placedBombRestriction = 1;
+                    theGame->allowBombPlacement[player.id] = 0;
+                    theGame->bombs[player.id] = initBomb(player.id);
+                    theGame->bombs[player.id].position.y = correctBowlingBallPos(getPlayerYPosition(player) + 56) - 40;
+                    theGame->bombs[player.id].position.x = correctBowlingBallPos(getPlayerXPosition(player) + 8);
+                    theGame->bombs[player.id].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, player.id); // också viktigt att veta vilken player
+                    theGame->bombs[player.id].timerinit = 1;           //detta värdet borde skickas som data till andra players
+                    theGame->bombs[player.id].placedBombRestriction = 1;
                 }
                 break;
             case SDLK_ESCAPE:
