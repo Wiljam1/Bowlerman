@@ -15,7 +15,7 @@ collissionDetection.o:
 wall.o:
 	gcc -c wall.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 clean_windows:
-	del /Q /F main.exe *.o
+	del /Q /F *.o
 
 	
 mac: main.o game.o player.o sorter.o bomb.o wall.o collissionDetection.o
