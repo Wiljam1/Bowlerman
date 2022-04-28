@@ -263,7 +263,7 @@ PUBLIC void gameUpdate(Game theGame)
         // render display
         renderTextures(theGame);
 
-        //SDL_Delay(10); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
+        SDL_Delay(1000/60); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
 }
 
@@ -398,7 +398,8 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     }
     else
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerMan[0], &playerRect0, 0, NULL, 0);
-    if (spriteTimer[theGame->playerID]++ % 5 == 0 && moveD != '0')
+
+    if (spriteTimer[theGame->playerID]++ % 5 == 0)
         updateSprite[theGame->playerID]++;
     if (updateSprite[theGame->playerID] > 7)
         updateSprite[theGame->playerID] = 0;
@@ -408,8 +409,11 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
 PUBLIC void destroyGame(Game theGame)
 {
     SDL_DestroyTexture(theGame->background);
-    for (int i = 0; i < 4; i++)
-        SDL_DestroyTexture(theGame->player_texture[i][0]);
+    for (int i = 0; i < 4; i++){
+        for (int j = 0; j < 3; j++){
+            SDL_DestroyTexture(theGame->player_texture[i][j]);
+            }
+    }
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();

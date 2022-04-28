@@ -7,7 +7,7 @@
 #include "wall.h"
 
 //values to be set by menu in the future
-#define PLAYERTEXTURES 13
+#define PLAYERTEXTURES 3
 #define MAXPLAYERS 4    //how many players are online
 
 

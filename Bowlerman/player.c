@@ -21,7 +21,7 @@ PUBLIC Player initPlayer(float xPos, float yPos)
     p.yVel = 0;
     p.playerRect.x = p.xPos = p.xPosOld = xPos;
     p.playerRect.y = p.yPos = p.yPosOld = yPos;
-    p.speed = 1;
+    p.speed = 4;
     p.playerRect.h = p.height = 100;
     p.playerRect.w = p.width = 80;
     p.moveDirection = '0';
