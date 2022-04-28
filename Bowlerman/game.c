@@ -111,7 +111,7 @@ void initGame(Game theGame)
 }
 
 //handles processes, like keyboard-inputs etc
-bool checkEvents(Game theGame, char moveDirection[1])
+bool checkEvents(Game theGame)
 {
     //Enter game loop (SDL_PollEvent)
     bool done = false;
@@ -144,16 +144,16 @@ bool checkEvents(Game theGame, char moveDirection[1])
                     case SDLK_ESCAPE: done = true; 
                         break;
                     case SDLK_w:
-                        moveDirection[0] = 'w';
+                        //theGame->moveDirection[0] = 'w';
                         break;
                     case SDLK_a:
-                        moveDirection[0] = 'a';
+                        //theGame->moveDirection[0] = 'a';
                         break;
                     case SDLK_s:
-                        moveDirection[0] = 's';
+                        //theGame->moveDirection[0] = 's';
                         break;
                     case SDLK_d:
-                        moveDirection[0] = 'd';
+                        //theGame->moveDirection[0] = 'd';
                         break;
                     default:
                         break;
@@ -165,19 +165,15 @@ bool checkEvents(Game theGame, char moveDirection[1])
                     // case SDLK_w: case SDLK_UP:
                     //     up = false;
                     case SDLK_w:
-                        moveDirection[0] = 'w';
                         break;
                     case SDLK_a:
-                        moveDirection[0] = 'a';
                         break;
                     case SDLK_s:
-                        moveDirection[0] = 's';
                         break;
                     case SDLK_d:
-                        moveDirection[0] = 'd';
                         break;
                     default:
-                        moveDirection[0] = '0';
+                        theGame->moveDirection[0] = '0';
                         break;
                 }
                 break;
@@ -208,16 +204,20 @@ void manageMovementInputs(Game theGame)
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if(state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
         velX = -getPlayerSpeed(player);
+        theGame->moveDirection[0] = 'a';
     }
     else if(state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
         velX = getPlayerSpeed(player);
+        theGame->moveDirection[0] = 'd';
     }
     if(velX == 0){
         if(state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_S]){
             velY = -getPlayerSpeed(player);
+            theGame->moveDirection[0] = 'w';
         }
         else if(state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D]){
             velY = getPlayerSpeed(player);
+            theGame->moveDirection[0] = 's';
         }
     }
     //Update player positions
@@ -228,7 +228,6 @@ void manageMovementInputs(Game theGame)
 //game loop
 PUBLIC void gameUpdate(Game theGame) 
 {
-    char moveDirection[1] = {'0'};  // Keeps track of player movement direction for sprite rendering
     Player player[MAXPLAYERS];   //declares x-ammounts of players
     initGame(theGame); //initializes startvalues. coordinates etc.
     //int renderOrder[4]={0,1,2,3}; //what order to render players
@@ -237,7 +236,7 @@ PUBLIC void gameUpdate(Game theGame)
     while(!done)
     {
         //Check for events
-        done = checkEvents(theGame, moveDirection);
+        done = checkEvents(theGame);
 
         //Process events (time based stuff)
         if (theGame->bombs[playerID].timerinit == 1)
@@ -253,7 +252,7 @@ PUBLIC void gameUpdate(Game theGame)
         //Send/receive data to server
 
         //render display
-        renderTextures(theGame, moveDirection); 
+        renderTextures(theGame); 
         
         SDL_Delay(10); //man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
@@ -275,7 +274,7 @@ PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[])   //loadmedi
 }
 
 //renders background and players etc.
-void renderTextures(Game theGame, char moveDirection[1])
+void renderTextures(Game theGame)
 {
     //clear renderer
     SDL_RenderClear(theGame->renderer);
@@ -307,22 +306,22 @@ void renderTextures(Game theGame, char moveDirection[1])
     if (spriteTimer > 10) spriteTimer = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
     SDL_Rect playerRect = {theGame->player[playerID].xPos, theGame->player[playerID].yPos, theGame->player->width, theGame->player->height};
     
-    if (moveDirection[playerID] == 'w')
+    if (theGame->moveDirection[playerID] == 'w')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][2], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (moveDirection[playerID] == 'a')
+    else if (theGame->moveDirection[playerID] == 'a')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 1);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (moveDirection[playerID] == 's')
+    else if (theGame->moveDirection[playerID] == 's')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (moveDirection[playerID] == 'd')
+    else if (theGame->moveDirection[playerID] == 'd')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;

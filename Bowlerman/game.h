@@ -25,6 +25,7 @@ struct game_type
     int playerAmmount;  //ammount of players online
     SDL_Rect playerRect[4][3];
     PlayerSprites pSprites;
+    char moveDirection[1];  // Keeps track of player movement direction for sprite rendering
 
     //Walls
     Wall wall[WALLAMOUNT];
@@ -49,11 +50,11 @@ Game createWindow();              // Struct for app initialization
 void initGame(Game theGame);
 SDL_Texture *loadTextures(Game newGame, char fileLocation[]); // Load any image you want in the resources/ folder!
 void gameUpdate(Game newGame);  // Game loop
-bool checkEvents(Game theGame, char moveDirection[]);
+bool checkEvents(Game theGame);
 void manageMovementInputs(Game theGame);
 void updatePlayerPos(Game theGame, int velX, int velY); //Flytta till player.c nångång
 void collisionDetect(Game theGame);
-void renderTextures(Game theGame, char moveDirection[]);
+void renderTextures(Game theGame);
 void destroyGame(Game theGame); // Function for easily destroying the application.
 
 #endif
