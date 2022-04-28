@@ -16,7 +16,7 @@
 const int WIDTH = 800;  //Move eventually
 const int HEIGHT = 450;
 
-int playerID = 0;       //the players ID. Move eventually
+//int playerID = 0;       //the players ID. Move eventually
 
 //initializes game
 PUBLIC Game createWindow()
@@ -139,11 +139,11 @@ bool checkEvents(Game theGame)
                 switch (event.key.keysym.sym)
                 {
                     case SDLK_SPACE: 
-                        theGame->bombs[playerID] = initBomb(playerID);
-                        theGame->bombs[playerID].position.y = getPlayerYPosition(theGame->player[playerID])+16;
-                        theGame->bombs[playerID].position.x = getPlayerXPosition(theGame->player[playerID])-5;
-                        theGame->bombs[playerID].timervalue = initbowlingballtimer(SDL_GetTicks());
-                        theGame->bombs[playerID].timerinit = 1;
+                        theGame->bombs[theGame->playerID] = initBomb(theGame->playerID);
+                        theGame->bombs[theGame->playerID].position.y = getPlayerYPosition(theGame->player[theGame->playerID])+16;
+                        theGame->bombs[theGame->playerID].position.x = getPlayerXPosition(theGame->player[theGame->playerID])-5;
+                        theGame->bombs[theGame->playerID].timervalue = initbowlingballtimer(SDL_GetTicks());
+                        theGame->bombs[theGame->playerID].timerinit = 1;
                     break;
                     case SDLK_ESCAPE: done = true; 
                         break;
@@ -183,7 +183,7 @@ void manageMovementInputs(Game theGame)
     //static int currentDirection = 0;
 
     int velX = 0, velY = 0;
-    Player player = theGame->player[playerID];
+    Player player = theGame->player[theGame->playerID];
     
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if(state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S]){
@@ -206,8 +206,8 @@ void manageMovementInputs(Game theGame)
     }
     if (velX == 0 && velY == 0) theGame->moveDirection[0] = '0';
     //Update player positions
-    theGame->player[playerID].xPos += velX;
-    theGame->player[playerID].yPos += velY;
+    theGame->player[theGame->playerID].xPos += velX;
+    theGame->player[theGame->playerID].yPos += velY;
 }
 
 //game loop
@@ -224,10 +224,10 @@ PUBLIC void gameUpdate(Game theGame)
         done = checkEvents(theGame);
 
         //Process events (time based stuff)
-        if (theGame->bombs[playerID].timerinit == 1)
+        if (theGame->bombs[theGame->playerID].timerinit == 1)
         {
-            theGame->bombs[playerID].timervalue = initbowlingballtimer(0);
-            if(theGame->bombs[playerID].timervalue == 1){theGame->bombs[playerID].timerinit = 0;}
+            theGame->bombs[theGame->playerID].timervalue = initbowlingballtimer(0);
+            if(theGame->bombs[theGame->playerID].timervalue == 1){theGame->bombs[theGame->playerID].timerinit = 0;}
         }
         //process();
 
@@ -268,9 +268,9 @@ void renderTextures(Game theGame)
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, NULL);
 
     //render bombs
-    if (theGame->bombs[playerID].timervalue == 0)
+    if (theGame->bombs[theGame->playerID].timervalue == 0)
     {
-        SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
+        SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[theGame->playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[theGame->playerID].position);
     }
 
     //bubble-sort the players y-position into the array "renderOrder"
@@ -289,24 +289,24 @@ void renderTextures(Game theGame)
     static int updateSprite = 0;
     static int spriteTimer = 0;
     if (spriteTimer > 10) spriteTimer = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
-    SDL_Rect playerRect = {theGame->player[playerID].xPos, theGame->player[playerID].yPos, theGame->player->width, theGame->player->height};
+    SDL_Rect playerRect = {theGame->player[theGame->playerID].xPos, theGame->player[theGame->playerID].yPos, theGame->player->width, theGame->player->height};
     
-    if (theGame->moveDirection[playerID] == 'w')
+    if (theGame->moveDirection[theGame->playerID] == 'w')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][2], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (theGame->moveDirection[playerID] == 'a')
+    else if (theGame->moveDirection[theGame->playerID] == 'a')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 1);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (theGame->moveDirection[playerID] == 's')
+    else if (theGame->moveDirection[theGame->playerID] == 's')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (theGame->moveDirection[playerID] == 'd')
+    else if (theGame->moveDirection[theGame->playerID] == 'd')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
