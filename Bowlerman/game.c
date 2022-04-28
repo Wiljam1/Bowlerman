@@ -187,7 +187,6 @@ void manageMovementInputs(Game theGame)
 
     int velX = 0, velY = 0;
     Player player = theGame->player[theGame->playerID];
-
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
     {
@@ -264,6 +263,14 @@ PUBLIC void gameUpdate(Game theGame)
         renderTextures(theGame);
 
         SDL_Delay(1000/60); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
+        /* static int a = 0;
+        static int b = 0;
+        a++;
+        if (a == 60)
+        {
+            printf("%d ", ++b);
+            a = 0;
+        } */
     }
 }
 
@@ -320,16 +327,8 @@ void renderTextures(Game theGame)
         SDL_RenderCopy(renderer, theGame->textureWall, NULL, &wallRect);
     }
 
-    // SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
-
     // Updating textures depending on movement
     UpdatePlayerTextures(theGame);
-
-    // SDL_Rect rect1 = {theGame->player[2].xPos, theGame->player[2].yPos, theGame->player->width, theGame->player->height};
-    // SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->player->playerRect, &theGame->playerRect[0][0], 0, NULL, 0);
-
-    // SDL_RenderCopy(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.redMan[0][0], &theGame->player->playerRect);
-
     // Draw GUI last (top of screenlayers)
 
     SDL_RenderPresent(renderer); // present renderer
@@ -399,11 +398,11 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     else
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerMan[0], &playerRect0, 0, NULL, 0);
 
-    if (spriteTimer[theGame->playerID]++ % 5 == 0)
+    if (spriteTimer[theGame->playerID]++ % 5 == 0 && moveD != '0')
         updateSprite[theGame->playerID]++;
     if (updateSprite[theGame->playerID] > 7)
         updateSprite[theGame->playerID] = 0;
-    //printf("%d ", updateSprite[theGame->playerID]);
+    //printf("%c ", moveD);
 }
 
 PUBLIC void destroyGame(Game theGame)
