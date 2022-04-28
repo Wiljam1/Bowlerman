@@ -310,22 +310,25 @@ PRIVATE void loadAllTextures(Game theGame)
 PRIVATE void UpdatePlayerTextures(Game theGame)
 {
     // renders player**** EMIL TESTAR HÄR*****
-    static int updateSprite = 0;
+    static int updateSprite[4] = {0};
     static int spriteTimer[4] = {0};
+    char moveD = theGame->player[theGame->playerID].moveDirection;
+
     if (spriteTimer[theGame->playerID] > 10) spriteTimer[theGame->playerID] = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
     SDL_Rect playerRect = {theGame->player[theGame->playerID].xPos, theGame->player[theGame->playerID].yPos, theGame->player->width, theGame->player->height};
-    
-    if (theGame->player[theGame->playerID].moveDirection == 'w'){
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][2], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
-    } else if (theGame->player[theGame->playerID].moveDirection == 'a'){
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 1);
-    } else if (theGame->player[theGame->playerID].moveDirection == 's'){
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
-    } else if (theGame->player[theGame->playerID].moveDirection == 'd'){
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
+
+    if (moveD == 'w'){
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][2], &theGame->pSprites.BowlerMan[updateSprite[theGame->playerID]], &playerRect, 0, NULL, 0);
+    } else if (moveD == 'a'){
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerMan[updateSprite[theGame->playerID]], &playerRect, 0, NULL, 1);
+    } else if (moveD == 's'){
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerMan[updateSprite[theGame->playerID]], &playerRect, 0, NULL, 0);
+    } else if (moveD == 'd'){
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerMan[updateSprite[theGame->playerID]], &playerRect, 0, NULL, 0);
     } else SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerMan[0], &playerRect, 0, NULL, 0);
-    if (spriteTimer[theGame->playerID]++ % 5 == 0) updateSprite++;
-    if (updateSprite > 7) updateSprite = 0;
+    if (spriteTimer[theGame->playerID]++ % 5 == 0 && moveD != '0') updateSprite[theGame->playerID]++;
+    if (updateSprite[theGame->playerID] > 7) updateSprite[theGame->playerID] = 0;
+    printf("%d ", updateSprite[theGame->playerID]);
 }
 
 PUBLIC void destroyGame(Game theGame)
