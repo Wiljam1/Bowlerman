@@ -2,12 +2,12 @@ soC: udps.c udpc.c
 	gcc -o server udps.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_net -lSDL2_image
 	gcc -o client udpc.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_net -lSDL2_image
 
-udpsM: udpsMirror.c
+udp0: udpsMirror.c
 	gcc -o udpsMirror udpsMirror.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_net -lSDL2_image
-udpsMs: udpsMirrorWithStruct.c
+udp1: udpsMirrorWithStruct.c
 	gcc -o udpsMirrorWithStruct udpsMirrorWithStruct.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_net -lSDL2_image
 
-udp: udpsMirrorWithStruct2.c
+udp2: udpsMirrorWithStruct2.c
 	gcc -o udpsMirrorWithStruct2 udpsMirrorWithStruct2.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_net -lSDL2_image
 
 
