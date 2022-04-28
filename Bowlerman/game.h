@@ -25,7 +25,6 @@ struct game_type
     int playerAmmount;  //ammount of players online
     SDL_Rect playerRect[4][3];
     PlayerSprites pSprites;
-    char moveDirection[1];  // Keeps track of player movement direction for sprite rendering
 
     //Walls
     Wall wall[WALLAMOUNT];

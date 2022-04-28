@@ -43,7 +43,7 @@ struct playerSprites
 };
 typedef struct playerSprites PlayerSprites;
 //initiate player position with x and y coordinates
-PlayerSprites getRedPlayer();
+PlayerSprites GetPlayerSprite();
 Player initPlayer(float xPos, float yPos);
 
 float getPlayerXPosition(Player p);

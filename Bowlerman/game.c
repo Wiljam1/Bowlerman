@@ -56,7 +56,7 @@ void initGame(Game theGame)
     theGame->textureWall = (SDL_Texture *) loadTextures(theGame, "wall.png");
     SDL_FreeSurface(theGame->window_surface);
 
-    theGame->pSprites = getRedPlayer();
+    theGame->pSprites = GetPlayerSprite();
 
     //Load bomb sprites
     loadBomb();
