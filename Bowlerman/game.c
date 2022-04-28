@@ -40,6 +40,8 @@ PUBLIC Game createWindow()
 //initializes startvalues for game
 void initGame(Game theGame)
 {
+    //setting moveDirection start value
+    theGame->moveDirection[0] = '0';
     //loads in textures
     theGame->background = (SDL_Texture *) loadTextures(theGame, "alley.png");
     theGame->player_texture[0][0] = (SDL_Texture *) loadTextures(theGame, "bowlermantestskins/bowman00.png");
