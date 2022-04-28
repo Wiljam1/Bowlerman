@@ -260,16 +260,18 @@ PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[])   //loadmedi
 //renders background and players etc.
 void renderTextures(Game theGame)
 {
+    SDL_Renderer *renderer = theGame->renderer;
+
     //clear renderer
-    SDL_RenderClear(theGame->renderer);
+    SDL_RenderClear(renderer);
 
     //updates/renders background
-    SDL_RenderCopy(theGame->renderer, theGame->background, NULL, NULL);
+    SDL_RenderCopy(renderer, theGame->background, NULL, NULL);
 
     //render bombs
     if (theGame->bombs[theGame->playerID].timervalue == 0)
     {
-        SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[theGame->playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[theGame->playerID].position);
+        SDL_RenderCopy(renderer, theGame->bomb_texture[theGame->playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[theGame->playerID].position);
     }
 
     //bubble-sort the players y-position into the array "renderOrder"
@@ -279,7 +281,7 @@ void renderTextures(Game theGame)
     for (int i = 0; i < WALLAMOUNT; i++)
     {
         SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
-        SDL_RenderCopy(theGame->renderer, theGame->textureWall, NULL, &wallRect);
+        SDL_RenderCopy(renderer, theGame->textureWall, NULL, &wallRect);
     }
 
     //SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
@@ -290,22 +292,22 @@ void renderTextures(Game theGame)
     if (spriteTimer > 10) spriteTimer = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
     SDL_Rect playerRect = {theGame->player[theGame->playerID].xPos, theGame->player[theGame->playerID].yPos, theGame->player->width, theGame->player->height};
     
-    if (theGame->player[playerID].moveDirection == 'w')
+    if (theGame->player[theGame->playerID].moveDirection == 'w')
     {
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][2], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
+        SDL_RenderCopyEx(renderer, theGame->player_texture[1][2], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (theGame->player[playerID].moveDirection == 'a')
+    else if (theGame->player[theGame->playerID].moveDirection == 'a')
     {
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 1);
+        SDL_RenderCopyEx(renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 1);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (theGame->player[playerID].moveDirection == 's')
+    else if (theGame->player[theGame->playerID].moveDirection == 's')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
     }
-    else if (theGame->player[playerID].moveDirection == 'd')
+    else if (theGame->player[theGame->playerID].moveDirection == 'd')
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][1], &theGame->pSprites.BowlerMan[updateSprite], &playerRect, 0, NULL, 0);
         if (spriteTimer++ % 5 == 0) updateSprite++;
