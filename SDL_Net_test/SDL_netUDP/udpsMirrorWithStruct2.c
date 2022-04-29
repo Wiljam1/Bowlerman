@@ -53,7 +53,7 @@ int main(int argc, char **argv)
  
 	/* Main loop */
 	quit = 0;
-    int playerAmmount=3;
+    int playerAmmount=0;
 	while (!quit)
 	{
 		/* Wait a packet. UDP_Recv returns != 0 if a packet is coming */
@@ -68,61 +68,63 @@ int main(int argc, char **argv)
                 printf("Client 0\n");
                 IPclient[0] = pRecive->address.host;
                 portClient[0] = pRecive->address.port;
-            }else if(pRecive->address.port != portClient[0] && (pRecive->address.port != portClient[2] && IPclient[1] == 0)){
-                printf("Client 1\n");
-                IPclient[1] = pRecive->address.host;
-                portClient[1] = pRecive->address.port;
-            }
-            else if(pRecive->address.port != portClient[0] && (pRecive->address.port != portClient[1] && IPclient[2] == 0)){
-                printf("Client 2\n");
-                IPclient[2] = pRecive->address.host;
-                portClient[2] = pRecive->address.port;
+                playerAmmount++;
             }
 
-            //skicka data 
-            else
+            //etablera vems IP-adress och port.
+            for (int i=0; i<playerAmmount; i++)
             {
-                for(int i=0; i<playerAmmount; i++)
+                if (pRecive->address.port == portClient[i]) break;
+                else if (IPclient[i+1] == 0)
+                {
+                    printf("Client %d\n", i+1);
+                    IPclient[i+1] = pRecive->address.host;
+                    portClient[i+1] = pRecive->address.port;
+                    playerAmmount++;
+                    break;
+                }
+            }
+
+
+            //skicka data 
+            for(int i=0; i<playerAmmount; i++)
             {
                 //skicka data till alla utom den IP som skickade
                 if (pRecive->address.port == portClient[i]){
                     printf("Recived data\n");
+
+                    //copy data:
+                    memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data));   //detta kan man flytta utanför loopen
+                    printf("UDP Packet data %d %d\n", udpData.x, udpData.y);
+                    memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
+                    pSent->len = sizeof(struct data)+1;
+                    //sscanf((char * )pRecive->data, "%d %d\n", &a, &b);
+                    //printf("%d %d\n", a, b);
+                    //sprintf((char *)pSent->data, "%d %d\n", a,  b);
+
+
+                    //send data:
                     for (int j=0; j<i; j++)
                     {
                         if(IPclient[j] != 0){
                             printf("Send to Client %d\n", j);
                             pSent->address.host = IPclient[j];	/* Set the destination host */
                             pSent->address.port = portClient[j];
-                            //sscanf((char * )pRecive->data, "%d %d\n", &a, &b);
-                            //printf("%d %d\n", a, b);
-                            //sprintf((char *)pSent->data, "%d %d\n", a,  b);
-                            memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data));   //detta kan man flytta utanför loopen
-                            printf("UDP Packet data %d %d\n", udpData.x, udpData.y);
-                            memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
-                            pSent->len = sizeof(struct data)+1;
-                            
                             SDLNet_UDP_Send(sd, -1, pSent); 
                         }
                     }
 
+                    //send data:
                     for (int j=i+1; j<playerAmmount; j++)
                     {
                         if(IPclient[j] != 0){
                             printf("Send to Client %d\n", j);
                             pSent->address.host = IPclient[j];	/* Set the destination host */
                             pSent->address.port = portClient[j];
-                            //sscanf((char * )pRecive->data, "%d %d\n", &a, &b);
-                            //printf("%d %d\n", a, b);
-                            //sprintf((char *)pSent->data, "%d %d\n", a,  b);
-                            memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data));
-                            printf("UDP Packet data %d %d\n", udpData.x, udpData.y);
-                            memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
-                            pSent->len = sizeof(struct data)+1;
                             SDLNet_UDP_Send(sd, -1, pSent); 
                         }
                     }
                 }
-            }
             }
 
 			/* Quit if packet contains "quit" */
