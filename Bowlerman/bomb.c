@@ -23,23 +23,23 @@ PUBLIC Bowlingball initBomb(int playerID)
     b.position.w = 50;
     b.position.h = 50;
     b.speed = 0;
-    b.timervalue[playerID] = 0;
-    b.timerinit[playerID] = 0;
-    b.explosioninit[playerID] = 1;
+    b.timervalue = 0;
+    b.timerinit = 0;
+    b.explosioninit = 1;
     return b;
 }
 
-int initbowlingballtimer(int startTime, int timeAmount)
+int initbowlingballtimer(int startTime, int timeAmount, int playerID)
 {
     static int lastTime[4]={0}, currentTime[4] = {0};
     if(startTime != 0)
     {
-        lastTime[0] = startTime;
+        lastTime[playerID] = startTime;
     }
-    currentTime[0] = SDL_GetTicks();
-    if (currentTime[0] > lastTime[0] + timeAmount)
+    currentTime[playerID] = SDL_GetTicks();
+    if (currentTime[playerID] > lastTime[playerID] + timeAmount)
     {
-        lastTime[0] = currentTime[0];
+        lastTime[playerID] = currentTime[playerID];
         return 1;
     }
     return 0;

@@ -32,7 +32,7 @@ struct game_type
     //bombs
     Bowlingball bombs[PLAYERAMOUNT];
     SDL_Rect *bowlingballAnimation[18];
-    SDL_Rect explosionPosition[10];
+    SDL_Rect explosionPosition[PLAYERAMOUNT][10];
     int allowBombPlacement[PLAYERAMOUNT];
 
     //Renderer

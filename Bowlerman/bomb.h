@@ -17,14 +17,14 @@ struct bowling_ball
     SDL_Rect position;
     //int height;
     //int width;
-    int timervalue[PLAYERAMOUNT];
+    int timervalue;
     int speed;
-    int timerinit[PLAYERAMOUNT];
-    int explosioninit[PLAYERAMOUNT];
+    int timerinit;
+    int explosioninit;
     //int frame;
 };
 
-int initbowlingballtimer(int startTime, int timeAmount);
+int initbowlingballtimer(int startTime, int timeAmount, int playerID);
 //int checkbowlingballtimer();
 
 SDL_Rect bowlingballAnimation[18];
