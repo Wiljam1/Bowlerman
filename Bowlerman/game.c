@@ -348,7 +348,10 @@ PRIVATE void loadAllTextures(Game theGame)
     theGame->player_texture[2][2] = (SDL_Texture *)loadTextures(theGame, "redman/right.png");
     theGame->player_texture[2][3] = (SDL_Texture *)loadTextures(theGame, "redman/left.png");
     /*PLAYER ID 3*/
-    theGame->player_texture[3][0] = (SDL_Texture *)loadTextures(theGame, "pin2.png");
+    theGame->player_texture[3][0] = (SDL_Texture *)loadTextures(theGame, "redman/down.png");
+    theGame->player_texture[3][1] = (SDL_Texture *)loadTextures(theGame, "redman/up.png");
+    theGame->player_texture[3][2] = (SDL_Texture *)loadTextures(theGame, "redman/right.png");
+    theGame->player_texture[3][3] = (SDL_Texture *)loadTextures(theGame, "redman/left.png");
     /*BOWLING BALLS*/
     theGame->bomb_texture[0] = (SDL_Texture *)loadTextures(theGame, "Bowling_Ball_BLue.png");
     theGame->bomb_texture[1] = (SDL_Texture *)loadTextures(theGame, "Bowling_Ball_Purple.png");
@@ -418,26 +421,26 @@ void initExplosionPosition(Game theGame, int playerID)
     int tilesize = 50;
     theGame->explosionPosition[playerID][0].y = theGame->bombs[playerID].position.y;
     theGame->explosionPosition[playerID][0].x = theGame->bombs[playerID].position.x;
-    theGame->explosionPosition[playerID][0].h = 50;
-    theGame->explosionPosition[playerID][0].w = 50;
+    theGame->explosionPosition[playerID][0].h = tilesize;
+    theGame->explosionPosition[playerID][0].w = tilesize;
 
     theGame->explosionPosition[playerID][1].y = theGame->bombs[playerID].position.y + tilesize;
     theGame->explosionPosition[playerID][1].x = theGame->bombs[playerID].position.x;
-    theGame->explosionPosition[playerID][1].h = 50;
-    theGame->explosionPosition[playerID][1].w = 50;
+    theGame->explosionPosition[playerID][1].h = tilesize;
+    theGame->explosionPosition[playerID][1].w = tilesize;
 
     theGame->explosionPosition[playerID][2].y = theGame->bombs[playerID].position.y - tilesize;
     theGame->explosionPosition[playerID][2].x = theGame->bombs[playerID].position.x;
-    theGame->explosionPosition[playerID][2].h = 50;
-    theGame->explosionPosition[playerID][2].w = 50;
+    theGame->explosionPosition[playerID][2].h = tilesize;
+    theGame->explosionPosition[playerID][2].w = tilesize;
 
     theGame->explosionPosition[playerID][3].y = theGame->bombs[playerID].position.y;
     theGame->explosionPosition[playerID][3].x = theGame->bombs[playerID].position.x + tilesize;
-    theGame->explosionPosition[playerID][3].h = 50;
-    theGame->explosionPosition[playerID][3].w = 50;
+    theGame->explosionPosition[playerID][3].h = tilesize;
+    theGame->explosionPosition[playerID][3].w = tilesize;
 
     theGame->explosionPosition[playerID][4].y = theGame->bombs[playerID].position.y;
     theGame->explosionPosition[playerID][4].x = theGame->bombs[playerID].position.x - tilesize;
-    theGame->explosionPosition[playerID][4].h = 50;
-    theGame->explosionPosition[playerID][4].w = 50;
+    theGame->explosionPosition[playerID][4].h = tilesize;
+    theGame->explosionPosition[playerID][4].w = tilesize;
 }
