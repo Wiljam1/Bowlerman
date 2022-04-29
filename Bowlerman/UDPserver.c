@@ -19,6 +19,7 @@ struct data {
    int x;
    int y;
    int status;
+   int playerID;
 };
 
 
@@ -31,7 +32,7 @@ int main(int argc, char **argv)
     Uint32 IPclient[3]={0}; 
     Uint32 portClient[3]={0}; 
     int quit, a, b;
-    struct data udpData = {0, 0, 0};
+    struct data udpData = {0, 0, 0, 0};
  
 	/* Initialize SDL_net */
 	if (SDLNet_Init() < 0)
@@ -84,6 +85,16 @@ int main(int argc, char **argv)
                     IPclient[i+1] = pRecive->address.host;
                     portClient[i+1] = pRecive->address.port;
                     playerAmmount++;
+
+                    //send playerID to player: skicka via TCP istället
+                    //memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data));
+                    //udpData.playerID=5;
+                    //memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
+                    //pSent->len = sizeof(struct data)+1;
+                    //pSent->address.host = IPclient[i+1];	/* Set the destination host */
+                    //pSent->address.port = portClient[i+1];
+                    //SDLNet_UDP_Send(sd, -1, pSent);
+
                     break;
                 }
             }
@@ -92,12 +103,12 @@ int main(int argc, char **argv)
             //skicka data 
             for(int i=0; i<playerAmmount; i++)
             {
-                //skicka data till alla utom den IP som skickade
+                
                 if (pRecive->address.port == portClient[i]){
                     printf("Recived data\n");
 
                     //copy data:
-                    memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data));   //detta kan man flytta utanför loopen
+                    memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data));
                     printf("UDP Packet data %d %d\n", udpData.x, udpData.y);
                     memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
                     pSent->len = sizeof(struct data)+1;
@@ -106,7 +117,7 @@ int main(int argc, char **argv)
                     //sprintf((char *)pSent->data, "%d %d\n", a,  b);
 
 
-                    //send data:
+                    //send data: skicka data till alla utom den IP som skickade
                     for (int j=0; j<i; j++)
                     {
                         if(IPclient[j] != 0){
