@@ -371,34 +371,26 @@ PRIVATE void loadAllTextures(Game theGame)
 PRIVATE void UpdatePlayerTextures(Game theGame)
 {
     // renders player**** EMIL TESTAR HÄR*****
-    static int updateSprite[4] = {0};
-    static int spriteTimer[4] = {0};
+    static Uint8 updateSprite[4] = {0};
+    static Uint8 spriteTimer[4] = {0};
     char moveD = theGame->player[theGame->playerID].moveDirection;
-    int dummyPosY = HEIGHT/2 - (theGame->player->height)/2;
-    int dummyPosX = WIDTH/2 - (theGame->player->width)/2;
-
+    int dummyPosY = HEIGHT/2 - 100/2;
+    int dummyPosX = WIDTH/2 - 100/2;
+    int spriteChoice;
     if (spriteTimer[theGame->playerID] > 10)
         spriteTimer[theGame->playerID] = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
     SDL_Rect playerRect0 = {theGame->player[theGame->playerID].xPos, theGame->player[theGame->playerID].yPos, theGame->player->width, theGame->player->height};
     SDL_Rect playerRect2 = {dummyPosX, dummyPosY, theGame->player->width, theGame->player->height};
     SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[2][0], &theGame->pSprites.BowlerManVert[0], &playerRect2, 0, NULL, 0);
     if (moveD == 'w')
-    {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
-    }
     else if (moveD == 'a')
-    {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][3], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
-    }
     else if (moveD == 's')
-    {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
-    }
     else if (moveD == 'd')
-    {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][2], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
-    }
-    else
+    else 
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[0], &playerRect0, 0, NULL, 0);
 
     if (spriteTimer[theGame->playerID]++ % 5 == 0 && moveD != '0')
