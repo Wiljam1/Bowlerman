@@ -14,7 +14,7 @@
 #define LENGTH 100
 
 const int WIDTH = 800; // Move eventually
-const int HEIGHT = 450;
+const int HEIGHT = 480;
 
 void initExplosionPosition(Game theGame, int playerID);
 
@@ -86,25 +86,25 @@ void initGame(Game theGame)
 
     // Init walls / map
     int wallwidth = 40;  // Vet inte hur vi ska bestämma dehär variablerna riktigt,
-    int wallheight = 80; // Om de ens kommer användas
+    int wallheight = 40; // Om de ens kommer användas
     for (int i = 0; i < WALLAMOUNT; i++)
     {
         theGame->wall[i] = initWalls(WALLAMOUNT, wallwidth, wallheight);
         if (i < 20)
         {
-            theGame->wall[i] = wallPlace(i * wallwidth, -(wallheight/4));
+            theGame->wall[i] = wallPlace(i * wallwidth, 0);
         }
         else if (i < 40)
         {
-            theGame->wall[i] = wallPlace(i * wallwidth - WIDTH, HEIGHT - wallheight/4);
+            theGame->wall[i] = wallPlace(i * wallwidth - WIDTH, HEIGHT - wallheight);
         }
         else if (i < 60)
         {
-            theGame->wall[i] = wallPlace(0, i * wallwidth - HEIGHT * 4);
+            theGame->wall[i] = wallPlace(0, (i - 40) * wallheight);
         }
         else if (i < 80)
         {
-            theGame->wall[i] = wallPlace(WIDTH - wallwidth, i * wallwidth - HEIGHT * 6);
+            theGame->wall[i] = wallPlace(WIDTH - wallwidth, (i - 60) * wallheight);
         }
         else
         {
@@ -359,7 +359,7 @@ PRIVATE void loadAllTextures(Game theGame)
     theGame->bomb_texture[3] = (SDL_Texture *)loadTextures(theGame, "Bowling_Ball_Yellow.png");
     theGame->bombExplosion_texture = (SDL_Texture *)loadTextures(theGame, "FIRE.png");
     /*WALLS*/
-    theGame->textureWall = (SDL_Texture *)loadTextures(theGame, "wall.png");
+    theGame->textureWall = (SDL_Texture *)loadTextures(theGame, "walls/160/mid.png");
     SDL_FreeSurface(theGame->window_surface);
     // Load player sprites
     theGame->pSprites = GetPlayerSprite();
