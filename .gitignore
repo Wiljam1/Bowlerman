@@ -1,2 +1,5 @@
-
+Bowlerman/game.o
+Bowlerman/player.o
+Bowlerman/bomb.o
+Bowlerman/collissionDetection.o
 Bowlerman/main.exe
