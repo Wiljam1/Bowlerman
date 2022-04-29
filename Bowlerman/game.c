@@ -333,10 +333,10 @@ PRIVATE void loadAllTextures(Game theGame)
     // loads in textures
     theGame->background = (SDL_Texture *)loadTextures(theGame, "alley.png");
     /*PLAYER ID 0*/
-    theGame->player_texture[0][0] = (SDL_Texture *)loadTextures(theGame, "redman/down.png");
-    theGame->player_texture[0][1] = (SDL_Texture *)loadTextures(theGame, "redman/up.png");
-    theGame->player_texture[0][2] = (SDL_Texture *)loadTextures(theGame, "redman/right.png");
-    theGame->player_texture[0][3] = (SDL_Texture *)loadTextures(theGame, "redman/left.png");
+    theGame->player_texture[0][0] = (SDL_Texture *)loadTextures(theGame, "blueman/down.png");
+    theGame->player_texture[0][1] = (SDL_Texture *)loadTextures(theGame, "blueman/up.png");
+    theGame->player_texture[0][2] = (SDL_Texture *)loadTextures(theGame, "blueman/right.png");
+    theGame->player_texture[0][3] = (SDL_Texture *)loadTextures(theGame, "blueman/left.png");
     /*PLAYER ID 1*/
     theGame->player_texture[1][0] = (SDL_Texture *)loadTextures(theGame, "redman/down.png");
     theGame->player_texture[1][1] = (SDL_Texture *)loadTextures(theGame, "redman/up.png");
