@@ -21,8 +21,6 @@ struct data {
    int status;
 };
 
-
- 
 int main(int argc, char **argv)
 {
 	UDPsocket sd;       /* Socket descriptor */
