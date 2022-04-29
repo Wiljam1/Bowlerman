@@ -17,6 +17,10 @@ wall.o:
 clean_windows:
 	del /Q /F *.o
 
+UDPserver: UDPserver.c
+	gcc -o UDPserver UDPserver.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
+
+
 	
 mac: main.o game.o player.o sorter.o bomb.o wall.o collissionDetection.o
 	gcc -o main main.o game.o player.o sorter.o bomb.o wall.o collissionDetection.o -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image

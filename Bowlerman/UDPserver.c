@@ -5,6 +5,9 @@ gcc -Wall `sdl-config --cflags` udps.c -o udps `sdl-config --libs` -lSDL_net
  
 exit
 #endif
+
+//UDP server for infinite ammount of players.
+//limitations: 512 bytes of data per package (?)
  
 #include <stdio.h>
 #include <stdlib.h>
@@ -63,7 +66,7 @@ int main(int argc, char **argv)
 			printf("\tData:    %s\n", (char *)pRecive->data);
 			printf("\tAddress: %x %x\n", pRecive->address.host, pRecive->address.port);
             
-            //etablera vems IP-adress och port. Detta bör man nog göra via TCP
+            //etablera client 0's IP-adress och port. Detta bör man nog göra via TCP
             if(IPclient[0] == 0 && portClient[0] == 0){
                 printf("Client 0\n");
                 IPclient[0] = pRecive->address.host;
