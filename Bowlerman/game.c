@@ -144,8 +144,8 @@ bool checkEvents(Game theGame)
                     theGame->bombs[theGame->playerID] = initBomb(theGame->playerID);
                     theGame->bombs[theGame->playerID].position.y = getPlayerYPosition(theGame->player[theGame->playerID]) + 16;
                     theGame->bombs[theGame->playerID].position.x = getPlayerXPosition(theGame->player[theGame->playerID]) - 5;
-                    theGame->bombs[theGame->playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000);
-                    theGame->bombs[theGame->playerID].timerinit = 1;
+                    theGame->bombs[theGame->playerID].timervalue[theGame->playerID] = initbowlingballtimer(SDL_GetTicks(), 3000);
+                    theGame->bombs[theGame->playerID].timerinit[theGame->playerID] = 1;
                 }
                 break;
             case SDLK_ESCAPE:
@@ -233,21 +233,21 @@ PUBLIC void gameUpdate(Game theGame)
         done = checkEvents(theGame);
 
         // Process events (time based stuff)
-        if (theGame->bombs[theGame->playerID].timerinit == 1)
+        if (theGame->bombs[theGame->playerID].timerinit[theGame->playerID] == 1)
         {
-            theGame->bombs[theGame->playerID].timervalue = initbowlingballtimer(0, 3000);
-            if(theGame->bombs[theGame->playerID].timervalue == 1){
-                theGame->bombs[theGame->playerID].timerinit = 0;
-                theGame->bombs[theGame->playerID].explosioninit = 0;
+            theGame->bombs[theGame->playerID].timervalue[theGame->playerID] = initbowlingballtimer(0, 3000);
+            if(theGame->bombs[theGame->playerID].timervalue[theGame->playerID] == 1){
+                theGame->bombs[theGame->playerID].timerinit[theGame->playerID] = 0;
+                theGame->bombs[theGame->playerID].explosioninit[theGame->playerID] = 0;
                 initExplosionPosition(theGame);
                 initbowlingballtimer(SDL_GetTicks(), 1000);
                 
                 }
         }
-        if(theGame->bombs[theGame->playerID].explosioninit == 0)
+        if(theGame->bombs[theGame->playerID].explosioninit[theGame->playerID] == 0)
         {
-            theGame->bombs[theGame->playerID].explosioninit = initbowlingballtimer(0, 1000);
-            if(theGame->bombs[theGame->playerID].explosioninit == 1)
+            theGame->bombs[theGame->playerID].explosioninit[theGame->playerID] = initbowlingballtimer(0, 1000);
+            if(theGame->bombs[theGame->playerID].explosioninit[theGame->playerID] == 1)
             {
                 theGame->allowBombPlacement[theGame->playerID] = 1;
             }
@@ -296,13 +296,13 @@ void renderTextures(Game theGame)
     SDL_RenderCopy(renderer, theGame->background, NULL, NULL);
 
     // render bombs
-    if (theGame->bombs[id].timervalue == 0)
+    if (theGame->bombs[id].timervalue[theGame->playerID] == 0)
     {
         SDL_RenderCopy(renderer, theGame->bomb_texture[id], &bowlingballAnimation[0], &theGame->bombs[id].position);
     }
 
     //render bomb explosions
-    if (theGame->bombs[theGame->playerID].explosioninit == 0)
+    if (theGame->bombs[theGame->playerID].explosioninit[theGame->playerID] == 0)
     {
         for (int i=0;i < 5;i++)
         {

@@ -23,8 +23,9 @@ PUBLIC Bowlingball initBomb(int playerID)
     b.position.w = 50;
     b.position.h = 50;
     b.speed = 0;
-    b.timervalue = 0;
-    b.timerinit = 0;
+    b.timervalue[playerID] = 0;
+    b.timerinit[playerID] = 0;
+    b.explosioninit[playerID] = 1;
     return b;
 }
 

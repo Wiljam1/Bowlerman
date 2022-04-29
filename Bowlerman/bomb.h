@@ -3,6 +3,9 @@
 #include <SDL2/SDL.h>
 #include "player.h"
 #include "game.h"
+
+#define PLAYERAMOUNT 4
+
 struct bowling_ball typedef Bowlingball;
 
 struct bowling_ball
@@ -14,10 +17,10 @@ struct bowling_ball
     SDL_Rect position;
     //int height;
     //int width;
-    int timervalue;
+    int timervalue[PLAYERAMOUNT];
     int speed;
-    int timerinit;
-    int explosioninit;
+    int timerinit[PLAYERAMOUNT];
+    int explosioninit[PLAYERAMOUNT];
     //int frame;
 };
 
