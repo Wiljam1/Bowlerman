@@ -21,9 +21,9 @@ PUBLIC Player initPlayer(float xPos, float yPos)
     p.yVel = 0;
     p.playerRect.x = p.xPos = p.xPosOld = xPos;
     p.playerRect.y = p.yPos = p.yPosOld = yPos;
-    p.speed = 1;
+    p.speed = 4;
     p.playerRect.h = p.height = 100;
-    p.playerRect.w = p.width = 80;
+    p.playerRect.w = p.width = 64;
     p.moveDirection = '0';
 
     return p;
@@ -32,51 +32,86 @@ PUBLIC Player initPlayer(float xPos, float yPos)
 PlayerSprites GetPlayerSprite()
 {
     PlayerSprites p;
-    const int width = 184;
-    const int baseX = 43;
-    const int baseY = 20;
-    const int height = 307;
+    p.BowlerManVert[0].h = 100;
+    p.BowlerManVert[0].w = 64;
+    p.BowlerManVert[0].x = 0;
+    p.BowlerManVert[0].y = 0;
 
-    p.BowlerMan[0].h = height;
-    p.BowlerMan[0].w = width;
-    p.BowlerMan[0].x = baseX;
-    p.BowlerMan[0].y = 0;
+    p.BowlerManVert[1].h = 100;
+    p.BowlerManVert[1].w = 64;
+    p.BowlerManVert[1].x = 64;
+    p.BowlerManVert[1].y = 0;
 
-    p.BowlerMan[1].h = height;
-    p.BowlerMan[1].w = width;
-    p.BowlerMan[1].x = baseX * 2 + width + 32;
-    p.BowlerMan[1].y = 0;
+    p.BowlerManVert[2].h = 100;
+    p.BowlerManVert[2].w = 64;
+    p.BowlerManVert[2].x = 128;
+    p.BowlerManVert[2].y = 0;
 
-    p.BowlerMan[2].h = height;
-    p.BowlerMan[2].w = width;
-    p.BowlerMan[2].x = baseX * 4 + width * 2 + 21;
-    p.BowlerMan[2].y = 0;
+    p.BowlerManVert[3].h = 100;
+    p.BowlerManVert[3].w = 64;
+    p.BowlerManVert[3].x = 192;
+    p.BowlerManVert[3].y = 0;
 
-    p.BowlerMan[3].h = height;
-    p.BowlerMan[3].w = width;
-    p.BowlerMan[3].x = baseX;
-    p.BowlerMan[3].y = height;
+    p.BowlerManVert[4].h = 100;
+    p.BowlerManVert[4].w = 64;
+    p.BowlerManVert[4].x = 256;
+    p.BowlerManVert[4].y = 0;
 
-    p.BowlerMan[4].h = height;
-    p.BowlerMan[4].w = width;
-    p.BowlerMan[4].x = baseX * 2 + width + 32;
-    p.BowlerMan[4].y = height;
+    p.BowlerManVert[5].h = 100;
+    p.BowlerManVert[5].w = 64;
+    p.BowlerManVert[5].x = 320;
+    p.BowlerManVert[5].y = 0;
 
-    p.BowlerMan[5].h = height;
-    p.BowlerMan[5].w = width;
-    p.BowlerMan[5].x = baseX * 4 + width * 2 + 21;
-    p.BowlerMan[5].y = height;
+    p.BowlerManVert[6].h = 100;
+    p.BowlerManVert[6].w = 64;
+    p.BowlerManVert[6].x = 384;
+    p.BowlerManVert[6].y = 0;
 
-    p.BowlerMan[6].h = height;
-    p.BowlerMan[6].w = width;
-    p.BowlerMan[6].x = baseX;
-    p.BowlerMan[6].y = height * 2;
+    p.BowlerManVert[7].h = 100;
+    p.BowlerManVert[7].w = 64;
+    p.BowlerManVert[7].x = 448;
+    p.BowlerManVert[7].y = 0;
 
-    p.BowlerMan[7].h = height;
-    p.BowlerMan[7].w = width;
-    p.BowlerMan[7].x = baseX * 2 + width + 32;
-    p.BowlerMan[7].y = height * 2;
+    p.BowlerManHori[0].h = 100;
+    p.BowlerManHori[0].w = 56;
+    p.BowlerManHori[0].x = 0;
+    p.BowlerManHori[0].y = 0;
 
+    p.BowlerManHori[1].h = 100;
+    p.BowlerManHori[1].w = 57;
+    p.BowlerManHori[1].x = 56;
+    p.BowlerManHori[1].y = 0;
+
+    p.BowlerManHori[2].h = 100;
+    p.BowlerManHori[2].w = 58;
+    p.BowlerManHori[2].x = 113;
+    p.BowlerManHori[2].y = 0;
+
+    p.BowlerManHori[3].h = 100;
+    p.BowlerManHori[3].w = 57;
+    p.BowlerManHori[3].x = 171;
+    p.BowlerManHori[3].y = 0;
+
+    p.BowlerManHori[4].h = 100;
+    p.BowlerManHori[4].w = 56;
+    p.BowlerManHori[4].x = 228;
+    p.BowlerManHori[4].y = 0;
+
+    p.BowlerManHori[5].h = 100;
+    p.BowlerManHori[5].w = 57;
+    p.BowlerManHori[5].x = 284;
+    p.BowlerManHori[5].y = 0;
+
+    p.BowlerManHori[6].h = 100;
+    p.BowlerManHori[6].w = 60;
+    p.BowlerManHori[6].x = 341;
+    p.BowlerManHori[6].y = 0;
+
+    p.BowlerManHori[7].h = 100;
+    p.BowlerManHori[7].w = 57;
+    p.BowlerManHori[7].x = 401;
+    p.BowlerManHori[7].y = 0;
+    
     return p;
 }
 

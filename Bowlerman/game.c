@@ -187,7 +187,6 @@ void manageMovementInputs(Game theGame)
 
     int velX = 0, velY = 0;
     Player player = theGame->player[theGame->playerID];
-
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
     {
@@ -263,7 +262,15 @@ PUBLIC void gameUpdate(Game theGame)
         // render display
         renderTextures(theGame);
 
-        //SDL_Delay(10); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
+        SDL_Delay(1000/60); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
+        /* static int a = 0;
+        static int b = 0;
+        a++;
+        if (a == 60)
+        {
+            printf("%d ", ++b);
+            a = 0;
+        } */
     }
 }
 
@@ -320,16 +327,8 @@ void renderTextures(Game theGame)
         SDL_RenderCopy(renderer, theGame->textureWall, NULL, &wallRect);
     }
 
-    // SDL_RenderCopy(theGame->renderer, theGame->bomb_texture[playerID], &bowlingballAnimation[ 0 ], &theGame->bombs[playerID].position);
-
     // Updating textures depending on movement
     UpdatePlayerTextures(theGame);
-
-    // SDL_Rect rect1 = {theGame->player[2].xPos, theGame->player[2].yPos, theGame->player->width, theGame->player->height};
-    // SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[1][0], &theGame->player->playerRect, &theGame->playerRect[0][0], 0, NULL, 0);
-
-    // SDL_RenderCopy(theGame->renderer, theGame->player_texture[1][0], &theGame->pSprites.redMan[0][0], &theGame->player->playerRect);
-
     // Draw GUI last (top of screenlayers)
 
     SDL_RenderPresent(renderer); // present renderer
@@ -340,16 +339,19 @@ PRIVATE void loadAllTextures(Game theGame)
     theGame->background = (SDL_Texture *)loadTextures(theGame, "alley.png");
     /*PLAYER ID 0*/
     theGame->player_texture[0][0] = (SDL_Texture *)loadTextures(theGame, "redman/down.png");
-    theGame->player_texture[0][1] = (SDL_Texture *)loadTextures(theGame, "redman/right.png");
-    theGame->player_texture[0][2] = (SDL_Texture *)loadTextures(theGame, "redman/up.png");
+    theGame->player_texture[0][1] = (SDL_Texture *)loadTextures(theGame, "redman/up.png");
+    theGame->player_texture[0][2] = (SDL_Texture *)loadTextures(theGame, "redman/right.png");
+    theGame->player_texture[0][3] = (SDL_Texture *)loadTextures(theGame, "redman/left.png");
     /*PLAYER ID 1*/
     theGame->player_texture[1][0] = (SDL_Texture *)loadTextures(theGame, "redman/down.png");
-    theGame->player_texture[1][1] = (SDL_Texture *)loadTextures(theGame, "redman/right.png");
-    theGame->player_texture[1][2] = (SDL_Texture *)loadTextures(theGame, "redman/up.png");
+    theGame->player_texture[1][1] = (SDL_Texture *)loadTextures(theGame, "redman/up.png");
+    theGame->player_texture[1][2] = (SDL_Texture *)loadTextures(theGame, "redman/right.png");
+    theGame->player_texture[1][3] = (SDL_Texture *)loadTextures(theGame, "redman/left.png");
     /*PLAYER ID 2*/
     theGame->player_texture[2][0] = (SDL_Texture *)loadTextures(theGame, "redman/down.png");
-    theGame->player_texture[2][1] = (SDL_Texture *)loadTextures(theGame, "redman/right.png");
-    theGame->player_texture[2][2] = (SDL_Texture *)loadTextures(theGame, "redman/up.png");
+    theGame->player_texture[2][1] = (SDL_Texture *)loadTextures(theGame, "redman/up.png");
+    theGame->player_texture[2][2] = (SDL_Texture *)loadTextures(theGame, "redman/right.png");
+    theGame->player_texture[2][3] = (SDL_Texture *)loadTextures(theGame, "redman/left.png");
     /*PLAYER ID 3*/
     theGame->player_texture[3][0] = (SDL_Texture *)loadTextures(theGame, "pin2.png");
     /*BOWLING BALLS*/
@@ -369,47 +371,43 @@ PRIVATE void loadAllTextures(Game theGame)
 PRIVATE void UpdatePlayerTextures(Game theGame)
 {
     // renders player**** EMIL TESTAR HÄR*****
-    static int updateSprite[4] = {0};
-    static int spriteTimer[4] = {0};
+    static Uint8 updateSprite[4] = {0};
+    static Uint8 spriteTimer[4] = {0};
     char moveD = theGame->player[theGame->playerID].moveDirection;
-    int dummyPosY = HEIGHT/2 - (theGame->player->height)/2;
-    int dummyPosX = WIDTH/2 - (theGame->player->width)/2;
-
+    int dummyPosY = HEIGHT/2 - 100/2;
+    int dummyPosX = WIDTH/2 - 100/2;
+    int spriteChoice;
     if (spriteTimer[theGame->playerID] > 10)
         spriteTimer[theGame->playerID] = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
     SDL_Rect playerRect0 = {theGame->player[theGame->playerID].xPos, theGame->player[theGame->playerID].yPos, theGame->player->width, theGame->player->height};
     SDL_Rect playerRect2 = {dummyPosX, dummyPosY, theGame->player->width, theGame->player->height};
-    SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[2][0], &theGame->pSprites.BowlerMan[0], &playerRect2, 0, NULL, 0);
+    SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[2][0], &theGame->pSprites.BowlerManVert[0], &playerRect2, 0, NULL, 0);
     if (moveD == 'w')
-    {
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][2], &theGame->pSprites.BowlerMan[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
-    }
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
     else if (moveD == 'a')
-    {
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerMan[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 1);
-    }
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][3], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
     else if (moveD == 's')
-    {
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerMan[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
-    }
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
     else if (moveD == 'd')
-    {
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerMan[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
-    }
-    else
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerMan[0], &playerRect0, 0, NULL, 0);
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][2], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
+    else 
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[0], &playerRect0, 0, NULL, 0);
+
     if (spriteTimer[theGame->playerID]++ % 5 == 0 && moveD != '0')
         updateSprite[theGame->playerID]++;
     if (updateSprite[theGame->playerID] > 7)
         updateSprite[theGame->playerID] = 0;
-    //printf("%d ", updateSprite[theGame->playerID]);
+    //printf("%c ", moveD);
 }
 
 PUBLIC void destroyGame(Game theGame)
 {
     SDL_DestroyTexture(theGame->background);
-    for (int i = 0; i < 4; i++)
-        SDL_DestroyTexture(theGame->player_texture[i][0]);
+    for (int i = 0; i < 4; i++){
+        for (int j = 0; j < 3; j++){
+            SDL_DestroyTexture(theGame->player_texture[i][j]);
+            }
+    }
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();

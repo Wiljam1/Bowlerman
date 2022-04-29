@@ -39,7 +39,8 @@ struct playerController
 
 struct playerSprites
 {
-    SDL_Rect BowlerMan[8];
+    SDL_Rect BowlerManVert[8];
+    SDL_Rect BowlerManHori[8];
 };
 typedef struct playerSprites PlayerSprites;
 //initiate player position with x and y coordinates
