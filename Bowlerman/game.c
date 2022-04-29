@@ -60,7 +60,7 @@ void initGame(Game theGame)
         theGame->allowBombPlacement[i] = 1;
     }
     // inits x-amount of players
-    theGame->player[0] = initPlayer(70, 70); // sets x and y coordinates and resets values.
+    theGame->player[0] = initPlayer(200, 200); // sets x and y coordinates and resets values.
     // initPlayerRect(theGame); //inits playerRect[0] to position of player0
 
     if (theGame->playerAmmount > 1)
@@ -85,18 +85,18 @@ void initGame(Game theGame)
     // }
 
     // Init walls / map
-    int wallwidth = 48;  // Vet inte hur vi ska bestämma dehär variablerna riktigt,
-    int wallheight = 48; // Om de ens kommer användas
+    int wallwidth = 40;  // Vet inte hur vi ska bestämma dehär variablerna riktigt,
+    int wallheight = 80; // Om de ens kommer användas
     for (int i = 0; i < WALLAMOUNT; i++)
     {
         theGame->wall[i] = initWalls(WALLAMOUNT, wallwidth, wallheight);
         if (i < 20)
         {
-            theGame->wall[i] = wallPlace(i * wallwidth, 0);
+            theGame->wall[i] = wallPlace(i * wallwidth, -(wallheight/4));
         }
         else if (i < 40)
         {
-            theGame->wall[i] = wallPlace(i * wallwidth - WIDTH, HEIGHT - wallwidth);
+            theGame->wall[i] = wallPlace(i * wallwidth - WIDTH, HEIGHT - wallheight/4);
         }
         else if (i < 60)
         {
@@ -316,7 +316,7 @@ void renderTextures(Game theGame)
     //arraySorter(player, theGame->playerAmmount, renderOrder);
 
     //Draw walls
-    for (int i = 0; i < WALLAMOUNT; i++)
+    for (int i = 100; i >= 0; i--)
     {
         SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
         SDL_RenderCopy(renderer, theGame->textureWall, NULL, &wallRect);

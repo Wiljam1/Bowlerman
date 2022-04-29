@@ -22,8 +22,6 @@ struct data {
    int playerID;
 };
 
-
- 
 int main(int argc, char **argv)
 {
 	UDPsocket sd;       /* Socket descriptor */
