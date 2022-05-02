@@ -1,9 +1,9 @@
 windows: main.o game.o player.o sorter.o bomb.o wall.o collissionDetection.o
-	gcc -o main main.o game.o player.o sorter.o bomb.o wall.o collissionDetection.o -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+	gcc -o main main.o game.o player.o sorter.o bomb.o wall.o collissionDetection.o -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
 main.o:
 	gcc -c main.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 game.o:
-	gcc -c game.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+	gcc -c game.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
 player.o:
 	gcc -c player.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 sorter.o:
