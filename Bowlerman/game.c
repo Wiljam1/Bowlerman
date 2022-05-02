@@ -15,8 +15,6 @@
 #define PRIVATE static
 #define LENGTH 100
 
-void initExplosionPosition(Game theGame, int playerID);
-
 struct data
 { // data sent via UDP
     int x;
@@ -31,9 +29,12 @@ UDPpacket *p;
 UDPpacket *p2; // behövs egentligen bara en pekare.
 struct data udpData = {0, 0, 0, 0};
 
+//Funktionsprototyper ska väl ligga i .h-filen?
 PRIVATE void loadAllTextures(Game theGame);
 PRIVATE void UpdatePlayerTextures(Game theGame);
 PRIVATE void renderWalls(Game theGame);
+void initExplosionPosition(Game theGame, int playerID);
+
 // initializes game
 PUBLIC Game createWindow()
 {
@@ -415,6 +416,7 @@ void renderTextures(Game theGame)
 
     SDL_RenderPresent(renderer); // present renderer
 }
+
 PRIVATE void loadAllTextures(Game theGame)
 {
     // loads in textures
@@ -455,6 +457,7 @@ PRIVATE void loadAllTextures(Game theGame)
     // Load bomb sprites
     loadBomb();
 }
+
 PRIVATE void UpdatePlayerTextures(Game theGame)
 {
     // renders player**** EMIL TESTAR HÄR*****
@@ -519,6 +522,9 @@ PUBLIC void destroyGame(Game theGame)
     {
         SDL_DestroyTexture(theGame->bomb_texture[i]);
     }
+    for(int i = 0; i < 3; i++){
+        SDL_DestroyTexture(theGame->textureWall[i]);
+    }
     SDL_DestroyTexture(theGame->bombExplosion_texture);
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
@@ -560,31 +566,28 @@ PRIVATE void renderWalls(Game theGame)
     }
 }
 
+//Kanske borde vara i bomb.c?
 void initExplosionPosition(Game theGame, int playerID)
 {
-    int tilesize = 50;
+    int tilesize = 50; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
+
+    for(int i = 0; i < 5; i++){
+        theGame->explosionPosition[playerID][i].h = tilesize;
+        theGame->explosionPosition[playerID][i].w = tilesize;
+    }
+
     theGame->explosionPosition[playerID][0].y = theGame->bombs[playerID].position.y;
     theGame->explosionPosition[playerID][0].x = theGame->bombs[playerID].position.x;
-    theGame->explosionPosition[playerID][0].h = tilesize;
-    theGame->explosionPosition[playerID][0].w = tilesize;
 
     theGame->explosionPosition[playerID][1].y = theGame->bombs[playerID].position.y + tilesize;
     theGame->explosionPosition[playerID][1].x = theGame->bombs[playerID].position.x;
-    theGame->explosionPosition[playerID][1].h = tilesize;
-    theGame->explosionPosition[playerID][1].w = tilesize;
 
     theGame->explosionPosition[playerID][2].y = theGame->bombs[playerID].position.y - tilesize;
     theGame->explosionPosition[playerID][2].x = theGame->bombs[playerID].position.x;
-    theGame->explosionPosition[playerID][2].h = tilesize;
-    theGame->explosionPosition[playerID][2].w = tilesize;
 
     theGame->explosionPosition[playerID][3].y = theGame->bombs[playerID].position.y;
     theGame->explosionPosition[playerID][3].x = theGame->bombs[playerID].position.x + tilesize;
-    theGame->explosionPosition[playerID][3].h = tilesize;
-    theGame->explosionPosition[playerID][3].w = tilesize;
 
     theGame->explosionPosition[playerID][4].y = theGame->bombs[playerID].position.y;
     theGame->explosionPosition[playerID][4].x = theGame->bombs[playerID].position.x - tilesize;
-    theGame->explosionPosition[playerID][4].h = tilesize;
-    theGame->explosionPosition[playerID][4].w = tilesize;
 }
