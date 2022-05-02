@@ -73,6 +73,7 @@ int main(int argc, char **argv)
                 playerAmmount++;
 
                 //send players ID:
+                memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data)); //detta behövs egentligen inte
                 udpData.playerID=0;
                 memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
                 pSent->len = sizeof(struct data)+1;
@@ -90,16 +91,18 @@ int main(int argc, char **argv)
                     printf("Client %d\n", i+1);
                     IPclient[i+1] = pRecive->address.host;
                     portClient[i+1] = pRecive->address.port;
-                    playerAmmount++;
+                    
 
                     //send playerID to player: skicka via TCP istället
-                    //memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data));
-                    udpData.playerID=0;
+                    memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data)); //detta behövs inte egentligen
+                    udpData.playerID=playerAmmount;
                     memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
                     pSent->len = sizeof(struct data)+1;
                     pSent->address.host = IPclient[i+1];	/* Set the destination host */
                     pSent->address.port = portClient[i+1];
                     SDLNet_UDP_Send(sd, -1, pSent);
+
+                    playerAmmount++;
 
                     break;
                 }

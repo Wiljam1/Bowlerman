@@ -29,9 +29,8 @@ struct data {           //data sent via UDP
 UDPsocket sd;
 IPaddress srvadd;
 UDPpacket *p;
-UDPpacket *p2;
-struct data udpData = {0, 0, 0};
-struct data udpData2 = {0, 0, 0};
+UDPpacket *p2;  //behövs egentligen bara en pekare.
+struct data udpData = {0, 0, 0, 0};
 
 //initializes game
 PRIVATE void loadAllTextures(Game theGame);
@@ -88,7 +87,22 @@ void initGame(Game theGame)
     loadAllTextures(theGame);
     // check server what ID you have.
     // getPlayerID();
-    theGame->playerID = 0;
+
+    //get playerID via UDP
+    //1st: send info to UDP-server
+    memcpy(p->data, &udpData, sizeof(struct data)+1);
+    p->len = sizeof(struct data)+1;   
+    p->address.host = srvadd.host;	/* Set the destination host */
+    p->address.port = srvadd.port;	/* And destination port */
+    SDLNet_UDP_Send(sd, -1, p);
+
+    //2nd: receive info from UDP-server
+    while(!SDLNet_UDP_Recv(sd, p2));    //spin-lock tills received info from UDP-server
+    memcpy(&udpData, (char * ) p2->data, sizeof(struct data));
+    theGame->playerID= udpData.playerID;
+    printf("UDP Packet incoming %d\n", udpData.playerID);
+
+    //theGame->playerID = 0;
 
     // detta ska ändras via servern sen.
     theGame->playerAmmount = 4;
