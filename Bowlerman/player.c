@@ -22,8 +22,8 @@ PUBLIC Player initPlayer(float xPos, float yPos)
     p.playerRect.x = p.xPos = p.xPosOld = xPos;
     p.playerRect.y = p.yPos = p.yPosOld = yPos;
     p.speed = 4;
-    p.playerRect.h = p.height = 50*2;
-    p.playerRect.w = p.width = 32*2;
+    p.playerRect.h = p.height = 100;
+    p.playerRect.w = p.width = 64;
     p.moveDirection = '0';
 
     return p;
@@ -31,6 +31,7 @@ PUBLIC Player initPlayer(float xPos, float yPos)
 
 PlayerSprites GetPlayerSprite()
 {
+    // Ska göra lite for-loopar här
     PlayerSprites p;
     p.BowlerManVert[0].h = 100;
     p.BowlerManVert[0].w = 64;

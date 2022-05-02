@@ -23,6 +23,7 @@ struct data
     int playerID;
 };
 
+//Blir inte det här globala variabler typ?
 UDPsocket sd;
 IPaddress srvadd;
 UDPpacket *p;
@@ -85,15 +86,18 @@ void initGame(Game theGame)
 {
     // Loading textures from file
     loadAllTextures(theGame);
+
     // check server what ID you have.
     // getPlayerID();
     // get playerID via UDP
+
     // 1st: send info to UDP-server
     memcpy(p->data, &udpData, sizeof(struct data) + 1);
     p->len = sizeof(struct data) + 1;
     p->address.host = srvadd.host; /* Set the destination host */
     p->address.port = srvadd.port; /* And destination port */
     SDLNet_UDP_Send(sd, -1, p);
+
     // 2nd: receive info from UDP-server
     while (!SDLNet_UDP_Recv(sd, p2))
         ; // spin-lock tills received info from UDP-server
@@ -101,45 +105,37 @@ void initGame(Game theGame)
     theGame->playerID = udpData.playerID;
     printf("UDP Packet incoming %d\n", udpData.playerID);
     // theGame->playerID = 0;
-    printf("CRASH");
+    // printf("CRASH");
     printf("%d", theGame->playerID);
 
     // detta ska ändras via servern sen.
-    theGame->playerAmmount = 4;
+    theGame->playerAmount = 4;
 
     // allow bomb placement init
     for (int i = 0; i < 4; i++)
     {
         theGame->allowBombPlacement[i] = 1;
     }
-    // inits x-amount of players
-    theGame->player[0] = initPlayer(200, 200); // sets x and y coordinates and resets values.
-    // initPlayerRect(theGame); //inits playerRect[0] to position of player0
 
-    if (theGame->playerAmmount > 1)
+    // init x amount of players
+    theGame->player[0] = initPlayer(WIDTH/17, WIDTH/11.9); // sets x and y coordinates and resets values.
+
+    if (theGame->playerAmount > 1)
     {
         theGame->player[1] = initPlayer(700, 300); // sets x and y coordinates and resets values.
     }
-    if (theGame->playerAmmount > 2)
+    if (theGame->playerAmount > 2)
     {
         theGame->player[2] = initPlayer(70, 300); // sets x and y coordinates and resets values.
     }
-    if (theGame->playerAmmount > 3)
+    if (theGame->playerAmount > 3)
     {
         theGame->player[3] = initPlayer(700, 70); // sets x and y coordinates and resets values.
     }
 
-    // //get and scale the dimensions of texture (based on how many players are online)
-    // for(int i=0; i<theGame->playerAmmount; i++)
-    // {
-    //     SDL_QueryTexture(theGame->player_texture[i], NULL, NULL, &playerRect[i].w, &playerRect[i].h);
-    //     playerRect[i].w /=7;              //scales down width by 4
-    //     playerRect[i].h /=7;              //scales down height by 4
-    // }
-
     // Init walls / map
-    float wallwidth = 70; // Vet inte hur vi ska bestämma dehär variablerna riktigt,
-    int wallheight = 70;  // Om de ens kommer användas
+    float wallwidth = WIDTH/17; // Vet inte hur vi ska bestämma dehär variablerna riktigt,
+    int wallheight = WIDTH/17;  // Om de ens kommer användas, väggarna kommer ju alltid vara den här storleken?
     for (int i = 0; i < WALLAMOUNT; i++)
     {
         theGame->wall[i] = initWalls(WALLAMOUNT, wallwidth, wallheight);
@@ -191,6 +187,7 @@ bool checkEvents(Game theGame)
             switch (event.key.keysym.sym)
             {
             case SDLK_SPACE:
+                //Kan nog göras till en funktion
                 if (theGame->allowBombPlacement[theGame->playerID] == 1) // man måste veta vilken player här
                 {
                     theGame->allowBombPlacement[theGame->playerID] = 0;
@@ -393,7 +390,7 @@ void renderTextures(Game theGame)
     SDL_RenderCopy(renderer, theGame->background, NULL, &backRect);
     renderWalls(theGame);
     // bubble-sort the players y-position into the array "renderOrder"
-    // arraySorter(player, theGame->playerAmmount, renderOrder);
+    // arraySorter(player, theGame->playerAmount, renderOrder);
 
     // Updating textures depending on movement
     UpdatePlayerTextures(theGame);
@@ -478,14 +475,14 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     
     //Algots rendering: dålig dock
     SDL_Rect playerRect[4];
-    for(int i=0; i<theGame->playerAmmount; i++)
+    for(int i=0; i<theGame->playerAmount; i++)
     {
         playerRect[i].x = theGame->player[theGame->playerID].xPos;
         playerRect[i].y = theGame->player[theGame->playerID].yPos;
         playerRect[i].w= theGame->player->width;
         playerRect[i].h = theGame->player->height;
     }
-    for(int i=0; i<theGame->playerAmmount; i++)
+    for(int i=0; i<theGame->playerAmount; i++)
     {
         SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][1], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i], 0, NULL, 0);
     }
@@ -575,6 +572,9 @@ void initExplosionPosition(Game theGame, int playerID)
         theGame->explosionPosition[playerID][i].h = tilesize;
         theGame->explosionPosition[playerID][i].w = tilesize;
     }
+
+    // I framtiden ska man väl kunna ha större explosionsradius än det vanliga?
+    // Man kanske får initiera flera positioner från början men endast rendera/ha collision med de som ska visas
 
     theGame->explosionPosition[playerID][0].y = theGame->bombs[playerID].position.y;
     theGame->explosionPosition[playerID][0].x = theGame->bombs[playerID].position.x;

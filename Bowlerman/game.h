@@ -25,7 +25,7 @@ struct game_type
     //Player
     Player player[MAXPLAYERS];
     int playerID;        //the players ID. 
-    int playerAmmount;  //ammount of players online
+    int playerAmount;  //amount of players online
     SDL_Rect playerRect[4][3];
     PlayerSprites pSprites;
 
