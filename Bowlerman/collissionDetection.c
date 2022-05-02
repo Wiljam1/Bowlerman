@@ -166,7 +166,7 @@ void testCollosionWithBombs(Game theGame)
     }
 }
 
-
+/*
 void testCollosionWithExplosion(Game theGame)
 {
     for (int i=0;i<4;i++)
@@ -182,37 +182,69 @@ void testCollosionWithExplosion(Game theGame)
                         if(theGame->player[i].xPos+theGame->player[i].width > theGame->explosionPosition[i][k].x && theGame->player[i].xPos < theGame->explosionPosition[i][k].x+theGame->explosionPosition[i][k].w)
                         {
                             if(theGame->player[i].yPos < theGame->explosionPosition[i][k].y + theGame->explosionPosition[i][k].h && theGame->player[i].yPos > theGame->explosionPosition[i][k].y){
-                                //correct y
+                                //player dead
                                 
                                 theGame->player[i].yPos = 500;
-                                printf("Bumping head\n");
+                                theGame->player[i].xPos = 500;
+                                return;
                             }
                             //Are we standing on the wall?
                             if(theGame->player[i].yPos + theGame->player[i].height > theGame->explosionPosition[i][k].y && theGame->player[i].yPos < theGame->explosionPosition[i][k].y){
-                                //correct y
+                                //player dead
 
                                 theGame->player[i].yPos = 500;
-                                printf("Standing on wall\n");
+                                theGame->player[i].xPos = 500;
+                                return;
                             }
                         }
                     }
-                    if(theGame->player[i].moveDirection == 'a' || theGame->player[i].moveDirection == 'd') 
+                    if(theGame->player[i].moveDirection == 'a' || theGame->player[i].moveDirection == 'd' || theGame->player[i].moveDirection == '0') 
                     {
                         if(theGame->player[i].yPos + theGame->player[i].height > theGame->explosionPosition[i][k].y && theGame->player[i].yPos < theGame->explosionPosition[i][k].y + theGame->explosionPosition[i][k].h)
                         {
-                            //Rubbing against right edge
+                            
                             if(theGame->player[i].xPos < theGame->explosionPosition[i][k].x + theGame->explosionPosition[i][k].w && theGame->player[i].xPos > theGame->explosionPosition[i][k].x){
-                                //Correct xw
-                                theGame->player[i].xPos = theGame->bombs[j].position.x + theGame->bombs[j].position.w;
-                                printf("Right Edge\n");
-                            }
-                            //Rubbing against left edge
-                            if(theGame->player[i].xPos + theGame->player[i].width > theGame->explosionPosition[i][k].x && theGame->player[i].xPos < theGame->explosionPosition[i][k].x){
-                                //Correct x
+                                //player dead
+
+                                theGame->player[i].yPos = 500;
                                 theGame->player[i].xPos = 500;
-                                printf("Left Edge\n");
+                                return;
+                            }
+                            
+                            if(theGame->player[i].xPos + theGame->player[i].width > theGame->explosionPosition[i][k].x && theGame->player[i].xPos < theGame->explosionPosition[i][k].x){
+                                //player dead
+
+                                theGame->player[i].yPos = 500;
+                                theGame->player[i].xPos = 500;
+                                return;
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+*/
+void testCollosionWithExplosion(Game theGame)
+{
+    for (int i=0;i<4;i++)
+    {
+        for (int j=0;j<4;j++)
+        {
+            if(theGame->bombs[j].explosioninit == 0)
+            {
+                for (int k=0;k<5;k++)
+                {
+                    if(theGame->explosionPosition[i][k].x < theGame->player[i].xPos + theGame->player[i].width &&
+                       theGame->explosionPosition[i][k].x + theGame->explosionPosition[i][k].w > theGame->player[i].xPos &&
+                       theGame->explosionPosition[i][k].y < theGame->player[i].yPos + theGame->player[i].height &&
+                       theGame->explosionPosition[i][k].h + theGame->explosionPosition[i][k].y > theGame->player[i].yPos)
+                    {
+                        //player dead
+                        theGame->player[i].yPos = 500;
+                        theGame->player[i].xPos = 500;
+                        return;
                     }
                 }
             }
