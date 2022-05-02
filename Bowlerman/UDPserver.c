@@ -27,8 +27,8 @@ int main(int argc, char **argv)
 	UDPsocket sd;       /* Socket descriptor */
 	UDPpacket *pRecive;       /* Pointer to packet memory */
 	UDPpacket *pSent;
-    Uint32 IPclient[3]={0}; 
-    Uint32 portClient[3]={0}; 
+    Uint32 IPclient[4]={0}; 
+    Uint32 portClient[4]={0}; 
     int quit, a, b;
     struct data udpData = {0, 0, 0, 0};
  
