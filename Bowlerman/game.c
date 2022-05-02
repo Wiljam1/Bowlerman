@@ -13,8 +13,6 @@
 #define PRIVATE static
 #define LENGTH 100
 
-const int WIDTH = 800; // Move eventually
-const int HEIGHT = 480;
 
 void initExplosionPosition(Game theGame, int playerID);
 
@@ -37,7 +35,7 @@ PUBLIC Game createWindow()
                                        WIDTH, HEIGHT,
                                        SDL_WINDOW_SHOWN);
 
-    theGame->renderer = SDL_CreateRenderer(theGame->window, -1, SDL_RENDERER_SOFTWARE | SDL_RENDERER_PRESENTVSYNC);
+    theGame->renderer = SDL_CreateRenderer(theGame->window, -1, SDL_RENDERER_ACCELERATED);
     theGame->window_surface = SDL_GetWindowSurface(theGame->window);
     return theGame;
 }
@@ -85,26 +83,26 @@ void initGame(Game theGame)
     // }
 
     // Init walls / map
-    int wallwidth = 40;  // Vet inte hur vi ska bestämma dehär variablerna riktigt,
-    int wallheight = 40; // Om de ens kommer användas
+    float wallwidth = 70;  // Vet inte hur vi ska bestämma dehär variablerna riktigt,
+    int wallheight = 70; // Om de ens kommer användas
     for (int i = 0; i < WALLAMOUNT; i++)
     {
         theGame->wall[i] = initWalls(WALLAMOUNT, wallwidth, wallheight);
         if (i < 20)
         {
-            theGame->wall[i] = wallPlace(i * wallwidth, 0);
+            theGame->wall[i] = wallPlace(i * wallwidth, 100);
         }
         else if (i < 40)
         {
-            theGame->wall[i] = wallPlace(i * wallwidth - WIDTH, HEIGHT - wallheight);
+            theGame->wall[i] = wallPlace(wallwidth *(i - 20), HEIGHT - wallheight);
         }
         else if (i < 60)
         {
-            theGame->wall[i] = wallPlace(0, (i - 40) * wallheight);
+            theGame->wall[i] = wallPlace(0, (i - 40) * wallheight + 100);
         }
         else if (i < 80)
         {
-            theGame->wall[i] = wallPlace(WIDTH - wallwidth, (i - 60) * wallheight);
+            theGame->wall[i] = wallPlace(WIDTH - wallwidth, (i - 60) * wallheight +100);
         }
         else
         {
@@ -142,8 +140,8 @@ bool checkEvents(Game theGame)
                 {
                     theGame->allowBombPlacement[theGame->playerID] = 0;
                     theGame->bombs[theGame->playerID] = initBomb(theGame->playerID);
-                    theGame->bombs[theGame->playerID].position.y = getPlayerYPosition(theGame->player[theGame->playerID]) + 16;
-                    theGame->bombs[theGame->playerID].position.x = getPlayerXPosition(theGame->player[theGame->playerID]) - 5;
+                    theGame->bombs[theGame->playerID].position.y = getPlayerYPosition(theGame->player[theGame->playerID]) + 56;
+                    theGame->bombs[theGame->playerID].position.x = getPlayerXPosition(theGame->player[theGame->playerID]) + 8;
                     theGame->bombs[theGame->playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, theGame->playerID); //också viktigt att veta vilken player
                     theGame->bombs[theGame->playerID].timerinit = 1;
                 }
@@ -299,9 +297,25 @@ void renderTextures(Game theGame)
     SDL_RenderClear(renderer);
 
     // updates/renders background
-    SDL_RenderCopy(renderer, theGame->background, NULL, NULL);
+    SDL_Rect backRect = {0, 100, WIDTH, HEIGHT};
+    SDL_RenderCopy(renderer, theGame->background, NULL, &backRect);
 
-    // render bombs and explosion
+     //Draw walls
+    for (int i = 100; i >= 0; i--)
+    {
+        SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
+        SDL_RenderCopy(renderer, theGame->textureWall, NULL, &wallRect);
+    }
+
+   
+    //bubble-sort the players y-position into the array "renderOrder"
+    //arraySorter(player, theGame->playerAmmount, renderOrder);
+
+   
+
+    // Updating textures depending on movement
+    UpdatePlayerTextures(theGame);
+     // render bombs and explosion
     for(int i=0;i < 4;i++){
         if (theGame->bombs[i].timervalue == 0){
             SDL_RenderCopy(renderer, theGame->bomb_texture[i], &bowlingballAnimation[0], &theGame->bombs[i].position);
@@ -312,18 +326,6 @@ void renderTextures(Game theGame)
             }
         }
     }
-    //bubble-sort the players y-position into the array "renderOrder"
-    //arraySorter(player, theGame->playerAmmount, renderOrder);
-
-    //Draw walls
-    for (int i = 100; i >= 0; i--)
-    {
-        SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
-        SDL_RenderCopy(renderer, theGame->textureWall, NULL, &wallRect);
-    }
-
-    // Updating textures depending on movement
-    UpdatePlayerTextures(theGame);
     // Draw GUI last (top of screenlayers)
 
     SDL_RenderPresent(renderer); // present renderer
@@ -372,7 +374,7 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     static Uint8 updateSprite[4] = {0};
     static Uint8 spriteTimer[4] = {0};
     char moveD = theGame->player[theGame->playerID].moveDirection;
-    int dummyPosY = HEIGHT/2 - 100/2;
+    int dummyPosY = 500;
     int dummyPosX = WIDTH/2 - 100/2;
     int spriteChoice;
     if (spriteTimer[theGame->playerID] > 10)

@@ -14,6 +14,9 @@
 #define PLAYERAMOUNT 4    //how many players are online
 #define WALLAMOUNT 100  
 
+#define WIDTH 1190 // Move eventually
+#define HEIGHT 910 + 100
+
 struct game_type
 {
     SDL_Window  *window;
