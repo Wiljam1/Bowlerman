@@ -87,7 +87,6 @@ void initGame(Game theGame)
     loadAllTextures(theGame);
     // check server what ID you have.
     // getPlayerID();
-
     //get playerID via UDP
     //1st: send info to UDP-server
     memcpy(p->data, &udpData, sizeof(struct data)+1);
@@ -101,7 +100,6 @@ void initGame(Game theGame)
     memcpy(&udpData, (char * ) p2->data, sizeof(struct data));
     theGame->playerID= udpData.playerID;
     printf("UDP Packet incoming %d\n", udpData.playerID);
-
     //theGame->playerID = 0;
 
     // detta ska ändras via servern sen.
@@ -283,7 +281,6 @@ PUBLIC void gameUpdate(Game theGame)
     {
         // Check for events
         done = checkEvents(theGame);
-
         // Process events (time based stuff)
         for(int i=0;i < 4;i++){
             if (theGame->bombs[i].timerinit == 1){
@@ -305,7 +302,7 @@ PUBLIC void gameUpdate(Game theGame)
             }
         }
         // process();
-
+        
         // Collisiondetection
         collisionDetect(theGame);
 
@@ -339,7 +336,7 @@ void renderTextures(Game theGame)
     // Define stuff to make function easier to read
     SDL_Renderer *renderer = theGame->renderer;
     int id = theGame->playerID;
-
+    
     // clear renderer
     SDL_RenderClear(renderer);
 
@@ -400,7 +397,7 @@ PRIVATE void loadAllTextures(Game theGame)
     /*WALLS*/
     theGame->textureWall[0] = (SDL_Texture *)loadTextures(theGame, "walls/80/straight.png");
     theGame->textureWall[1] = (SDL_Texture *)loadTextures(theGame, "walls/80/corner.png");
-    theGame->textureWall[2] = (SDL_Texture *)loadTextures(theGame, "walls/80/mid.png");
+    theGame->textureWall[2] = (SDL_Texture *)loadTextures(theGame, "walls/80/center.png");
     SDL_FreeSurface(theGame->window_surface);
     // Load player sprites
     theGame->pSprites = GetPlayerSprite();
@@ -436,7 +433,6 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
         updateSprite[theGame->playerID]++;
     if (updateSprite[theGame->playerID] > 7)
         updateSprite[theGame->playerID] = 0;
-    //printf("%c ", moveD);
 }
 
 PUBLIC void destroyGame(Game theGame)
