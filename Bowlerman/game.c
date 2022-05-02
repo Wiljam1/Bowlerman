@@ -255,7 +255,7 @@ PUBLIC void gameUpdate(Game theGame)
 
         // Collisiondetection
         collisionDetect(theGame);
-
+        testCollosionWithBombs(theGame);
         // Send/receive data to server
 
         // render display

@@ -1,5 +1,5 @@
-#include <sDL2/sDL.h>
-#include <sDL2/sDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -70,8 +70,8 @@ PUBLIC void collisionDetect(Game theGame)
 
 
 
-
-        /* if(playerYPos+playerHeight > wallYPos && playerYPos < wallYPos+wallHeight)
+        /*
+         if(playerYPos+playerHeight > wallYPos && playerYPos < wallYPos+wallHeight)
         {
             //Rubbing against right edge
             if(playerXPos < wallXPos+wallWidth && playerXPos+playerWidth > wallXPos+wallWidth){
@@ -107,6 +107,58 @@ PUBLIC void collisionDetect(Game theGame)
                 theGame->player[theGame->playerID].yPos -= speed;
                 printf("standing on wall\n");
             }
-        } */
+        } 
+        */
     }
 }
+
+void testCollosionWithBombs(Game theGame)
+{
+    for (int i=0;i<4;i++)
+    {
+        for (int j=0;j<4;j++)
+        {
+            if(theGame->bombs[j].timervalue == 0)
+            {
+                if(theGame->player[i].moveDirection == 'w' || theGame->player[i].moveDirection == 's') 
+                {   
+                    if(theGame->player[i].xPos+theGame->player[i].width > theGame->bombs[j].position.x && theGame->player[i].xPos < theGame->bombs[j].position.x+theGame->bombs[j].position.w)
+                    {
+                        if(theGame->player[i].yPos < theGame->bombs[j].position.y + theGame->bombs[j].position.h && theGame->player[i].yPos > theGame->bombs[j].position.y){
+                            //correct y
+                            
+                            theGame->player[i].yPos = theGame->bombs[j].position.y + theGame->bombs[j].position.h;
+                            printf("Bumping head\n");
+                        }
+                        //Are we standing on the wall?
+                        if(theGame->player[i].yPos + theGame->player[i].height > theGame->bombs[j].position.y && theGame->player[i].yPos < theGame->bombs[j].position.y){
+                            //correct y
+
+                            theGame->player[i].yPos = theGame->bombs[j].position.y - theGame->player[i].height;
+                            printf("Standing on wall\n");
+                        }
+                    }
+                }
+                if(theGame->player[i].moveDirection == 'a' || theGame->player[i].moveDirection == 'd') 
+                {
+                    if(theGame->player[i].yPos + theGame->player[i].height > theGame->bombs[j].position.y && theGame->player[i].yPos < theGame->bombs[j].position.y + theGame->bombs[j].position.h)
+                    {
+                        //Rubbing against right edge
+                        if(theGame->player[i].xPos < theGame->bombs[j].position.x + theGame->bombs[j].position.w && theGame->player[i].xPos > theGame->bombs[j].position.x){
+                            //Correct xw
+                            theGame->player[i].xPos = theGame->bombs[j].position.x + theGame->bombs[j].position.w;
+                            printf("Right Edge\n");
+                        }
+                        //Rubbing against left edge
+                        if(theGame->player[i].xPos + theGame->player[i].width > theGame->bombs[j].position.x && theGame->player[i].xPos < theGame->bombs[j].position.x){
+                            //Correct x
+                            theGame->player[i].xPos = theGame->bombs[j].position.x - theGame->player[i].width;
+                            printf("Left Edge\n");
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

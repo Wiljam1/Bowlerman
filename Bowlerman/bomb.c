@@ -29,6 +29,8 @@ PUBLIC Bowlingball initBomb(int playerID)
     return b;
 }
 
+//timer för bomberna, går kanske att göras med SDL_ADDTimer
+//och sedan SDL_TimerID
 int initbowlingballtimer(int startTime, int timeAmount, int playerID)
 {
     static int lastTime[4]={0}, currentTime[4] = {0};
