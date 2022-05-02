@@ -15,9 +15,9 @@ collissionDetection.o:
 wall.o:
 	gcc -c wall.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 clean_windows:
-	del /Q /F *.o
+	del /Q /F main.exe UDPserver.exe *.o
 
-UDPserver: UDPserver.c
+UDPserver:
 	gcc -o UDPserver UDPserver.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
 
 
@@ -41,5 +41,5 @@ collissionDetection.o:
 clean_mac:
 	rm *.o
 
-UDPserver: UDPserver.c
+UDPserver_mac:
 	gcc -o UDPserver UDPserver.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
