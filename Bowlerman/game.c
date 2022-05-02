@@ -467,24 +467,37 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
 
     if (spriteTimer[theGame->playerID] > 10)
         spriteTimer[theGame->playerID] = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
-    SDL_Rect playerRect[4] = {{theGame->player[0].xPos, theGame->player[0].yPos, theGame->player->width, theGame->player->height},
-                              {theGame->player[1].xPos, theGame->player[1].yPos, theGame->player->width, theGame->player->height},
-                              {theGame->player[2].xPos, theGame->player[2].yPos, theGame->player->width, theGame->player->height},
-                              {theGame->player[3].xPos, theGame->player[3].yPos, theGame->player->width, theGame->player->height}};
+    
+    
 
     SDL_Rect playerRect2 = {dummyPosX, dummyPosY, theGame->player->width, theGame->player->height};
     SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[2][0], &theGame->pSprites.BowlerManVert[0], &playerRect2, 0, NULL, 0);
-
-    if (moveD == 'w')
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[theGame->playerID], 0, NULL, 0);
-    else if (moveD == 'a')
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][3], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect[theGame->playerID], 0, NULL, 0);
-    else if (moveD == 's')
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[theGame->playerID], 0, NULL, 0);
-    else if (moveD == 'd')
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][2], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect[theGame->playerID], 0, NULL, 0);
-    else
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[0], &playerRect[theGame->playerID], 0, NULL, 0);
+    
+    //Algots rendering: dålig dock
+    SDL_Rect playerRect[4];
+    for(int i=0; i<theGame->playerAmmount; i++)
+    {
+        playerRect[i].x = theGame->player[theGame->playerID].xPos;
+        playerRect[i].y = theGame->player[theGame->playerID].yPos;
+        playerRect[i].w= theGame->player->width;
+        playerRect[i].h = theGame->player->height;
+    }
+    for(int i=0; i<theGame->playerAmmount; i++)
+    {
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][1], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i], 0, NULL, 0);
+    }
+    
+    //emils rendering: bra, men funkar ej för flera spelare
+    //if (moveD == 'w')
+    //    SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
+    //else if (moveD == 'a')
+    //    SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][3], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
+    //else if (moveD == 's')
+    //    SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
+    //else if (moveD == 'd')
+    //    SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][2], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
+    //else 
+    //    SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[0], &playerRect0, 0, NULL, 0);
 
     if (spriteTimer[theGame->playerID]++ % 5 == 0 && moveD != '0')
         updateSprite[theGame->playerID]++;
