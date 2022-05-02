@@ -94,14 +94,20 @@ void initGame(Game theGame)
     p->address.host = srvadd.host;	/* Set the destination host */
     p->address.port = srvadd.port;	/* And destination port */
     SDLNet_UDP_Send(sd, -1, p);
+<<<<<<< Updated upstream
 
     //2nd: receive playerID from UDP-server
+=======
+    //2nd: receive info from UDP-server
+>>>>>>> Stashed changes
     while(!SDLNet_UDP_Recv(sd, p2));    //spin-lock tills received info from UDP-server
     memcpy(&udpData, (char * ) p2->data, sizeof(struct data));
     theGame->playerID= udpData.playerID;
     printf("UDP Packet incoming %d\n", udpData.playerID);
     //theGame->playerID = 0;
-
+    printf("CRASH");
+    printf("%d", theGame->playerID);
+   
     // detta ska ändras via servern sen.
     theGame->playerAmmount = 4;
 
@@ -450,21 +456,26 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     int dummyPosY = 500;
     int dummyPosX = WIDTH/2 - 100/2;
     int spriteChoice;
+    
     if (spriteTimer[theGame->playerID] > 10)
         spriteTimer[theGame->playerID] = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
-    SDL_Rect playerRect0 = {theGame->player[theGame->playerID].xPos, theGame->player[theGame->playerID].yPos, theGame->player->width, theGame->player->height};
+    SDL_Rect playerRect[4] = {{theGame->player[0].xPos, theGame->player[0].yPos, theGame->player->width, theGame->player->height},
+                             {theGame->player[1].xPos, theGame->player[1].yPos, theGame->player->width, theGame->player->height},
+                             {theGame->player[2].xPos, theGame->player[2].yPos, theGame->player->width, theGame->player->height},
+                             {theGame->player[3].xPos, theGame->player[3].yPos, theGame->player->width, theGame->player->height}};
+
     SDL_Rect playerRect2 = {dummyPosX, dummyPosY, theGame->player->width, theGame->player->height};
     SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[2][0], &theGame->pSprites.BowlerManVert[0], &playerRect2, 0, NULL, 0);
     if (moveD == 'w')
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[theGame->playerID], 0, NULL, 0);
     else if (moveD == 'a')
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][3], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][3], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect[theGame->playerID], 0, NULL, 0);
     else if (moveD == 's')
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[theGame->playerID], 0, NULL, 0);
     else if (moveD == 'd')
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][2], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][2], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect[theGame->playerID], 0, NULL, 0);
     else 
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[0], &playerRect0, 0, NULL, 0);
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[0], &playerRect[theGame->playerID], 0, NULL, 0);
 
     if (spriteTimer[theGame->playerID]++ % 5 == 0 && moveD != '0')
         updateSprite[theGame->playerID]++;
