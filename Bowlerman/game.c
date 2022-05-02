@@ -95,7 +95,7 @@ void initGame(Game theGame)
     p->address.port = srvadd.port;	/* And destination port */
     SDLNet_UDP_Send(sd, -1, p);
 
-    //2nd: receive info from UDP-server
+    //2nd: receive playerID from UDP-server
     while(!SDLNet_UDP_Recv(sd, p2));    //spin-lock tills received info from UDP-server
     memcpy(&udpData, (char * ) p2->data, sizeof(struct data));
     theGame->playerID= udpData.playerID;
@@ -224,8 +224,6 @@ bool checkEvents(Game theGame)
     // Manage movement inputs
     manageMovementInputs(theGame);
 
-    // send and retrive positions via server
-
     return done;
 }
 
@@ -269,11 +267,49 @@ void manageMovementInputs(Game theGame)
     theGame->player[theGame->playerID].yPos += velY;
 }
 
+PRIVATE void manageUDP(Game theGame)
+{
+    int x_posOld = theGame->player[theGame->playerID].xPosOld;
+    int y_posOld = theGame->player[theGame->playerID].yPosOld;
+    int x_pos = theGame->player[theGame->playerID].xPos;
+    int y_pos = theGame->player[theGame->playerID].yPos;
+
+    // send positions  
+    if(x_posOld != x_pos || y_posOld != y_pos){
+        printf("%d %d\n", (int) x_pos, (int) y_pos);
+        udpData.playerID=theGame->playerID;
+        udpData.x = x_pos;
+        udpData.y = y_pos;
+        memcpy(p->data, &udpData, sizeof(struct data)+1);
+        //fwrite(&udpData, sizeof(struct data), 1, p->data);
+        p->len = sizeof(struct data)+1;
+        //sprintf((char *)p->data, "%d %d\n", (int) x_pos, (int) y_pos);    
+        p->address.host = srvadd.host;	/* Set the destination host */
+        p->address.port = srvadd.port;	/* And destination port */
+        //p->len = strlen((char *)p->data) + 1;
+        SDLNet_UDP_Send(sd, -1, p);
+        x_posOld = x_pos;
+        y_posOld = y_pos;
+    }      
+        
+    //receive data
+    if (SDLNet_UDP_Recv(sd, p2)){
+        int a, b; 
+        //sscanf((char * )p2->data, "%d %d\n", &a, &b);
+        memcpy(&udpData, (char * ) p2->data, sizeof(struct data));
+        int playerID = udpData.playerID;
+        theGame->player[playerID].xPos= udpData.x;
+        theGame->player[playerID].yPos= udpData.y;
+        printf("UDP Packet incoming, x,y-coord: %d %d of player %d\n", udpData.x, udpData.y, udpData.playerID);
+    }
+}
+
 // game loop
 PUBLIC void gameUpdate(Game theGame)
 {
     Player player[MAXPLAYERS]; // declares x-ammounts of players
     initGame(theGame);         // initializes startvalues. coordinates etc.
+
     // int renderOrder[4]={0,1,2,3}; //what order to render players
     // gameloop:
     bool done = false;
@@ -307,6 +343,7 @@ PUBLIC void gameUpdate(Game theGame)
         collisionDetect(theGame);
 
         // Send/receive data to server
+        manageUDP(theGame);
 
         // render display
         renderTextures(theGame);

@@ -80,6 +80,7 @@ int main(int argc, char **argv)
                 pSent->address.host = IPclient[0];	/* Set the destination host */
                 pSent->address.port = portClient[0];
                 SDLNet_UDP_Send(sd, -1, pSent);
+                printf("initializing client 0\n");
             }
 
             //etablera vems IP-adress och port.
@@ -101,6 +102,7 @@ int main(int argc, char **argv)
                     pSent->address.host = IPclient[i+1];	/* Set the destination host */
                     pSent->address.port = portClient[i+1];
                     SDLNet_UDP_Send(sd, -1, pSent);
+                    printf("initializing client %d\n", i+1);
 
                     playerAmmount++;
 
