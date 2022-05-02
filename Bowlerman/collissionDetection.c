@@ -10,9 +10,6 @@
 #include "collissionDetection.h"
 
 
-const int WDITHH = 800;  //Move eventually
-const int HEIGHTT = 450;
-
 PUBLIC void collisionDetect(Game theGame)
 {
     float playerWidth = theGame->player[theGame->playerID].width, playerHeight = theGame->player[theGame->playerID].height;
@@ -22,12 +19,12 @@ PUBLIC void collisionDetect(Game theGame)
     //Don't move out of window!
     if(playerXPos < 0)                //Left edge
         theGame->player[theGame->playerID].xPos = 0;
-    if(playerXPos+playerWidth > WDITHH)         //Right edge
-         theGame->player[theGame->playerID].xPos = WDITHH - playerWidth;
+    if(playerXPos+playerWidth > WIDTH)         //Right edge
+         theGame->player[theGame->playerID].xPos = WIDTH - playerWidth;
     if(playerYPos < 0)                //Top edge
         theGame->player[theGame->playerID].yPos = 0;
-    if(playerYPos+playerHeight > HEIGHTT)        //Bottom edge
-        theGame->player[theGame->playerID].yPos = HEIGHTT - playerHeight;
+    if(playerYPos+playerHeight > HEIGHT)        //Bottom edge
+        theGame->player[theGame->playerID].yPos = HEIGHT - playerHeight;
 
     //Collision with enemies
     // for(int i = 0; i < WALLCOUNT/4; i++){
@@ -43,15 +40,22 @@ PUBLIC void collisionDetect(Game theGame)
     {
         float wallXPos = theGame->wall[i].x, wallYPos = theGame->wall[i].y, 
               wallWidth = theGame->wall[i].w, wallHeight = theGame->wall[i].h;
-              
-        if (i >= 20 && i < 40)
+
+        if (i < 20)
+        {
+            if (playerYPos < wallYPos)
+            {
+                theGame->player[theGame->playerID].yPos = wallYPos;
+            }
+        }     
+        if (i >= 20 && i < 40) // Nedre
         {
             if (playerYPos + playerHeight > wallYPos)
             {
                 theGame->player[theGame->playerID].yPos = wallYPos - playerHeight;
             }
         }
-        if (i >= 40 && i < 60)
+        if (i >= 40 && i < 60) // Vänster
         {
             if (playerXPos < wallXPos + wallWidth)
             {
@@ -59,7 +63,7 @@ PUBLIC void collisionDetect(Game theGame)
             }
 
         }
-        if (i >= 60 && i < 80)
+        if (i >= 60 && i < 80) //höger
         {
             if (playerXPos + playerWidth > wallXPos)
             {
