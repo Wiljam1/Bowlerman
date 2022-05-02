@@ -94,12 +94,7 @@ void initGame(Game theGame)
     p->address.host = srvadd.host;	/* Set the destination host */
     p->address.port = srvadd.port;	/* And destination port */
     SDLNet_UDP_Send(sd, -1, p);
-<<<<<<< Updated upstream
-
-    //2nd: receive playerID from UDP-server
-=======
     //2nd: receive info from UDP-server
->>>>>>> Stashed changes
     while(!SDLNet_UDP_Recv(sd, p2));    //spin-lock tills received info from UDP-server
     memcpy(&udpData, (char * ) p2->data, sizeof(struct data));
     theGame->playerID= udpData.playerID;
@@ -348,6 +343,7 @@ PUBLIC void gameUpdate(Game theGame)
         // Collisiondetection
         collisionDetect(theGame);
         testCollosionWithBombs(theGame);
+        testCollosionWithExplosion(theGame);
         // Send/receive data to server
         manageUDP(theGame);
 

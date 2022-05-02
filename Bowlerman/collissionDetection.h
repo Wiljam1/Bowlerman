@@ -7,5 +7,6 @@
 void collisionDetect(Game theGame);
 
 void testCollosionWithBombs(Game theGame);
+void testCollosionWithExplosion(Game theGame);
 
 #endif

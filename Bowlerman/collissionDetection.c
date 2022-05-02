@@ -166,3 +166,58 @@ void testCollosionWithBombs(Game theGame)
     }
 }
 
+
+void testCollosionWithExplosion(Game theGame)
+{
+    for (int i=0;i<4;i++)
+    {
+        for (int j=0;j<4;j++)
+        {
+            if(theGame->bombs[j].explosioninit == 0)
+            {
+                for (int k=0;k<5;k++)
+                {
+                    if(theGame->player[i].moveDirection == 'w' || theGame->player[i].moveDirection == 's') 
+                    {   
+                        if(theGame->player[i].xPos+theGame->player[i].width > theGame->explosionPosition[i][k].x && theGame->player[i].xPos < theGame->explosionPosition[i][k].x+theGame->explosionPosition[i][k].w)
+                        {
+                            if(theGame->player[i].yPos < theGame->explosionPosition[i][k].y + theGame->explosionPosition[i][k].h && theGame->player[i].yPos > theGame->explosionPosition[i][k].y){
+                                //correct y
+                                
+                                theGame->player[i].yPos = 500;
+                                printf("Bumping head\n");
+                            }
+                            //Are we standing on the wall?
+                            if(theGame->player[i].yPos + theGame->player[i].height > theGame->explosionPosition[i][k].y && theGame->player[i].yPos < theGame->explosionPosition[i][k].y){
+                                //correct y
+
+                                theGame->player[i].yPos = 500;
+                                printf("Standing on wall\n");
+                            }
+                        }
+                    }
+                    if(theGame->player[i].moveDirection == 'a' || theGame->player[i].moveDirection == 'd') 
+                    {
+                        if(theGame->player[i].yPos + theGame->player[i].height > theGame->explosionPosition[i][k].y && theGame->player[i].yPos < theGame->explosionPosition[i][k].y + theGame->explosionPosition[i][k].h)
+                        {
+                            //Rubbing against right edge
+                            if(theGame->player[i].xPos < theGame->explosionPosition[i][k].x + theGame->explosionPosition[i][k].w && theGame->player[i].xPos > theGame->explosionPosition[i][k].x){
+                                //Correct xw
+                                theGame->player[i].xPos = theGame->bombs[j].position.x + theGame->bombs[j].position.w;
+                                printf("Right Edge\n");
+                            }
+                            //Rubbing against left edge
+                            if(theGame->player[i].xPos + theGame->player[i].width > theGame->explosionPosition[i][k].x && theGame->player[i].xPos < theGame->explosionPosition[i][k].x){
+                                //Correct x
+                                theGame->player[i].xPos = 500;
+                                printf("Left Edge\n");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
