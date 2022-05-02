@@ -32,9 +32,9 @@ UDPpacket *p;
 UDPpacket *p2;  //behövs egentligen bara en pekare.
 struct data udpData = {0, 0, 0, 0};
 
-//initializes game
 PRIVATE void loadAllTextures(Game theGame);
 PRIVATE void UpdatePlayerTextures(Game theGame);
+PRIVATE void renderWalls(Game theGame);
 // initializes game
 PUBLIC Game createWindow()
 {
@@ -49,7 +49,7 @@ PUBLIC Game createWindow()
                                        WIDTH, HEIGHT,
                                        SDL_WINDOW_SHOWN);
 
-    theGame->renderer = SDL_CreateRenderer(theGame->window, -1, SDL_RENDERER_ACCELERATED);
+    theGame->renderer = SDL_CreateRenderer(theGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     theGame->window_surface = SDL_GetWindowSurface(theGame->window);
     
     //initiera SDL NET
@@ -315,14 +315,6 @@ PUBLIC void gameUpdate(Game theGame)
         renderTextures(theGame);
 
         SDL_Delay(1000/60); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
-        /* static int a = 0;
-        static int b = 0;
-        a++;
-        if (a == 60)
-        {
-            printf("%d ", ++b);
-            a = 0;
-        } */
     }
 }
 
@@ -354,19 +346,9 @@ void renderTextures(Game theGame)
     // updates/renders background
     SDL_Rect backRect = {0, 100, WIDTH, HEIGHT};
     SDL_RenderCopy(renderer, theGame->background, NULL, &backRect);
-
-     //Draw walls
-    for (int i = 100; i >= 0; i--)
-    {
-        SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
-        SDL_RenderCopy(renderer, theGame->textureWall, NULL, &wallRect);
-    }
-
-   
+    renderWalls(theGame);
     //bubble-sort the players y-position into the array "renderOrder"
     //arraySorter(player, theGame->playerAmmount, renderOrder);
-
-   
 
     // Updating textures depending on movement
     UpdatePlayerTextures(theGame);
@@ -416,7 +398,9 @@ PRIVATE void loadAllTextures(Game theGame)
     theGame->bomb_texture[3] = (SDL_Texture *)loadTextures(theGame, "Bowling_Ball_Yellow.png");
     theGame->bombExplosion_texture = (SDL_Texture *)loadTextures(theGame, "FIRE.png");
     /*WALLS*/
-    theGame->textureWall = (SDL_Texture *)loadTextures(theGame, "walls/160/mid.png");
+    theGame->textureWall[0] = (SDL_Texture *)loadTextures(theGame, "walls/80/straight.png");
+    theGame->textureWall[1] = (SDL_Texture *)loadTextures(theGame, "walls/80/corner.png");
+    theGame->textureWall[2] = (SDL_Texture *)loadTextures(theGame, "walls/80/mid.png");
     SDL_FreeSurface(theGame->window_surface);
     // Load player sprites
     theGame->pSprites = GetPlayerSprite();
@@ -472,6 +456,40 @@ PUBLIC void destroyGame(Game theGame)
     SDL_Quit();
 }
 
+ PRIVATE void renderWalls(Game theGame)
+ {
+     //Draw walls
+    for (int i = 100; i >= 0; i--)
+    {
+        SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
+        /* LONG WALLS*/
+        if (i < 36)
+        {
+            SDL_RenderCopy(theGame->renderer, theGame->textureWall[0], NULL, &wallRect);
+        }
+        else if(i < 76)
+        {
+            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[0], NULL, &wallRect, 90, 0, 0);
+        }
+        /* CORNER WALLS */
+        if (i == 0)
+        {
+            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 90, 0, 0);
+        }
+        if (i == 16)
+        {
+            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 180, 0, 0);
+        }
+        if (i == 20)
+        {
+            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 0, 0, 0);
+        }
+        if (i == 36)
+        {
+            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 270, 0, 0);
+        }
+    }
+ }
 
 void initExplosionPosition(Game theGame, int playerID)
 {
