@@ -44,9 +44,9 @@ PUBLIC void collisionDetect(Game theGame)
 
         if (i < 20)
         {
-            if (playerYPos < wallYPos)
+            if (playerYPos < wallYPos + 40)
             {
-                theGame->player[theGame->playerID].yPos = wallYPos;
+                theGame->player[theGame->playerID].yPos = wallYPos + 40;
             }
         }     
         if (i >= 20 && i < 40) // Nedre
