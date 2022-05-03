@@ -58,7 +58,7 @@ int correctBowlingBallPos(int i)
         return (k*70+3);      //returnerar närmaste tile sen +3 för att få det helt centrerat
     }
     else{
-        return (k+1*70+3);
+        return ((k+1)*70+3);
     }   
 }
 

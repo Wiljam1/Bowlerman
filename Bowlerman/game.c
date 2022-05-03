@@ -204,8 +204,8 @@ bool checkEvents(Game theGame)
                 {
                     theGame->allowBombPlacement[theGame->playerID] = 0;
                     theGame->bombs[theGame->playerID] = initBomb(theGame->playerID);
-                    theGame->bombs[theGame->playerID].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[theGame->playerID]) + 56);
-                    theGame->bombs[theGame->playerID].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[theGame->playerID]) + 8);
+                    theGame->bombs[theGame->playerID].position.y = correctBowlingBallPos((int) getPlayerYPosition(theGame->player[theGame->playerID]) + 56);
+                    theGame->bombs[theGame->playerID].position.x = correctBowlingBallPos((int) getPlayerXPosition(theGame->player[theGame->playerID]) + 8);
                     theGame->bombs[theGame->playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, theGame->playerID); // också viktigt att veta vilken player
                     theGame->bombs[theGame->playerID].timerinit = 1;
                     theGame->bombs[theGame->playerID].placedBombRestriction = 1;
@@ -375,6 +375,7 @@ PUBLIC void gameUpdate(Game theGame)
         collisionDetect(theGame);
         testCollosionWithBombs(theGame);
         testCollosionWithExplosion(theGame);
+        testCollisionWithWalls(theGame);
         // Send/receive data to server
         manageUDP(theGame);
 

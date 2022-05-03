@@ -216,6 +216,50 @@ void playerStandingOnBomb(Game theGame)
     }
 }
 
+void testCollisionWithWalls(Game theGame)
+{
+    for (int i=0;i<4;i++)
+    {
+        for (int j=0;j<42;j++)
+        {
+            if(theGame->player[i].moveDirection == 'w' || theGame->player[i].moveDirection == 's') 
+            {   
+                if(theGame->player[i].xPos+theGame->player[i].width > theGame->wall[j].x && theGame->player[i].xPos < theGame->wall[j].x + theGame->wall[j].w)
+                {
+                    if(theGame->player[i].yPos < theGame->wall[j].y + theGame->wall[j].h && theGame->player[i].yPos > theGame->wall[j].y){
+                        //correct y
+                        theGame->player[i].yPos = theGame->wall[j].y + theGame->wall[j].h;
+                        printf("Bumping head\n");
+                    }
+                    if(theGame->player[i].yPos + theGame->player[i].height > theGame->wall[j].y && theGame->player[i].yPos < theGame->wall[j].y){
+                        //correct y
+                        theGame->player[i].yPos = theGame->wall[j].y - theGame->player[i].height;
+                        printf("Standing on wall\n");
+                    }
+                }
+            }
+            if(theGame->player[i].moveDirection == 'a' || theGame->player[i].moveDirection == 'd') 
+            {
+                if(theGame->player[i].yPos + theGame->player[i].height > theGame->wall[j].y && theGame->player[i].yPos < theGame->wall[j].y + theGame->wall[j].h)
+                {
+                    if(theGame->player[i].xPos < theGame->wall[j].x + theGame->wall[j].w && theGame->player[i].xPos > theGame->wall[j].x){
+                        //Correct x
+                        theGame->player[i].xPos = theGame->wall[j].x + theGame->wall[j].w;
+                        printf("Right Edge\n");
+                    }
+                    if(theGame->player[i].xPos + theGame->player[i].width > theGame->wall[j].x && theGame->player[i].xPos < theGame->wall[j].x){
+                        //Correct x
+                        theGame->player[i].xPos = theGame->wall[j].x - theGame->player[i].width;
+                        printf("Left Edge\n");
+                    }
+                }
+            }
+            
+        }
+    }
+
+}
+
 
 /*
 void testCollosionWithExplosion(Game theGame)

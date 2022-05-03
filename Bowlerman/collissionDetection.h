@@ -9,5 +9,6 @@ void collisionDetect(Game theGame);
 void testCollosionWithBombs(Game theGame);
 void testCollosionWithExplosion(Game theGame);
 void playerStandingOnBomb(Game theGame);
+void testCollisionWithWalls(Game theGame);
 
 #endif
