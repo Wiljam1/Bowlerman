@@ -319,6 +319,7 @@ PRIVATE void manageUDP(Game theGame)
         theGame->player[playerID].xPos = udpData.x;
         theGame->player[playerID].yPos = udpData.y;
         theGame->player[playerID].moveDirection = udpData.moveDirection;
+        theGame->player[playerID].id = udpData.playerID;
         printf("UDP Packet incoming, x,y-coord: %d %d of player %d\n", udpData.x, udpData.y, udpData.playerID);
     }
 }
@@ -483,17 +484,9 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     static Uint8 updateSprite[4] = {0};
     static Uint8 spriteTimer[4] = {0};
     Uint8 spriteChoice[4] = {0};
-    char moveD = theGame->player[theGame->playerID].moveDirection;
-    int dummyPosY = 500;
-    int dummyPosX = WIDTH / 2 - 100 / 2;
 
-    if (spriteTimer[theGame->playerID] > 10)
-        spriteTimer[theGame->playerID] = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
     
     
-
-    //SDL_Rect playerRect2 = {dummyPosX, dummyPosY, theGame->player->width, theGame->player->height};
-    //SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[2][0], &theGame->pSprites.BowlerManVert[0], &playerRect2, 0, NULL, 0);
     
     //Algots rendering: dålig dock
     SDL_Rect playerRect[4];
@@ -506,33 +499,35 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     }
     for(int i=0; i < theGame->playerAmount; i++)
     {
+        
+        if (spriteTimer[i] > 10)
+            spriteTimer[i] = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
+        
         switch (theGame->player[i].moveDirection)
         {
             case 'w': 
-                spriteChoice[theGame->playerID] = 1;
-                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[theGame->playerID]], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i]);
+                spriteChoice[i] = 1;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[updateSprite[i]], &playerRect[i]);
                 break;
-            case 'a': spriteChoice[theGame->playerID] = 3;
-                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[theGame->playerID]], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect[i]);
+            case 'a': spriteChoice[i] = 3;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManHori[updateSprite[i]], &playerRect[i]);
                 break;
-            case 's': spriteChoice[theGame->playerID] = 0;
-                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[theGame->playerID]], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i]);
+            case 's': spriteChoice[i] = 0;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[updateSprite[i]], &playerRect[i]);
                 break;
-            case 'd': spriteChoice[theGame->playerID] = 2;
-                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[theGame->playerID]], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect[i]);
+            case 'd': spriteChoice[i] = 2;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManHori[updateSprite[i]], &playerRect[i]);
                 break;
             case '0':
-            default: spriteChoice[theGame->playerID] = 0;
-                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[theGame->playerID]], &theGame->pSprites.BowlerManVert[0], &playerRect[i]);
+            default: spriteChoice[i] = 0;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i]);
                 break;
         }
-    }
-    for (int i = 0; i < theGame->playerAmount; i++)
-    {
         if (spriteTimer[i]++ % 5 == 0 && theGame->player[i].moveDirection != '0')
-            updateSprite[i]++;
+                updateSprite[i]++;
         if (updateSprite[i] > 7)
-            updateSprite[i] = 0;
+                updateSprite[i] = 0;
+        
     }
 }
 
