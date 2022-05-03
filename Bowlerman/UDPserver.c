@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 
                     //copy data:
                     memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data));
-                    printf("UDP Packet data %d %d\n", udpData.x, udpData.y);
+                    printf("UDP Packet data %d %d %c\n", udpData.x, udpData.y, udpData.moveDirection);
                     memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
                     pSent->len = sizeof(struct data)+1;
                     //sscanf((char * )pRecive->data, "%d %d\n", &a, &b);

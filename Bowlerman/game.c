@@ -224,7 +224,7 @@ bool checkEvents(Game theGame)
             // case SDLK_w: case SDLK_UP:
             //     up = false;
             default:
-                // theGame->moveDirection[0] = '0';
+                theGame->player[theGame->playerID].moveDirection = '0';
                 break;
             }
             break;
@@ -285,15 +285,15 @@ PRIVATE void manageUDP(Game theGame)
     int y_posOld = theGame->player[theGame->playerID].yPosOld;
     int x_pos = theGame->player[theGame->playerID].xPos;
     int y_pos = theGame->player[theGame->playerID].yPos;
+    udpData.moveDirection = theGame->player[theGame->playerID].moveDirection;
 
     // send positions
-    if (x_posOld != x_pos || y_posOld != y_pos)
+    if (x_posOld != x_pos || y_posOld != y_pos || theGame->player[theGame->playerID].moveDirection == '0' )
     {
         printf("%d %d\n", (int)x_pos, (int)y_pos);
         udpData.playerID = theGame->playerID;
         udpData.x = x_pos;
         udpData.y = y_pos;
-        udpData.moveDirection = theGame->player[theGame->playerID].moveDirection;
         memcpy(p->data, &udpData, sizeof(struct data) + 1);
         // fwrite(&udpData, sizeof(struct data), 1, p->data);
         p->len = sizeof(struct data) + 1;
@@ -304,7 +304,17 @@ PRIVATE void manageUDP(Game theGame)
         SDLNet_UDP_Send(sd, -1, p);
         theGame->player[theGame->playerID].xPosOld = x_pos; // Fixade oldxpos
         theGame->player[theGame->playerID].yPosOld = y_pos;
+
+        if (theGame->player[theGame->playerID].moveDirection == '0')
+        {
+            theGame->player[theGame->playerID].moveDirection == '1';
+        }
     }
+    /* if (notMoving =0)
+    {
+        //send UDP
+        notMoving=1;
+    } */
 
     // receive data
     if (SDLNet_UDP_Recv(sd, p2))
@@ -475,10 +485,10 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     // renders player
     static Uint8 updateSprite[4] = {0};
     static Uint8 spriteTimer[4] = {0};
+    Uint8 spriteChoice[4] = {0};
     char moveD = theGame->player[theGame->playerID].moveDirection;
     int dummyPosY = 500;
     int dummyPosX = WIDTH / 2 - 100 / 2;
-    int spriteChoice;
 
     if (spriteTimer[theGame->playerID] > 10)
         spriteTimer[theGame->playerID] = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
@@ -497,33 +507,36 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
         playerRect[i].w= theGame->player->width;
         playerRect[i].h = theGame->player->height;
     }
-    for(int i=0; i<theGame->playerAmount; i++)
+    for(int i=0; i < theGame->playerAmount; i++)
     {
         switch (theGame->player[i].moveDirection)
         {
             case 'w': 
-                spriteChoice = 1;
-                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i]);
+                spriteChoice[theGame->playerID] = 1;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[theGame->playerID]], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i]);
                 break;
-            case 'a': spriteChoice = 3;
-                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect[i]);
+            case 'a': spriteChoice[theGame->playerID] = 3;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[theGame->playerID]], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect[i]);
                 break;
-            case 's': spriteChoice = 0;
-                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i]);
+            case 's': spriteChoice[theGame->playerID] = 0;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[theGame->playerID]], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i]);
                 break;
-            case 'd': spriteChoice = 2;
-                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect[i]);
+            case 'd': spriteChoice[theGame->playerID] = 2;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[theGame->playerID]], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect[i]);
                 break;
             case '0':
-            default: spriteChoice = 0;
-                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][0], &theGame->pSprites.BowlerManVert[0], &playerRect[i]);
+            default: spriteChoice[theGame->playerID] = 0;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[theGame->playerID]], &theGame->pSprites.BowlerManVert[0], &playerRect[i]);
                 break;
         }
     }
-    if (spriteTimer[theGame->playerID]++ % 5 == 0 && moveD != '0')
-        updateSprite[theGame->playerID]++;
-    if (updateSprite[theGame->playerID] > 7)
-        updateSprite[theGame->playerID] = 0;
+    for (int i = 0; i < theGame->playerAmount; i++)
+    {
+        if (spriteTimer[i]++ % 5 == 0 && theGame->player[i].moveDirection != '0')
+            updateSprite[i]++;
+        if (updateSprite[i] > 7)
+            updateSprite[i] = 0;
+    }
 }
 
 PUBLIC void destroyGame(Game theGame)
