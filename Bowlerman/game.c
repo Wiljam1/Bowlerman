@@ -159,12 +159,15 @@ void initGame(Game theGame)
         {
         }
     }
+    int count=0;
     for (int i=1;i<5;i++)
     {
+        count ++;
         for(int j=0;j<7;j++)
         {
-            theGame->wall[i*j+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth,wallheight);
-            theGame->wall[i*j+WALLAMOUNT] = wallPlace(j*70+140, i*70+140);
+            count ++;
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+140, i*70+140);
         }
     }
 }
