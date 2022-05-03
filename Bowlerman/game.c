@@ -21,6 +21,7 @@ struct data
     int y;
     int status;
     int playerID;
+    char moveDirection;
 };
 
 //Blir inte det här globala variabler typ?
@@ -292,6 +293,7 @@ PRIVATE void manageUDP(Game theGame)
         udpData.playerID = theGame->playerID;
         udpData.x = x_pos;
         udpData.y = y_pos;
+        udpData.moveDirection = theGame->player[theGame->playerID].moveDirection;
         memcpy(p->data, &udpData, sizeof(struct data) + 1);
         // fwrite(&udpData, sizeof(struct data), 1, p->data);
         p->len = sizeof(struct data) + 1;
@@ -313,6 +315,7 @@ PRIVATE void manageUDP(Game theGame)
         int playerID = udpData.playerID;
         theGame->player[playerID].xPos = udpData.x;
         theGame->player[playerID].yPos = udpData.y;
+        theGame->player[playerID].moveDirection = udpData.moveDirection;
         printf("UDP Packet incoming, x,y-coord: %d %d of player %d\n", udpData.x, udpData.y, udpData.playerID);
     }
 }
@@ -496,7 +499,7 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     }
     for(int i=0; i<theGame->playerAmount; i++)
     {
-        switch (moveD)
+        switch (theGame->player[i].moveDirection)
         {
             case 'w': 
                 spriteChoice = 1;

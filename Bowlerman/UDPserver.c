@@ -20,6 +20,7 @@ struct data {
    int y;
    int status;
    int playerID;
+   char moveDirection;
 };
 
 int main(int argc, char **argv)
