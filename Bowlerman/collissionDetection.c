@@ -181,10 +181,10 @@ void testCollosionWithExplosion(Game theGame)
             {
                 for (int k=0;k<5;k++)
                 {
-                    if(theGame->explosionPosition[i][k].x < theGame->player[i].xPos + theGame->player[i].width &&
-                       theGame->explosionPosition[i][k].x + theGame->explosionPosition[i][k].w > theGame->player[i].xPos &&
-                       theGame->explosionPosition[i][k].y < theGame->player[i].yPos + theGame->player[i].height &&
-                       theGame->explosionPosition[i][k].h + theGame->explosionPosition[i][k].y > theGame->player[i].yPos)
+                    if(theGame->explosionPosition[j][k].x < theGame->player[i].xPos + theGame->player[i].width &&
+                       theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > theGame->player[i].xPos &&
+                       theGame->explosionPosition[j][k].y < theGame->player[i].yPos + theGame->player[i].height &&
+                       theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y > theGame->player[i].yPos)
                     {
                         //player dead
                         theGame->player[i].yPos = 500;
@@ -201,16 +201,16 @@ void playerStandingOnBomb(Game theGame)
 {
     for(int i=0;i<theGame->playerAmount;i++)
     {
-        if(theGame->bombs[i].position.x < theGame->player[i].xPos + theGame->player[i].width &&
-            theGame->bombs[i].position.x + theGame->bombs[i].position.w > theGame->player[i].xPos &&
-            theGame->bombs[i].position.y < theGame->player[i].yPos + theGame->player[i].height &&
-            theGame->bombs[i].position.h + theGame->bombs[i].position.y > theGame->player[i].yPos)
+        if(theGame->bombs[theGame->playerID].position.x < theGame->player[theGame->playerID].xPos + theGame->player[theGame->playerID].width &&
+            theGame->bombs[theGame->playerID].position.x + theGame->bombs[theGame->playerID].position.w > theGame->player[theGame->playerID].xPos &&
+            theGame->bombs[theGame->playerID].position.y < theGame->player[theGame->playerID].yPos + theGame->player[theGame->playerID].height &&
+            theGame->bombs[theGame->playerID].position.h + theGame->bombs[theGame->playerID].position.y > theGame->player[theGame->playerID].yPos)
             {         
-            theGame->bombs[i].placedBombRestriction = 1;
+            theGame->bombs[theGame->playerID].placedBombRestriction = 1;
         }
         else 
         {
-            theGame->bombs[i].placedBombRestriction = 0;
+            theGame->bombs[theGame->playerID].placedBombRestriction = 0;
         }
     }
 }
