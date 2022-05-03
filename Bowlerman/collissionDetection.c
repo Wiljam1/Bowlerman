@@ -36,6 +36,7 @@ PUBLIC void collisionDetect(Game theGame)
     // }
 
     //Check for collision with any walls
+    /*
     for(int i = 0; i < WALLAMOUNT; i++)
     {
         float wallXPos = theGame->wall[i].x, wallYPos = theGame->wall[i].y, 
@@ -74,7 +75,7 @@ PUBLIC void collisionDetect(Game theGame)
 
 
 
-        /*
+        
          if(playerYPos+playerHeight > wallYPos && playerYPos < wallYPos+wallHeight)
         {
             //Rubbing against right edge
@@ -112,8 +113,9 @@ PUBLIC void collisionDetect(Game theGame)
                 printf("standing on wall\n");
             }
         } 
-        */
+        
     }
+    */
 }
 
 //collison detection mellan bomber och spelare
@@ -220,13 +222,13 @@ void testCollisionWithWalls(Game theGame)
 {
     for (int i=0;i<4;i++)
     {
-        for (int j=100;j<142;j++)
+        for (int j=0;j<142;j++)
         {
             if(theGame->player[i].moveDirection == 'w' || theGame->player[i].moveDirection == 's') 
             {   
                 if(theGame->player[i].xPos+theGame->player[i].width > theGame->wall[j].x && theGame->player[i].xPos < theGame->wall[j].x + theGame->wall[j].w)
                 {
-                    if(theGame->player[i].yPos < theGame->wall[j].y + theGame->wall[j].h && theGame->player[i].yPos > theGame->wall[j].y){
+                    if(theGame->player[i].yPos < theGame->wall[j].y + theGame->wall[j].h*0.7 && theGame->player[i].yPos > theGame->wall[j].y){
                         //correct y
                         theGame->player[i].yPos = theGame->wall[j].y + theGame->wall[j].h;
                         printf("Bumping head\n");
