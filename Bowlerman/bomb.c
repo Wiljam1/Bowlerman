@@ -26,6 +26,7 @@ PUBLIC Bowlingball initBomb(int playerID)
     b.timervalue = 0;
     b.timerinit = 0;
     b.explosioninit = 1;
+    b.placedBombRestriction = 0;
     return b;
 }
 

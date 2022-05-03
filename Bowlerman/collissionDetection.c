@@ -116,13 +116,19 @@ PUBLIC void collisionDetect(Game theGame)
     }
 }
 
+//collison detection mellan bomber och spelare
+//i är för antal spelare, j för antal bomber
 void testCollosionWithBombs(Game theGame)
 {
+    if (theGame->bombs[theGame->playerID].placedBombRestriction == 1)
+    {
+        playerStandingOnBomb(theGame);
+    }
     for (int i=0;i<4;i++)
     {
         for (int j=0;j<4;j++)
         {
-            if(theGame->bombs[j].timervalue == 0)
+            if(theGame->bombs[j].timervalue == 0 && theGame->bombs[j].placedBombRestriction == 0)
             {
                 if(theGame->player[i].moveDirection == 'w' || theGame->player[i].moveDirection == 's') 
                 {   
@@ -130,14 +136,11 @@ void testCollosionWithBombs(Game theGame)
                     {
                         if(theGame->player[i].yPos < theGame->bombs[j].position.y + theGame->bombs[j].position.h && theGame->player[i].yPos > theGame->bombs[j].position.y){
                             //correct y
-                            
                             theGame->player[i].yPos = theGame->bombs[j].position.y + theGame->bombs[j].position.h;
                             printf("Bumping head\n");
                         }
-                        //Are we standing on the wall?
                         if(theGame->player[i].yPos + theGame->player[i].height > theGame->bombs[j].position.y && theGame->player[i].yPos < theGame->bombs[j].position.y){
                             //correct y
-
                             theGame->player[i].yPos = theGame->bombs[j].position.y - theGame->player[i].height;
                             printf("Standing on wall\n");
                         }
@@ -147,13 +150,11 @@ void testCollosionWithBombs(Game theGame)
                 {
                     if(theGame->player[i].yPos + theGame->player[i].height > theGame->bombs[j].position.y && theGame->player[i].yPos < theGame->bombs[j].position.y + theGame->bombs[j].position.h)
                     {
-                        //Rubbing against right edge
                         if(theGame->player[i].xPos < theGame->bombs[j].position.x + theGame->bombs[j].position.w && theGame->player[i].xPos > theGame->bombs[j].position.x){
-                            //Correct xw
+                            //Correct x
                             theGame->player[i].xPos = theGame->bombs[j].position.x + theGame->bombs[j].position.w;
                             printf("Right Edge\n");
                         }
-                        //Rubbing against left edge
                         if(theGame->player[i].xPos + theGame->player[i].width > theGame->bombs[j].position.x && theGame->player[i].xPos < theGame->bombs[j].position.x){
                             //Correct x
                             theGame->player[i].xPos = theGame->bombs[j].position.x - theGame->player[i].width;
@@ -165,6 +166,52 @@ void testCollosionWithBombs(Game theGame)
         }
     }
 }
+
+
+
+//collison detection mellan spelare och explosioner
+//i är för antal spelare, j för antal bomber och k för de olika rectanglar som explosionerna finns på
+void testCollosionWithExplosion(Game theGame)
+{
+    for (int i=0;i<4;i++)
+    {
+        for (int j=0;j<4;j++)
+        {
+            if(theGame->bombs[j].explosioninit == 0)
+            {
+                for (int k=0;k<5;k++)
+                {
+                    if(theGame->explosionPosition[i][k].x < theGame->player[i].xPos + theGame->player[i].width &&
+                       theGame->explosionPosition[i][k].x + theGame->explosionPosition[i][k].w > theGame->player[i].xPos &&
+                       theGame->explosionPosition[i][k].y < theGame->player[i].yPos + theGame->player[i].height &&
+                       theGame->explosionPosition[i][k].h + theGame->explosionPosition[i][k].y > theGame->player[i].yPos)
+                    {
+                        //player dead
+                        theGame->player[i].yPos = 500;
+                        theGame->player[i].xPos = 500;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void playerStandingOnBomb(Game theGame)
+{
+    if(theGame->bombs[theGame->playerID].position.x < theGame->player[theGame->playerID].xPos + theGame->player[theGame->playerID].width &&
+        theGame->bombs[theGame->playerID].position.x + theGame->bombs[theGame->playerID].position.w > theGame->player[theGame->playerID].xPos &&
+        theGame->bombs[theGame->playerID].position.y < theGame->player[theGame->playerID].yPos + theGame->player[theGame->playerID].height &&
+        theGame->bombs[theGame->playerID].position.h + theGame->bombs[theGame->playerID].position.y > theGame->player[theGame->playerID].yPos)
+        {         
+        theGame->bombs[theGame->playerID].placedBombRestriction = 1;
+    }
+    else 
+    {
+        theGame->bombs[theGame->playerID].placedBombRestriction = 0;
+    }
+}
+
 
 /*
 void testCollosionWithExplosion(Game theGame)
@@ -226,30 +273,5 @@ void testCollosionWithExplosion(Game theGame)
     }
 }
 */
-void testCollosionWithExplosion(Game theGame)
-{
-    for (int i=0;i<4;i++)
-    {
-        for (int j=0;j<4;j++)
-        {
-            if(theGame->bombs[j].explosioninit == 0)
-            {
-                for (int k=0;k<5;k++)
-                {
-                    if(theGame->explosionPosition[i][k].x < theGame->player[i].xPos + theGame->player[i].width &&
-                       theGame->explosionPosition[i][k].x + theGame->explosionPosition[i][k].w > theGame->player[i].xPos &&
-                       theGame->explosionPosition[i][k].y < theGame->player[i].yPos + theGame->player[i].height &&
-                       theGame->explosionPosition[i][k].h + theGame->explosionPosition[i][k].y > theGame->player[i].yPos)
-                    {
-                        //player dead
-                        theGame->player[i].yPos = 500;
-                        theGame->player[i].xPos = 500;
-                        return;
-                    }
-                }
-            }
-        }
-    }
-}
 
 

@@ -21,13 +21,16 @@ struct bowling_ball
     int speed;
     int timerinit;
     int explosioninit;
+    int placedBombRestriction;
     //int frame;
 };
 
 int initbowlingballtimer(int startTime, int timeAmount, int playerID);
+
 //int checkbowlingballtimer();
 
 SDL_Rect bowlingballAnimation[18];
+
 
 Bowlingball initBomb(int playerID);
 void loadBomb();

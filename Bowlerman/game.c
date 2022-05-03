@@ -196,6 +196,7 @@ bool checkEvents(Game theGame)
                     theGame->bombs[theGame->playerID].position.x = getPlayerXPosition(theGame->player[theGame->playerID]) + 8;
                     theGame->bombs[theGame->playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, theGame->playerID); // också viktigt att veta vilken player
                     theGame->bombs[theGame->playerID].timerinit = 1;
+                    theGame->bombs[theGame->playerID].placedBombRestriction = 1;
                 }
                 break;
             case SDLK_ESCAPE:
