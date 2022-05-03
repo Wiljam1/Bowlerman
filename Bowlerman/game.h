@@ -30,7 +30,7 @@ struct game_type
     PlayerSprites pSprites;
 
     //Walls
-    Wall wall[WALLAMOUNT];
+    Wall wall[WALLAMOUNT*2];
 
     //bombs
     Bowlingball bombs[PLAYERAMOUNT];
