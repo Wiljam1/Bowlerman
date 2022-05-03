@@ -12,19 +12,19 @@
 
 PUBLIC void collisionDetect(Game theGame)
 {
-    float playerWidth = theGame->player[theGame->playerID].width, playerHeight = theGame->player[theGame->playerID].height;
-    float playerXPos = theGame->player[theGame->playerID].xPos, playerYPos = theGame->player[theGame->playerID].yPos;
-    int speed = getPlayerSpeed(theGame->player[theGame->playerID]);
+    float playerWidth = theGame->player[theGame->playerIDLocal].width, playerHeight = theGame->player[theGame->playerIDLocal].height;
+    float playerXPos = theGame->player[theGame->playerIDLocal].xPos, playerYPos = theGame->player[theGame->playerIDLocal].yPos;
+    int speed = getPlayerSpeed(theGame->player[theGame->playerIDLocal]);
     
     //Don't move out of window!
     if(playerXPos < 0)                //Left edge
-        theGame->player[theGame->playerID].xPos = 0;
+        theGame->player[theGame->playerIDLocal].xPos = 0;
     if(playerXPos+playerWidth > WIDTH)         //Right edge
-         theGame->player[theGame->playerID].xPos = WIDTH - playerWidth;
+         theGame->player[theGame->playerIDLocal].xPos = WIDTH - playerWidth;
     if(playerYPos < 0)                //Top edge
-        theGame->player[theGame->playerID].yPos = 0;
+        theGame->player[theGame->playerIDLocal].yPos = 0;
     if(playerYPos+playerHeight > HEIGHT)        //Bottom edge
-        theGame->player[theGame->playerID].yPos = HEIGHT - playerHeight;
+        theGame->player[theGame->playerIDLocal].yPos = HEIGHT - playerHeight;
 
     //Collision with enemies
     // for(int i = 0; i < WALLCOUNT/4; i++){
@@ -46,21 +46,21 @@ PUBLIC void collisionDetect(Game theGame)
         {
             if (playerYPos < wallYPos + 40)
             {
-                theGame->player[theGame->playerID].yPos = wallYPos + 40;
+                theGame->player[theGame->playerIDLocal].yPos = wallYPos + 40;
             }
         }     
         if (i >= 20 && i < 40) // Nedre
         {
             if (playerYPos + playerHeight > wallYPos)
             {
-                theGame->player[theGame->playerID].yPos = wallYPos - playerHeight;
+                theGame->player[theGame->playerIDLocal].yPos = wallYPos - playerHeight;
             }
         }
         if (i >= 40 && i < 60) // Vänster
         {
             if (playerXPos < wallXPos + wallWidth)
             {
-                theGame->player[theGame->playerID].xPos = wallXPos + wallWidth;
+                theGame->player[theGame->playerIDLocal].xPos = wallXPos + wallWidth;
             }
 
         }
@@ -68,7 +68,7 @@ PUBLIC void collisionDetect(Game theGame)
         {
             if (playerXPos + playerWidth > wallXPos)
             {
-                theGame->player[theGame->playerID].xPos = wallXPos - playerWidth;
+                theGame->player[theGame->playerIDLocal].xPos = wallXPos - playerWidth;
             }
         }
 
@@ -81,7 +81,7 @@ PUBLIC void collisionDetect(Game theGame)
             //Rubbing against right edge
             if(playerXPos < wallXPos+wallWidth && playerXPos+playerWidth > wallXPos+wallWidth){
                 //Correct xw
-                theGame->player[theGame->playerID].yPos += speed;
+                theGame->player[theGame->playerIDLocal].yPos += speed;
                 playerXPos = wallXPos+wallWidth;
                 printf("\nRight Edge\n");
                 printf("pXpos: %d\nwallXpos: %d\n", (int)playerXPos, (int)wallXPos);
@@ -89,7 +89,7 @@ PUBLIC void collisionDetect(Game theGame)
             //Rubbing against left edge
             else if(playerXPos+playerWidth > wallXPos && playerXPos < wallXPos){
                 //Correct x
-                theGame->player[theGame->playerID].xPos -= speed;
+                theGame->player[theGame->playerIDLocal].xPos -= speed;
                 playerXPos = wallXPos-playerWidth;
                 printf("Left Edge\n");
             }
@@ -103,13 +103,13 @@ PUBLIC void collisionDetect(Game theGame)
             printf("HEj");
             if(playerYPos < wallYPos+wallHeight && playerYPos > wallYPos){
                 //correct y
-                theGame->player[theGame->playerID].yPos += speed;
+                theGame->player[theGame->playerIDLocal].yPos += speed;
                 printf("Bumping head\n");
             }
             //Are we standing on the wall?
             else if(playerYPos+playerHeight > wallYPos && playerYPos < wallYPos){
                 //correct y
-                theGame->player[theGame->playerID].yPos -= speed;
+                theGame->player[theGame->playerIDLocal].yPos -= speed;
                 printf("standing on wall\n");
             }
         } 
@@ -122,7 +122,7 @@ PUBLIC void collisionDetect(Game theGame)
 //i är för antal spelare, j för antal bomber
 void testCollosionWithBombs(Game theGame)
 {
-    if (theGame->bombs[theGame->playerID].placedBombRestriction == 1)
+    if (theGame->bombs[theGame->playerIDLocal].placedBombRestriction == 1)
     {
         playerStandingOnBomb(theGame);
     }
@@ -204,16 +204,16 @@ void playerStandingOnBomb(Game theGame)
 {
     for(int i=0;i<theGame->playerAmount;i++)
     {
-        if(theGame->bombs[theGame->playerID].position.x < theGame->player[theGame->playerID].xPos + theGame->player[theGame->playerID].width &&
-            theGame->bombs[theGame->playerID].position.x + theGame->bombs[theGame->playerID].position.w > theGame->player[theGame->playerID].xPos &&
-            theGame->bombs[theGame->playerID].position.y < theGame->player[theGame->playerID].yPos + theGame->player[theGame->playerID].height &&
-            theGame->bombs[theGame->playerID].position.h + theGame->bombs[theGame->playerID].position.y > theGame->player[theGame->playerID].yPos)
+        if(theGame->bombs[theGame->playerIDLocal].position.x < theGame->player[theGame->playerIDLocal].xPos + theGame->player[theGame->playerIDLocal].width &&
+            theGame->bombs[theGame->playerIDLocal].position.x + theGame->bombs[theGame->playerIDLocal].position.w > theGame->player[theGame->playerIDLocal].xPos &&
+            theGame->bombs[theGame->playerIDLocal].position.y < theGame->player[theGame->playerIDLocal].yPos + theGame->player[theGame->playerIDLocal].height &&
+            theGame->bombs[theGame->playerIDLocal].position.h + theGame->bombs[theGame->playerIDLocal].position.y > theGame->player[theGame->playerIDLocal].yPos)
             {         
-            theGame->bombs[theGame->playerID].placedBombRestriction = 1;
+            theGame->bombs[theGame->playerIDLocal].placedBombRestriction = 1;
         }
         else 
         {
-            theGame->bombs[theGame->playerID].placedBombRestriction = 0;
+            theGame->bombs[theGame->playerIDLocal].placedBombRestriction = 0;
         }
     }
 }

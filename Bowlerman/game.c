@@ -103,11 +103,11 @@ void initGame(Game theGame)
     while (!SDLNet_UDP_Recv(sd, p2))
         ; // spin-lock tills received info from UDP-server
     memcpy(&udpData, (char *)p2->data, sizeof(struct data));
-    theGame->playerID = udpData.playerID;
+    theGame->playerIDLocal = udpData.playerID;
     printf("UDP Packet incoming %d\n", udpData.playerID);
-    // theGame->playerID = 0;
+    // theGame->playerIDLocal = 0;
     // printf("CRASH");
-    printf("%d", theGame->playerID);
+    printf("%d", theGame->playerIDLocal);
 
     // detta ska ändras via servern sen.
     theGame->playerAmount = 4;
@@ -200,15 +200,15 @@ bool checkEvents(Game theGame)
             {
             case SDLK_SPACE:
                 //Kan nog göras till en funktion
-                if (theGame->allowBombPlacement[theGame->playerID] == 1) // man måste veta vilken player här
+                if (theGame->allowBombPlacement[theGame->playerIDLocal] == 1) // man måste veta vilken player här
                 {
-                    theGame->allowBombPlacement[theGame->playerID] = 0;
-                    theGame->bombs[theGame->playerID] = initBomb(theGame->playerID);
-                    theGame->bombs[theGame->playerID].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[theGame->playerID]) + 56) - 40;
-                    theGame->bombs[theGame->playerID].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[theGame->playerID]) + 8);
-                    theGame->bombs[theGame->playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, theGame->playerID); // också viktigt att veta vilken player
-                    theGame->bombs[theGame->playerID].timerinit = 1;
-                    theGame->bombs[theGame->playerID].placedBombRestriction = 1;
+                    theGame->allowBombPlacement[theGame->playerIDLocal] = 0;
+                    theGame->bombs[theGame->playerIDLocal] = initBomb(theGame->playerIDLocal);
+                    theGame->bombs[theGame->playerIDLocal].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[theGame->playerIDLocal]) + 56) - 40;
+                    theGame->bombs[theGame->playerIDLocal].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[theGame->playerIDLocal]) + 8);
+                    theGame->bombs[theGame->playerIDLocal].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, theGame->playerIDLocal); // också viktigt att veta vilken player
+                    theGame->bombs[theGame->playerIDLocal].timerinit = 1;
+                    theGame->bombs[theGame->playerIDLocal].placedBombRestriction = 1;
                 }
                 break;
             case SDLK_ESCAPE:
@@ -246,52 +246,52 @@ void manageMovementInputs(Game theGame)
     // static int currentDirection = 0;
 
     int velX = 0, velY = 0;
-    Player player = theGame->player[theGame->playerID];
+    Player player = theGame->player[theGame->playerIDLocal];
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
     {
         velX = -getPlayerSpeed(player);
-        theGame->player[theGame->playerID].moveDirection = 'a';
+        theGame->player[theGame->playerIDLocal].moveDirection = 'a';
     }
     else if (state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
     {
         velX = getPlayerSpeed(player);
-        theGame->player[theGame->playerID].moveDirection = 'd';
+        theGame->player[theGame->playerIDLocal].moveDirection = 'd';
     }
     if (velX == 0)
     {
         if (state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_S])
         {
             velY = -getPlayerSpeed(player);
-            theGame->player[theGame->playerID].moveDirection = 'w';
+            theGame->player[theGame->playerIDLocal].moveDirection = 'w';
         }
         else if (state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D])
         {
             velY = getPlayerSpeed(player);
-            theGame->player[theGame->playerID].moveDirection = 's';
+            theGame->player[theGame->playerIDLocal].moveDirection = 's';
         }
     }
     if (!velX && !velY)
-        theGame->player[theGame->playerID].moveDirection = '0';
+        theGame->player[theGame->playerIDLocal].moveDirection = '0';
     // Update player positions
-    theGame->player[theGame->playerID].xPos += velX;
-    theGame->player[theGame->playerID].yPos += velY;
+    theGame->player[theGame->playerIDLocal].xPos += velX;
+    theGame->player[theGame->playerIDLocal].yPos += velY;
 }
 
 PRIVATE void manageUDP(Game theGame)
 {
     static int flag;
-    udpData.moveDirection = theGame->player[theGame->playerID].moveDirection;
-    int x_posOld = theGame->player[theGame->playerID].xPosOld;
-    int y_posOld = theGame->player[theGame->playerID].yPosOld;
-    int x_pos = theGame->player[theGame->playerID].xPos;
-    int y_pos = theGame->player[theGame->playerID].yPos;
+    udpData.moveDirection = theGame->player[theGame->playerIDLocal].moveDirection;
+    int x_posOld = theGame->player[theGame->playerIDLocal].xPosOld;
+    int y_posOld = theGame->player[theGame->playerIDLocal].yPosOld;
+    int x_pos = theGame->player[theGame->playerIDLocal].xPos;
+    int y_pos = theGame->player[theGame->playerIDLocal].yPos;
     
     // send positions
     if (x_posOld != x_pos || y_posOld != y_pos || flag == 1)
     {
         printf("%d %d\n", (int)x_pos, (int)y_pos);
-        udpData.playerID = theGame->playerID;
+        udpData.playerID = theGame->playerIDLocal;
         udpData.x = x_pos;
         udpData.y = y_pos;
         memcpy(p->data, &udpData, sizeof(struct data) + 1);
@@ -302,8 +302,8 @@ PRIVATE void manageUDP(Game theGame)
         p->address.port = srvadd.port; /* And destination port */
         // p->len = strlen((char *)p->data) + 1;
         SDLNet_UDP_Send(sd, -1, p);
-        theGame->player[theGame->playerID].xPosOld = x_pos; // Fixade oldxpos
-        theGame->player[theGame->playerID].yPosOld = y_pos;
+        theGame->player[theGame->playerIDLocal].xPosOld = x_pos; // Fixade oldxpos
+        theGame->player[theGame->playerIDLocal].yPosOld = y_pos;
         flag = 0;
     }
     if (udpData.moveDirection != '0'){
@@ -400,7 +400,7 @@ void renderTextures(Game theGame)
 {
     // Define stuff to make function easier to read
     SDL_Renderer *renderer = theGame->renderer;
-    int id = theGame->playerID;
+    int id = theGame->playerIDLocal;
 
     // clear renderer
     SDL_RenderClear(renderer);
