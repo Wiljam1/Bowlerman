@@ -228,9 +228,9 @@ void testCollisionWithWalls(Game theGame)
             {   
                 if(theGame->player[i].xPos+theGame->player[i].width > theGame->wall[j].x && theGame->player[i].xPos < theGame->wall[j].x + theGame->wall[j].w)
                 {
-                    if(theGame->player[i].yPos < theGame->wall[j].y + theGame->wall[j].h*0.7 && theGame->player[i].yPos > theGame->wall[j].y){
+                    if(theGame->player[i].yPos + 30 < theGame->wall[j].y + theGame->wall[j].h && theGame->player[i].yPos > theGame->wall[j].y){
                         //correct y
-                        theGame->player[i].yPos = theGame->wall[j].y + theGame->wall[j].h;
+                        theGame->player[i].yPos = theGame->wall[j].y + theGame->wall[j].h - 30;
                         printf("Bumping head\n");
                     }
                     if(theGame->player[i].yPos + theGame->player[i].height > theGame->wall[j].y && theGame->player[i].yPos < theGame->wall[j].y){
@@ -242,7 +242,7 @@ void testCollisionWithWalls(Game theGame)
             }
             if(theGame->player[i].moveDirection == 'a' || theGame->player[i].moveDirection == 'd') 
             {
-                if(theGame->player[i].yPos + theGame->player[i].height > theGame->wall[j].y && theGame->player[i].yPos < theGame->wall[j].y + theGame->wall[j].h)
+                if(theGame->player[i].yPos + theGame->player[i].height > theGame->wall[j].y && theGame->player[i].yPos + 30 < theGame->wall[j].y + theGame->wall[j].h)
                 {
                     if(theGame->player[i].xPos < theGame->wall[j].x + theGame->wall[j].w && theGame->player[i].xPos > theGame->wall[j].x){
                         //Correct x
