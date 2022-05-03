@@ -20,8 +20,8 @@ PUBLIC Bowlingball initBomb(int playerID)
     Bowlingball b;
     b.position.y = 0;
     b.position.x = 0;
-    b.position.w = 50;
-    b.position.h = 50;
+    b.position.w = 66;
+    b.position.h = 66;
     b.speed = 0;
     b.timervalue = 0;
     b.timerinit = 0;
@@ -48,19 +48,21 @@ int initbowlingballtimer(int startTime, int timeAmount, int playerID)
     return 0;
 }
 
-/*
-int checkbowlingballtimer(timervalue)
+//centrerar bombernas position, i för inkommande possition, j och k för tillfälliga variabler 
+int correctBowlingBallPos(int i)
 {
-    int i=0, timeout=2000;
-    if (SDL_TICKS_PASSED(timervalue, timeout))
-    {
-        i=1;
+    int j=0, k=0;
+    k=i/70;
+    j=i%70;
+    if(j<35){
+        return k*70;
     }
-
-    return i;
+    else{
+    return k+1*70;
+    }   
 }
-*/
 
+//bomb rect possitioner i sprite sheet.
 PUBLIC void loadBomb()
 {
     bowlingballAnimation[ 0 ].x =   0;

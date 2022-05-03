@@ -27,6 +27,8 @@ struct bowling_ball
 
 int initbowlingballtimer(int startTime, int timeAmount, int playerID);
 
+int correctBowlingBallPos(int i);
+
 //int checkbowlingballtimer();
 
 SDL_Rect bowlingballAnimation[18];

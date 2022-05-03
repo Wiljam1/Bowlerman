@@ -197,6 +197,7 @@ void testCollosionWithExplosion(Game theGame)
     }
 }
 
+//om spelare släpper bomb så är kollision avstängt mellan spelaren och bomben tills man kliver av bomben
 void playerStandingOnBomb(Game theGame)
 {
     for(int i=0;i<theGame->playerAmount;i++)

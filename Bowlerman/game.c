@@ -204,8 +204,8 @@ bool checkEvents(Game theGame)
                 {
                     theGame->allowBombPlacement[theGame->playerID] = 0;
                     theGame->bombs[theGame->playerID] = initBomb(theGame->playerID);
-                    theGame->bombs[theGame->playerID].position.y = getPlayerYPosition(theGame->player[theGame->playerID]) + 56;
-                    theGame->bombs[theGame->playerID].position.x = getPlayerXPosition(theGame->player[theGame->playerID]) + 8;
+                    theGame->bombs[theGame->playerID].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[theGame->playerID]) + 56);
+                    theGame->bombs[theGame->playerID].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[theGame->playerID]) + 8);
                     theGame->bombs[theGame->playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, theGame->playerID); // också viktigt att veta vilken player
                     theGame->bombs[theGame->playerID].timerinit = 1;
                     theGame->bombs[theGame->playerID].placedBombRestriction = 1;
@@ -594,7 +594,7 @@ PRIVATE void renderWalls(Game theGame)
 //Kanske borde vara i bomb.c?
 void initExplosionPosition(Game theGame, int playerID)
 {
-    int tilesize = 50; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
+    int tilesize = 66; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
 
     for(int i = 0; i < 5; i++){
         theGame->explosionPosition[playerID][i].h = tilesize;
