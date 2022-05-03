@@ -288,8 +288,8 @@ PRIVATE void manageUDP(Game theGame)
         p->address.port = srvadd.port; /* And destination port */
         // p->len = strlen((char *)p->data) + 1;
         SDLNet_UDP_Send(sd, -1, p);
-        x_posOld = x_pos;
-        y_posOld = y_pos;
+        theGame->player[theGame->playerID].xPosOld = x_pos; // Fixade oldxpos
+        theGame->player[theGame->playerID].yPosOld = y_pos;
     }
 
     // receive data
@@ -457,7 +457,7 @@ PRIVATE void loadAllTextures(Game theGame)
 
 PRIVATE void UpdatePlayerTextures(Game theGame)
 {
-    // renders player**** EMIL TESTAR HÄR*****
+    // renders player
     static Uint8 updateSprite[4] = {0};
     static Uint8 spriteTimer[4] = {0};
     char moveD = theGame->player[theGame->playerID].moveDirection;
@@ -484,7 +484,7 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     }
     for(int i=0; i<theGame->playerAmount; i++)
     {
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][1], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i], 0, NULL, 0);
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[0][0], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i], 0, NULL, 0);
     }
     
     //emils rendering: bra, men funkar ej för flera spelare
