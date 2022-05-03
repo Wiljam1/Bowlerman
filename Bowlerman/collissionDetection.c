@@ -199,16 +199,19 @@ void testCollosionWithExplosion(Game theGame)
 
 void playerStandingOnBomb(Game theGame)
 {
-    if(theGame->bombs[theGame->playerID].position.x < theGame->player[theGame->playerID].xPos + theGame->player[theGame->playerID].width &&
-        theGame->bombs[theGame->playerID].position.x + theGame->bombs[theGame->playerID].position.w > theGame->player[theGame->playerID].xPos &&
-        theGame->bombs[theGame->playerID].position.y < theGame->player[theGame->playerID].yPos + theGame->player[theGame->playerID].height &&
-        theGame->bombs[theGame->playerID].position.h + theGame->bombs[theGame->playerID].position.y > theGame->player[theGame->playerID].yPos)
-        {         
-        theGame->bombs[theGame->playerID].placedBombRestriction = 1;
-    }
-    else 
+    for(int i=0;i<theGame->playerAmount;i++)
     {
-        theGame->bombs[theGame->playerID].placedBombRestriction = 0;
+        if(theGame->bombs[i].position.x < theGame->player[i].xPos + theGame->player[i].width &&
+            theGame->bombs[i].position.x + theGame->bombs[i].position.w > theGame->player[i].xPos &&
+            theGame->bombs[i].position.y < theGame->player[i].yPos + theGame->player[i].height &&
+            theGame->bombs[i].position.h + theGame->bombs[i].position.y > theGame->player[i].yPos)
+            {         
+            theGame->bombs[i].placedBombRestriction = 1;
+        }
+        else 
+        {
+            theGame->bombs[i].placedBombRestriction = 0;
+        }
     }
 }
 
