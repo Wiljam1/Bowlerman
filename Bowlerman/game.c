@@ -478,8 +478,8 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     SDL_Rect playerRect[4];
     for(int i=0; i<theGame->playerAmount; i++)
     {
-        playerRect[i].x = theGame->player[theGame->playerID].xPos;
-        playerRect[i].y = theGame->player[theGame->playerID].yPos;
+        playerRect[i].x = theGame->player[i].xPos;
+        playerRect[i].y = theGame->player[i].yPos;
         playerRect[i].w= theGame->player->width;
         playerRect[i].h = theGame->player->height;
     }
