@@ -424,7 +424,10 @@ void renderTextures(Game theGame)
         {
             for (int j = 0; j < 5; j++)
             {
-                SDL_RenderCopy(theGame->renderer, theGame->bombExplosion_texture, &bowlingballAnimation[0], &theGame->explosionPosition[i][j]);
+                if(testCollisionExplosionWithWalls(theGame, j) == 0)
+                {
+                    SDL_RenderCopy(theGame->renderer, theGame->bombExplosion_texture, &bowlingballAnimation[0], &theGame->explosionPosition[i][j]);
+                }
             }
         }
     }

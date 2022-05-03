@@ -10,5 +10,6 @@ void testCollosionWithBombs(Game theGame);
 void testCollosionWithExplosion(Game theGame);
 void playerStandingOnBomb(Game theGame);
 void testCollisionWithWalls(Game theGame);
+int testCollisionExplosionWithWalls(Game theGame, int k);
 
 #endif
