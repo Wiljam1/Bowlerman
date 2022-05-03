@@ -220,7 +220,7 @@ void testCollisionWithWalls(Game theGame)
 {
     for (int i=0;i<4;i++)
     {
-        for (int j=0;j<42;j++)
+        for (int j=100;j<142;j++)
         {
             if(theGame->player[i].moveDirection == 'w' || theGame->player[i].moveDirection == 's') 
             {   
