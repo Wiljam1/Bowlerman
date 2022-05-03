@@ -161,14 +161,14 @@ void initGame(Game theGame)
         }
     }
     int count=0;
-    for (int i=1;i<5;i++)
+    for (int i=0;i<5;i++)
     {
         count ++;
         for(int j=0;j<7;j++)
         {
             count ++;
             theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+140, i*70+140);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+140, i*140+240);
         }
     }
 }
@@ -460,7 +460,7 @@ PRIVATE void loadAllTextures(Game theGame)
     theGame->bomb_texture[3] = (SDL_Texture *)loadTextures(theGame, "Bowling_Ball_Yellow.png");
     theGame->bombExplosion_texture = (SDL_Texture *)loadTextures(theGame, "FIRE.png");
     /*WALLS*/
-    theGame->textureWall[0] = (SDL_Texture *)loadTextures(theGame, "walls/80/center.png");
+    theGame->textureWall[0] = (SDL_Texture *)loadTextures(theGame, "walls/80/straight.png");
     theGame->textureWall[1] = (SDL_Texture *)loadTextures(theGame, "walls/80/corner.png");
     theGame->textureWall[2] = (SDL_Texture *)loadTextures(theGame, "walls/80/center.png");
     SDL_FreeSurface(theGame->window_surface);
@@ -582,7 +582,7 @@ PRIVATE void renderWalls(Game theGame)
             SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 270, 0, 0);
         }
     }
-    for (int i=0;i<28;i++)
+    for (int i=0;i<42;i++)
     {   
         SDL_Rect wallRect = {theGame->wall[i+WALLAMOUNT].x, theGame->wall[i+WALLAMOUNT].y, theGame->wall[i+WALLAMOUNT].w, theGame->wall[i+WALLAMOUNT].h};
         SDL_RenderCopy(theGame->renderer, theGame->textureWall[2], NULL, &wallRect);        
