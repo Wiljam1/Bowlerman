@@ -454,7 +454,7 @@ PRIVATE void loadAllTextures(Game theGame)
     theGame->bomb_texture[3] = (SDL_Texture *)loadTextures(theGame, "Bowling_Ball_Yellow.png");
     theGame->bombExplosion_texture = (SDL_Texture *)loadTextures(theGame, "FIRE.png");
     /*WALLS*/
-    theGame->textureWall[0] = (SDL_Texture *)loadTextures(theGame, "walls/80/straight.png");
+    theGame->textureWall[0] = (SDL_Texture *)loadTextures(theGame, "walls/80/center.png");
     theGame->textureWall[1] = (SDL_Texture *)loadTextures(theGame, "walls/80/corner.png");
     theGame->textureWall[2] = (SDL_Texture *)loadTextures(theGame, "walls/80/center.png");
     SDL_FreeSurface(theGame->window_surface);
@@ -479,8 +479,8 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     
     
 
-    SDL_Rect playerRect2 = {dummyPosX, dummyPosY, theGame->player->width, theGame->player->height};
-    SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[2][0], &theGame->pSprites.BowlerManVert[0], &playerRect2, 0, NULL, 0);
+    //SDL_Rect playerRect2 = {dummyPosX, dummyPosY, theGame->player->width, theGame->player->height};
+    //SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[2][0], &theGame->pSprites.BowlerManVert[0], &playerRect2, 0, NULL, 0);
     
     //Algots rendering: dålig dock
     SDL_Rect playerRect[4];
@@ -495,32 +495,25 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     {
         switch (moveD)
         {
-            case 'w': spriteChoice = 1;
+            case 'w': 
+                spriteChoice = 1;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i]);
                 break;
             case 'a': spriteChoice = 3;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect[i]);
                 break;
             case 's': spriteChoice = 0;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i]);
                 break;
             case 'd': spriteChoice = 2;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect[i]);
                 break;
+            case '0':
             default: spriteChoice = 0;
+                SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i]);
                 break;
         }
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[0][spriteChoice], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i], 0, NULL, 0);
     }
-    
-    //emils rendering: bra, men funkar ej för flera spelare
-    //if (moveD == 'w')
-    //    SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][1], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
-    //else if (moveD == 'a')
-    //    SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][3], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
-    //else if (moveD == 's')
-    //    SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
-    //else if (moveD == 'd')
-    //    SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][2], &theGame->pSprites.BowlerManHori[updateSprite[theGame->playerID]], &playerRect0, 0, NULL, 0);
-    //else 
-    //    SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[theGame->playerID][0], &theGame->pSprites.BowlerManVert[0], &playerRect0, 0, NULL, 0);
-
     if (spriteTimer[theGame->playerID]++ % 5 == 0 && moveD != '0')
         updateSprite[theGame->playerID]++;
     if (updateSprite[theGame->playerID] > 7)
