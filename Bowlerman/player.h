@@ -45,13 +45,14 @@ struct playerSprites
 typedef struct playerSprites PlayerSprites;
 //initiate player position with x and y coordinates
 PlayerSprites GetPlayerSprite();
-Player initPlayer(float xPos, float yPos);
+Player initPlayer(float xPos, float yPos, int playerID);
 
 float getPlayerXPosition(Player p);
 float getPlayerYPosition(Player p);
 int getPlayerHeight();
 int getPlayerWidth();
 int getPlayerSpeed(Player p);
+int getPlayerID(Player p);
 
 
 //ändrar spelarens (clientmässiga) hastighet beroende på användarens tangentbordsintryckningar

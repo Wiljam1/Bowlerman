@@ -119,19 +119,19 @@ void initGame(Game theGame)
     }
 
     // init x amount of players
-    theGame->player[0] = initPlayer(80, 140); // sets x and y coordinates and resets values.
+    theGame->player[0] = initPlayer(80, 140, 0); // sets x and y coordinates and resets values.
 
     if (theGame->playerAmount > 1)
     {
-        theGame->player[1] = initPlayer(1046, 140); // sets x and y coordinates and resets values.
+        theGame->player[1] = initPlayer(1046, 140, 1); // sets x and y coordinates and resets values.
     }
     if (theGame->playerAmount > 2)
     {
-        theGame->player[2] = initPlayer(80, 830); // sets x and y coordinates and resets values.
+        theGame->player[2] = initPlayer(80, 830, 2); // sets x and y coordinates and resets values.
     }
     if (theGame->playerAmount > 3)
     {
-        theGame->player[3] = initPlayer(1046, 830); // sets x and y coordinates and resets values.
+        theGame->player[3] = initPlayer(1046, 830, 3); // sets x and y coordinates and resets values.
     }
 
     // Init walls / map
@@ -169,6 +169,7 @@ void initGame(Game theGame)
             count ++;
             theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
             theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+140, i*140+240);
+            printf("COUNT: %d\n", count);
         }
     }
 }
@@ -327,11 +328,11 @@ PRIVATE void manageUDP(Game theGame)
 // game loop
 PUBLIC void gameUpdate(Game theGame)
 {
-    Player player[MAXPLAYERS]; // declares x-ammounts of players
+    // Initialize
+    Player player[MAXPLAYERS]; // declares x-amounts of players
     initGame(theGame);         // initializes startvalues. coordinates etc.
 
-    // int renderOrder[4]={0,1,2,3}; //what order to render players
-    // gameloop:
+    // Game Loop:
     bool done = false;
     while (!done)
     {
@@ -412,8 +413,6 @@ void renderTextures(Game theGame)
     // bubble-sort the players y-position into the array "renderOrder"
     // arraySorter(player, theGame->playerAmount, renderOrder);
 
-    // Updating textures depending on movement
-    UpdatePlayerTextures(theGame);
     // render bombs and explosion
     for (int i = 0; i < 4; i++)
     {
@@ -432,6 +431,10 @@ void renderTextures(Game theGame)
             }
         }
     }
+
+    // Updating textures depending on movement
+    UpdatePlayerTextures(theGame);
+    
     // Draw GUI last (top of screenlayers)
 
     SDL_RenderPresent(renderer); // present renderer

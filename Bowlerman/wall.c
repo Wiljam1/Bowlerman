@@ -21,17 +21,16 @@ Wall initWalls(int amount, int width, int height)
     return w;
 }
 
-Wall wallPlace(int x, int y)
+Wall wallPlace(int xPos, int yPos)
 {
     Wall w;
 
-    w.x = x;
-    w.y = y;
+    w.x = xPos;
+    w.y = yPos;
 
     return w;
-    //theGame->walls[id].x = x;
-    //theGame->walls[id].y = y;
 }  //Place a wall
+
 void wallDelete(int id)
 {
     printf("wallDelete(); not implemented\n");

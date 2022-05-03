@@ -12,28 +12,21 @@
 
 PUBLIC void collisionDetect(Game theGame)
 {
+    //"Easier to read"-variables
     float playerWidth = theGame->player[theGame->playerIDLocal].width, playerHeight = theGame->player[theGame->playerIDLocal].height;
     float playerXPos = theGame->player[theGame->playerIDLocal].xPos, playerYPos = theGame->player[theGame->playerIDLocal].yPos;
-    int speed = getPlayerSpeed(theGame->player[theGame->playerIDLocal]);
+    int playerID = getPlayerID(theGame->player[theGame->playerIDLocal]);
+    int speed = getPlayerSpeed(theGame->player[playerID]);
     
     //Don't move out of window!
     if(playerXPos < 0)                //Left edge
-        theGame->player[theGame->playerIDLocal].xPos = 0;
+        theGame->player[playerID].xPos = 0;
     if(playerXPos+playerWidth > WIDTH)         //Right edge
-         theGame->player[theGame->playerIDLocal].xPos = WIDTH - playerWidth;
+         theGame->player[playerID].xPos = WIDTH - playerWidth;
     if(playerYPos < 0)                //Top edge
-        theGame->player[theGame->playerIDLocal].yPos = 0;
+        theGame->player[playerID].yPos = 0;
     if(playerYPos+playerHeight > HEIGHT)        //Bottom edge
-        theGame->player[theGame->playerIDLocal].yPos = HEIGHT - playerHeight;
-
-    //Collision with enemies
-    // for(int i = 0; i < WALLCOUNT/4; i++){
-    //     if(collide2d(game->man.x, game->man.y, game->bricks[i].x, game->bricks[i].y, MANsIZE, MANsIZE, 256/8, 800/8)){
-    //         game->man.isDead = true;
-    //         //Mix_HaltChannel(game->musicChannel);
-    //         break;
-    //     }
-    // }
+        theGame->player[playerID].yPos = HEIGHT - playerHeight;
 
     //Check for collision with any walls
     
@@ -46,21 +39,21 @@ PUBLIC void collisionDetect(Game theGame)
         {
             if (playerYPos < wallYPos + 40)
             {
-                theGame->player[theGame->playerIDLocal].yPos = wallYPos + 40;
+                theGame->player[playerID].yPos = wallYPos + 40;
             }
         }     
         if (i >= 20 && i < 40) // Nedre
         {
             if (playerYPos + playerHeight > wallYPos)
             {
-                theGame->player[theGame->playerIDLocal].yPos = wallYPos - playerHeight;
+                theGame->player[playerID].yPos = wallYPos - playerHeight;
             }
         }
         if (i >= 40 && i < 60) // Vänster
         {
             if (playerXPos < wallXPos + wallWidth)
             {
-                theGame->player[theGame->playerIDLocal].xPos = wallXPos + wallWidth;
+                theGame->player[playerID].xPos = wallXPos + wallWidth;
             }
 
         }
@@ -68,12 +61,9 @@ PUBLIC void collisionDetect(Game theGame)
         {
             if (playerXPos + playerWidth > wallXPos)
             {
-                theGame->player[theGame->playerIDLocal].xPos = wallXPos - playerWidth;
+                theGame->player[playerID].xPos = wallXPos - playerWidth;
             }
         }
-
-
-
 
         /*
          if(playerYPos+playerHeight > wallYPos && playerYPos < wallYPos+wallHeight)
@@ -95,8 +85,6 @@ PUBLIC void collisionDetect(Game theGame)
             }
         }
 
-
-
         if(playerXPos+playerWidth > wallXPos && playerXPos < wallXPos+wallWidth)
         {
             //Are we bumping our head?
@@ -115,11 +103,10 @@ PUBLIC void collisionDetect(Game theGame)
         } 
         */
     }
-    
 }
 
-//collison detection mellan bomber och spelare
-//i är för antal spelare, j för antal bomber
+// collison detection mellan bomber och spelare
+// i är för antal spelare, j för antal bomber
 void testCollosionWithBombs(Game theGame)
 {
     if (theGame->bombs[theGame->playerIDLocal].placedBombRestriction == 1)
@@ -128,39 +115,42 @@ void testCollosionWithBombs(Game theGame)
     }
     for (int i=0;i<4;i++)
     {
+        int playerX = theGame->player[i].xPos, playerY = theGame->player[i].yPos, playerW = theGame->player[i].width, playerH = theGame->player[i].height;
+        int moveDirection = theGame->player[i].moveDirection;
         for (int j=0;j<4;j++)
         {
+            int bombX = theGame->bombs[j].position.x, bombY = theGame->bombs[j].position.y, bombW = theGame->bombs[j].position.w, bombH = theGame->bombs[j].position.h;
             if(theGame->bombs[j].timervalue == 0 && theGame->bombs[j].placedBombRestriction == 0)
             {
-                if(theGame->player[i].moveDirection == 'w' || theGame->player[i].moveDirection == 's') 
+                if(moveDirection == 'w' || moveDirection == 's') 
                 {   
-                    if(theGame->player[i].xPos+theGame->player[i].width > theGame->bombs[j].position.x && theGame->player[i].xPos < theGame->bombs[j].position.x+theGame->bombs[j].position.w)
+                    if(playerX + playerW > bombX && playerX < bombX + bombW)
                     {
-                        if(theGame->player[i].yPos < theGame->bombs[j].position.y + theGame->bombs[j].position.h && theGame->player[i].yPos > theGame->bombs[j].position.y){
+                        if(playerY + 30 < bombY + bombH && playerY > bombY){
                             //correct y
-                            theGame->player[i].yPos = theGame->bombs[j].position.y + theGame->bombs[j].position.h;
-                            printf("Bumping head\n");
+                            theGame->player[i].yPos = bombY + bombH - 30;
+                            printf("Bumping head on bomb\n");
                         }
-                        if(theGame->player[i].yPos + theGame->player[i].height > theGame->bombs[j].position.y && theGame->player[i].yPos < theGame->bombs[j].position.y){
+                        if(playerY + playerH > bombY && playerY < bombY){
                             //correct y
-                            theGame->player[i].yPos = theGame->bombs[j].position.y - theGame->player[i].height;
-                            printf("Standing on wall\n");
+                            theGame->player[i].yPos = bombY - playerH;
+                            printf("Standing on bomb\n");
                         }
                     }
                 }
-                if(theGame->player[i].moveDirection == 'a' || theGame->player[i].moveDirection == 'd') 
+                if(moveDirection == 'a' || moveDirection == 'd') 
                 {
-                    if(theGame->player[i].yPos + theGame->player[i].height > theGame->bombs[j].position.y && theGame->player[i].yPos < theGame->bombs[j].position.y + theGame->bombs[j].position.h)
+                    if(playerY + playerH > bombY && playerY + 30 < bombY + bombH)
                     {
-                        if(theGame->player[i].xPos < theGame->bombs[j].position.x + theGame->bombs[j].position.w && theGame->player[i].xPos > theGame->bombs[j].position.x){
+                        if(playerX < bombX + bombW && playerX > bombX){
                             //Correct x
-                            theGame->player[i].xPos = theGame->bombs[j].position.x + theGame->bombs[j].position.w;
-                            printf("Right Edge\n");
+                            theGame->player[i].xPos = bombX + bombW;
+                            printf("Right Edge of bomb\n");
                         }
-                        if(theGame->player[i].xPos + theGame->player[i].width > theGame->bombs[j].position.x && theGame->player[i].xPos < theGame->bombs[j].position.x){
+                        if(playerX + playerW > bombX && playerX < bombX){
                             //Correct x
-                            theGame->player[i].xPos = theGame->bombs[j].position.x - theGame->player[i].width;
-                            printf("Left Edge\n");
+                            theGame->player[i].xPos = bombX - playerW;
+                            printf("Left Edge of bomb\n");
                         }
                     }
                 }
@@ -169,10 +159,8 @@ void testCollosionWithBombs(Game theGame)
     }
 }
 
-
-
-//collison detection mellan spelare och explosioner
-//i är för antal spelare, j för antal bomber och k för de olika rectanglar som explosionerna finns på
+// collison detection mellan spelare och explosioner
+// i är för antal spelare, j för antal bomber och k för de olika rectanglar som explosionerna finns på
 void testCollosionWithExplosion(Game theGame)
 {
     for (int i=0;i<4;i++)
@@ -199,21 +187,22 @@ void testCollosionWithExplosion(Game theGame)
     }
 }
 
-//om spelare släpper bomb så är kollision avstängt mellan spelaren och bomben tills man kliver av bomben
+// om spelare släpper bomb så är kollision avstängt mellan spelaren och bomben tills man kliver av bomben
 void playerStandingOnBomb(Game theGame)
 {
+    int playerID = getPlayerID(theGame->player[theGame->playerIDLocal]);
     for(int i=0;i<theGame->playerAmount;i++)
     {
-        if(theGame->bombs[theGame->playerIDLocal].position.x < theGame->player[theGame->playerIDLocal].xPos + theGame->player[theGame->playerIDLocal].width &&
-            theGame->bombs[theGame->playerIDLocal].position.x + theGame->bombs[theGame->playerIDLocal].position.w > theGame->player[theGame->playerIDLocal].xPos &&
-            theGame->bombs[theGame->playerIDLocal].position.y < theGame->player[theGame->playerIDLocal].yPos + theGame->player[theGame->playerIDLocal].height &&
-            theGame->bombs[theGame->playerIDLocal].position.h + theGame->bombs[theGame->playerIDLocal].position.y > theGame->player[theGame->playerIDLocal].yPos)
-            {         
-            theGame->bombs[theGame->playerIDLocal].placedBombRestriction = 1;
+        if(theGame->bombs[playerID].position.x < theGame->player[playerID].xPos + theGame->player[playerID].width &&
+            theGame->bombs[playerID].position.x + theGame->bombs[playerID].position.w > theGame->player[playerID].xPos &&
+            theGame->bombs[playerID].position.y < theGame->player[playerID].yPos + theGame->player[playerID].height &&
+            theGame->bombs[playerID].position.h + theGame->bombs[playerID].position.y > theGame->player[playerID].yPos)
+        {         
+            theGame->bombs[playerID].placedBombRestriction = 1;
         }
         else 
         {
-            theGame->bombs[theGame->playerIDLocal].placedBombRestriction = 0;
+            theGame->bombs[playerID].placedBombRestriction = 0;
         }
     }
 }
@@ -222,44 +211,45 @@ void testCollisionWithWalls(Game theGame)
 {
     for (int i=0;i<4;i++)
     {
+        int playerX = theGame->player[i].xPos, playerY = theGame->player[i].yPos, playerW = theGame->player[i].width, playerH = theGame->player[i].height;
+        int moveDirection = theGame->player[i].moveDirection;
         for (int j=100;j<142;j++)
         {
-            if(theGame->player[i].moveDirection == 'w' || theGame->player[i].moveDirection == 's') 
+            int wallX = theGame->wall[j].x, wallY = theGame->wall[j].y, wallW = theGame->wall[j].w, wallH = theGame->wall[j].h;
+            if(moveDirection == 'w' || moveDirection == 's') 
             {   
-                if(theGame->player[i].xPos+theGame->player[i].width > theGame->wall[j].x && theGame->player[i].xPos < theGame->wall[j].x + theGame->wall[j].w)
+                if(playerX + playerW > wallX && playerX < wallX + wallW)
                 {
-                    if(theGame->player[i].yPos + 30 < theGame->wall[j].y + theGame->wall[j].h && theGame->player[i].yPos > theGame->wall[j].y){
+                    if(playerY + 30 < wallY + wallH && playerY > wallY){
                         //correct y
-                        theGame->player[i].yPos = theGame->wall[j].y + theGame->wall[j].h - 30;
+                        theGame->player[i].yPos = wallY + wallH - 30;
                         printf("Bumping head\n");
                     }
-                    if(theGame->player[i].yPos + theGame->player[i].height > theGame->wall[j].y && theGame->player[i].yPos < theGame->wall[j].y){
+                    if(playerY + playerH > wallY && playerY < wallY){
                         //correct y
-                        theGame->player[i].yPos = theGame->wall[j].y - theGame->player[i].height;
+                        theGame->player[i].yPos = wallY - playerH;
                         printf("Standing on wall\n");
                     }
                 }
             }
-            if(theGame->player[i].moveDirection == 'a' || theGame->player[i].moveDirection == 'd') 
+            if(moveDirection == 'a' || moveDirection == 'd') 
             {
-                if(theGame->player[i].yPos + theGame->player[i].height > theGame->wall[j].y && theGame->player[i].yPos + 30 < theGame->wall[j].y + theGame->wall[j].h)
+                if(playerY + playerH > wallY && playerY + 30 < wallY + wallH)
                 {
-                    if(theGame->player[i].xPos < theGame->wall[j].x + theGame->wall[j].w && theGame->player[i].xPos > theGame->wall[j].x){
+                    if(playerX < wallX + wallW && playerX > wallX){
                         //Correct x
-                        theGame->player[i].xPos = theGame->wall[j].x + theGame->wall[j].w;
+                        theGame->player[i].xPos = wallX + wallW;
                         printf("Right Edge\n");
                     }
-                    if(theGame->player[i].xPos + theGame->player[i].width > theGame->wall[j].x && theGame->player[i].xPos < theGame->wall[j].x){
+                    if(playerX + playerW > wallX && playerX < wallX){
                         //Correct x
-                        theGame->player[i].xPos = theGame->wall[j].x - theGame->player[i].width;
+                        theGame->player[i].xPos = wallX - playerW;
                         printf("Left Edge\n");
                     }
                 }
-            }
-            
+            } 
         }
     }
-
 }
 
 int testCollisionExplosionWithWalls(Game theGame, int k)
@@ -282,7 +272,6 @@ int testCollisionExplosionWithWalls(Game theGame, int k)
     }
     return 0;
 }
-
 
 /*
 void testCollosionWithExplosion(Game theGame)

@@ -7,12 +7,13 @@
 #include "player.h"
 #include "game.h"
 #include "collissionDetection.h"
-PUBLIC Player initPlayer(float xPos, float yPos)
+PUBLIC Player initPlayer(float xPos, float yPos, int playerID)
 {
     malloc(sizeof(struct playerController));
 
     Player p;
 
+    p.id = playerID;
     p.up = 0;
     p.down = 0;
     p.right = 0;
@@ -135,6 +136,10 @@ PUBLIC float getPlayerYPosition(Player p)
 PUBLIC int getPlayerSpeed(Player p)
 {
     return p.speed;
+}
+PUBLIC int getPlayerID(Player p)
+{
+    return p.id;
 }
 
 // REplaced by different movement-implementation

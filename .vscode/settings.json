@@ -6,7 +6,8 @@
         "sdl.h": "c",
         "collissiondetection.h": "c",
         "game.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "string.h": "c"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }

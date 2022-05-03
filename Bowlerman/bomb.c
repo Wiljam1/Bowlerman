@@ -10,10 +10,6 @@
 #include "sorter.h"
 #include "bomb.h"
 
-
-
-
-
 PUBLIC Bowlingball initBomb(int playerID)
 {
     //malloc(sizeof(struct bowling_ball));
