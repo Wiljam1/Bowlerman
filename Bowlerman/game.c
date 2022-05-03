@@ -486,14 +486,27 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     SDL_Rect playerRect[4];
     for(int i=0; i<theGame->playerAmount; i++)
     {
-        playerRect[i].x = theGame->player[theGame->playerID].xPos;
-        playerRect[i].y = theGame->player[theGame->playerID].yPos;
+        playerRect[i].x = theGame->player[i].xPos;
+        playerRect[i].y = theGame->player[i].yPos;
         playerRect[i].w= theGame->player->width;
         playerRect[i].h = theGame->player->height;
     }
     for(int i=0; i<theGame->playerAmount; i++)
     {
-        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[0][0], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i], 0, NULL, 0);
+        switch (moveD)
+        {
+            case 'w': spriteChoice = 1;
+                break;
+            case 'a': spriteChoice = 3;
+                break;
+            case 's': spriteChoice = 0;
+                break;
+            case 'd': spriteChoice = 2;
+                break;
+            default: spriteChoice = 0;
+                break;
+        }
+        SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[0][spriteChoice], &theGame->pSprites.BowlerManVert[updateSprite[theGame->playerID]], &playerRect[i], 0, NULL, 0);
     }
     
     //emils rendering: bra, men funkar ej för flera spelare
