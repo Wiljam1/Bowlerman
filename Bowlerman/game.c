@@ -602,7 +602,7 @@ PRIVATE void renderWalls(Game theGame)
 //Kanske borde vara i bomb.c?
 void initExplosionPosition(Game theGame, int playerID)
 {
-    int tilesize = 66; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
+    int tilesize = 66, diff=2; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
 
     for(int i = 0; i < 5; i++){
         theGame->explosionPosition[playerID][i].h = tilesize;
@@ -612,18 +612,18 @@ void initExplosionPosition(Game theGame, int playerID)
     // I framtiden ska man väl kunna ha större explosionsradius än det vanliga?
     // Man kanske får initiera flera positioner från början men endast rendera/ha collision med de som ska visas
 
-    theGame->explosionPosition[playerID][0].y = theGame->bombs[playerID].position.y;
-    theGame->explosionPosition[playerID][0].x = theGame->bombs[playerID].position.x;
+    theGame->explosionPosition[playerID][0].y = theGame->bombs[playerID].position.y + diff;
+    theGame->explosionPosition[playerID][0].x = theGame->bombs[playerID].position.x + diff;
 
-    theGame->explosionPosition[playerID][1].y = theGame->bombs[playerID].position.y + tilesize + 2;
-    theGame->explosionPosition[playerID][1].x = theGame->bombs[playerID].position.x;
+    theGame->explosionPosition[playerID][1].y = theGame->bombs[playerID].position.y + tilesize + diff*3;
+    theGame->explosionPosition[playerID][1].x = theGame->bombs[playerID].position.x + diff;
 
-    theGame->explosionPosition[playerID][2].y = theGame->bombs[playerID].position.y - tilesize - 2;
-    theGame->explosionPosition[playerID][2].x = theGame->bombs[playerID].position.x;
+    theGame->explosionPosition[playerID][2].y = theGame->bombs[playerID].position.y - tilesize - diff*3;
+    theGame->explosionPosition[playerID][2].x = theGame->bombs[playerID].position.x - diff;
 
-    theGame->explosionPosition[playerID][3].y = theGame->bombs[playerID].position.y;
-    theGame->explosionPosition[playerID][3].x = theGame->bombs[playerID].position.x + tilesize + 2;
+    theGame->explosionPosition[playerID][3].y = theGame->bombs[playerID].position.y + diff;
+    theGame->explosionPosition[playerID][3].x = theGame->bombs[playerID].position.x + tilesize + diff*3;
 
-    theGame->explosionPosition[playerID][4].y = theGame->bombs[playerID].position.y;
-    theGame->explosionPosition[playerID][4].x = theGame->bombs[playerID].position.x - tilesize - 2;
+    theGame->explosionPosition[playerID][4].y = theGame->bombs[playerID].position.y - diff;
+    theGame->explosionPosition[playerID][4].x = theGame->bombs[playerID].position.x - tilesize - diff*3;
 }
