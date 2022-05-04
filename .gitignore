@@ -6,5 +6,7 @@ Bowlerman/bomb.o
 Bowlerman/collissionDetection.o
 Bowlerman/main.exe
 Bowlerman/main.out
+Bowlerman/wall.o
+Bowlerman/sorter.o
 Bowlerman/UDPserver.exe
 Bowlerman/UDPserver.out

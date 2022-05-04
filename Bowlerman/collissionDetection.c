@@ -276,12 +276,12 @@ int testCollisionWithDestroyableWalls(Game theGame, int k)
 {
     for(int j=0;j<4;j++)
     {
-        for (int i=139;i<250;i++)
+        for (int i=0;i<5;i++)
         {
-            if(theGame->wall[i].x < theGame->explosionPosition[j][k].x &&
-               theGame->wall[i].x + theGame->wall[i].w > theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w &&
-               theGame->wall[i].y < theGame->explosionPosition[j][k].y &&
-               theGame->wall[i].h + theGame->wall[i].y > theGame->explosionPosition[j][k].y + theGame->explosionPosition[j][k].h)
+            if(theGame->wall[k].x < theGame->explosionPosition[j][i].x &&
+               theGame->wall[k].x + theGame->wall[k].w > theGame->explosionPosition[j][i].x + theGame->explosionPosition[j][i].w &&
+               theGame->wall[k].y < theGame->explosionPosition[j][i].y &&
+               theGame->wall[k].h + theGame->wall[k].y > theGame->explosionPosition[j][i].y + theGame->explosionPosition[j][i].h)
             {
                 return 1;
             } 
