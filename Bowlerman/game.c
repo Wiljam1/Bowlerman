@@ -160,16 +160,68 @@ void initGame(Game theGame)
         {
         }
     }
-    int count=0;
+    //initiering av oförstörbara väggar i mitten av planen.
+    int count=-1;
     for (int i=0;i<5;i++)
     {
-        count ++;
         for(int j=0;j<7;j++)
         {
             count ++;
             theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
             theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+140, i*140+240);
             printf("COUNT: %d\n", count);
+        }
+    }
+    //initiering av förstörbara väggar i planen. 
+    count=39;
+    for (int i=1;i<12;i++)
+    {
+        for(int j=0;j<9;j++)
+        {
+            count ++;
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+280, i*70+100);
+            i+=9;
+        }
+    }
+    for (int i=2;i<12;i++)
+    {
+        for(int j=0;j<6;j++)
+        {
+            count ++;
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+210, i*70+100);
+            i+=7;
+        }
+    }
+    for (int i=3;i<12;i++)
+    {
+        for(int j=0;j<13;j++)
+        {
+            count ++;
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+140, i*70+100);
+            i+=5;
+        }
+    }
+    for (int i=4;i<9;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+            count ++;
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+70, i*70+100);
+            i++;
+        }
+    }
+    for (int i=5;i<8;i++)
+    {
+        for(int j=0;j<15;j++)
+        {
+            count ++;
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+70, i*70+100);
+            i++;
         }
     }
 }
@@ -474,6 +526,7 @@ PRIVATE void loadAllTextures(Game theGame)
     theGame->textureWall[0] = (SDL_Texture *)loadTextures(theGame, "walls/80/straight.png");
     theGame->textureWall[1] = (SDL_Texture *)loadTextures(theGame, "walls/80/corner.png");
     theGame->textureWall[2] = (SDL_Texture *)loadTextures(theGame, "walls/80/center.png");
+    theGame->textureWall[3] = (SDL_Texture *)loadTextures(theGame, "wall.png");
     SDL_FreeSurface(theGame->window_surface);
     // Load player sprites
     theGame->pSprites = GetPlayerSprite();
@@ -590,10 +643,15 @@ PRIVATE void renderWalls(Game theGame)
             SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 270, 0, 0);
         }
     }
-    for (int i=0;i<42;i++)
+    for (int i=0;i<36;i++)
     {   
         SDL_Rect wallRect = {theGame->wall[i+WALLAMOUNT].x, theGame->wall[i+WALLAMOUNT].y, theGame->wall[i+WALLAMOUNT].w, theGame->wall[i+WALLAMOUNT].h};
         SDL_RenderCopy(theGame->renderer, theGame->textureWall[2], NULL, &wallRect);        
+    }
+    for (int i=39;i<150;i++)
+    {   
+        SDL_Rect wallRect = {theGame->wall[i+WALLAMOUNT].x, theGame->wall[i+WALLAMOUNT].y, theGame->wall[i+WALLAMOUNT].w, theGame->wall[i+WALLAMOUNT].h};
+        SDL_RenderCopy(theGame->renderer, theGame->textureWall[3], NULL, &wallRect);        
     }
 
 
