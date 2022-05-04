@@ -167,9 +167,8 @@ void initGame(Game theGame)
         for(int j=0;j<7;j++)
         {
             count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
             theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+140, i*140+240);
-            printf("COUNT: %d\n", count);
         }
     }
     //initiering av förstörbara väggar i planen. 
@@ -179,50 +178,50 @@ void initGame(Game theGame)
         for(int j=0;j<9;j++)
         {
             count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
             theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+280, i*70+100);
-            i+=9;
         }
+        i+=9;
     }
     for (int i=2;i<12;i++)
     {
         for(int j=0;j<6;j++)
         {
             count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
             theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+210, i*70+100);
-            i+=7;
         }
+        i+=7;
     }
     for (int i=3;i<12;i++)
     {
         for(int j=0;j<13;j++)
         {
             count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
             theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+140, i*70+100);
-            i+=5;
         }
+        i+=5;
     }
     for (int i=4;i<9;i++)
     {
         for(int j=0;j<8;j++)
         {
             count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
             theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+70, i*70+100);
-            i++;
         }
+        i++;
     }
     for (int i=5;i<8;i++)
     {
         for(int j=0;j<15;j++)
         {
             count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*2, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
             theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+70, i*70+100);
-            i++;
         }
+        i++;
     }
 }
 
