@@ -1,12 +1,8 @@
-Bowlerman/game.o
-Bowlerman/main.o
-Bowlerman/UDPserver.o
-Bowlerman/player.o
-Bowlerman/bomb.o
-Bowlerman/collissionDetection.o
 Bowlerman/main.exe
 Bowlerman/main.out
-Bowlerman/wall.o
-Bowlerman/sorter.o
 Bowlerman/UDPserver.exe
 Bowlerman/UDPserver.out
+*.o
+*.exe
+*.a
+*.out
