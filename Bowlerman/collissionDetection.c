@@ -260,10 +260,10 @@ int testCollisionExplosionWithWalls(Game theGame, int k)
     {
         for (int i=100;i<142;i++)
         {
-            if(theGame->wall[i].x < theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w &&
-               theGame->wall[i].x + theGame->wall[i].w > theGame->explosionPosition[j][k].x &&
-               theGame->wall[i].y < theGame->explosionPosition[j][k].y + theGame->explosionPosition[j][k].h &&
-               theGame->wall[i].h + theGame->wall[i].y > theGame->explosionPosition[j][k].y)
+            if(theGame->wall[i].x < theGame->explosionPosition[j][k].x &&
+               theGame->wall[i].x + theGame->wall[i].w > theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w &&
+               theGame->wall[i].y < theGame->explosionPosition[j][k].y &&
+               theGame->wall[i].h + theGame->wall[i].y > theGame->explosionPosition[j][k].y + theGame->explosionPosition[j][k].h)
             {
                 return 1;
             }

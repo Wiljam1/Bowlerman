@@ -615,15 +615,15 @@ void initExplosionPosition(Game theGame, int playerID)
     theGame->explosionPosition[playerID][0].y = theGame->bombs[playerID].position.y;
     theGame->explosionPosition[playerID][0].x = theGame->bombs[playerID].position.x;
 
-    theGame->explosionPosition[playerID][1].y = theGame->bombs[playerID].position.y + tilesize;
+    theGame->explosionPosition[playerID][1].y = theGame->bombs[playerID].position.y + tilesize + 3;
     theGame->explosionPosition[playerID][1].x = theGame->bombs[playerID].position.x;
 
-    theGame->explosionPosition[playerID][2].y = theGame->bombs[playerID].position.y - tilesize;
+    theGame->explosionPosition[playerID][2].y = theGame->bombs[playerID].position.y - tilesize - 3;
     theGame->explosionPosition[playerID][2].x = theGame->bombs[playerID].position.x;
 
     theGame->explosionPosition[playerID][3].y = theGame->bombs[playerID].position.y;
-    theGame->explosionPosition[playerID][3].x = theGame->bombs[playerID].position.x + tilesize;
+    theGame->explosionPosition[playerID][3].x = theGame->bombs[playerID].position.x + tilesize + 3;
 
     theGame->explosionPosition[playerID][4].y = theGame->bombs[playerID].position.y;
-    theGame->explosionPosition[playerID][4].x = theGame->bombs[playerID].position.x - tilesize;
+    theGame->explosionPosition[playerID][4].x = theGame->bombs[playerID].position.x - tilesize - 3;
 }
