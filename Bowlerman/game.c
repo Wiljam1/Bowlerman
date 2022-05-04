@@ -602,7 +602,7 @@ PRIVATE void renderWalls(Game theGame)
 //Kanske borde vara i bomb.c?
 void initExplosionPosition(Game theGame, int playerID)
 {
-    int tilesize = 66, diff=2; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
+    int tilesize = 70, diff=2; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
 
     for(int i = 0; i < 5; i++){
         theGame->explosionPosition[playerID][i].h = tilesize;

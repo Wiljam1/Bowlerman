@@ -255,7 +255,6 @@ void testCollisionWithWalls(Game theGame)
 //gör så att explosioner inte går in i väggar
 int testCollisionExplosionWithWalls(Game theGame, int k)
 {
-    int a=70, b=66;
     for(int j=0;j<4;j++)
     {
         for (int i=100;i<142;i++)
@@ -266,11 +265,7 @@ int testCollisionExplosionWithWalls(Game theGame, int k)
                theGame->wall[i].h + theGame->wall[i].y > theGame->explosionPosition[j][k].y + theGame->explosionPosition[j][k].h)
             {
                 return 1;
-            }
-            else {
-                return 0;
-            }
-            
+            } 
         }
     }
     return 0;
