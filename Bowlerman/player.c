@@ -27,6 +27,7 @@ PUBLIC Player initPlayer(float xPos, float yPos, int playerID)
     p.playerRect.w = p.width = 64*0.7;
     p.moveDirection = '0';
     p.playerIsDead = false;
+
     return p;
 }
 
@@ -147,7 +148,43 @@ PUBLIC int getPlayerID(Player p)
 {
     return p.id;
 }
+PUBLIC void getStartPos(Player *p)
+{
+    switch (p->id)
+    {
+        case 0:
+            p->xPos = 80;
+            p->yPos = 140;
+            break;
+        case 1:
+            p->xPos = 1046;
+            p->yPos = 140;
+            break;
+        case 2:
+            p->xPos = 80;
+            p->yPos = 830;
+            break;
+        case 3:
+            p->xPos = 1046;
+            p->yPos = 830;
+            break;
+    }
+}
 
+/*theGame->player[0] = initPlayer(80, 140, 0); // sets x and y coordinates and resets values.
+
+    if (theGame->playerAmount > 1)
+    {
+        theGame->player[1] = initPlayer(1046, 140, 1); // sets x and y coordinates and resets values.
+    }
+    if (theGame->playerAmount > 2)
+    {
+        theGame->player[2] = initPlayer(80, 830, 2); // sets x and y coordinates and resets values.
+    }
+    if (theGame->playerAmount > 3)
+    {
+        theGame->player[3] = initPlayer(1046, 830, 3); // sets x and y coordinates and resets values.
+    }*/
 // REplaced by different movement-implementation
 
 // PUBLIC void determinePlayerVelocity(Player p)
