@@ -272,20 +272,17 @@ int testCollisionExplosionWithWalls(Game theGame, int k)
 }
 
 //testar om väggen explosionen träffar kan förstöras och förstör den
-int testCollisionWithDestroyableWalls(Game theGame, int k)
+int testCollisionWithDestroyableWalls(Game theGame, int k, int j)
 {
-    for(int j=0;j<4;j++)
+    for (int i=0;i<5;i++)
     {
-        for (int i=0;i<5;i++)
+        if(theGame->wall[k].x < theGame->explosionPosition[j][i].x &&
+           theGame->wall[k].x + theGame->wall[k].w > theGame->explosionPosition[j][i].x + theGame->explosionPosition[j][i].w &&
+            theGame->wall[k].y < theGame->explosionPosition[j][i].y &&
+           theGame->wall[k].h + theGame->wall[k].y > theGame->explosionPosition[j][i].y + theGame->explosionPosition[j][i].h)
         {
-            if(theGame->wall[k].x < theGame->explosionPosition[j][i].x &&
-               theGame->wall[k].x + theGame->wall[k].w > theGame->explosionPosition[j][i].x + theGame->explosionPosition[j][i].w &&
-               theGame->wall[k].y < theGame->explosionPosition[j][i].y &&
-               theGame->wall[k].h + theGame->wall[k].y > theGame->explosionPosition[j][i].y + theGame->explosionPosition[j][i].h)
-            {
-                return 1;
-            } 
-        }
+            return 1;
+        } 
     }
     return 0;
 }

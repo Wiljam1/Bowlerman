@@ -404,17 +404,15 @@ PUBLIC void gameUpdate(Game theGame)
                 }
             }
         }
-        for (int i = 0; i < 4; i++)
-        {
-            if (theGame->bombs[i].explosioninit == 0)
-            {
+        for (int i = 0; i < 4; i++){
+            if (theGame->bombs[i].explosioninit == 0){
                 theGame->bombs[i].explosioninit = initbowlingballtimer(0, 1000, i);
-                if (theGame->bombs[i].explosioninit == 1)
-                {
+                if (theGame->bombs[i].explosioninit == 1){
                     theGame->allowBombPlacement[i] = 1;
-                    for(int j=139;j<250;j++)
-                    {
-                        theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j);
+                    for(int j=139;j<250;j++){
+                        if(theGame->wall[j].destroyedWall == 0){
+                            theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
+                        }
                     }
                 }
             }
@@ -651,11 +649,11 @@ PRIVATE void renderWalls(Game theGame)
         SDL_Rect wallRect = {theGame->wall[i+WALLAMOUNT].x, theGame->wall[i+WALLAMOUNT].y, theGame->wall[i+WALLAMOUNT].w, theGame->wall[i+WALLAMOUNT].h};
         SDL_RenderCopy(theGame->renderer, theGame->textureWall[2], NULL, &wallRect);        
     }
-    for (int i=39;i<150;i++)
+    for (int i=139;i<250;i++)
     {   
         if (theGame->wall[i].destroyedWall == 0)
         {
-            SDL_Rect wallRect = {theGame->wall[i+WALLAMOUNT].x, theGame->wall[i+WALLAMOUNT].y, theGame->wall[i+WALLAMOUNT].w, theGame->wall[i+WALLAMOUNT].h};
+            SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
             SDL_RenderCopy(theGame->renderer, theGame->textureWall[3], NULL, &wallRect);   
         }     
     }
