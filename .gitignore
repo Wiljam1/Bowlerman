@@ -3,3 +3,6 @@ Bowlerman/main.out
 Bowlerman/UDPserver.exe
 Bowlerman/UDPserver.out
 *.o
+*.exe
+*.a
+*.out
