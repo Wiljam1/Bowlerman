@@ -3,6 +3,7 @@ Bowlerman/main.o
 Bowlerman/UDPserver.o
 Bowlerman/player.o
 Bowlerman/bomb.o
+Bowlerman/wall.o
 Bowlerman/collissionDetection.o
 Bowlerman/main.exe
 Bowlerman/main.out
