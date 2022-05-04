@@ -119,19 +119,19 @@ void initGame(Game theGame)
     }
 
     // init x amount of players
-    theGame->player[0] = initPlayer(80, 140, 0); // sets x and y coordinates and resets values.
+    theGame->player[0] = initPlayer(70, 140, 0); // sets x and y coordinates and resets values.
 
     if (theGame->playerAmount > 1)
     {
-        theGame->player[1] = initPlayer(1046, 140, 1); // sets x and y coordinates and resets values.
+        theGame->player[1] = initPlayer(1076, 140, 1); // sets x and y coordinates and resets values.
     }
     if (theGame->playerAmount > 2)
     {
-        theGame->player[2] = initPlayer(80, 830, 2); // sets x and y coordinates and resets values.
+        theGame->player[2] = initPlayer(70, 870, 2); // sets x and y coordinates and resets values.
     }
     if (theGame->playerAmount > 3)
     {
-        theGame->player[3] = initPlayer(1046, 830, 3); // sets x and y coordinates and resets values.
+        theGame->player[3] = initPlayer(1076, 870, 3); // sets x and y coordinates and resets values.
     }
 
     // Init walls / map
@@ -282,11 +282,6 @@ bool checkEvents(Game theGame)
         default:
             break;
         }
-    }
-    for (int i = 0; i < PLAYERAMOUNT; i++)
-    {
-        if (theGame->player[i].playerIsDead == true)
-            playerReviveLocation(&theGame->player[i]);
     }
     // Manage movement inputs
     manageMovementInputs(theGame);
@@ -554,33 +549,41 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     }
     for(int i=0; i < theGame->playerAmount; i++)
     {
-        if (spriteTimer[i] > 10)
-            spriteTimer[i] = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
-        
-            switch (theGame->player[i].moveDirection)
-            {
-                case 'w': 
-                    spriteChoice[i] = 1;
-                    SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[updateSprite[i]], &playerRect[i]);
-                    break;
-                case 'a': spriteChoice[i] = 3;
-                    SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManHori[updateSprite[i]], &playerRect[i]);
-                    break;
-                case 's': spriteChoice[i] = 0;
-                    SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[updateSprite[i]], &playerRect[i]);
-                    break;
-                case 'd': spriteChoice[i] = 2;
-                    SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManHori[updateSprite[i]], &playerRect[i]);
-                    break;
-                case '0':
-                default: spriteChoice[i] = 0;
-                    SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i]);
-                    break;
+        if (theGame->player[i].isDead == false){
+            if (spriteTimer[i] > 10){
+                spriteTimer[i] = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
             }
-            if (spriteTimer[i]++ % 5 == 0 && theGame->player[i].moveDirection != '0')
-                    updateSprite[i]++;
-            if (updateSprite[i] > 7)
-                    updateSprite[i] = 0;
+                switch (theGame->player[i].moveDirection)
+                {
+                    case 'w': 
+                        spriteChoice[i] = 1;
+                        SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[updateSprite[i]], &playerRect[i]);
+                        break;
+                    case 'a': spriteChoice[i] = 3;
+                        SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManHori[updateSprite[i]], &playerRect[i]);
+                        break;
+                    case 's': spriteChoice[i] = 0;
+                        SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[updateSprite[i]], &playerRect[i]);
+                        break;
+                    case 'd': spriteChoice[i] = 2;
+                        SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManHori[updateSprite[i]], &playerRect[i]);
+                        break;
+                    case '0':
+                    default: spriteChoice[i] = 0;
+                        SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i]);
+                        break;
+                }
+                if (spriteTimer[i]++ % 5 == 0 && theGame->player[i].moveDirection != '0'){
+                        updateSprite[i]++;
+                }
+                if (updateSprite[i] > 7){
+                        updateSprite[i] = 0;
+                }
+        }
+        else{
+            getStartPos(&theGame->player[i]);
+            theGame->player[i].isDead = false;
+        }
     }
 }
 

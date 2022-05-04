@@ -28,14 +28,11 @@ struct playerController
     float xPosOld;
     float yPosOld;
 
-    int timer;
-    int initTime;
-
     float speed;
     int height;
     int width;
     char name[40];
-    bool playerIsDead;
+    bool isDead;
     SDL_Rect playerRect;   //struct to hold the position and size of the sprite
     char moveDirection;  // Keeps track of player movement direction for sprite rendering
 };
@@ -48,7 +45,7 @@ struct playerSprites
 typedef struct playerSprites PlayerSprites;
 //initiate player position with x and y coordinates
 PlayerSprites GetPlayerSprite();
-Player initPlayer(float xPos, float yPos, int playerID);
+Player initPlayer(int xPos, int yPos, int playerID);
 
 float getPlayerXPosition(Player p);
 float getPlayerYPosition(Player p);
@@ -56,7 +53,6 @@ int getPlayerHeight();
 int getPlayerWidth();
 int getPlayerSpeed(Player p);
 int getPlayerID(Player p);
-PUBLIC void playerReviveLocation(Player *p);
 PUBLIC void getStartPos(Player *p);
 //ändrar spelarens (clientmässiga) hastighet beroende på användarens tangentbordsintryckningar
 // void determinePlayerVelocity(Player playerMoving);

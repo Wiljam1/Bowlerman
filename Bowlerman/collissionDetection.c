@@ -181,7 +181,7 @@ void testCollosionWithExplosion(Game theGame)
                        theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y - 30 > theGame->player[i].yPos)
                     {
                         //player dead
-                        theGame->player[i].playerIsDead = true;
+                        theGame->player[i].isDead = true;
                         return;
                     }
                 }

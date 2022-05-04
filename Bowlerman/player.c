@@ -7,7 +7,7 @@
 #include "player.h"
 #include "game.h"
 #include "collissionDetection.h"
-PUBLIC Player initPlayer(float xPos, float yPos, int playerID)
+PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
 {
     malloc(sizeof(struct playerController));
 
@@ -26,7 +26,7 @@ PUBLIC Player initPlayer(float xPos, float yPos, int playerID)
     p.playerRect.h = p.height = 100*0.7;
     p.playerRect.w = p.width = 64*0.7;
     p.moveDirection = '0';
-    p.playerIsDead = false;
+    p.isDead = false;
 
     return p;
 }
@@ -118,11 +118,6 @@ PlayerSprites GetPlayerSprite()
     return p;
 }
 
-PUBLIC void playerReviveLocation(Player *p)
-{
-    p->xPos = -60;
-    p->yPos = -60;
-}
 
 PUBLIC int getPlayerHeight(Player p)
 {
@@ -153,38 +148,25 @@ PUBLIC void getStartPos(Player *p)
     switch (p->id)
     {
         case 0:
-            p->xPos = 80;
+            p->xPos = 70;
             p->yPos = 140;
             break;
         case 1:
-            p->xPos = 1046;
+            p->xPos = 1076;
             p->yPos = 140;
             break;
         case 2:
-            p->xPos = 80;
-            p->yPos = 830;
+            p->xPos = 70;
+            p->yPos = 870;
             break;
         case 3:
-            p->xPos = 1046;
-            p->yPos = 830;
+            p->xPos = 1076;
+            p->yPos = 870;
             break;
     }
 }
 
-/*theGame->player[0] = initPlayer(80, 140, 0); // sets x and y coordinates and resets values.
 
-    if (theGame->playerAmount > 1)
-    {
-        theGame->player[1] = initPlayer(1046, 140, 1); // sets x and y coordinates and resets values.
-    }
-    if (theGame->playerAmount > 2)
-    {
-        theGame->player[2] = initPlayer(80, 830, 2); // sets x and y coordinates and resets values.
-    }
-    if (theGame->playerAmount > 3)
-    {
-        theGame->player[3] = initPlayer(1046, 830, 3); // sets x and y coordinates and resets values.
-    }*/
 // REplaced by different movement-implementation
 
 // PUBLIC void determinePlayerVelocity(Player p)
