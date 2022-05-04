@@ -259,7 +259,7 @@ bool checkEvents(Game theGame)
                     theGame->bombs[theGame->playerIDLocal].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[theGame->playerIDLocal]) + 56) - 40;
                     theGame->bombs[theGame->playerIDLocal].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[theGame->playerIDLocal]) + 8);
                     theGame->bombs[theGame->playerIDLocal].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, theGame->playerIDLocal); // också viktigt att veta vilken player
-                    theGame->bombs[theGame->playerIDLocal].timerinit = 1;
+                    theGame->bombs[theGame->playerIDLocal].timerinit = 1;           //detta värdet borde skickas som data till andra players
                     theGame->bombs[theGame->playerIDLocal].placedBombRestriction = 1;
                 }
                 break;
@@ -412,6 +412,10 @@ PUBLIC void gameUpdate(Game theGame)
                 if (theGame->bombs[i].explosioninit == 1)
                 {
                     theGame->allowBombPlacement[i] = 1;
+                    for(int j=139;j<250;j++)
+                    {
+                        theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j);
+                    }
                 }
             }
         }
@@ -649,8 +653,11 @@ PRIVATE void renderWalls(Game theGame)
     }
     for (int i=39;i<150;i++)
     {   
-        SDL_Rect wallRect = {theGame->wall[i+WALLAMOUNT].x, theGame->wall[i+WALLAMOUNT].y, theGame->wall[i+WALLAMOUNT].w, theGame->wall[i+WALLAMOUNT].h};
-        SDL_RenderCopy(theGame->renderer, theGame->textureWall[3], NULL, &wallRect);        
+        if (theGame->wall[i].destroyedWall == 0)
+        {
+            SDL_Rect wallRect = {theGame->wall[i+WALLAMOUNT].x, theGame->wall[i+WALLAMOUNT].y, theGame->wall[i+WALLAMOUNT].w, theGame->wall[i+WALLAMOUNT].h};
+            SDL_RenderCopy(theGame->renderer, theGame->textureWall[3], NULL, &wallRect);   
+        }     
     }
 
 

@@ -213,7 +213,7 @@ void testCollisionWithWalls(Game theGame)
     {
         int playerX = theGame->player[i].xPos, playerY = theGame->player[i].yPos, playerW = theGame->player[i].width, playerH = theGame->player[i].height;
         int moveDirection = theGame->player[i].moveDirection;
-        for (int j=100;j<142;j++)
+        for (int j=100;j<250;j++)
         {
             int wallX = theGame->wall[j].x, wallY = theGame->wall[j].y, wallW = theGame->wall[j].w, wallH = theGame->wall[j].h;
             if(moveDirection == 'w' || moveDirection == 's') 
@@ -257,7 +257,26 @@ int testCollisionExplosionWithWalls(Game theGame, int k)
 {
     for(int j=0;j<4;j++)
     {
-        for (int i=0;i<142;i++)
+        for (int i=0;i<136;i++)
+        {
+            if(theGame->wall[i].x < theGame->explosionPosition[j][k].x &&
+               theGame->wall[i].x + theGame->wall[i].w > theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w &&
+               theGame->wall[i].y < theGame->explosionPosition[j][k].y &&
+               theGame->wall[i].h + theGame->wall[i].y > theGame->explosionPosition[j][k].y + theGame->explosionPosition[j][k].h)
+            {
+                return 1;
+            } 
+        }
+    }
+    return 0;
+}
+
+//testar om väggen explosionen träffar kan förstöras och förstör den
+int testCollisionWithDestroyableWalls(Game theGame, int k)
+{
+    for(int j=0;j<4;j++)
+    {
+        for (int i=139;i<250;i++)
         {
             if(theGame->wall[i].x < theGame->explosionPosition[j][k].x &&
                theGame->wall[i].x + theGame->wall[i].w > theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w &&

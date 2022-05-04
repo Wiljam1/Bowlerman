@@ -17,6 +17,7 @@ Wall initWalls(int amount, int width, int height)
     w.id = amount;
     w.w = width;
     w.h = height;
+    w.destroyedWall = 0;
 
     return w;
 }

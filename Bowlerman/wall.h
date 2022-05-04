@@ -10,7 +10,7 @@ typedef struct wall Wall;
 
 struct wall{
     int id; //UDP?
-
+    int destroyedWall;
     int x, y, w, h;
 };
 
