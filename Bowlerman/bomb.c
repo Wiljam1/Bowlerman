@@ -16,8 +16,8 @@ PUBLIC Bowlingball initBomb(int playerID)
     Bowlingball b;
     b.position.y = 0;
     b.position.x = 0;
-    b.position.w = 66;
-    b.position.h = 66;
+    b.position.w = 70;
+    b.position.h = 70;
     b.speed = 0;
     b.timervalue = 0;
     b.timerinit = 0;
@@ -51,10 +51,10 @@ int correctBowlingBallPos(int i)
     k=i/70;
     j=i%70;
     if(j<35){
-        return (k*70+3);      //returnerar närmaste tile sen +3 för att få det helt centrerat
+        return (k*70);      //returnerar närmaste tile sen +3 för att få det helt centrerat
     }
     else{
-        return ((k+1)*70+3);
+        return ((k+1)*70);
     }   
 }
 
