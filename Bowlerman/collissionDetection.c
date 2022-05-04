@@ -174,7 +174,7 @@ void testCollosionWithExplosion(Game theGame)
                     if(theGame->explosionPosition[j][k].x < theGame->player[i].xPos + theGame->player[i].width &&
                        theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > theGame->player[i].xPos &&
                        theGame->explosionPosition[j][k].y < theGame->player[i].yPos + theGame->player[i].height &&
-                       theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y > theGame->player[i].yPos)
+                       theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y - 30 > theGame->player[i].yPos)
                     {
                         //player dead
                         theGame->player[i].yPos = 500;
@@ -255,24 +255,33 @@ void testCollisionWithWalls(Game theGame)
 //gör så att explosioner inte går in i väggar
 int testCollisionExplosionWithWalls(Game theGame, int k)
 {
+    int a=70, b=66;
     for(int j=0;j<4;j++)
     {
         for (int i=100;i<142;i++)
         {
-            if(theGame->explosionPosition[j][k].x < theGame->wall[i].x + theGame->wall[i].w &&
-            theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > theGame->wall[i].x &&
-            theGame->explosionPosition[j][k].y < theGame->wall[i].y + theGame->wall[i].h &&
-            theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y > theGame->wall[i].y)
+            if(theGame->wall[i].x < theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w &&
+               theGame->wall[i].x + theGame->wall[i].w > theGame->explosionPosition[j][k].x &&
+               theGame->wall[i].y < theGame->explosionPosition[j][k].y + theGame->explosionPosition[j][k].h &&
+               theGame->wall[i].h + theGame->wall[i].y > theGame->explosionPosition[j][k].y)
             {
                 return 1;
             }
             else {
                 return 0;
             }
+            
         }
     }
     return 0;
 }
+
+/*
+if(theGame->explosionPosition[j][k].x < theGame->wall[i].x + theGame->wall[i].w &&
+            theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > theGame->wall[i].x &&
+            theGame->explosionPosition[j][k].y < theGame->wall[i].y + theGame->wall[i].h &&
+            theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y > theGame->wall[i].y)
+*/
 
 /*
 void testCollosionWithExplosion(Game theGame)
