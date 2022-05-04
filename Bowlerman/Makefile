@@ -21,24 +21,3 @@ UDPserver:
 	gcc -o UDPserver UDPserver.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
 
 	
-mac: main.o game.o player.o sorter.o bomb.o wall.o collissionDetection.o
-	arch -x86_64 gcc -o main main.o game.o player.o sorter.o bomb.o wall.o collissionDetection.o -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_mixer
-main.o:
-	arch -x86_64 gcc -c main.c -lSDL2main -lSDL2 -lSDL2_image
-game.o:
-	arch -x86_64 gcc -c game.c -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_mixer
-player.o:
-	arch -x86_64 gcc -c player.c -lSDL2main -lSDL2 -lSDL2_image
-sorter.o:
-	arch -x86_64 gcc -c sorter.c -lSDL2main -lSDL2 -lSDL2_image
-bomb.o:
-	arch -x86_64 gcc -c bomb.c -lSDL2main -lSDL2 -lSDL2_image
-wall.o:
-	arch -x86_64 gcc -c wall.c -lSDL2main -lSDL2 -lSDL2_image
-collissionDetection.o:
-	arch -x86_64 gcc -c collissionDetection.c -lSDL2main -lSDL2 -lSDL2_image
-clean_mac:
-	rm *.o
-
-UDPserver_mac:
-	arch -x86_64 gcc -o UDPserver UDPserver.c -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_mixer
