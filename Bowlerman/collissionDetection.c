@@ -215,39 +215,42 @@ void testCollisionWithWalls(Game theGame)
         int moveDirection = theGame->player[i].moveDirection;
         for (int j=100;j<250;j++)
         {
-            int wallX = theGame->wall[j].x, wallY = theGame->wall[j].y, wallW = theGame->wall[j].w, wallH = theGame->wall[j].h;
-            if(moveDirection == 'w' || moveDirection == 's') 
-            {   
-                if(playerX + playerW > wallX && playerX < wallX + wallW)
-                {
-                    if(playerY + 30 < wallY + wallH && playerY > wallY){
-                        //correct y
-                        theGame->player[i].yPos = wallY + wallH - 30;
-                        printf("Bumping head\n");
-                    }
-                    if(playerY + playerH > wallY && playerY < wallY){
-                        //correct y
-                        theGame->player[i].yPos = wallY - playerH;
-                        printf("Standing on wall\n");
-                    }
-                }
-            }
-            if(moveDirection == 'a' || moveDirection == 'd') 
+            if(theGame->wall[j].destroyedWall == 0)
             {
-                if(playerY + playerH > wallY && playerY + 30 < wallY + wallH)
-                {
-                    if(playerX < wallX + wallW && playerX > wallX){
-                        //Correct x
-                        theGame->player[i].xPos = wallX + wallW;
-                        printf("Right Edge\n");
-                    }
-                    if(playerX + playerW > wallX && playerX < wallX){
-                        //Correct x
-                        theGame->player[i].xPos = wallX - playerW;
-                        printf("Left Edge\n");
+                int wallX = theGame->wall[j].x, wallY = theGame->wall[j].y, wallW = theGame->wall[j].w, wallH = theGame->wall[j].h;
+                if(moveDirection == 'w' || moveDirection == 's') 
+                {   
+                    if(playerX + playerW > wallX && playerX < wallX + wallW)
+                    {
+                        if(playerY + 30 < wallY + wallH && playerY > wallY){
+                            //correct y
+                            theGame->player[i].yPos = wallY + wallH - 30;
+                            printf("Bumping head\n");
+                        }
+                        if(playerY + playerH > wallY && playerY < wallY){
+                            //correct y
+                            theGame->player[i].yPos = wallY - playerH;
+                            printf("Standing on wall\n");
+                        }
                     }
                 }
-            } 
+                if(moveDirection == 'a' || moveDirection == 'd') 
+                {
+                    if(playerY + playerH > wallY && playerY + 30 < wallY + wallH)
+                    {
+                        if(playerX < wallX + wallW && playerX > wallX){
+                            //Correct x
+                            theGame->player[i].xPos = wallX + wallW;
+                            printf("Right Edge\n");
+                        }
+                        if(playerX + playerW > wallX && playerX < wallX){
+                            //Correct x
+                            theGame->player[i].xPos = wallX - playerW;
+                            printf("Left Edge\n");
+                        }
+                    }
+                } 
+            }
         }
     }
 }

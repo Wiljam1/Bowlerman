@@ -390,13 +390,10 @@ PUBLIC void gameUpdate(Game theGame)
         // Check for events
         done = checkEvents(theGame);
         // Process events (time based stuff)
-        for (int i = 0; i < 4; i++)
-        {
-            if (theGame->bombs[i].timerinit == 1)
-            {
+        for (int i = 0; i < 4; i++){
+            if (theGame->bombs[i].timerinit == 1){
                 theGame->bombs[i].timervalue = initbowlingballtimer(0, 3000, i);
-                if (theGame->bombs[i].timervalue == 1)
-                {
+                if (theGame->bombs[i].timervalue == 1){
                     theGame->bombs[i].timerinit = 0;
                     theGame->bombs[i].explosioninit = 0;
                     initExplosionPosition(theGame, i);
@@ -407,13 +404,13 @@ PUBLIC void gameUpdate(Game theGame)
         for (int i = 0; i < 4; i++){
             if (theGame->bombs[i].explosioninit == 0){
                 theGame->bombs[i].explosioninit = initbowlingballtimer(0, 1000, i);
+                for(int j=139;j<250;j++){
+                    if(theGame->wall[j].destroyedWall == 0){
+                        theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
+                    }
+                }
                 if (theGame->bombs[i].explosioninit == 1){
                     theGame->allowBombPlacement[i] = 1;
-                    for(int j=139;j<250;j++){
-                        if(theGame->wall[j].destroyedWall == 0){
-                            theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
-                        }
-                    }
                 }
             }
         }
