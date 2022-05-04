@@ -31,9 +31,12 @@ UDPpacket *p;
 UDPpacket *p2; // behövs egentligen bara en pekare.
 struct data udpData = {0, 0, 0, 0};
 
-//Funktionsprototyper ska väl ligga i .h-filen?
+//Funktionsprototyper ska väl ligga i .h-filen? ---- Tror inte om de är private då de endast används i denna fil? kanske inte spelar någon roll
+//Loading all game textures
 PRIVATE void loadAllTextures(Game theGame);
+// Updating textures depending on movement
 PRIVATE void UpdatePlayerTextures(Game theGame);
+//Render wall textures
 PRIVATE void renderWalls(Game theGame);
 void initExplosionPosition(Game theGame, int playerID);
 
@@ -105,12 +108,10 @@ void initGame(Game theGame)
     memcpy(&udpData, (char *)p2->data, sizeof(struct data));
     theGame->playerIDLocal = udpData.playerID;
     printf("UDP Packet incoming %d\n", udpData.playerID);
-    // theGame->playerIDLocal = 0;
-    // printf("CRASH");
     printf("%d", theGame->playerIDLocal);
 
     // detta ska ändras via servern sen.
-    theGame->playerAmount = 4;
+    theGame->playerAmount = PLAYERAMOUNT;
 
     // allow bomb placement init
     for (int i = 0; i < 4; i++)
@@ -481,7 +482,6 @@ void renderTextures(Game theGame)
         }
     }
 
-    // Updating textures depending on movement
     UpdatePlayerTextures(theGame);
     
     // Draw GUI last (top of screenlayers)
@@ -533,12 +533,12 @@ PRIVATE void loadAllTextures(Game theGame)
 
 PRIVATE void UpdatePlayerTextures(Game theGame)
 {
-    // renders player
+    /*Keeps track of what sprites to load and at what timing*/
     static Uint8 updateSprite[4] = {0};
     static Uint8 spriteTimer[4] = {0};
     Uint8 spriteChoice[4] = {0}; 
     
-    //Algots rendering: dålig dock
+    /*Init all player rectangles*/
     SDL_Rect playerRect[4];
     for(int i=0; i<theGame->playerAmount; i++)
     {
@@ -547,11 +547,12 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
         playerRect[i].w= theGame->player->width;
         playerRect[i].h = theGame->player->height;
     }
+    /*Managing sprite updates*/
     for(int i=0; i < theGame->playerAmount; i++)
     {
         if (theGame->player[i].isDead == false){
-            if (spriteTimer[i] > 10){
-                spriteTimer[i] = 0; // Vi får komma på en bra timing för animationsuppdatering alt. en bättre lösning.
+            if (spriteTimer[i] > 10){ //Slowing down sprite updates
+                spriteTimer[i] = 0; 
             }
                 switch (theGame->player[i].moveDirection)
                 {
@@ -573,7 +574,7 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
                         SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i]);
                         break;
                 }
-                if (spriteTimer[i]++ % 5 == 0 && theGame->player[i].moveDirection != '0'){
+                if (spriteTimer[i]++ % 5 == 0 && theGame->player[i].moveDirection != '0'){ // Slowing down sprite updates
                         updateSprite[i]++;
                 }
                 if (updateSprite[i] > 7){
@@ -581,7 +582,7 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
                 }
         }
         else{
-            getStartPos(&theGame->player[i]);
+            getStartPos(&theGame->player[i]); // If player is dead it respawns at starting pos
             theGame->player[i].isDead = false;
         }
     }
