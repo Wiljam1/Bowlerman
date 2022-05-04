@@ -37,7 +37,11 @@ PUBLIC void collisionDetect(Game theGame)
 
         if (i < 20)
         {
-            if (playerYPos < wallYPos + 40)
+            if (playerYPos + playerHeight < wallYPos)
+            {
+                theGame->player[playerID].yPos = wallYPos - playerHeight;
+            }
+            else if (playerYPos < wallYPos + 40)
             {
                 theGame->player[playerID].yPos = wallYPos + 40;
             }
@@ -177,8 +181,7 @@ void testCollosionWithExplosion(Game theGame)
                        theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y - 30 > theGame->player[i].yPos)
                     {
                         //player dead
-                        theGame->player[i].yPos = 500;
-                        theGame->player[i].xPos = 500;
+                        theGame->player[i].playerIsDead = true;
                         return;
                     }
                 }

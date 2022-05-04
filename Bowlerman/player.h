@@ -32,7 +32,7 @@ struct playerController
     int height;
     int width;
     char name[40];
-    
+    bool playerIsDead;
     SDL_Rect playerRect;   //struct to hold the position and size of the sprite
     char moveDirection;  // Keeps track of player movement direction for sprite rendering
 };
@@ -53,7 +53,7 @@ int getPlayerHeight();
 int getPlayerWidth();
 int getPlayerSpeed(Player p);
 int getPlayerID(Player p);
-
+PUBLIC void playerReviveLocation(Player *p);
 
 //ändrar spelarens (clientmässiga) hastighet beroende på användarens tangentbordsintryckningar
 // void determinePlayerVelocity(Player playerMoving);

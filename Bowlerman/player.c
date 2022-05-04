@@ -26,7 +26,7 @@ PUBLIC Player initPlayer(float xPos, float yPos, int playerID)
     p.playerRect.h = p.height = 100*0.7;
     p.playerRect.w = p.width = 64*0.7;
     p.moveDirection = '0';
-
+    p.playerIsDead = false;
     return p;
 }
 
@@ -115,6 +115,12 @@ PlayerSprites GetPlayerSprite()
     p.BowlerManHori[7].y = 0;
     
     return p;
+}
+
+PUBLIC void playerReviveLocation(Player *p)
+{
+    p->xPos = -60;
+    p->yPos = -60;
 }
 
 PUBLIC int getPlayerHeight(Player p)
