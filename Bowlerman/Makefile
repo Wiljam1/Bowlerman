@@ -22,23 +22,23 @@ UDPserver:
 
 	
 mac: main.o game.o player.o sorter.o bomb.o wall.o collissionDetection.o
-	gcc -o main main.o game.o player.o sorter.o bomb.o wall.o collissionDetection.o -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
+	arch -x86_64 gcc -o main main.o game.o player.o sorter.o bomb.o wall.o collissionDetection.o -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_mixer
 main.o:
-	gcc -c main.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
+	arch -x86_64 gcc -c main.c -lSDL2main -lSDL2 -lSDL2_image
 game.o:
-	gcc -c game.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
+	arch -x86_64 gcc -c game.c -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_mixer
 player.o:
-	gcc -c player.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
+	arch -x86_64 gcc -c player.c -lSDL2main -lSDL2 -lSDL2_image
 sorter.o:
-	gcc -c sorter.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
+	arch -x86_64 gcc -c sorter.c -lSDL2main -lSDL2 -lSDL2_image
 bomb.o:
-	gcc -c bomb.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
+	arch -x86_64 gcc -c bomb.c -lSDL2main -lSDL2 -lSDL2_image
 wall.o:
-	gcc -c wall.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
+	arch -x86_64 gcc -c wall.c -lSDL2main -lSDL2 -lSDL2_image
 collissionDetection.o:
-	gcc -c collissionDetection.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image
+	arch -x86_64 gcc -c collissionDetection.c -lSDL2main -lSDL2 -lSDL2_image
 clean_mac:
 	rm *.o
 
 UDPserver_mac:
-	gcc -o UDPserver UDPserver.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
+	arch -x86_64 gcc -o UDPserver UDPserver.c -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_mixer
