@@ -338,7 +338,9 @@ void manageMovementInputs(Game theGame)
 
 PRIVATE void manageUDP(Game theGame)
 {
-    static int flag;
+    static int flag=0;
+    static int flag2=0;
+
     udpData.moveDirection = theGame->player[theGame->playerIDLocal].moveDirection;
     int x_posOld = theGame->player[theGame->playerIDLocal].xPosOld;
     int y_posOld = theGame->player[theGame->playerIDLocal].yPosOld;
@@ -362,13 +364,21 @@ PRIVATE void manageUDP(Game theGame)
         udpData.placeBomb=0;
     }
 
+        //flagga för att reset:a movement direction när spelaren står stilla.
+    if( udpData.moveDirection != '0'){
+       flag2=1;
+    }
+    if( (udpData.moveDirection == '0') && flag2){
+       flag=1;
+       flag2=0;
+    }
+
     // send data if movement or bomb-placement
-    if (x_posOld != x_pos || y_posOld != y_pos || flag == 1 || udpData.placeBomb==1)
+    //problem med flag. det gör att det laggar
+    if (abs(x_posOld - x_pos)>=5 || abs(y_posOld - y_pos)>=5 || flag == 1 || udpData.placeBomb==1)
     {
         printf("%d %d\n", (int)x_pos, (int)y_pos);
         udpData.playerID = theGame->playerIDLocal;
-        
-        
         udpData.x = x_pos;
         udpData.y = y_pos;
         memcpy(p->data, &udpData, sizeof(struct data) + 1);
@@ -379,13 +389,12 @@ PRIVATE void manageUDP(Game theGame)
         p->address.port = srvadd.port; /* And destination port */
         // p->len = strlen((char *)p->data) + 1;
         SDLNet_UDP_Send(sd, -1, p);
-        theGame->player[theGame->playerIDLocal].xPosOld = x_pos; // Fixade oldxpos
+        theGame->player[theGame->playerIDLocal].xPosOld = x_pos; 
         theGame->player[theGame->playerIDLocal].yPosOld = y_pos;
-        flag = 0;
+        flag=0;
     }
-    if (udpData.moveDirection != '0'){
-        flag = 1;
-    }
+
+
     // receive data
     if (SDLNet_UDP_Recv(sd, p2))
     {
@@ -735,4 +744,4 @@ void initExplosionPosition(Game theGame, int playerID)
             }
         }
     }
-}                                                                               
+}
