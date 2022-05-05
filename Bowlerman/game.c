@@ -418,32 +418,9 @@ PUBLIC void gameUpdate(Game theGame)
     {
         // Check for events
         done = checkEvents(theGame);
+        
         // Process events (time based stuff)
-        for (int i = 0; i < 4; i++){
-            if (theGame->bombs[i].timerinit == 1){
-                theGame->bombs[i].timervalue = initbowlingballtimer(0, 3000, i);
-                if (theGame->bombs[i].timervalue == 1){
-                    theGame->bombs[i].timerinit = 0;
-                    theGame->bombs[i].explosioninit = 0;
-                    initExplosionPosition(theGame, i);
-                    initbowlingballtimer(SDL_GetTicks(), 1000, i);
-                }
-            }
-        }
-        for (int i = 0; i < 4; i++){
-            if (theGame->bombs[i].explosioninit == 0){
-                theGame->bombs[i].explosioninit = initbowlingballtimer(0, 1000, i);
-                for(int j=139;j<250;j++){
-                    if(theGame->wall[j].destroyedWall == 0){
-                        theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
-                    }
-                }
-                if (theGame->bombs[i].explosioninit == 1){
-                    theGame->allowBombPlacement[i] = 1;
-                }
-            }
-        }
-        // process();
+        process(theGame);
 
         // Collisiondetection
         collisionDetect(theGame);
@@ -462,7 +439,34 @@ PUBLIC void gameUpdate(Game theGame)
     }
 }
 
-// loads media into texture
+void process(Game theGame)
+{
+    for (int i = 0; i < 4; i++){
+        if (theGame->bombs[i].timerinit == 1){
+            theGame->bombs[i].timervalue = initbowlingballtimer(0, 3000, i);
+            if (theGame->bombs[i].timervalue == 1){
+                theGame->bombs[i].timerinit = 0;
+                theGame->bombs[i].explosioninit = 0;
+                initExplosionPosition(theGame, i);
+                initbowlingballtimer(SDL_GetTicks(), 1000, i);
+            }
+        }
+    }
+    for (int i = 0; i < 4; i++){
+        if (theGame->bombs[i].explosioninit == 0){
+            theGame->bombs[i].explosioninit = initbowlingballtimer(0, 1000, i);
+            for(int j=139;j<250;j++){
+                if(theGame->wall[j].destroyedWall == 0){
+                    theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
+                }
+            }
+            if (theGame->bombs[i].explosioninit == 1){
+                theGame->allowBombPlacement[i] = 1;
+            }
+        }
+    }
+}
+
 PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[]) // loadmedia
 {
     bool success = true;
@@ -731,4 +735,4 @@ void initExplosionPosition(Game theGame, int playerID)
             }
         }
     }
-}
+}                                                                               
