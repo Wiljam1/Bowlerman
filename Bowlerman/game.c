@@ -539,10 +539,10 @@ PRIVATE void loadAllTextures(Game theGame)
     theGame->player_texture[2][2] = (SDL_Texture *)loadTextures(theGame, "redman/right.png");
     theGame->player_texture[2][3] = (SDL_Texture *)loadTextures(theGame, "redman/left.png");
     /*PLAYER ID 3*/
-    theGame->player_texture[3][0] = (SDL_Texture *)loadTextures(theGame, "redman/down.png");
-    theGame->player_texture[3][1] = (SDL_Texture *)loadTextures(theGame, "redman/up.png");
-    theGame->player_texture[3][2] = (SDL_Texture *)loadTextures(theGame, "redman/right.png");
-    theGame->player_texture[3][3] = (SDL_Texture *)loadTextures(theGame, "redman/left.png");
+    theGame->player_texture[3][0] = (SDL_Texture *)loadTextures(theGame, "yellowman/down.png");
+    theGame->player_texture[3][1] = (SDL_Texture *)loadTextures(theGame, "yellowman/up.png");
+    theGame->player_texture[3][2] = (SDL_Texture *)loadTextures(theGame, "yellowman/right.png");
+    theGame->player_texture[3][3] = (SDL_Texture *)loadTextures(theGame, "yellowman/left.png");
     /*BOWLING BALLS*/
     theGame->bomb_texture[0] = (SDL_Texture *)loadTextures(theGame, "Bowling_Ball_BLue.png");
     theGame->bomb_texture[1] = (SDL_Texture *)loadTextures(theGame, "Bowling_Ball_Purple.png");
