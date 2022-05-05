@@ -30,7 +30,7 @@ UDPsocket sd;
 IPaddress srvadd;
 UDPpacket *p;
 UDPpacket *p2; // behövs egentligen bara en pekare.
-struct data udpData = {0, 0, 0, 0};
+struct data udpData = {0, 0, 0, 0, 0};
 
 //Funktionsprototyper ska väl ligga i .h-filen? ---- Tror inte om de är private då de endast används i denna fil? kanske inte spelar någon roll
 //Loading all game textures
@@ -347,6 +347,7 @@ PRIVATE void manageUDP(Game theGame)
     int x_pos = theGame->player[theGame->playerIDLocal].xPos;
     int y_pos = theGame->player[theGame->playerIDLocal].yPos;
 
+    //check to see if we should send bomb with UDP
     static int bombUDPtimer=0;
     udpData.placeBomb=0;
     if(theGame->bombs[theGame->playerIDLocal].timerinit==1){  
@@ -364,7 +365,7 @@ PRIVATE void manageUDP(Game theGame)
         udpData.placeBomb=0;
     }
 
-        //flagga för att reset:a movement direction när spelaren står stilla.
+    //flagga för att reset:a movement direction när spelaren står stilla.
     if( udpData.moveDirection != '0'){
        flag2=1;
     }
@@ -374,7 +375,6 @@ PRIVATE void manageUDP(Game theGame)
     }
 
     // send data if movement or bomb-placement
-    //problem med flag. det gör att det laggar
     if (abs(x_posOld - x_pos)>=5 || abs(y_posOld - y_pos)>=5 || flag == 1 || udpData.placeBomb==1)
     {
         printf("%d %d\n", (int)x_pos, (int)y_pos);
@@ -384,10 +384,8 @@ PRIVATE void manageUDP(Game theGame)
         memcpy(p->data, &udpData, sizeof(struct data) + 1);
         // fwrite(&udpData, sizeof(struct data), 1, p->data);
         p->len = sizeof(struct data) + 1;
-        // sprintf((char *)p->data, "%d %d\n", (int) x_pos, (int) y_pos);
         p->address.host = srvadd.host; /* Set the destination host */
         p->address.port = srvadd.port; /* And destination port */
-        // p->len = strlen((char *)p->data) + 1;
         SDLNet_UDP_Send(sd, -1, p);
         theGame->player[theGame->playerIDLocal].xPosOld = x_pos; 
         theGame->player[theGame->playerIDLocal].yPosOld = y_pos;
@@ -398,8 +396,6 @@ PRIVATE void manageUDP(Game theGame)
     // receive data
     if (SDLNet_UDP_Recv(sd, p2))
     {
-        int a, b;
-        // sscanf((char * )p2->data, "%d %d\n", &a, &b);
         memcpy(&udpData, (char *)p2->data, sizeof(struct data));
         int playerID = udpData.playerID;
         theGame->player[playerID].xPos = udpData.x;
@@ -407,7 +403,7 @@ PRIVATE void manageUDP(Game theGame)
         if (udpData.placeBomb==1){ 
             tryToPlaceBomb(theGame, playerID);
         }
-
+        udpData.placeBomb=0;
         theGame->player[playerID].moveDirection = udpData.moveDirection;
         theGame->player[playerID].id = udpData.playerID;
         printf("UDP Packet incoming, x,y-coord: %d %d of player %d\n", udpData.x, udpData.y, udpData.playerID);
