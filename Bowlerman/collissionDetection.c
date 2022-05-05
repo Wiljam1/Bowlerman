@@ -180,9 +180,17 @@ void testCollosionWithExplosion(Game theGame)
                        theGame->explosionPosition[j][k].y < theGame->player[i].yPos + theGame->player[i].height &&
                        theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y - 30 > theGame->player[i].yPos)
                     {
-                        //player dead
-                        theGame->player[i].isDead = true;
-                        return;
+                        for(int l=100;l<136;l++)
+                        {
+                            if (!(theGame->wall[l].x < theGame->explosionPosition[j][k].x &&
+                                theGame->wall[l].x + theGame->wall[l].w > theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w &&
+                                theGame->wall[l].y < theGame->explosionPosition[j][k].y &&
+                                theGame->wall[l].h + theGame->wall[l].y > theGame->explosionPosition[j][k].y + theGame->explosionPosition[j][k].h)){
+                                //player dead
+                                theGame->player[i].isDead = true;
+                            }
+                            
+                        }
                     }
                 }
             }
