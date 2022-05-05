@@ -171,7 +171,7 @@ void initGame(Game theGame)
         {
             count ++;
             theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+140, i*140+240);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*wallwidth*2+wallwidth*2, i*wallwidth*2+wallwidth*2 + 100);
         }
     }
     //initiering av förstörbara väggar i planen. 
@@ -182,7 +182,7 @@ void initGame(Game theGame)
         {
             count ++;
             theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+280, i*70+100);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*wallwidth+wallwidth*4, i*wallwidth+100);
         }
         i+=9;
     }
@@ -192,7 +192,7 @@ void initGame(Game theGame)
         {
             count ++;
             theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+210, i*70+100);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*wallwidth*2+wallwidth*3, i*wallwidth+100);
         }
         i+=7;
     }
@@ -202,7 +202,7 @@ void initGame(Game theGame)
         {
             count ++;
             theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+140, i*70+100);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*wallwidth+wallwidth*2, i*wallwidth+100);
         }
         i+=5;
     }
@@ -212,7 +212,7 @@ void initGame(Game theGame)
         {
             count ++;
             theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+70, i*70+100);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*wallwidth*2+wallwidth, i*wallwidth+100);
         }
         i++;
     }
@@ -222,7 +222,7 @@ void initGame(Game theGame)
         {
             count ++;
             theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+70, i*70+100);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*wallwidth+wallwidth, i*wallwidth+100);
         }
         i++;
     }
@@ -448,8 +448,9 @@ PUBLIC void gameUpdate(Game theGame)
         // Collisiondetection
         collisionDetect(theGame);
         testCollosionWithBombs(theGame);
-        testCollosionWithExplosion(theGame);
         testCollisionWithWalls(theGame);
+        testCollosionWithExplosion(theGame);
+        
 
         // Send/receive data to server
         manageUDP(theGame);
@@ -695,7 +696,7 @@ PRIVATE void renderWalls(Game theGame)
 void initExplosionPosition(Game theGame, int playerID)
 {
     int tilesize = 66, diff=2; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
-
+    SDL_Rect temp = {0,0,tilesize,tilesize};
     for(int i = 0; i < 5; i++){
         theGame->explosionPosition[playerID][i].h = tilesize;
         theGame->explosionPosition[playerID][i].w = tilesize;
@@ -707,27 +708,27 @@ void initExplosionPosition(Game theGame, int playerID)
     theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;
     theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
     j++;
-    if (testPossibilityToExplode(theGame, playerID, j) == 1)
-    {
-        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + tilesize + diff*3; // Neråt
-        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
-    }
+    theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + tilesize + diff*3; // Neråt
+    theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
     j++;
-    if (testPossibilityToExplode(theGame, playerID, j) == 1)
-    {
-        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y - tilesize - diff;    // UPP
-        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
-    }
+    theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y - tilesize - diff;    // UPP
+    theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
     j++;
-    if (testPossibilityToExplode(theGame, playerID, j) == 1)
-    {
-        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;             //Höger
-        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + tilesize + diff*3;
-    }
+    theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;             //Höger
+    theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + tilesize + diff*3;
     j++;
-    if (testPossibilityToExplode(theGame, playerID, j) == 1)
+    theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;             //Vänster
+    theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x - tilesize - diff;
+
+    for (int i=1;i<5;i++)
     {
-        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;             //Vänster
-        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x - tilesize - diff;
+        if (testPossibilityToExplode(theGame, playerID, i) == 0)
+        {
+            for(int powerup=0;powerup<5;powerup++)
+            {
+                theGame->explosionPosition[playerID][i].y = 5000;
+                theGame->explosionPosition[playerID][i].x = 5000;
+            }
+        }
     }
 }

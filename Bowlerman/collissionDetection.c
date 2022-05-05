@@ -292,14 +292,14 @@ int testCollisionWithDestroyableWalls(Game theGame, int k, int j)
     return 0;
 }
 
-int testPossibilityToExplode(Game theGame, int playerID, int j)
+int testPossibilityToExplode(Game theGame, int playerID, int i)
 {
     for(int k=100;k<136;k++)
     {
-        if(theGame->wall[k].x < theGame->explosionPosition[playerID][j].x &&
-            theGame->wall[k].x + theGame->wall[k].w > theGame->explosionPosition[playerID][j].x + theGame->explosionPosition[playerID][j].w &&
-            theGame->wall[k].y < theGame->explosionPosition[playerID][j].y &&
-            theGame->wall[k].h + theGame->wall[k].y > theGame->explosionPosition[playerID][j].y + theGame->explosionPosition[playerID][j].h)
+        if(theGame->wall[k].x < theGame->explosionPosition[playerID][i].x &&
+            theGame->wall[k].x + theGame->wall[k].w > theGame->explosionPosition[playerID][i].x + theGame->explosionPosition[playerID][i].w &&
+            theGame->wall[k].y < theGame->explosionPosition[playerID][i].y &&
+            theGame->wall[k].h + theGame->wall[k].y > theGame->explosionPosition[playerID][i].y + theGame->explosionPosition[playerID][i].h)
         {
             return 0;
         } 
