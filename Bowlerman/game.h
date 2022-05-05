@@ -1,20 +1,28 @@
 #ifndef game_h
 #define game_h
-#include <stdbool.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_net.h>
+#include <SDL2/SDL_timer.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 #include "player.h"
 #include "bomb.h"
 #include "wall.h"
+
+#define PUBLIC /* empty */
+#define PRIVATE static
 
 //values to be set by menu in the future
 #define PLAYERTEXTURES 4
 #define MAXPLAYERS 4    //how many players are online
 
-
 #define PLAYERAMOUNT 4    //how many players are online
 #define WALLAMOUNT 100  
 
-#define WIDTH 1190 // Move eventually
+#define WIDTH 1190 // To be set by menu
 #define HEIGHT 910 + 100
 
 struct game_type
@@ -53,6 +61,7 @@ struct game_type
 typedef struct game_type *Game;
 Game createWindow();              // Struct for app initialization
 void initGame(Game theGame);
+void loadUDP(Game theGame);
 SDL_Texture *loadTextures(Game newGame, char fileLocation[]); // Load any image you want in the resources/ folder!
 void gameUpdate(Game newGame);  // Game loop
 bool checkEvents(Game theGame);

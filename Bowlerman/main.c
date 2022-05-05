@@ -6,8 +6,8 @@
 
 int main(int argc, char *argv[])
 { 
-    Game bowlerman = createWindow();
-    gameUpdate(bowlerman);
-    destroyGame(bowlerman);
+    Game game = createWindow();
+    gameUpdate(game);
+    destroyGame(game);
     return 0;
 }

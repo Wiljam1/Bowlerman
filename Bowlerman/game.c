@@ -1,19 +1,9 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_net.h>
-#include <SDL2/SDL_timer.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
 #include "game.h"
 #include "collissionDetection.h"
 #include "sorter.h"
 #include "bomb.h"
 
-#define PUBLIC /* empty */
-#define PRIVATE static
-#define LENGTH 100
+#define LENGTH 100 // ??????
 
 struct data
 { // data sent via UDP
@@ -33,19 +23,17 @@ UDPpacket *p2; // behövs egentligen bara en pekare.
 struct data udpData = {0, 0, 0, 0};
 
 //Funktionsprototyper ska väl ligga i .h-filen? ---- Tror inte om de är private då de endast används i denna fil? kanske inte spelar någon roll
-//Loading all game textures
 PRIVATE void loadAllTextures(Game theGame);
-// Updating textures depending on movement
-PRIVATE void UpdatePlayerTextures(Game theGame);
-//Render wall textures
+PRIVATE void UpdatePlayerTextures(Game theGame); // Updating textures depending on movement
 PRIVATE void renderWalls(Game theGame);
 void initExplosionPosition(Game theGame, int playerID);
 PRIVATE void tryToPlaceBomb(Game theGame, int playerID);
+PRIVATE void manageUDP(Game theGame);
 
-// initializes game
 PUBLIC Game createWindow()
 {
     Game theGame = malloc(sizeof(struct game_type));
+
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
         printf("Failed to initialize SDL2: %s\n", SDL_GetError());
@@ -65,34 +53,120 @@ PUBLIC Game createWindow()
         fprintf(stderr, "SDLNet_Init: %s\n", SDLNet_GetError());
         exit(EXIT_FAILURE);
     }
-
     if (!(sd = SDLNet_UDP_Open(0)))
     {
         fprintf(stderr, "SDLNet_UDP_Open: %s\n", SDLNet_GetError());
         exit(EXIT_FAILURE);
     }
-
     /* Resolve server name  */
     if (SDLNet_ResolveHost(&srvadd, "127.0.0.1", 2000) == -1)
     {
         fprintf(stderr, "SDLNet_ResolveHost(192.0.0.1 2000): %s\n", SDLNet_GetError());
         exit(EXIT_FAILURE);
     }
-
     if (!((p = SDLNet_AllocPacket(sizeof(struct data) + 1)) && (p2 = SDLNet_AllocPacket(sizeof(struct data) + 1))))
     {
         fprintf(stderr, "SDLNet_AllocPacket: %s\n", SDLNet_GetError());
         exit(EXIT_FAILURE);
     }
+
     return theGame;
 }
 
-// initializes startvalues for game
 void initGame(Game theGame)
 {
     // Loading textures from file
     loadAllTextures(theGame);
 
+    loadUDP(theGame);
+
+    // detta ska ändras via servern sen.
+    theGame->playerAmount = PLAYERAMOUNT;
+
+    // allow bomb placement init
+    for (int i = 0; i < 4; i++)
+    {
+        theGame->allowBombPlacement[i] = 1;
+    }
+
+    // init x amount of players
+    theGame->player[0] = initPlayer(70, 140, 0); // sets x and y coordinates and resets values.
+    if (theGame->playerAmount > 1)
+        theGame->player[1] = initPlayer(1076, 140, 1);
+    if (theGame->playerAmount > 2)
+        theGame->player[2] = initPlayer(70, 870, 2);
+    if (theGame->playerAmount > 3)
+        theGame->player[3] = initPlayer(1076, 870, 3); 
+
+    // Init walls / map
+    int wallwidth = WIDTH/17; // Vet inte hur vi ska bestämma dehär variablerna riktigt,
+    int wallheight = WIDTH/17;  // Om de ens kommer användas, väggarna kommer ju alltid vara den här storleken?
+    for (int i = 0; i < WALLAMOUNT; i++)
+    {
+        theGame->wall[i] = initWalls(WALLAMOUNT, wallwidth, wallheight);
+        if (i < 20)
+            theGame->wall[i] = wallPlace(i * wallwidth, 100);
+        else if (i < 40)
+            theGame->wall[i] = wallPlace(wallwidth * (i - 20), HEIGHT - wallheight);
+        else if (i < 60)
+            theGame->wall[i] = wallPlace(0, (i - 40) * wallheight + 100);
+        else if (i < 80)
+            theGame->wall[i] = wallPlace(WIDTH - wallwidth, (i - 60) * wallheight + 100);
+    }
+    //initiering av oförstörbara och förstörbara väggar i mitten av planen.
+    int count=-1;
+    for (int i=0;i < 5; i++){
+        for(int j= 0; j < 7; j++){
+            count ++;
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+140, i*140+240);
+        }
+    }
+    count=39;
+    for (int i=1;i<12;i++){
+        for(int j=0;j<9;j++){
+            count ++;
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+280, i*70+100);
+        }
+        i+=9;
+    }
+    for (int i=2;i<12;i++){
+        for(int j=0;j<6;j++){
+            count ++;
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+210, i*70+100);
+        }
+        i+=7;
+    }
+    for (int i=3;i<12;i++){
+        for(int j=0;j<13;j++){
+            count ++;
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+140, i*70+100);
+        }
+        i+=5;
+    }
+    for (int i=4;i<9;i++){
+        for(int j=0;j<8;j++){
+            count ++;
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+70, i*70+100);
+        }
+        i++;
+    }
+    for (int i=5;i<8;i++){
+        for(int j=0;j<15;j++){
+            count ++;
+            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT, wallwidth, wallheight);
+            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+70, i*70+100);
+        }
+        i++;
+    }
+}
+
+void loadUDP(Game theGame)
+{
     // check server what ID you have.
     // getPlayerID();
     // get playerID via UDP
@@ -111,138 +185,8 @@ void initGame(Game theGame)
     theGame->playerIDLocal = udpData.playerID;
     printf("UDP Packet incoming %d\n", udpData.playerID);
     printf("%d", theGame->playerIDLocal);
-
-    // detta ska ändras via servern sen.
-    theGame->playerAmount = PLAYERAMOUNT;
-
-    // allow bomb placement init
-    for (int i = 0; i < 4; i++)
-    {
-        theGame->allowBombPlacement[i] = 1;
-    }
-
-    // init x amount of players
-    theGame->player[0] = initPlayer(70, 140, 0); // sets x and y coordinates and resets values.
-
-    if (theGame->playerAmount > 1)
-    {
-        theGame->player[1] = initPlayer(1076, 140, 1); // sets x and y coordinates and resets values.
-    }
-    if (theGame->playerAmount > 2)
-    {
-        theGame->player[2] = initPlayer(70, 870, 2); // sets x and y coordinates and resets values.
-    }
-    if (theGame->playerAmount > 3)
-    {
-        theGame->player[3] = initPlayer(1076, 870, 3); // sets x and y coordinates and resets values.
-    }
-
-    // Init walls / map
-    float wallwidth = WIDTH/17; // Vet inte hur vi ska bestämma dehär variablerna riktigt,
-    int wallheight = WIDTH/17;  // Om de ens kommer användas, väggarna kommer ju alltid vara den här storleken?
-    for (int i = 0; i < WALLAMOUNT; i++)
-    {
-        theGame->wall[i] = initWalls(WALLAMOUNT, wallwidth, wallheight);
-        if (i < 20)
-        {
-            theGame->wall[i] = wallPlace(i * wallwidth, 100);
-        }
-        else if (i < 40)
-        {
-            theGame->wall[i] = wallPlace(wallwidth * (i - 20), HEIGHT - wallheight);
-        }
-        else if (i < 60)
-        {
-            theGame->wall[i] = wallPlace(0, (i - 40) * wallheight + 100);
-        }
-        else if (i < 80)
-        {
-            theGame->wall[i] = wallPlace(WIDTH - wallwidth, (i - 60) * wallheight + 100);
-        }
-        else
-        {
-        }
-    }
-    //initiering av oförstörbara väggar i mitten av planen.
-    int count=-1;
-    for (int i=0;i<5;i++)
-    {
-        for(int j=0;j<7;j++)
-        {
-            count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+140, i*140+240);
-        }
-    }
-    //initiering av förstörbara väggar i planen. 
-    count=39;
-    for (int i=1;i<12;i++)
-    {
-        for(int j=0;j<9;j++)
-        {
-            count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+280, i*70+100);
-        }
-        i+=9;
-    }
-    for (int i=2;i<12;i++)
-    {
-        for(int j=0;j<6;j++)
-        {
-            count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+210, i*70+100);
-        }
-        i+=7;
-    }
-    for (int i=3;i<12;i++)
-    {
-        for(int j=0;j<13;j++)
-        {
-            count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+140, i*70+100);
-        }
-        i+=5;
-    }
-    for (int i=4;i<9;i++)
-    {
-        for(int j=0;j<8;j++)
-        {
-            count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*140+70, i*70+100);
-        }
-        i++;
-    }
-    for (int i=5;i<8;i++)
-    {
-        for(int j=0;j<15;j++)
-        {
-            count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*70+70, i*70+100);
-        }
-        i++;
-    }
 }
 
-void tryToPlaceBomb(Game theGame, int playerID)
-{
-    if (theGame->allowBombPlacement[playerID] == 1) // man måste veta vilken player här
-    {
-        theGame->allowBombPlacement[playerID] = 0;
-        theGame->bombs[playerID] = initBomb(playerID);
-        theGame->bombs[playerID].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[playerID]) + 56) - 40;
-        theGame->bombs[playerID].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[playerID]) + 8);
-        theGame->bombs[playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, playerID); // också viktigt att veta vilken player
-        theGame->bombs[playerID].timerinit = 1;           //detta värdet borde skickas som data till andra players
-        theGame->bombs[playerID].placedBombRestriction = 1;
-    }
-}
-
-// handles processes, like keyboard-inputs etc
 bool checkEvents(Game theGame)
 {
     // Enter game loop (SDL_PollEvent)
@@ -336,76 +280,6 @@ void manageMovementInputs(Game theGame)
     theGame->player[theGame->playerIDLocal].yPos += velY;
 }
 
-PRIVATE void manageUDP(Game theGame)
-{
-    static int flag;
-    udpData.moveDirection = theGame->player[theGame->playerIDLocal].moveDirection;
-    int x_posOld = theGame->player[theGame->playerIDLocal].xPosOld;
-    int y_posOld = theGame->player[theGame->playerIDLocal].yPosOld;
-    int x_pos = theGame->player[theGame->playerIDLocal].xPos;
-    int y_pos = theGame->player[theGame->playerIDLocal].yPos;
-
-    static int bombUDPtimer=0;
-    udpData.placeBomb=0;
-    if(theGame->bombs[theGame->playerIDLocal].timerinit==1){  
-        if(bombUDPtimer<1)    //vi ser till att skicka 1 packets, för om vi skickar för mycket blir det buggigt pga delay med UDP i slutet
-        {
-            udpData.placeBomb=1;
-            bombUDPtimer++;
-        }
-        else {
-            udpData.placeBomb=0;
-        }
-    }
-    else{
-        bombUDPtimer=0;
-        udpData.placeBomb=0;
-    }
-
-    // send data if movement or bomb-placement
-    if (x_posOld != x_pos || y_posOld != y_pos || flag == 1 || udpData.placeBomb==1)
-    {
-        printf("%d %d\n", (int)x_pos, (int)y_pos);
-        udpData.playerID = theGame->playerIDLocal;
-        
-        
-        udpData.x = x_pos;
-        udpData.y = y_pos;
-        memcpy(p->data, &udpData, sizeof(struct data) + 1);
-        // fwrite(&udpData, sizeof(struct data), 1, p->data);
-        p->len = sizeof(struct data) + 1;
-        // sprintf((char *)p->data, "%d %d\n", (int) x_pos, (int) y_pos);
-        p->address.host = srvadd.host; /* Set the destination host */
-        p->address.port = srvadd.port; /* And destination port */
-        // p->len = strlen((char *)p->data) + 1;
-        SDLNet_UDP_Send(sd, -1, p);
-        theGame->player[theGame->playerIDLocal].xPosOld = x_pos; // Fixade oldxpos
-        theGame->player[theGame->playerIDLocal].yPosOld = y_pos;
-        flag = 0;
-    }
-    if (udpData.moveDirection != '0'){
-        flag = 1;
-    }
-    // receive data
-    if (SDLNet_UDP_Recv(sd, p2))
-    {
-        int a, b;
-        // sscanf((char * )p2->data, "%d %d\n", &a, &b);
-        memcpy(&udpData, (char *)p2->data, sizeof(struct data));
-        int playerID = udpData.playerID;
-        theGame->player[playerID].xPos = udpData.x;
-        theGame->player[playerID].yPos = udpData.y;
-        if (udpData.placeBomb==1){ 
-            tryToPlaceBomb(theGame, playerID);
-        }
-
-        theGame->player[playerID].moveDirection = udpData.moveDirection;
-        theGame->player[playerID].id = udpData.playerID;
-        printf("UDP Packet incoming, x,y-coord: %d %d of player %d\n", udpData.x, udpData.y, udpData.playerID);
-    }
-}
-
-// game loop
 PUBLIC void gameUpdate(Game theGame)
 {
     // Initialize
@@ -447,9 +321,9 @@ PUBLIC void gameUpdate(Game theGame)
 
         // Collisiondetection
         collisionDetect(theGame);
+        testCollisionWithWalls(theGame);
         testCollosionWithBombs(theGame);
         testCollosionWithExplosion(theGame);
-        testCollisionWithWalls(theGame);
 
         // Send/receive data to server
         manageUDP(theGame);
@@ -461,7 +335,6 @@ PUBLIC void gameUpdate(Game theGame)
     }
 }
 
-// loads media into texture
 PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[]) // loadmedia
 {
     bool success = true;
@@ -476,7 +349,6 @@ PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[]) // loadmedia
     return SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
 }
 
-// renders background and players etc.
 void renderTextures(Game theGame)
 {
     // Define stuff to make function easier to read
@@ -517,6 +389,122 @@ void renderTextures(Game theGame)
     // Draw GUI last (top of screenlayers)
 
     SDL_RenderPresent(renderer); // present renderer
+}
+
+PUBLIC void destroyGame(Game theGame)
+{
+    SDL_DestroyTexture(theGame->background);
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            SDL_DestroyTexture(theGame->player_texture[i][j]);
+        }
+    }
+    for (int i = 0; i < 4; i++)
+    {
+        SDL_DestroyTexture(theGame->bomb_texture[i]);
+    }
+    for(int i = 0; i < 3; i++){
+        SDL_DestroyTexture(theGame->textureWall[i]);
+    }
+    SDL_DestroyTexture(theGame->bombExplosion_texture);
+    SDL_DestroyRenderer(theGame->renderer);
+    SDL_DestroyWindow(theGame->window);
+    SDL_Quit();
+}
+
+// ALLT UNDER DEHÄR BORDE VARA I EN ANNAN FIL
+void initExplosionPosition(Game theGame, int playerID)
+{
+    int tilesize = 66, diff=2; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
+
+    for(int i = 0; i < 5; i++){
+        theGame->explosionPosition[playerID][i].h = tilesize;
+        theGame->explosionPosition[playerID][i].w = tilesize;
+    }
+
+    // I framtiden ska man väl kunna ha större explosionsradius än det vanliga?
+    // Man kanske får initiera flera positioner från början men endast rendera/ha collision med de som ska visas
+
+    theGame->explosionPosition[playerID][0].y = theGame->bombs[playerID].position.y + diff;
+    theGame->explosionPosition[playerID][0].x = theGame->bombs[playerID].position.x + diff;
+
+    theGame->explosionPosition[playerID][1].y = theGame->bombs[playerID].position.y + tilesize + diff*3; // Neråt
+    theGame->explosionPosition[playerID][1].x = theGame->bombs[playerID].position.x + diff;
+
+    theGame->explosionPosition[playerID][2].y = theGame->bombs[playerID].position.y - tilesize - diff;    // UPP
+    theGame->explosionPosition[playerID][2].x = theGame->bombs[playerID].position.x + diff;
+
+    theGame->explosionPosition[playerID][3].y = theGame->bombs[playerID].position.y + diff;             //Höger
+    theGame->explosionPosition[playerID][3].x = theGame->bombs[playerID].position.x + tilesize + diff*3;
+
+    theGame->explosionPosition[playerID][4].y = theGame->bombs[playerID].position.y + diff;             //Vänster
+    theGame->explosionPosition[playerID][4].x = theGame->bombs[playerID].position.x - tilesize - diff;
+}
+
+void tryToPlaceBomb(Game theGame, int playerID)
+{
+    if (theGame->allowBombPlacement[playerID] == 1) // man måste veta vilken player här
+    {
+        theGame->allowBombPlacement[playerID] = 0;
+        theGame->bombs[playerID] = initBomb(playerID);
+        theGame->bombs[playerID].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[playerID]) + 56) - 40;
+        theGame->bombs[playerID].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[playerID]) + 8);
+        theGame->bombs[playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, playerID); // också viktigt att veta vilken player
+        theGame->bombs[playerID].timerinit = 1;           //detta värdet borde skickas som data till andra players
+        theGame->bombs[playerID].placedBombRestriction = 1;
+    }
+}
+
+PRIVATE void renderWalls(Game theGame)
+{
+    // Draw walls
+    for (int i = 77; i >= 0; i--)
+    {
+        SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
+        /* LONG WALLS*/
+        if (i < 36)
+        {
+            SDL_RenderCopy(theGame->renderer, theGame->textureWall[0], NULL, &wallRect);
+        }
+        else if (i < 76)
+        {
+            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[0], NULL, &wallRect, 90, 0, 0);
+        }
+        /* CORNER WALLS */
+        if (i == 0)
+        {
+            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 90, 0, 0);
+        }
+        if (i == 16)
+        {
+            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 180, 0, 0);
+        }
+        if (i == 20)
+        {
+            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 0, 0, 0);
+        }
+        if (i == 36)
+        {
+            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 270, 0, 0);
+        }
+    }
+    for (int i=0;i<36;i++)
+    {   
+        SDL_Rect wallRect = {theGame->wall[i+WALLAMOUNT].x, theGame->wall[i+WALLAMOUNT].y, theGame->wall[i+WALLAMOUNT].w, theGame->wall[i+WALLAMOUNT].h};
+        SDL_RenderCopy(theGame->renderer, theGame->textureWall[2], NULL, &wallRect);        
+    }
+    for (int i=139;i<250;i++)
+    {   
+        if (theGame->wall[i].destroyedWall == 0)
+        {
+            SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
+            SDL_RenderCopy(theGame->renderer, theGame->textureWall[3], NULL, &wallRect);   
+        }     
+    }
+
+
 }
 
 PRIVATE void loadAllTextures(Game theGame)
@@ -618,116 +606,71 @@ PRIVATE void UpdatePlayerTextures(Game theGame)
     }
 }
 
-PUBLIC void destroyGame(Game theGame)
+PRIVATE void manageUDP(Game theGame)
 {
-    SDL_DestroyTexture(theGame->background);
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            SDL_DestroyTexture(theGame->player_texture[i][j]);
-        }
-    }
-    for (int i = 0; i < 4; i++)
-    {
-        SDL_DestroyTexture(theGame->bomb_texture[i]);
-    }
-    for(int i = 0; i < 3; i++){
-        SDL_DestroyTexture(theGame->textureWall[i]);
-    }
-    SDL_DestroyTexture(theGame->bombExplosion_texture);
-    SDL_DestroyRenderer(theGame->renderer);
-    SDL_DestroyWindow(theGame->window);
-    SDL_Quit();
-}
+    static int flag;
+    udpData.moveDirection = theGame->player[theGame->playerIDLocal].moveDirection;
+    int x_posOld = theGame->player[theGame->playerIDLocal].xPosOld;
+    int y_posOld = theGame->player[theGame->playerIDLocal].yPosOld;
+    int x_pos = theGame->player[theGame->playerIDLocal].xPos;
+    int y_pos = theGame->player[theGame->playerIDLocal].yPos;
 
-PRIVATE void renderWalls(Game theGame)
-{
-    // Draw walls
-    for (int i = 77; i >= 0; i--)
-    {
-        SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
-        /* LONG WALLS*/
-        if (i < 36)
+    static int bombUDPtimer=0;
+    udpData.placeBomb=0;
+    if(theGame->bombs[theGame->playerIDLocal].timerinit==1){  
+        if(bombUDPtimer<1)    //vi ser till att skicka 1 packets, för om vi skickar för mycket blir det buggigt pga delay med UDP i slutet
         {
-            SDL_RenderCopy(theGame->renderer, theGame->textureWall[0], NULL, &wallRect);
+            udpData.placeBomb=1;
+            bombUDPtimer++;
         }
-        else if (i < 76)
-        {
-            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[0], NULL, &wallRect, 90, 0, 0);
-        }
-        /* CORNER WALLS */
-        if (i == 0)
-        {
-            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 90, 0, 0);
-        }
-        if (i == 16)
-        {
-            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 180, 0, 0);
-        }
-        if (i == 20)
-        {
-            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 0, 0, 0);
-        }
-        if (i == 36)
-        {
-            SDL_RenderCopyEx(theGame->renderer, theGame->textureWall[1], NULL, &wallRect, 270, 0, 0);
+        else {
+            udpData.placeBomb=0;
         }
     }
-    for (int i=0;i<36;i++)
-    {   
-        SDL_Rect wallRect = {theGame->wall[i+WALLAMOUNT].x, theGame->wall[i+WALLAMOUNT].y, theGame->wall[i+WALLAMOUNT].w, theGame->wall[i+WALLAMOUNT].h};
-        SDL_RenderCopy(theGame->renderer, theGame->textureWall[2], NULL, &wallRect);        
-    }
-    for (int i=139;i<250;i++)
-    {   
-        if (theGame->wall[i].destroyedWall == 0)
-        {
-            SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
-            SDL_RenderCopy(theGame->renderer, theGame->textureWall[3], NULL, &wallRect);   
-        }     
+    else{
+        bombUDPtimer=0;
+        udpData.placeBomb=0;
     }
 
-
-}
-
-//Kanske borde vara i bomb.c?
-void initExplosionPosition(Game theGame, int playerID)
-{
-    int tilesize = 66, diff=2; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
-
-    for(int i = 0; i < 5; i++){
-        theGame->explosionPosition[playerID][i].h = tilesize;
-        theGame->explosionPosition[playerID][i].w = tilesize;
-    }
-
-    // I framtiden ska man väl kunna ha större explosionsradius än det vanliga?
-    // Man kanske får initiera flera positioner från början men endast rendera/ha collision med de som ska visas
-    int j = 0;
-    theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;
-    theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
-    j++;
-    if (testPossibilityToExplode(theGame, playerID, j) == 1)
+    // send data if movement or bomb-placement
+    if (x_posOld != x_pos || y_posOld != y_pos || flag == 1 || udpData.placeBomb==1)
     {
-        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + tilesize + diff*3; // Neråt
-        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
+        printf("%d %d\n", (int)x_pos, (int)y_pos);
+        udpData.playerID = theGame->playerIDLocal;
+        
+        
+        udpData.x = x_pos;
+        udpData.y = y_pos;
+        memcpy(p->data, &udpData, sizeof(struct data) + 1);
+        // fwrite(&udpData, sizeof(struct data), 1, p->data);
+        p->len = sizeof(struct data) + 1;
+        // sprintf((char *)p->data, "%d %d\n", (int) x_pos, (int) y_pos);
+        p->address.host = srvadd.host; /* Set the destination host */
+        p->address.port = srvadd.port; /* And destination port */
+        // p->len = strlen((char *)p->data) + 1;
+        SDLNet_UDP_Send(sd, -1, p);
+        theGame->player[theGame->playerIDLocal].xPosOld = x_pos; // Fixade oldxpos
+        theGame->player[theGame->playerIDLocal].yPosOld = y_pos;
+        flag = 0;
     }
-    j++;
-    if (testPossibilityToExplode(theGame, playerID, j) == 1)
-    {
-        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y - tilesize - diff;    // UPP
-        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
+    if (udpData.moveDirection != '0'){
+        flag = 1;
     }
-    j++;
-    if (testPossibilityToExplode(theGame, playerID, j) == 1)
+    // receive data
+    if (SDLNet_UDP_Recv(sd, p2))
     {
-        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;             //Höger
-        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + tilesize + diff*3;
-    }
-    j++;
-    if (testPossibilityToExplode(theGame, playerID, j) == 1)
-    {
-        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;             //Vänster
-        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x - tilesize - diff;
+        int a, b;
+        // sscanf((char * )p2->data, "%d %d\n", &a, &b);
+        memcpy(&udpData, (char *)p2->data, sizeof(struct data));
+        int playerID = udpData.playerID;
+        theGame->player[playerID].xPos = udpData.x;
+        theGame->player[playerID].yPos = udpData.y;
+        if (udpData.placeBomb==1){ 
+            tryToPlaceBomb(theGame, playerID);
+        }
+
+        theGame->player[playerID].moveDirection = udpData.moveDirection;
+        theGame->player[playerID].id = udpData.playerID;
+        printf("UDP Packet incoming, x,y-coord: %d %d of player %d\n", udpData.x, udpData.y, udpData.playerID);
     }
 }
