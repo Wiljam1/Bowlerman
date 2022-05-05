@@ -6,3 +6,6 @@ Bowlerman/UDPserver.out
 *.exe
 *.a
 *.out
+.vscode/configurationCache.log
+.vscode/settings.json
+.vscode/targets.log
