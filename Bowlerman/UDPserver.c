@@ -21,6 +21,7 @@ struct data {
    int status;
    int playerID;
    char moveDirection;
+    int placeBomb;
 };
 
 int main(int argc, char **argv)

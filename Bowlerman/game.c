@@ -22,6 +22,7 @@ struct data
     int status;
     int playerID;
     char moveDirection;
+    int placeBomb;
 };
 
 //Blir inte det här globala variabler typ?
@@ -39,6 +40,7 @@ PRIVATE void UpdatePlayerTextures(Game theGame);
 //Render wall textures
 PRIVATE void renderWalls(Game theGame);
 void initExplosionPosition(Game theGame, int playerID);
+PRIVATE void tryToPlaceBomb(Game theGame, int playerID);
 
 // initializes game
 PUBLIC Game createWindow()
@@ -226,6 +228,20 @@ void initGame(Game theGame)
     }
 }
 
+void tryToPlaceBomb(Game theGame, int playerID)
+{
+    if (theGame->allowBombPlacement[playerID] == 1) // man måste veta vilken player här
+    {
+        theGame->allowBombPlacement[playerID] = 0;
+        theGame->bombs[playerID] = initBomb(playerID);
+        theGame->bombs[playerID].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[playerID]) + 56) - 40;
+        theGame->bombs[playerID].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[playerID]) + 8);
+        theGame->bombs[playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, playerID); // också viktigt att veta vilken player
+        theGame->bombs[playerID].timerinit = 1;           //detta värdet borde skickas som data till andra players
+        theGame->bombs[playerID].placedBombRestriction = 1;
+    }
+}
+
 // handles processes, like keyboard-inputs etc
 bool checkEvents(Game theGame)
 {
@@ -252,17 +268,7 @@ bool checkEvents(Game theGame)
             switch (event.key.keysym.sym)
             {
             case SDLK_SPACE:
-                //Kan nog göras till en funktion
-                if (theGame->allowBombPlacement[theGame->playerIDLocal] == 1) // man måste veta vilken player här
-                {
-                    theGame->allowBombPlacement[theGame->playerIDLocal] = 0;
-                    theGame->bombs[theGame->playerIDLocal] = initBomb(theGame->playerIDLocal);
-                    theGame->bombs[theGame->playerIDLocal].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[theGame->playerIDLocal]) + 56) - 40;
-                    theGame->bombs[theGame->playerIDLocal].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[theGame->playerIDLocal]) + 8);
-                    theGame->bombs[theGame->playerIDLocal].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, theGame->playerIDLocal); // också viktigt att veta vilken player
-                    theGame->bombs[theGame->playerIDLocal].timerinit = 1;           //detta värdet borde skickas som data till andra players
-                    theGame->bombs[theGame->playerIDLocal].placedBombRestriction = 1;
-                }
+                tryToPlaceBomb(theGame, theGame->playerIDLocal);
                 break;
             case SDLK_ESCAPE:
                 done = true;
@@ -339,11 +345,28 @@ PRIVATE void manageUDP(Game theGame)
     int x_pos = theGame->player[theGame->playerIDLocal].xPos;
     int y_pos = theGame->player[theGame->playerIDLocal].yPos;
     
-    // send positions
-    if (x_posOld != x_pos || y_posOld != y_pos || flag == 1)
+
+    // send data if movement or bomb-placement
+    if (x_posOld != x_pos || y_posOld != y_pos || flag == 1 || theGame->bombs[theGame->playerIDLocal].timerinit==1)
     {
         printf("%d %d\n", (int)x_pos, (int)y_pos);
         udpData.playerID = theGame->playerIDLocal;
+        static int bombUDPtimer=0;
+        udpData.placeBomb=0;
+        if(theGame->bombs[theGame->playerIDLocal].timerinit==1){  
+            if(bombUDPtimer<1)    //vi ser till att skicka 1 packets, för om vi skickar för mycket blir det buggigt pga delay med UDP i slutet
+            {
+                udpData.placeBomb=1;
+                bombUDPtimer++;
+            }
+            else {
+                udpData.placeBomb=0;
+            }
+        }
+        else{
+            bombUDPtimer=0;
+            udpData.placeBomb=0;
+        }
         udpData.x = x_pos;
         udpData.y = y_pos;
         memcpy(p->data, &udpData, sizeof(struct data) + 1);
@@ -370,6 +393,10 @@ PRIVATE void manageUDP(Game theGame)
         int playerID = udpData.playerID;
         theGame->player[playerID].xPos = udpData.x;
         theGame->player[playerID].yPos = udpData.y;
+        if (udpData.placeBomb==1){ 
+            tryToPlaceBomb(theGame, playerID);
+        }
+
         theGame->player[playerID].moveDirection = udpData.moveDirection;
         theGame->player[playerID].id = udpData.playerID;
         printf("UDP Packet incoming, x,y-coord: %d %d of player %d\n", udpData.x, udpData.y, udpData.playerID);
@@ -421,6 +448,7 @@ PUBLIC void gameUpdate(Game theGame)
         testCollosionWithBombs(theGame);
         testCollosionWithExplosion(theGame);
         testCollisionWithWalls(theGame);
+
         // Send/receive data to server
         manageUDP(theGame);
 

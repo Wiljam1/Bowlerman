@@ -44,6 +44,11 @@ int initbowlingballtimer(int startTime, int timeAmount, int playerID)
     return 0;
 }
 
+int serverTimer()
+{
+    
+}
+
 //centrerar bombernas position, i för inkommande possition, j och k för tillfälliga variabler 
 int correctBowlingBallPos(int i)
 {
