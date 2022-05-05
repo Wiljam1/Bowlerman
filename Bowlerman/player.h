@@ -27,6 +27,7 @@ struct playerController
     float yVel, xVel, xPos, yPos;
     float xPosOld;
     float yPosOld;
+    bool isMoving; //is the player moving or not
 
     float speed;
     int height;
