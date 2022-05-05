@@ -1,0 +1,303 @@
+make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 3.81
+# Copyright (C) 2006  Free Software Foundation, Inc.
+# This is free software; see the source for copying conditions.
+# There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+# This program built for i386-pc-mingw32
+ 
+
+# Make-databas, utskriven Thu May 05 20:42:19 2022
+
+# Variabler
+
+# automatisk
+<D = $(patsubst %/,%,$(dir $<))
+# automatisk
+?F = $(notdir $?)
+# makefil
+MAKEFLAGS = Rrqp
+# milj�
+VSCODE_LOG_NATIVE = false
+# automatisk
+?D = $(patsubst %/,%,$(dir $?))
+# automatisk
+@D = $(patsubst %/,%,$(dir $@))
+# milj�
+HOMEDRIVE = C:
+# automatisk
+@F = $(notdir $@)
+# automatisk
+^D = $(patsubst %/,%,$(dir $^))
+# milj�
+SIGRITY_EDA_DIR = C:\Cadence\SPB_17.4
+# normal
+SHELL := sh.exe
+# milj�
+WINDIR = C:\Windows
+# milj�
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# milj�
+VBOX_MSI_INSTALL_PATH = C:\Program Files\Oracle\VirtualBox\
+# milj�
+ONEDRIVE = C:\Users\emilw\OneDrive - KTH
+# milj�
+PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+# makefil
+MAKEFILE_LIST := 
+# milj�
+TMP = C:\Users\emilw\AppData\Local\Temp
+# milj�
+VSCODE_VERBOSE_LOGGING = true
+# milj�
+PROGRAMW6432 = C:\Program Files
+# milj�
+PROGRAMDATA = C:\ProgramData
+# milj�
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-d24a7e74-02bd-4f18-a4c8-cb0a328c61f9-sock
+# milj�
+VSCODE_CWD = C:\Users\emilw\AppData\Local\Programs\Microsoft VS Code
+# milj�
+CDS_LIC_ONLY = 1
+# milj�
+PATH = C:\MinGW\bin;C:\Program Files\MATLAB\R2020b\bin;C:\Program Files\Git\cmd;C:\Windows\System32;C:\toolchain-gd32v-win\compiler\bin;C:\Users\emilw\AppData\Local\Microsoft\WindowsApps;C:\Users\emilw\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\emilw\AppData\Local\GitHubDesktop\bin;C:\msys64\mingw64\bin;C:\Program Files (x86)\GnuWin32\bin;
+# milj� 
+make.exe: *** Ingen regel f�r att skapa m�let "all".  Stannar.
+
+
+COMMONPROGRAMW6432 = C:\Program Files\Common Files
+# makefil
+CURDIR := c:/GitHub/Grupp2
+# milj�
+PROCESSOR_ARCHITECTURE = x86
+# milj�
+USERPROFILE = C:\Users\emilw
+# milj�
+ALLUSERSPROFILE = C:\ProgramData
+# milj�
+DOKANLIBRARY1 = C:\Program Files\Dokan\Dokan Library-1.4.1\
+# milj�
+VSCODE_LOG_STACK = false
+# milj�
+NUMBER_OF_PROCESSORS = 8
+# milj�
+ELECTRON_RUN_AS_NODE = 1
+# normal
+.FEATURES := target-specific order-only second-expansion else-if archives
+# automatisk
+%F = $(notdir $%)
+# milj�
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_12700_YLAUTRIZEPRIGBHG
+# milj�
+VSCODE_PIPE_LOGGING = true
+# milj�
+COMPUTERNAME = EMILS-LENOVO
+# milj�
+PROGRAMFILES = C:\Program Files (x86)
+# milj�
+DRIVERDATA = C:\Windows\System32\Drivers\DriverData
+# milj�
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# milj�
+USERNAME = emilw
+# milj�
+PUBLIC = C:\Users\Public
+# milj�
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# milj�
+HOME = C:\Users\emilw\AppData\Roaming\SPB_Data
+# milj�
+VSCODE_CODE_CACHE_PATH = C:\Users\emilw\AppData\Roaming\Code\CachedData\57fd6d0195bb9b9d1b49f6da5db789060795de47
+# milj�
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# milj�
+COMMONPROGRAMFILES = C:\Program Files (x86)\Common Files
+# milj�
+LOGONSERVER = \\EMILS-LENOVO
+# milj�
+CDS_LIC_FILE = 5280@localhost
+# milj�
+ONEDRIVECONSUMER = C:\Users\emilw\OneDrive
+# milj�
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# milj�
+USERDOMAIN = EMILS-LENOVO
+# normal
+MAKE = $(MAKE_COMMAND)
+# normal
+MAKECMDGOALS := all
+# milj�
+QT_DEVICE_PIXEL_RATIO = auto
+# milj�
+ONEDRIVECOMMERCIAL = C:\Users\emilw\OneDrive - KTH
+# normal
+MAKE_VERSION := 3.81
+# makefil
+.DEFAULT_GOAL := 
+# milj�
+DOKANLIBRARY1_LIBRARYPATH_X64 = C:\Program Files\Dokan\Dokan Library-1.4.1\lib\
+# milj�
+PROGRAMFILES(X86) = C:\Program Files (x86)
+# automatisk
+%D = $(patsubst %/,%,$(dir $%))
+# milj�
+CDS_SITE = C:\Cadence\Company
+# milj�
+LOCALAPPDATA = C:\Users\emilw\AppData\Local
+# milj�
+PSMODULEPATH = C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules
+# normal
+MAKE_COMMAND := make.exe
+# milj�
+PROCESSOR_ARCHITEW6432 = AMD64
+# normal
+.VARIABLES := 
+# automatisk
+*F = $(notdir $*)
+# milj�
+PROCESSOR_IDENTIFIER = AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD
+# milj�
+OS = Windows_NT
+# milj�
+VSCODE_IPC_HOOK = \\.\pipe\aaf37932ccb3576ece5a6be0ea81cb1e-1.67.0-main-sock
+# milj�
+HOMEPATH = \Users\emilw
+# milj�
+COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
+# milj�
+PROMPT = $P$G
+# milj�
+MFLAGS = -Rrqp
+# automatisk
+*D = $(patsubst %/,%,$(dir $*))
+# milj�
+PT8HOME = C:\Program Files\Cisco Packet Tracer 8.0.1
+# milj�
+SYSTEMROOT = C:\Windows
+# automatisk
++D = $(patsubst %/,%,$(dir $+))
+# automatisk
++F = $(notdir $+)
+# milj�
+APPDATA = C:\Users\emilw\AppData\Roaming
+# milj�
+__COMPAT_LAYER = DetectorsAppHealth
+# milj�
+TEMP = C:\Users\emilw\AppData\Local\Temp
+# milj�
+COMSPEC = C:\Windows\system32\cmd.exe
+# milj�
+DOKANLIBRARY1_LIBRARYPATH_X86 = C:\Program Files\Dokan\Dokan Library-1.4.1\x86\lib\
+# normal
+MAKEFILES := 
+# automatisk
+<F = $(notdir $<)
+# milj�
+LC_ALL = C
+# automatisk
+^F = $(notdir $^)
+# normal
+SUFFIXES := 
+# milj�
+SYSTEMDRIVE = C:
+# milj�
+SESSIONNAME = Console
+# milj�
+PROCESSOR_REVISION = 6001
+# milj�
+MAKELEVEL := 0
+# milj�
+LANG = C
+# milj�
+PROCESSOR_LEVEL = 23
+# milj�
+VSCODE_PID = 12700
+# milj�
+USERDOMAIN_ROAMINGPROFILE = EMILS-LENOVO
+# variable set hash-table stats:
+# Load=100/1024=10%, Rehash=0, Collisions=10/117=9%
+
+# Pattern-specific Variable Values
+
+# Inga m�nsterspecifika variabelv�rden.
+
+# Kataloger
+
+# C:\toolchain-gd32v-win\compiler\bin (nyckel C:/toolchain-gd32v-win/compiler/bin, mtid 1585716364): 32 filer, inga om�jligheter.
+# . (nyckel c:/GitHub/Grupp2, mtid 1651773526): 11 filer, inga om�jligheter.
+# C:\MinGW\bin (nyckel C:/MinGW/bin, mtid 1651480178): 71 filer, inga om�jligheter.
+# C:\Program Files\MATLAB\R2020b\bin (nyckel C:/Program Files/MATLAB/R2020b/bin, mtid 1632465700): 13 filer, inga om�jligheter.
+# C:\Users\emilw\AppData\Local\Programs\Microsoft VS Code\bin (nyckel C:/Users/emilw/AppData/Local/Programs/Microsoft VS Code/bin, mtid 1651774515): 4 filer, inga om�jligheter.
+# C:\msys64\mingw64\bin (nyckel C:/msys64/mingw64/bin, mtid 1647971087): 207 filer, inga om�jligheter.
+# C:\Program Files\Git\cmd (nyckel C:/Program Files/Git/cmd, mtid 1647860973): 8 filer, inga om�jligheter.
+# C:\Windows\System32 (nyckel C:/Windows/System32, mtid 1651563258): 2836 filer, inga om�jligheter.
+# C:\Users\emilw\AppData\Local\GitHubDesktop\bin (nyckel C:/Users/emilw/AppData/Local/GitHubDesktop/bin, mtid 1647859905): 4 filer, inga om�jligheter.
+# C:\Users\emilw\AppData\Local\Microsoft\WindowsApps (nyckel C:/Users/emilw/AppData/Local/Microsoft/WindowsApps, mtid 1651498749): 19 filer, inga om�jligheter.
+# C:\Program Files (x86)\GnuWin32\bin (nyckel C:/Program Files (x86)/GnuWin32/bin, mtid 1647983943): 5 filer, inga om�jligheter.
+
+# 3210 filer, inga impossibilities in 11 directories.
+
+# Implicit Rules
+
+# Inga implicita regler.
+
+# Filer
+
+# Inte ett m�l:
+all:
+#  Kommandoradsm�l.
+#  Implicit regels�kning har genomf�rts.
+#  Filen finns inte.
+#  Filen har inte uppdaterats.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Inte ett m�l:
+.DEFAULT:
+#  Implicit regels�kning har inte genomf�rts.
+#  �ndringstiden har inte kontrollerats.
+#  Filen har inte uppdaterats.
+
+# Inte ett m�l:
+makefile:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit regels�kning har genomf�rts.
+#  Filen finns inte.
+#  Filen har uppdaterats.
+#  Uppdateringen misslyckades.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Inte ett m�l:
+.SUFFIXES:
+#  Implicit regels�kning har inte genomf�rts.
+#  �ndringstiden har inte kontrollerats.
+#  Filen har inte uppdaterats.
+
+# Inte ett m�l:
+GNUmakefile:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit regels�kning har genomf�rts.
+#  Filen finns inte.
+#  Filen har uppdaterats.
+#  Uppdateringen misslyckades.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# files hash-table stats:
+# Load=5/1024=0%, Rehash=0, Collisions=0/16=0%
+# VPATH-s�kv�gar
+
+# Inga "vpath"-s�kv�gar.
+
+# Ingen allm�n s�kv�g (enligt "VPATH"-variabeln).
+
+# # of strings in strcache: 0
+# # of strcache buffers: 0
+# strcache size: total = 0 / max = 0 / min = 4096 / avg = 0
+# strcache free: total = 0 / max = 0 / min = 4096 / avg = 0
+
+# F�rdigst�llde Make-databas Thu May 05 20:42:19 2022
+
+ 

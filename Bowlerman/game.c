@@ -122,19 +122,19 @@ void initGame(Game theGame)
     }
 
     // init x amount of players
-    theGame->player[0] = initPlayer(70, 140, 0); // sets x and y coordinates and resets values.
+    theGame->player[0] = initPlayer(LEFT_X, TOP_Y, 0); // sets x and y coordinates and resets values.
 
     if (theGame->playerAmount > 1)
     {
-        theGame->player[1] = initPlayer(1076, 140, 1); // sets x and y coordinates and resets values.
+        theGame->player[1] = initPlayer(RIGHT_X, TOP_Y, 1); // sets x and y coordinates and resets values.
     }
     if (theGame->playerAmount > 2)
     {
-        theGame->player[2] = initPlayer(70, 870, 2); // sets x and y coordinates and resets values.
+        theGame->player[2] = initPlayer(LEFT_X, BOTTOM_Y, 2); // sets x and y coordinates and resets values.
     }
     if (theGame->playerAmount > 3)
     {
-        theGame->player[3] = initPlayer(1076, 870, 3); // sets x and y coordinates and resets values.
+        theGame->player[3] = initPlayer(RIGHT_X, BOTTOM_Y, 3); // sets x and y coordinates and resets values.
     }
 
     // Init walls / map
@@ -725,10 +725,10 @@ PRIVATE void loadAllTextures(Game theGame)
     theGame->player_texture[2][2] = (SDL_Texture *)loadTextures(theGame, "redman/right.png");
     theGame->player_texture[2][3] = (SDL_Texture *)loadTextures(theGame, "redman/left.png");
     /*PLAYER ID 3*/
-    theGame->player_texture[3][0] = (SDL_Texture *)loadTextures(theGame, "redman/down.png");
-    theGame->player_texture[3][1] = (SDL_Texture *)loadTextures(theGame, "redman/up.png");
-    theGame->player_texture[3][2] = (SDL_Texture *)loadTextures(theGame, "redman/right.png");
-    theGame->player_texture[3][3] = (SDL_Texture *)loadTextures(theGame, "redman/left.png");
+    theGame->player_texture[3][0] = (SDL_Texture *)loadTextures(theGame, "yellowman/down.png");
+    theGame->player_texture[3][1] = (SDL_Texture *)loadTextures(theGame, "yellowman/up.png");
+    theGame->player_texture[3][2] = (SDL_Texture *)loadTextures(theGame, "yellowman/right.png");
+    theGame->player_texture[3][3] = (SDL_Texture *)loadTextures(theGame, "yellowman/left.png");
     /*BOWLING BALLS*/
     theGame->bomb_texture[0] = (SDL_Texture *)loadTextures(theGame, "Bowling_Ball_BLue.png");
     theGame->bomb_texture[1] = (SDL_Texture *)loadTextures(theGame, "Bowling_Ball_Purple.png");
