@@ -180,17 +180,8 @@ void testCollosionWithExplosion(Game theGame)
                        theGame->explosionPosition[j][k].y < theGame->player[i].yPos + theGame->player[i].height &&
                        theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y - 30 > theGame->player[i].yPos)
                     {
-                        for(int l=100;l<136;l++)
-                        {
-                            if (!(theGame->wall[l].x < theGame->explosionPosition[j][k].x &&
-                                theGame->wall[l].x + theGame->wall[l].w > theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w &&
-                                theGame->wall[l].y < theGame->explosionPosition[j][k].y &&
-                                theGame->wall[l].h + theGame->wall[l].y > theGame->explosionPosition[j][k].y + theGame->explosionPosition[j][k].h)){
-                                //player dead
-                                theGame->player[i].isDead = true;
-                            }
-                            
-                        }
+                        //player dead
+                        theGame->player[i].isDead = true;
                     }
                 }
             }
@@ -299,6 +290,21 @@ int testCollisionWithDestroyableWalls(Game theGame, int k, int j)
         } 
     }
     return 0;
+}
+
+int testPossibilityToExplode(Game theGame, int playerID, int j)
+{
+    for(int k=100;k<136;k++)
+    {
+        if(theGame->wall[k].x < theGame->explosionPosition[playerID][j].x &&
+            theGame->wall[k].x + theGame->wall[k].w > theGame->explosionPosition[playerID][j].x + theGame->explosionPosition[playerID][j].w &&
+            theGame->wall[k].y < theGame->explosionPosition[playerID][j].y &&
+            theGame->wall[k].h + theGame->wall[k].y > theGame->explosionPosition[playerID][j].y + theGame->explosionPosition[playerID][j].h)
+        {
+            return 0;
+        } 
+        else return 1;
+    }
 }
 
 /*

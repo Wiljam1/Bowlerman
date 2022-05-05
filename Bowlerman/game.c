@@ -703,19 +703,31 @@ void initExplosionPosition(Game theGame, int playerID)
 
     // I framtiden ska man väl kunna ha större explosionsradius än det vanliga?
     // Man kanske får initiera flera positioner från början men endast rendera/ha collision med de som ska visas
-
-    theGame->explosionPosition[playerID][0].y = theGame->bombs[playerID].position.y + diff;
-    theGame->explosionPosition[playerID][0].x = theGame->bombs[playerID].position.x + diff;
-
-    theGame->explosionPosition[playerID][1].y = theGame->bombs[playerID].position.y + tilesize + diff*3; // Neråt
-    theGame->explosionPosition[playerID][1].x = theGame->bombs[playerID].position.x + diff;
-
-    theGame->explosionPosition[playerID][2].y = theGame->bombs[playerID].position.y - tilesize - diff;    // UPP
-    theGame->explosionPosition[playerID][2].x = theGame->bombs[playerID].position.x + diff;
-
-    theGame->explosionPosition[playerID][3].y = theGame->bombs[playerID].position.y + diff;             //Höger
-    theGame->explosionPosition[playerID][3].x = theGame->bombs[playerID].position.x + tilesize + diff*3;
-
-    theGame->explosionPosition[playerID][4].y = theGame->bombs[playerID].position.y + diff;             //Vänster
-    theGame->explosionPosition[playerID][4].x = theGame->bombs[playerID].position.x - tilesize - diff;
+    int j = 0;
+    theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;
+    theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
+    j++;
+    if (testPossibilityToExplode(theGame, playerID, j) == 1)
+    {
+        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + tilesize + diff*3; // Neråt
+        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
+    }
+    j++;
+    if (testPossibilityToExplode(theGame, playerID, j) == 1)
+    {
+        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y - tilesize - diff;    // UPP
+        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
+    }
+    j++;
+    if (testPossibilityToExplode(theGame, playerID, j) == 1)
+    {
+        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;             //Höger
+        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + tilesize + diff*3;
+    }
+    j++;
+    if (testPossibilityToExplode(theGame, playerID, j) == 1)
+    {
+        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;             //Vänster
+        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x - tilesize - diff;
+    }
 }
