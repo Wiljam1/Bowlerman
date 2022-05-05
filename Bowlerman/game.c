@@ -344,29 +344,31 @@ PRIVATE void manageUDP(Game theGame)
     int y_posOld = theGame->player[theGame->playerIDLocal].yPosOld;
     int x_pos = theGame->player[theGame->playerIDLocal].xPos;
     int y_pos = theGame->player[theGame->playerIDLocal].yPos;
-    
+
+    static int bombUDPtimer=0;
+    udpData.placeBomb=0;
+    if(theGame->bombs[theGame->playerIDLocal].timerinit==1){  
+        if(bombUDPtimer<1)    //vi ser till att skicka 1 packets, för om vi skickar för mycket blir det buggigt pga delay med UDP i slutet
+        {
+            udpData.placeBomb=1;
+            bombUDPtimer++;
+        }
+        else {
+            udpData.placeBomb=0;
+        }
+    }
+    else{
+        bombUDPtimer=0;
+        udpData.placeBomb=0;
+    }
 
     // send data if movement or bomb-placement
-    if (x_posOld != x_pos || y_posOld != y_pos || flag == 1 || theGame->bombs[theGame->playerIDLocal].timerinit==1)
+    if (x_posOld != x_pos || y_posOld != y_pos || flag == 1 || udpData.placeBomb==1)
     {
         printf("%d %d\n", (int)x_pos, (int)y_pos);
         udpData.playerID = theGame->playerIDLocal;
-        static int bombUDPtimer=0;
-        udpData.placeBomb=0;
-        if(theGame->bombs[theGame->playerIDLocal].timerinit==1){  
-            if(bombUDPtimer<1)    //vi ser till att skicka 1 packets, för om vi skickar för mycket blir det buggigt pga delay med UDP i slutet
-            {
-                udpData.placeBomb=1;
-                bombUDPtimer++;
-            }
-            else {
-                udpData.placeBomb=0;
-            }
-        }
-        else{
-            bombUDPtimer=0;
-            udpData.placeBomb=0;
-        }
+        
+        
         udpData.x = x_pos;
         udpData.y = y_pos;
         memcpy(p->data, &udpData, sizeof(struct data) + 1);
