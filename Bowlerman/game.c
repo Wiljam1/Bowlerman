@@ -48,26 +48,9 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
     // Loading textures from file
     loadAllTextures(theGame);
 
-    // check server what ID you have.
-    // getPlayerID();
-    // get playerID via UDP
-
-    // 1st: send info to UDP-server
-    memcpy(udpValues->p->data, &(*udpData), sizeof(UDPData) + 1);
-    udpValues->p->len = sizeof(UDPData) + 1;
-    udpValues->p->address.host = udpValues->srvadd.host; /* Set the destination host */
-    udpValues->p->address.port = udpValues->srvadd.port; /* And destination port */
-    SDLNet_UDP_Send(udpValues->sd, -1, udpValues->p);
-    // 2nd: receive info from UDP-server
-    while (!SDLNet_UDP_Recv(udpValues->sd, udpValues->p2))
-        ; // spin-lock tills received info from UDP-server
-    memcpy(udpData, (char *)udpValues->p2->data, sizeof(UDPData));
-    printf("crash");
-    theGame->playerIDLocal = udpData->playerID;
-    printf("UDP Packet incoming %d\n", udpData->playerID);
-    printf("%d", theGame->playerIDLocal);
-    // detta ska ändras via servern sen.
-    theGame->playerAmount = PLAYERAMOUNT;
+    // get playerID via UDP and saves it in theGame->playerIDLocal
+    getPlayerIDviaUDP(theGame, udpData, udpValues);
+   
 
     // allow bomb placement init
     for (int i = 0; i < 4; i++)
@@ -184,8 +167,8 @@ PUBLIC void gameUpdate(Game theGame)
 {
     // Initialize
     Player player[MAXPLAYERS]; // declares x-amounts of players
-    UDPInit udpValues = SetUDPValues();
-    UDPData udpData = UDPDataTransfer();
+    UDPInit udpValues = SetUDPValues();     //returns a struct for udp-init-struct. Like IP-adress etc.
+    UDPData udpData = UDPDataTransfer();    //Resets data struct, Like player x,y -positions etc.
     initGame(theGame, &udpData, &udpValues);         // initializes startvalues. coordinates etc.
 
     // Game Loop:

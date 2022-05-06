@@ -39,6 +39,7 @@ typedef struct udp_init UDPInit;
 UDPData UDPDataTransfer();
 UDPInit SetUDPValues();
 void initSDLNet(UDPInit *u);
+void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPInit *udpValues);
 void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues);
 
 #endif
