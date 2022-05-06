@@ -61,10 +61,11 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
     
     initAllWalls(theGame);
 
-    theGame->powerups[0].x = 0;
-    theGame->powerups[0].y = 0;
-    theGame->powerups[0].h = 70;
-    theGame->powerups[0].w = 70;
+    //Test hard-coded powerup
+    theGame->powerups[0] = initPowerup(50, 50);
+    theGame->powerups[0] = powerupPlace(220, 180, 's');
+    theGame->powerups[1] = initPowerup(50, 50);
+    theGame->powerups[1] = powerupPlace(0, 0, 's');
   
 }
 

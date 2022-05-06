@@ -33,8 +33,10 @@ void renderTextures(Game theGame)
     // updates/renders background
     SDL_Rect backRect = {0, 100, WIDTH, HEIGHT};
     SDL_RenderCopy(renderer, theGame->background, NULL, &backRect);
-    renderWalls(theGame);
+
     renderPowerups(theGame);
+
+    renderWalls(theGame);
 
     // render bombs and explosion
     for (int i = 0; i < 4; i++)

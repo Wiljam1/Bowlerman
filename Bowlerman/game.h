@@ -103,7 +103,7 @@ struct game_type
 
     //Walls
     Wall wall[WALLAMOUNT*3];
-
+    
     //Powerups
     Powerup powerups[POWERUPAMOUNT];
 
