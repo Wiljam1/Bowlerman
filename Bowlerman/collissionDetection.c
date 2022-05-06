@@ -297,8 +297,23 @@ int testPossibilityToExplode(Game theGame, int playerID, int i)
 {
     for(int k=0;k<136;k++)
     {
-        if(theGame->wall[k].destroyedWall==0)
+        if(theGame->wall[k].x < theGame->explosionPosition[playerID][i].x &&
+            theGame->wall[k].x + theGame->wall[k].w > theGame->explosionPosition[playerID][i].x + theGame->explosionPosition[playerID][i].w &&
+            theGame->wall[k].y < theGame->explosionPosition[playerID][i].y &&
+            theGame->wall[k].h + theGame->wall[k].y > theGame->explosionPosition[playerID][i].y + theGame->explosionPosition[playerID][i].h)
         {
+            return 0;
+        } 
+    }
+    return 1;
+}
+
+int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i)
+{
+    for(int k=139;k<250;k++)
+    {
+        if(theGame->wall[k].destroyedWall==0)
+            {
             if(theGame->wall[k].x < theGame->explosionPosition[playerID][i].x &&
                 theGame->wall[k].x + theGame->wall[k].w > theGame->explosionPosition[playerID][i].x + theGame->explosionPosition[playerID][i].w &&
                 theGame->wall[k].y < theGame->explosionPosition[playerID][i].y &&
@@ -309,22 +324,6 @@ int testPossibilityToExplode(Game theGame, int playerID, int i)
         }
     }
     return 1;
-}
-
-int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i)
-{
-    for(int k=139;k<250;k++)
-    {
-        if(theGame->wall[k].x < theGame->explosionPosition[playerID][i].x &&
-            theGame->wall[k].x + theGame->wall[k].w > theGame->explosionPosition[playerID][i].x + theGame->explosionPosition[playerID][i].w &&
-            theGame->wall[k].y < theGame->explosionPosition[playerID][i].y &&
-            theGame->wall[k].h + theGame->wall[k].y > theGame->explosionPosition[playerID][i].y + theGame->explosionPosition[playerID][i].h)
-        {
-            return 0;
-        } 
-    }
-    return 1;
-    
 }
 
 /*
