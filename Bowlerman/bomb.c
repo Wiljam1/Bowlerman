@@ -7,6 +7,7 @@
 #include "game.h"
 #include "player.h"
 #include "collissionDetection.h"
+#include "powerup.h"
 #include "bomb.h"
 
 PUBLIC Bowlingball initBomb(int playerID)
@@ -161,6 +162,11 @@ void process(Game theGame)
             for(int j=139;j<250;j++){
                 if(theGame->wall[j].destroyedWall == 0){
                     theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
+                    if(theGame->wall[j].destroyedWall) //If wall is destroyed...
+                    {
+                        printf("Wall is destroyed! Rolling for powerup..\n");
+                        rollForPowerup(theGame, theGame->wall[j].x, theGame->wall[j].y);
+                    }
                 }
             }
             if (theGame->bombs[i].explosioninit == 1){

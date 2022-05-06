@@ -287,7 +287,7 @@ int testCollisionWithDestroyableWalls(Game theGame, int k, int j)
             theGame->wall[k].y < theGame->explosionPosition[j][i].y &&
            theGame->wall[k].h + theGame->wall[k].y > theGame->explosionPosition[j][i].y + theGame->explosionPosition[j][i].h)
         {
-            return 1;
+            return 1;  //Wall is destroyed!
         } 
     }
     return 0;

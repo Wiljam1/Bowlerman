@@ -9,17 +9,18 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues)
 {
     static int flag=0;
     static int flag2=0;
-
-    udpData->moveDirection = theGame->player[theGame->playerIDLocal].moveDirection;
-    int x_posOld = theGame->player[theGame->playerIDLocal].xPosOld;
-    int y_posOld = theGame->player[theGame->playerIDLocal].yPosOld;
-    int x_pos = theGame->player[theGame->playerIDLocal].xPos;
-    int y_pos = theGame->player[theGame->playerIDLocal].yPos;
+    
+    int playerID = theGame->playerIDLocal;
+    udpData->moveDirection = theGame->player[playerID].moveDirection;
+    int x_posOld = theGame->player[playerID].xPosOld;
+    int y_posOld = theGame->player[playerID].yPosOld;
+    int x_pos = theGame->player[playerID].xPos;
+    int y_pos = theGame->player[playerID].yPos;
 
     //check to see if we should send bomb with UDP
     static int bombUDPtimer=0;
     udpData->placeBomb=0;
-    if(theGame->bombs[theGame->playerIDLocal].timerinit==1){  
+    if(theGame->bombs[playerID].timerinit==1){  
         if(bombUDPtimer<1)    //vi ser till att skicka 1 packets, för om vi skickar för mycket blir det buggigt pga delay med UDP i slutet
         {
             udpData->placeBomb=1;
@@ -48,7 +49,7 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues)
     if (abs(x_posOld - x_pos)>=5 || abs(y_posOld - y_pos)>=5 || flag == 1 || udpData->placeBomb==1)
     {
         printf("%d %d\n", (int)x_pos, (int)y_pos);
-        udpData->playerID = theGame->playerIDLocal;
+        udpData->playerID = playerID;
         udpData->x = x_pos;
         udpData->y = y_pos;
         memcpy(udpValues->p->data, &(*udpData), sizeof(UDPData) + 1);
@@ -59,8 +60,8 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues)
         udpValues->p->address.port = udpValues->srvadd.port; /* And destination port */
         // p->len = strlen((char *)p->data) + 1;
         SDLNet_UDP_Send(udpValues->sd, -1, udpValues->p);
-        theGame->player[theGame->playerIDLocal].xPosOld = x_pos; 
-        theGame->player[theGame->playerIDLocal].yPosOld = y_pos;
+        theGame->player[playerID].xPosOld = x_pos; 
+        theGame->player[playerID].yPosOld = y_pos;
         flag=0;
     }
 

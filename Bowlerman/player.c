@@ -7,6 +7,10 @@
 #include "player.h"
 #include "game.h"
 #include "collissionDetection.h"
+
+#define MAXSPEED 8
+#define MINSPEED 1
+
 PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
 {
     malloc(sizeof(struct playerController));
@@ -23,6 +27,9 @@ PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
     p.playerRect.x = p.xPos = p.xPosOld = xPos;
     p.playerRect.y = p.yPos = p.yPosOld = yPos;
     p.speed = 4;
+    p.amountOfBombs = 1;
+    p.explosionPower = 1;
+    p.canRollBombs = false;
     p.playerRect.h = p.height = 100*0.7;
     p.playerRect.w = p.width = 64*0.7;
     p.moveDirection = '0';
@@ -239,6 +246,22 @@ PUBLIC void getStartPos(Player *p)
             p->yPos = 870;
             break;
     }
+}
+void playerAddSpeed(Player *p, int speed)
+{
+    p->speed += speed;
+    if(p->speed > MAXSPEED) 
+        p->speed = MAXSPEED;
+    if(p->speed < MINSPEED)
+        p->speed = MINSPEED;
+}
+void playerAddExplosionPower(Player *p, int explosionPower)
+{
+    p->explosionPower += explosionPower;
+}
+void playerAddAmountOfBombs(Player *p, int amountOfBombs)
+{
+    p->amountOfBombs += amountOfBombs;
 }
 
 

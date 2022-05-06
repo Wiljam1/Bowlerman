@@ -12,6 +12,7 @@
 #include "textures.h"
 #include "wall.h"
 #include "network.h"
+#include "powerup.h"
 
 #define PUBLIC /* empty */
 #define PRIVATE static
@@ -77,9 +78,13 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
     initAllPlayers(theGame);
     
     initAllWalls(theGame);
+
+    theGame->powerups[0].x = 0;
+    theGame->powerups[0].y = 0;
+    theGame->powerups[0].h = 70;
+    theGame->powerups[0].w = 70;
   
 }
-
 
 // handles processes, like keyboard-inputs etc
 bool checkEvents(Game theGame)
@@ -112,6 +117,12 @@ bool checkEvents(Game theGame)
             case SDLK_ESCAPE:
                 done = true;
                 break;
+            case SDLK_t:
+                //Testing
+                playerAddSpeed(&theGame->player[theGame->playerIDLocal], 1);
+                printf("Speed is now: %d\n", getPlayerSpeed(theGame->player[theGame->playerIDLocal]));
+                //------
+                break;
             default:
                 break;
             }
@@ -137,11 +148,6 @@ bool checkEvents(Game theGame)
 
 void manageMovementInputs(Game theGame)
 {
-    // Om du ska fortsätta göra movement bättre;
-    // https://stackoverflow.com/questions/39929853/priority-when-2-keys-are-pressed-at-the-same-time-script-for-a-game
-    // Man kollar vilken direction gubben kollar åt och bestämmer sedan att ett knapptryck kan ta över om det är en ny direction.
-    // static int currentDirection = 0;
-
     int velX = 0, velY = 0;
     Player player = theGame->player[theGame->playerIDLocal];
     const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -175,8 +181,6 @@ void manageMovementInputs(Game theGame)
     theGame->player[theGame->playerIDLocal].yPos += velY;
 }
 
-
-
 // game loop
 PUBLIC void gameUpdate(Game theGame)
 {
@@ -198,7 +202,7 @@ PUBLIC void gameUpdate(Game theGame)
 
         // Collisiondetection
         collisionDetect(theGame);
-        testCollosionWithBombs(theGame);
+        testCollosionWithBombs(theGame);     //Alla dessa kan flyttas in i collisionDetect();
         testCollisionWithWalls(theGame);
         testCollosionWithExplosion(theGame);
         
@@ -213,7 +217,6 @@ PUBLIC void gameUpdate(Game theGame)
     }
 }
 
-
 PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[]) // loadmedia
 {
     bool success = true;
@@ -227,8 +230,6 @@ PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[]) // loadmedia
     }
     return SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
 }
-
-// renders background and players etc.
 
 PUBLIC void destroyGame(Game theGame)
 {

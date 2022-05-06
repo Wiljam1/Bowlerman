@@ -4,14 +4,17 @@
 #include <SDL2/SDL.h>
 
 //values to be set by menu in the future
+//----------------------------------------------
 #define PLAYERTEXTURES 4
 #define MAXPLAYERS 4    //how many players are online
 
 #define PLAYERAMOUNT 4    //how many players are online
-#define WALLAMOUNT 100  
+#define WALLAMOUNT 100
+#define POWERUPAMOUNT 100 //How many powerups per map  
 
 #define WIDTH 1190 // Move eventually
 #define HEIGHT 910 + 100
+//-------------------------------------------------
 
 struct wall{
     int id; //UDP?
@@ -19,6 +22,13 @@ struct wall{
     int x, y, w, h;
 };
 typedef struct wall Wall;
+
+struct powerup{
+    int id; //UDP?
+    int x, y, w, h;
+    char type; // 's' = speed, 'm' = moreBombs, 'x' = explosionPower, 'r' = canRollBombs...
+};
+typedef struct powerup Powerup;
 
 struct bowling_ball
 {
@@ -34,7 +44,7 @@ struct bowling_ball
     int timerinit;
     int explosioninit;
     int placedBombRestriction;
-    int powerUpExplosion ;
+    int powerUpExplosion;
 
     //int frame;
 };
@@ -54,6 +64,9 @@ struct playerController
     bool isMoving; //is the player moving or not
 
     float speed;
+    int amountOfBombs, explosionPower;
+    bool canRollBombs;
+
     int height;
     int width;
     char name[40];
@@ -86,6 +99,9 @@ struct game_type
     //Walls
     Wall wall[WALLAMOUNT*3];
 
+    //Powerups
+    Powerup powerups[POWERUPAMOUNT];
+
     //bombs
     Bowlingball bombs[PLAYERAMOUNT];
     SDL_Rect *bowlingballAnimation[18];
@@ -101,6 +117,7 @@ struct game_type
     SDL_Texture *bomb_texture[PLAYERAMOUNT];
     SDL_Texture *textureWall[4];
     SDL_Texture *bombExplosion_texture;
+    SDL_Texture *texturePowerups[4];
 
     SDL_Event    window_event;
 };

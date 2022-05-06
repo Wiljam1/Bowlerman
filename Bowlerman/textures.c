@@ -4,6 +4,7 @@
 #include "bomb.h"
 #include "collissionDetection.h"
 #include "wall.h"
+#include "powerup.h"
 
 
 void renderTextures(Game theGame)
@@ -19,8 +20,7 @@ void renderTextures(Game theGame)
     SDL_Rect backRect = {0, 100, WIDTH, HEIGHT};
     SDL_RenderCopy(renderer, theGame->background, NULL, &backRect);
     renderWalls(theGame);
-    // bubble-sort the players y-position into the array "renderOrder"
-    // arraySorter(player, theGame->playerAmount, renderOrder);
+    renderPowerups(theGame);
 
     // render bombs and explosion
     for (int i = 0; i < 4; i++)
@@ -84,6 +84,11 @@ PUBLIC void loadAllTextures(Game theGame)
     theGame->textureWall[1] = (SDL_Texture *)loadTextures(theGame, "walls/80/corner.png");
     theGame->textureWall[2] = (SDL_Texture *)loadTextures(theGame, "walls/80/center.png");
     theGame->textureWall[3] = (SDL_Texture *)loadTextures(theGame, "wall.png");
+    /*POWERUPS*/
+    theGame->texturePowerups[0] = (SDL_Texture *)loadTextures(theGame, "speedPowerup.png");
+    theGame->texturePowerups[1] = (SDL_Texture *)loadTextures(theGame, "explosionPowerPowerup.png");
+    theGame->texturePowerups[2] = (SDL_Texture *)loadTextures(theGame, "moreBombsPowerup.png");
+    theGame->texturePowerups[3] = (SDL_Texture *)loadTextures(theGame, "canRollBombsPowerup.png");
 
     SDL_FreeSurface(theGame->window_surface);
     // Load player sprites

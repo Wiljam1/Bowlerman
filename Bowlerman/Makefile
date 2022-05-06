@@ -1,5 +1,5 @@
-windows: main.o game.o player.o bomb.o wall.o collissionDetection.o textures.o network.o
-	gcc -o main main.o game.o player.o bomb.o wall.o collissionDetection.o textures.o network.o -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
+windows: main.o game.o player.o bomb.o wall.o collissionDetection.o textures.o network.o powerup.o
+	gcc -o main main.o game.o player.o bomb.o wall.o collissionDetection.o textures.o network.o powerup.o -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
 main.o:
 	gcc -c main.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 game.o:
@@ -16,6 +16,8 @@ textures.o:
 	gcc -c textures.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 network.o:
 	gcc -c network.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
+powerup.o:
+	gcc -c powerup.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
 clean_windows:
 	del /Q /F main.exe UDPserver.exe *.o
 

@@ -36,9 +36,10 @@ int getPlayerHeight();
 int getPlayerWidth();
 int getPlayerSpeed(Player p);
 int getPlayerID(Player p);
-PUBLIC void getStartPos(Player *p);
-//ändrar spelarens (clientmässiga) hastighet beroende på användarens tangentbordsintryckningar
-// void determinePlayerVelocity(Player playerMoving);
+void getStartPos(Player *p);
+void playerAddSpeed(Player *p, int speed);
+void playerAddExplosionPower(Player *p, int explosionPower);
+void playerAddAmountOfBombs(Player *p, int amountOfBombs);
 
 //ändrar spelarens (clientmässiga) position
 //void playerPositionUpdate(int x, int y);

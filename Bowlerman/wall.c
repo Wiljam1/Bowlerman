@@ -37,7 +37,6 @@ void wallDelete(int id)
     printf("wallDelete(); not implemented\n");
 } //Delete a placed wall
 
-
 void initAllWalls(Game theGame)
 {
       // Init walls / map
