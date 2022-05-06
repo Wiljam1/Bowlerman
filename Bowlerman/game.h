@@ -38,7 +38,8 @@ struct bowling_ball
     int timerinit;
     int explosioninit;
     int placedBombRestriction;
-    int powerUpExplosion ;
+    int powerUpExplosion;
+    int isPlaced;
 
     //int frame;
 };

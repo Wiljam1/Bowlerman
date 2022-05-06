@@ -21,7 +21,7 @@ void process(Game theGame);
 
 void initExplosionPosition(Game theGame, int playerID);
 
-Bowlingball initBomb(int playerID);
+Bowlingball initBomb();
 void loadBomb();
 
 //SDL_Rect setBowlingBallPosition(Game theGame, Player player);

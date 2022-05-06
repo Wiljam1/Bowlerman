@@ -19,6 +19,9 @@ PUBLIC void allowBombPlacementInit(Game theGame)
 
 
 PUBLIC Bowlingball initBomb(int playerID)
+#define BOMBTIMER 3000
+
+PUBLIC Bowlingball initBomb()
 {
     //malloc(sizeof(struct bowling_ball));
     Bowlingball b;
@@ -32,6 +35,7 @@ PUBLIC Bowlingball initBomb(int playerID)
     b.explosioninit = 1;        // initierar explosionerna
     b.placedBombRestriction = 0; //gör så man inte kan lägga en bomb samtidigt som en är ute
     b.powerUpExplosion = 2;             //powerupp för större explosioner
+    b.isPlaced = 0;
     return b;
 }
 
@@ -77,12 +81,13 @@ void tryToPlaceBomb(Game theGame, int playerID)
     if (theGame->allowBombPlacement[playerID] == 1) // man måste veta vilken player här
     {
         theGame->allowBombPlacement[playerID] = 0;
-        theGame->bombs[playerID] = initBomb(playerID);
+        theGame->bombs[playerID] = initBomb();
         theGame->bombs[playerID].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[playerID]) + 56) - 40;
         theGame->bombs[playerID].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[playerID]) + 8);
-        theGame->bombs[playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, playerID); // också viktigt att veta vilken player
+        theGame->bombs[playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID); // också viktigt att veta vilken player
         theGame->bombs[playerID].timerinit = 1;           //detta värdet borde skickas som data till andra players
         theGame->bombs[playerID].placedBombRestriction = 1;
+        theGame->bombs[playerID].isPlaced = 1;
     }
 }
 
@@ -155,7 +160,7 @@ void process(Game theGame)
 {
     for (int i = 0; i < 4; i++){
         if (theGame->bombs[i].timerinit == 1){
-            theGame->bombs[i].timervalue = initbowlingballtimer(0, 3000, i);
+            theGame->bombs[i].timervalue = initbowlingballtimer(0, BOMBTIMER, i);
             if (theGame->bombs[i].timervalue == 1){
                 theGame->bombs[i].timerinit = 0;
                 theGame->bombs[i].explosioninit = 0;
@@ -174,6 +179,7 @@ void process(Game theGame)
             }
             if (theGame->bombs[i].explosioninit == 1){
                 theGame->allowBombPlacement[i] = 1;
+                theGame->bombs[i].isPlaced = 0;
             }
         }
     }

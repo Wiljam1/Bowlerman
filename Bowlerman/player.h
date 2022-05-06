@@ -37,6 +37,7 @@ int getPlayerWidth();
 int getPlayerSpeed(Player p);
 int getPlayerID(Player p);
 PUBLIC void getStartPos(Player *p);
+PUBLIC int getLocalID(Game theGame);
 //ändrar spelarens (clientmässiga) hastighet beroende på användarens tangentbordsintryckningar
 // void determinePlayerVelocity(Player playerMoving);
 

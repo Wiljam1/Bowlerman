@@ -214,6 +214,10 @@ PUBLIC int getPlayerSpeed(Player p)
 {
     return p.speed;
 }
+PUBLIC int getLocalID(Game theGame)
+{
+    return theGame->playerIDLocal;
+}
 PUBLIC int getPlayerID(Player p)
 {
     return p.id;

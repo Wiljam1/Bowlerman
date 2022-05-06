@@ -113,18 +113,19 @@ PUBLIC void collisionDetect(Game theGame)
 // i är för antal spelare, j för antal bomber
 void testCollosionWithBombs(Game theGame)
 {
-    if (theGame->bombs[theGame->playerIDLocal].placedBombRestriction == 1)
-    {
-        playerStandingOnBomb(theGame);
-    }
     for (int i=0;i<4;i++)
     {
-        int playerX = theGame->player[i].xPos, playerY = theGame->player[i].yPos, playerW = theGame->player[i].width, playerH = theGame->player[i].height;
-        int moveDirection = theGame->player[i].moveDirection;
-        for (int j=0;j<4;j++)
+        if (theGame->bombs[i].placedBombRestriction == 1)
         {
-            int bombX = theGame->bombs[j].position.x, bombY = theGame->bombs[j].position.y, bombW = theGame->bombs[j].position.w, bombH = theGame->bombs[j].position.h;
-            if(theGame->bombs[j].timervalue == 0 && theGame->bombs[j].placedBombRestriction == 0)
+            playerStandingOnBomb(theGame);
+        }
+        if (theGame->bombs[i].isPlaced == 1)
+        {
+            int id = getLocalID(theGame);
+            int playerX = theGame->player[id].xPos, playerY = theGame->player[id].yPos, playerW = theGame->player[id].width, playerH = theGame->player[id].height;
+            int moveDirection = theGame->player[id].moveDirection;
+            int bombX = theGame->bombs[i].position.x, bombY = theGame->bombs[i].position.y, bombW = theGame->bombs[i].position.w, bombH = theGame->bombs[i].position.h;
+            if(theGame->bombs[i].placedBombRestriction == 0)
             {
                 if(moveDirection == 'w' || moveDirection == 's') 
                 {   
@@ -132,12 +133,12 @@ void testCollosionWithBombs(Game theGame)
                     {
                         if(playerY + 30 < bombY + bombH && playerY > bombY){
                             //correct y
-                            theGame->player[i].yPos = bombY + bombH - 30;
+                            theGame->player[id].yPos = bombY + bombH - 30;
                             printf("Bumping head on bomb\n");
                         }
                         if(playerY + playerH > bombY && playerY < bombY){
                             //correct y
-                            theGame->player[i].yPos = bombY - playerH;
+                            theGame->player[id].yPos = bombY - playerH;
                             printf("Standing on bomb\n");
                         }
                     }
@@ -148,12 +149,12 @@ void testCollosionWithBombs(Game theGame)
                     {
                         if(playerX < bombX + bombW && playerX > bombX){
                             //Correct x
-                            theGame->player[i].xPos = bombX + bombW;
+                            theGame->player[id].xPos = bombX + bombW;
                             printf("Right Edge of bomb\n");
                         }
                         if(playerX + playerW > bombX && playerX < bombX){
                             //Correct x
-                            theGame->player[i].xPos = bombX - playerW;
+                            theGame->player[id].xPos = bombX - playerW;
                             printf("Left Edge of bomb\n");
                         }
                     }
@@ -192,8 +193,7 @@ void testCollosionWithExplosion(Game theGame)
 // om spelare släpper bomb så är kollision avstängt mellan spelaren och bomben tills man kliver av bomben
 void playerStandingOnBomb(Game theGame)
 {
-    int playerID = getPlayerID(theGame->player[theGame->playerIDLocal]);
-    for(int i=0;i<theGame->playerAmount;i++)
+    for(int playerID=0;playerID<theGame->playerAmount;playerID++)
     {
         if(theGame->bombs[playerID].position.x < theGame->player[playerID].xPos + theGame->player[playerID].width &&
             theGame->bombs[playerID].position.x + theGame->bombs[playerID].position.w > theGame->player[playerID].xPos &&
