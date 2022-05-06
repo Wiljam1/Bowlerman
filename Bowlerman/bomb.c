@@ -19,10 +19,11 @@ PUBLIC Bowlingball initBomb(int playerID)
     b.position.w = 70;
     b.position.h = 70;
     b.speed = 0;
-    b.timervalue = 0;
-    b.timerinit = 0;
-    b.explosioninit = 1;
-    b.placedBombRestriction = 0;
+    b.timervalue = 0;           //också en initiering för bomberna
+    b.timerinit = 0;            //initierar timer för bomber
+    b.explosioninit = 1;        // initierar explosionerna
+    b.placedBombRestriction = 0; //gör så man inte kan lägga en bomb samtidigt som en är ute
+    b.powerUpExplosion = 2;             //powerupp för större explosioner
     return b;
 }
 

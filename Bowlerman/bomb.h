@@ -22,6 +22,8 @@ struct bowling_ball
     int timerinit;
     int explosioninit;
     int placedBombRestriction;
+    int powerUpExplosion ;
+
     //int frame;
 };
 
