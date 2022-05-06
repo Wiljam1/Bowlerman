@@ -8,7 +8,6 @@
 #include <string.h>
 #include "game.h"
 #include "collissionDetection.h"
-#include "sorter.h"
 #include "bomb.h"
 #include "textures.h"
 #include "wall.h"
