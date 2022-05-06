@@ -6,7 +6,7 @@
 
 #define PLAYERAMOUNT 4
 
-
+void allowBombPlacementInit(Game theGame);
 struct bowling_ball typedef Bowlingball;
 
 void tryToPlaceBomb(Game theGame, int playerID);

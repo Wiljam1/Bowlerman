@@ -49,13 +49,9 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
 
     // get playerID via UDP and saves it in theGame->playerIDLocal
     getPlayerIDviaUDP(theGame, udpData, udpValues);
-   
 
     // allow bomb placement init
-    for (int i = 0; i < 4; i++)
-    {
-        theGame->allowBombPlacement[i] = 1;
-    }
+    allowBombPlacementInit(theGame);
 
     initAllPlayers(theGame);
     

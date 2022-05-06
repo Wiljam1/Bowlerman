@@ -9,6 +9,15 @@
 #include "collissionDetection.h"
 #include "bomb.h"
 
+PUBLIC void allowBombPlacementInit(Game theGame)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        theGame->allowBombPlacement[i] = 1;
+    }
+}
+
+
 PUBLIC Bowlingball initBomb(int playerID)
 {
     //malloc(sizeof(struct bowling_ball));
