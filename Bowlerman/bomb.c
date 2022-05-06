@@ -7,7 +7,6 @@
 #include "game.h"
 #include "player.h"
 #include "collissionDetection.h"
-#include "sorter.h"
 #include "bomb.h"
 
 PUBLIC Bowlingball initBomb(int playerID)
