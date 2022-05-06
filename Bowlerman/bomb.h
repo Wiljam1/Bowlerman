@@ -6,7 +6,6 @@
 
 #define PLAYERAMOUNT 4
 
-struct bowling_ball typedef Bowlingball;
 
 struct bowling_ball
 {
@@ -24,6 +23,8 @@ struct bowling_ball
     int placedBombRestriction;
     //int frame;
 };
+struct bowling_ball typedef Bowlingball;
+
 
 int initbowlingballtimer(int startTime, int timeAmount, int playerID);
 
