@@ -52,7 +52,6 @@ struct game_type
 };
 typedef struct game_type *Game;
 Game createWindow();              // Struct for app initialization
-void initGame(Game theGame);
 SDL_Texture *loadTextures(Game newGame, char fileLocation[]); // Load any image you want in the resources/ folder!
 void gameUpdate(Game newGame);  // Game loop
 bool checkEvents(Game theGame);

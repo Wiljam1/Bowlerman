@@ -21,7 +21,7 @@
 //nånting konstigt med player.h elr player.c, tror att de blir inkluderade två gånger
 //Får en massa errors när man flyttar runt saker här "already defined blah blah blah"
 
-typedef struct playerController Player;
+
 
 //när jag har denna struct i player.c funkar koden inte i game.c jättekonstigt! fattar ej varför
 //jag tror det är för att programmet måste veta hur stor struct:en är (?)
@@ -42,6 +42,7 @@ struct playerController
     SDL_Rect playerRect;   //struct to hold the position and size of the sprite
     char moveDirection;  // Keeps track of player movement direction for sprite rendering
 };
+typedef struct playerController Player;
 
 struct playerSprites
 {
