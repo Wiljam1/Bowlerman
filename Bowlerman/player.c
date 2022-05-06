@@ -110,7 +110,6 @@ void UpdatePlayerTextures(Game theGame)
 
 PlayerSprites GetPlayerSprite()
 {
-    // Ska göra lite for-loopar här
     PlayerSprites p;
     p.BowlerManVert[0].h = 100;
     p.BowlerManVert[0].w = 64;
@@ -194,7 +193,6 @@ PlayerSprites GetPlayerSprite()
     
     return p;
 }
-
 
 PUBLIC int getPlayerHeight(Player p)
 {

@@ -7,13 +7,11 @@
 #define PLAYERTEXTURES 4
 #define MAXPLAYERS 4    //how many players are online
 
-
 #define PLAYERAMOUNT 4    //how many players are online
 #define WALLAMOUNT 100  
 
 #define WIDTH 1190 // Move eventually
 #define HEIGHT 910 + 100
-
 
 struct wall{
     int id; //UDP?
@@ -21,8 +19,6 @@ struct wall{
     int x, y, w, h;
 };
 typedef struct wall Wall;
-
-
 
 struct bowling_ball
 {
@@ -45,8 +41,6 @@ struct bowling_ball
 struct bowling_ball typedef Bowlingball;
 
 SDL_Rect bowlingballAnimation[18];
-
-
 
 //när jag har denna struct i player.c funkar koden inte i game.c jättekonstigt! fattar ej varför
 //jag tror det är för att programmet måste veta hur stor struct:en är (?)

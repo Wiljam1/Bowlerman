@@ -17,7 +17,6 @@
 #define PRIVATE static
 #define LENGTH 100
 
-
 void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues);
 
 // initializes game
@@ -63,7 +62,6 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
     initAllWalls(theGame);
   
 }
-
 
 
 // handles processes, like keyboard-inputs etc
@@ -197,8 +195,6 @@ PUBLIC void gameUpdate(Game theGame)
         SDL_Delay(1000 / 60); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
 }
-
-
 
 
 PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[]) // loadmedia
