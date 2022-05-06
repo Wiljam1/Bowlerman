@@ -8,6 +8,7 @@
 #include "player.h"
 #include "collissionDetection.h"
 #include "bomb.h"
+#define BOMBTIMER 3000
 
 PUBLIC void allowBombPlacementInit(Game theGame)
 {
@@ -18,10 +19,10 @@ PUBLIC void allowBombPlacementInit(Game theGame)
 }
 
 
-PUBLIC Bowlingball initBomb(int playerID)
-#define BOMBTIMER 3000
+PUBLIC Bowlingball initBomb(int playerID);
 
-PUBLIC Bowlingball initBomb()
+
+PUBLIC Bowlingball initBomb(int playerID)
 {
     //malloc(sizeof(struct bowling_ball));
     Bowlingball b;
@@ -81,7 +82,7 @@ void tryToPlaceBomb(Game theGame, int playerID)
     if (theGame->allowBombPlacement[playerID] == 1) // man måste veta vilken player här
     {
         theGame->allowBombPlacement[playerID] = 0;
-        theGame->bombs[playerID] = initBomb();
+        theGame->bombs[playerID] = initBomb(playerID);
         theGame->bombs[playerID].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[playerID]) + 56) - 40;
         theGame->bombs[playerID].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[playerID]) + 8);
         theGame->bombs[playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID); // också viktigt att veta vilken player
