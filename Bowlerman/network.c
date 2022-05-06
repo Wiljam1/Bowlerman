@@ -117,6 +117,11 @@ PUBLIC void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPInit *udpValues
     theGame->playerIDLocal = udpData->playerID;
     printf("UDP Packet incoming %d\n", udpData->playerID);
     printf("%d", theGame->playerIDLocal);
+    
+}
+
+PUBLIC void checkPlayerAmmount(Game theGame)
+{
     // detta ska ändras via servern sen.
     theGame->playerAmount = PLAYERAMOUNT;
 }

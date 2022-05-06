@@ -49,6 +49,9 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
 
     // get playerID via UDP and saves it in theGame->playerIDLocal
     getPlayerIDviaUDP(theGame, udpData, udpValues);
+    
+    //Kollar player-ammount (hur många spelare som är online). Just nu är den satt till att alltid vara 4.
+    checkPlayerAmmount(theGame);
 
     // allow bomb placement init
     allowBombPlacementInit(theGame);
