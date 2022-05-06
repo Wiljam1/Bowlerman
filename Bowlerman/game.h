@@ -3,6 +3,10 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
+//denna .h-fil får INTE include:a några andra .h-filer. För då blir det "circular inclusion".
+//pga alla andra .h-filer är beroende av game.h
+
+
 //values to be set by menu in the future
 #define PLAYERTEXTURES 4
 #define MAXPLAYERS 4    //how many players are online

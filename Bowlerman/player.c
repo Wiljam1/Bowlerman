@@ -26,7 +26,7 @@ PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
     p.playerRect.h = p.height = 100*0.7;
     p.playerRect.w = p.width = 64*0.7;
     p.moveDirection = '0';
-    p.isMoving=false;
+    p.isMoving=false;  //is not enforced by keyboard inputs though.
     p.isDead = false;
 
     return p;
