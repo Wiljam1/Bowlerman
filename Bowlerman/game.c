@@ -41,7 +41,7 @@ PUBLIC Game createWindow()
 // initializes startvalues for game
 void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
 {
-    
+    //inits SDL-net and loads in correct IP-adresses etc.
     initSDLNet(udpValues);
     
     // Loading textures from file
@@ -155,7 +155,6 @@ void manageMovementInputs(Game theGame)
 }
 
 
-
 // game loop
 PUBLIC void gameUpdate(Game theGame)
 {
@@ -208,7 +207,6 @@ PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[]) // loadmedia
 }
 
 // renders background and players etc.
-
 PUBLIC void destroyGame(Game theGame)
 {
     SDL_DestroyTexture(theGame->background);
