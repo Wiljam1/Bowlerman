@@ -19,7 +19,7 @@
 
 void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues);
 
-// initializes game
+// initializes game-window
 PUBLIC Game createWindow()
 {
     Game theGame = malloc(sizeof(struct game_type));
@@ -192,21 +192,6 @@ PUBLIC void gameUpdate(Game theGame)
 
         SDL_Delay(1000 / 60); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
-}
-
-
-PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[]) // loadmedia
-{
-    bool success = true;
-    char fileLocationInResources[100] = "resources/";
-    strcat(fileLocationInResources, fileLocation);
-    newGame->window_surface = IMG_Load(fileLocationInResources);
-    if (newGame->window_surface == NULL)
-    {
-        printf("Failed to load surface! SDL_Error: %s\n", SDL_GetError());
-        success = false;
-    }
-    return SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
 }
 
 // renders background and players etc.

@@ -10,6 +10,7 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 
+SDL_Texture *loadTextures(Game newGame, char fileLocation[]); // loadmedia
 void loadAllTextures(Game theGame);
 void renderTextures(Game theGame);
 
