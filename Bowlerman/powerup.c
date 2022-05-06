@@ -31,7 +31,7 @@ void renderPowerups(Game theGame)
                         theGame->powerups[0].w, theGame->powerups[0].h};
     SDL_RenderCopy(theGame->renderer, theGame->texturePowerups[0], NULL, &testRect);
     
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < POWERUPAMOUNT; i++){
         SDL_Rect powerupRect = {theGame->powerups[i].x, theGame->powerups[i].y, 
                                 theGame->powerups[i].w, theGame->powerups[i].h};
         //printf("Powerup xPos: %d\n", theGame->powerups[i].x);
