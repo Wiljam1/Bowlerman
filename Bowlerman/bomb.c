@@ -115,7 +115,7 @@ void initExplosionPosition(Game theGame, int playerID)
     }
     //tar bort rect som träffar en vägg
     
-    for (int i=1;i<5;i++)
+    for (int i=1;i<1+4*theGame->bombs[playerID].powerUpExplosion;i++)
     {
         if (testPossibilityToExplode(theGame, playerID, i) == 0)
         {
