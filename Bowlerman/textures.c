@@ -94,9 +94,9 @@ PUBLIC void loadAllTextures(Game theGame)
     theGame->bomb_texture[3] = (SDL_Texture *)loadTextures(theGame, "Bowling_Ball_Yellow.png");
     theGame->bombExplosion_texture = (SDL_Texture *)loadTextures(theGame, "FIRE.png");
     /*WALLS*/
-    theGame->textureWall[0] = (SDL_Texture *)loadTextures(theGame, "walls/80/straight.png");
-    theGame->textureWall[1] = (SDL_Texture *)loadTextures(theGame, "walls/80/corner.png");
-    theGame->textureWall[2] = (SDL_Texture *)loadTextures(theGame, "walls/80/center.png");
+    theGame->textureWall[0] = (SDL_Texture *)loadTextures(theGame, "walls/40/straight.png");
+    theGame->textureWall[1] = (SDL_Texture *)loadTextures(theGame, "walls/40/corner.png");
+    theGame->textureWall[2] = (SDL_Texture *)loadTextures(theGame, "walls/40/center.png");
     theGame->textureWall[3] = (SDL_Texture *)loadTextures(theGame, "wall.png");
     /*POWERUPS*/
     theGame->texturePowerups[0] = (SDL_Texture *)loadTextures(theGame, "speedPowerup.png");
