@@ -56,14 +56,8 @@ UDPInit SetUDPValues()
     return u;
 }
 //Funktionsprototyper ska väl ligga i .h-filen? ---- Tror inte om de är private då de endast används i denna fil? kanske inte spelar någon roll
-//Loading all game textures
-// Updating textures depending on movement
-
-//Render wall textures
 
 void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues);
-
-
 PRIVATE void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues);
 
 // initializes game
@@ -150,7 +144,6 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
     initAllWalls(theGame);
   
 }
-
 
 
 // handles processes, like keyboard-inputs etc
@@ -360,8 +353,6 @@ PUBLIC void gameUpdate(Game theGame)
         SDL_Delay(1000 / 60); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
 }
-
-
 
 
 PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[]) // loadmedia
