@@ -11,6 +11,7 @@
 #define PRIVATE static
 
 void loadAllTextures(Game theGame);
+void renderTextures(Game theGame);
 
 
 #endif

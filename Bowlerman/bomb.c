@@ -64,6 +64,113 @@ int correctBowlingBallPos(int i)
     }   
 }
 
+void tryToPlaceBomb(Game theGame, int playerID)
+{
+    if (theGame->allowBombPlacement[playerID] == 1) // man måste veta vilken player här
+    {
+        theGame->allowBombPlacement[playerID] = 0;
+        theGame->bombs[playerID] = initBomb(playerID);
+        theGame->bombs[playerID].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[playerID]) + 56) - 40;
+        theGame->bombs[playerID].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[playerID]) + 8);
+        theGame->bombs[playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), 3000, playerID); // också viktigt att veta vilken player
+        theGame->bombs[playerID].timerinit = 1;           //detta värdet borde skickas som data till andra players
+        theGame->bombs[playerID].placedBombRestriction = 1;
+    }
+}
+
+void initExplosionPosition(Game theGame, int playerID)
+{
+    int tilesize = 66, diff=2; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
+    SDL_Rect temp = {0,0,tilesize,tilesize};
+    for(int i = 0; i < 1+4*theGame->bombs[playerID].powerUpExplosion; i++){
+        theGame->explosionPosition[playerID][i].h = tilesize;
+        theGame->explosionPosition[playerID][i].w = tilesize;
+    }
+
+    // I framtiden ska man väl kunna ha större explosionsradius än det vanliga?
+    // Man kanske får initiera flera positioner från början men endast rendera/ha collision med de som ska visas
+    //possitionen bomben är på
+    int j = 0;
+    theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;
+    theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
+    //för resterande possitioner explosionen hamnar på
+    for(int i=1;i<theGame->bombs[playerID].powerUpExplosion+1;i++)
+    {
+        
+        j++;
+        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + tilesize*i + diff*2*i + diff; // Neråt
+        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
+        
+        j++;
+        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y - tilesize*i - diff*2*i + diff;    // UPP
+        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
+        
+        j++;
+        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;             //Höger
+        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + tilesize*i + diff*2*i + diff;
+        
+        j++;
+        theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;             //Vänster
+        theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x - tilesize*i - diff*2*i + diff;
+        
+    }
+    //tar bort rect som träffar en vägg
+    
+    for (int i=1;i<5;i++)
+    {
+        if (testPossibilityToExplode(theGame, playerID, i) == 0)
+        {
+            for(int j=0;j<theGame->bombs[playerID].powerUpExplosion;j++)
+            {
+                theGame->explosionPosition[playerID][i+4*j].h = 0;
+                theGame->explosionPosition[playerID][i+4*j].w = 0;
+                theGame->explosionPosition[playerID][i+4*j].y = 2000;
+                theGame->explosionPosition[playerID][i+4*j].x = 2000;
+            }
+        }
+        if (testPossibilityToExplodeDestroyableWalls(theGame, playerID, i) == 0)
+        {
+            for(int j=1;j<theGame->bombs[playerID].powerUpExplosion;j++)
+            {
+                theGame->explosionPosition[playerID][i+4*j].h = 0;
+                theGame->explosionPosition[playerID][i+4*j].w = 0;
+                theGame->explosionPosition[playerID][i+4*j].y = 2000;
+                theGame->explosionPosition[playerID][i+4*j].x = 2000;
+            }
+        }
+        
+    }
+    
+}
+
+void process(Game theGame)
+{
+    for (int i = 0; i < 4; i++){
+        if (theGame->bombs[i].timerinit == 1){
+            theGame->bombs[i].timervalue = initbowlingballtimer(0, 3000, i);
+            if (theGame->bombs[i].timervalue == 1){
+                theGame->bombs[i].timerinit = 0;
+                theGame->bombs[i].explosioninit = 0;
+                initExplosionPosition(theGame, i);
+                initbowlingballtimer(SDL_GetTicks(), 1000, i);
+            }
+        }
+    }
+    for (int i = 0; i < 4; i++){
+        if (theGame->bombs[i].explosioninit == 0){
+            theGame->bombs[i].explosioninit = initbowlingballtimer(0, 1000, i);
+            for(int j=139;j<250;j++){
+                if(theGame->wall[j].destroyedWall == 0){
+                    theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
+                }
+            }
+            if (theGame->bombs[i].explosioninit == 1){
+                theGame->allowBombPlacement[i] = 1;
+            }
+        }
+    }
+}
+
 //bomb rect possitioner i sprite sheet.
 PUBLIC void loadBomb()
 {

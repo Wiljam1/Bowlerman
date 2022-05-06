@@ -32,6 +32,82 @@ PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
     return p;
 }
 
+void initAllPlayers(Game theGame)
+{
+    // init x amount of players
+    theGame->player[0] = initPlayer(LEFT_X, TOP_Y, 0); // sets x and y coordinates and resets values.
+
+    if (theGame->playerAmount > 1)
+    {
+        theGame->player[1] = initPlayer(RIGHT_X, TOP_Y, 1); // sets x and y coordinates and resets values.
+    }
+    if (theGame->playerAmount > 2)
+    {
+        theGame->player[2] = initPlayer(LEFT_X, BOTTOM_Y, 2); // sets x and y coordinates and resets values.
+    }
+    if (theGame->playerAmount > 3)
+    {
+        theGame->player[3] = initPlayer(RIGHT_X, BOTTOM_Y, 3); // sets x and y coordinates and resets values.
+    }
+}
+
+void UpdatePlayerTextures(Game theGame)
+{
+    /*Keeps track of what sprites to load and at what timing*/
+    static Uint8 updateSprite[4] = {0};
+    static Uint8 spriteTimer[4] = {0};
+    Uint8 spriteChoice[4] = {0}; 
+    
+    /*Init all player rectangles*/
+    SDL_Rect playerRect[4];
+    for(int i=0; i<theGame->playerAmount; i++)
+    {
+        playerRect[i].x = theGame->player[i].xPos;
+        playerRect[i].y = theGame->player[i].yPos;
+        playerRect[i].w= theGame->player->width;
+        playerRect[i].h = theGame->player->height;
+    }
+    /*Managing sprite updates*/
+    for(int i=0; i < theGame->playerAmount; i++)
+    {
+        if (theGame->player[i].isDead == false){
+            if (spriteTimer[i] > 10){ //Slowing down sprite updates
+                spriteTimer[i] = 0; 
+            }
+                switch (theGame->player[i].moveDirection)
+                {
+                    case 'w': 
+                        spriteChoice[i] = 1;
+                        SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[updateSprite[i]], &playerRect[i]);
+                        break;
+                    case 'a': spriteChoice[i] = 3;
+                        SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManHori[updateSprite[i]], &playerRect[i]);
+                        break;
+                    case 's': spriteChoice[i] = 0;
+                        SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[updateSprite[i]], &playerRect[i]);
+                        break;
+                    case 'd': spriteChoice[i] = 2;
+                        SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManHori[updateSprite[i]], &playerRect[i]);
+                        break;
+                    case '0':
+                    default: spriteChoice[i] = 0;
+                        SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i]);
+                        break;
+                }
+                if (spriteTimer[i]++ % 5 == 0 && theGame->player[i].moveDirection != '0'){ // Slowing down sprite updates
+                        updateSprite[i]++;
+                }
+                if (updateSprite[i] > 7){
+                        updateSprite[i] = 0;
+                }
+        }
+        else{
+            getStartPos(&theGame->player[i]); // If player is dead it respawns at starting pos
+            theGame->player[i].isDead = false;
+        }
+    }
+}
+
 PlayerSprites GetPlayerSprite()
 {
     // Ska göra lite for-loopar här

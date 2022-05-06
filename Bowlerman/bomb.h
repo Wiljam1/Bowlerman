@@ -9,7 +9,7 @@
 
 struct bowling_ball typedef Bowlingball;
 
-
+void tryToPlaceBomb(Game theGame, int playerID);
 
 int initbowlingballtimer(int startTime, int timeAmount, int playerID);
 
@@ -17,7 +17,9 @@ int correctBowlingBallPos(int i);
 
 //int checkbowlingballtimer();
 
+void process(Game theGame);
 
+void initExplosionPosition(Game theGame, int playerID);
 
 Bowlingball initBomb(int playerID);
 void loadBomb();

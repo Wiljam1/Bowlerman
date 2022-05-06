@@ -2,7 +2,51 @@
 #include "game.h"
 #include "player.h"
 #include "bomb.h"
+#include "collissionDetection.h"
+#include "wall.h"
 
+
+void renderTextures(Game theGame)
+{
+    // Define stuff to make function easier to read
+    SDL_Renderer *renderer = theGame->renderer;
+    int id = theGame->playerIDLocal;
+
+    // clear renderer
+    SDL_RenderClear(renderer);
+
+    // updates/renders background
+    SDL_Rect backRect = {0, 100, WIDTH, HEIGHT};
+    SDL_RenderCopy(renderer, theGame->background, NULL, &backRect);
+    renderWalls(theGame);
+    // bubble-sort the players y-position into the array "renderOrder"
+    // arraySorter(player, theGame->playerAmount, renderOrder);
+
+    // render bombs and explosion
+    for (int i = 0; i < 4; i++)
+    {
+        if (theGame->bombs[i].timervalue == 0)
+        {
+            SDL_RenderCopy(renderer, theGame->bomb_texture[i], &bowlingballAnimation[0], &theGame->bombs[i].position);
+        }
+        if (theGame->bombs[i].explosioninit == 0)
+        {
+            for (int j = 0; j < 1+4*theGame->bombs[i].powerUpExplosion; j++)
+            {
+                if(testCollisionExplosionWithWalls(theGame, j) == 0)
+                {
+                    SDL_RenderCopy(theGame->renderer, theGame->bombExplosion_texture, &bowlingballAnimation[0], &theGame->explosionPosition[i][j]);
+                }
+            }
+        }
+    }
+
+    UpdatePlayerTextures(theGame);
+    
+    // Draw GUI last (top of screenlayers)
+
+    SDL_RenderPresent(renderer); // present renderer
+}
 
 PUBLIC void loadAllTextures(Game theGame)
 {
