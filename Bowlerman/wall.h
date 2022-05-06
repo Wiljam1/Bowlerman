@@ -11,7 +11,9 @@
 
 typedef struct wall Wall;
 
-
+void initAllPlayers(Game theGame);
+void renderWalls(Game theGame);
+void initAllWalls(Game theGame);
 Wall initWalls(int amount, int width, int height);  //How many walls are going to be used
 Wall wallPlace(int x, int y);  //Place a wall in the window
 void wallDelete(int id); //Delete a placed wall

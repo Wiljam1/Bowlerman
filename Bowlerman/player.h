@@ -29,6 +29,7 @@ typedef struct playerSprites PlayerSprites;
 PlayerSprites GetPlayerSprite();
 Player initPlayer(int xPos, int yPos, int playerID);
 
+void UpdatePlayerTextures(Game theGame);
 float getPlayerXPosition(Player p);
 float getPlayerYPosition(Player p);
 int getPlayerHeight();
