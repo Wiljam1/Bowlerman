@@ -5,7 +5,21 @@
 #include "collissionDetection.h"
 #include "wall.h"
 #include "powerup.h"
+#include <string.h>
 
+PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[]) // loadmedia
+{
+    bool success = true;
+    char fileLocationInResources[100] = "resources/";
+    strcat(fileLocationInResources, fileLocation);
+    newGame->window_surface = IMG_Load(fileLocationInResources);
+    if (newGame->window_surface == NULL)
+    {
+        printf("Failed to load surface! SDL_Error: %s\n", SDL_GetError());
+        success = false;
+    }
+    return SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
+}
 
 void renderTextures(Game theGame)
 {

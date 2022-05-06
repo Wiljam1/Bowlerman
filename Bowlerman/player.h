@@ -40,6 +40,8 @@ void getStartPos(Player *p);
 void playerAddSpeed(Player *p, int speed);
 void playerAddExplosionPower(Player *p, int explosionPower);
 void playerAddAmountOfBombs(Player *p, int amountOfBombs);
+PUBLIC void getStartPos(Player *p);
+PUBLIC int getLocalID(Game theGame);
 
 //ändrar spelarens (clientmässiga) position
 //void playerPositionUpdate(int x, int y);

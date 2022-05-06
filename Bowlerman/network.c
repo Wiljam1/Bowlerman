@@ -102,6 +102,31 @@ PUBLIC UDPInit SetUDPValues()
     return u;
 }
 
+PUBLIC void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPInit *udpValues)
+{
+     // 1st: send info to UDP-server
+    memcpy(udpValues->p->data, &(*udpData), sizeof(UDPData) + 1);
+    udpValues->p->len = sizeof(UDPData) + 1;
+    udpValues->p->address.host = udpValues->srvadd.host; /* Set the destination host */
+    udpValues->p->address.port = udpValues->srvadd.port; /* And destination port */
+    SDLNet_UDP_Send(udpValues->sd, -1, udpValues->p);
+    // 2nd: receive info from UDP-server
+    while (!SDLNet_UDP_Recv(udpValues->sd, udpValues->p2))
+        ; // spin-lock tills received info from UDP-server
+    memcpy(udpData, (char *)udpValues->p2->data, sizeof(UDPData));
+    printf("crash");
+    theGame->playerIDLocal = udpData->playerID;
+    printf("UDP Packet incoming %d\n", udpData->playerID);
+    printf("%d", theGame->playerIDLocal);
+    
+}
+
+PUBLIC void checkPlayerAmmount(Game theGame)
+{
+    // detta ska ändras via servern sen.
+    theGame->playerAmount = PLAYERAMOUNT;
+}
+
 PUBLIC void initSDLNet(UDPInit *u)
 {
     // initiera SDL NET
