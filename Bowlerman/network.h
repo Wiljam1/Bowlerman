@@ -24,7 +24,7 @@ struct data
 };
 typedef struct data UDPData;
 
-
+//values for UDP, like IP-adress etc.
 struct udp_init
 {
     UDPsocket sd;
@@ -36,10 +36,10 @@ typedef struct udp_init UDPInit;
 
 
 
-UDPData UDPDataTransfer();
-UDPInit SetUDPValues();
-void initSDLNet(UDPInit *u);
-void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPInit *udpValues);
-void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues);
+UDPData UDPDataTransfer();  //creates and resets a UDP-data struct
+UDPInit SetUDPValues();     //initializes UDP IP-adress struct
+void initSDLNet(UDPInit *u); //inits SDL-net with correct IP-adresses etc.
+void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPInit *udpValues);  //get player ID via UDP
+void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues);  //sends and receives data via UDP
 
 #endif
