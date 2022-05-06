@@ -13,7 +13,8 @@ void tryToPlaceBomb(Game theGame, int playerID);
 
 int initbowlingballtimer(int startTime, int timeAmount, int playerID);
 
-int correctBowlingBallPos(int i);
+int correctBowlingBallPosx(int i);
+int correctBowlingBallPosy(int i);
 
 //int checkbowlingballtimer();
 

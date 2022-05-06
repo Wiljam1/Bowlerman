@@ -64,9 +64,10 @@ int serverTimer()
 }
 
 //centrerar bombernas position, i för inkommande possition, j och k för tillfälliga variabler 
-int correctBowlingBallPos(int i)
+int correctBowlingBallPosx(int i)
 {
     int j=0, k=0;
+    i -= 12;
     k=i/70;
     j=i%70;
     if(j<35){
@@ -77,14 +78,27 @@ int correctBowlingBallPos(int i)
     }   
 }
 
+int correctBowlingBallPosy(int i)
+{
+    int j=0, k=0;
+    k=+i/70;
+    j=i%70;
+    if(j<35){
+        return (k*70)+30;      //returnerar närmaste tile sen +3 för att få det helt centrerat
+    }
+    else{
+        return ((k+1)*70)+30;
+    }   
+}
+
 void tryToPlaceBomb(Game theGame, int playerID)
 {
     if (theGame->allowBombPlacement[playerID] == 1) // man måste veta vilken player här
     {
         theGame->allowBombPlacement[playerID] = 0;
         theGame->bombs[playerID] = initBomb(playerID);
-        theGame->bombs[playerID].position.y = correctBowlingBallPos(getPlayerYPosition(theGame->player[playerID]) + 56) - 40;
-        theGame->bombs[playerID].position.x = correctBowlingBallPos(getPlayerXPosition(theGame->player[playerID]) + 8);
+        theGame->bombs[playerID].position.y = correctBowlingBallPosy(getPlayerYPosition(theGame->player[playerID]));
+        theGame->bombs[playerID].position.x = correctBowlingBallPosx(getPlayerXPosition(theGame->player[playerID]));
         theGame->bombs[playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID); // också viktigt att veta vilken player
         theGame->bombs[playerID].timerinit = 1;           //detta värdet borde skickas som data till andra players
         theGame->bombs[playerID].placedBombRestriction = 1;
