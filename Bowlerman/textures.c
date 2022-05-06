@@ -1,5 +1,7 @@
 #include "textures.h"
 #include "game.h"
+#include "player.h"
+#include "bomb.h"
 
 
 PUBLIC void loadAllTextures(Game theGame)

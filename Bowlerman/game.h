@@ -2,9 +2,6 @@
 #define game_h
 #include <stdbool.h>
 #include <SDL2/SDL.h>
-#include "player.h"
-#include "bomb.h"
-#include "wall.h"
 
 //values to be set by menu in the future
 #define PLAYERTEXTURES 4
@@ -16,6 +13,69 @@
 
 #define WIDTH 1190 // Move eventually
 #define HEIGHT 910 + 100
+
+
+struct wall{
+    int id; //UDP?
+    int destroyedWall;
+    int x, y, w, h;
+};
+typedef struct wall Wall;
+
+
+
+struct bowling_ball
+{
+    //int id;   
+    //float yVel, xVel, xPos, yPos;
+    //float xPosOld;
+    //float yPosOld;
+    SDL_Rect position;
+    //int height;
+    //int width;
+    int timervalue;
+    int speed;
+    int timerinit;
+    int explosioninit;
+    int placedBombRestriction;
+    int powerUpExplosion ;
+
+    //int frame;
+};
+struct bowling_ball typedef Bowlingball;
+
+SDL_Rect bowlingballAnimation[18];
+
+
+
+//när jag har denna struct i player.c funkar koden inte i game.c jättekonstigt! fattar ej varför
+//jag tror det är för att programmet måste veta hur stor struct:en är (?)
+struct playerController
+{
+    int id;   //för packets via UDP behöver man kunna veta vem det är som skickar datan.
+    bool up, down, left, right;
+    float yVel, xVel, xPos, yPos;
+    float xPosOld;
+    float yPosOld;
+    bool isMoving; //is the player moving or not
+
+    float speed;
+    int height;
+    int width;
+    char name[40];
+    bool isDead;
+    SDL_Rect playerRect;   //struct to hold the position and size of the sprite
+    char moveDirection;  // Keeps track of player movement direction for sprite rendering
+};
+typedef struct playerController Player;
+
+struct playerSprites
+{
+    SDL_Rect BowlerManVert[8];
+    SDL_Rect BowlerManHori[8];
+};
+typedef struct playerSprites PlayerSprites;
+
 
 struct game_type
 {

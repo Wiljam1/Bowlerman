@@ -11,6 +11,7 @@
 #include "sorter.h"
 #include "bomb.h"
 #include "textures.h"
+#include "wall.h"
 
 #define PUBLIC /* empty */
 #define PRIVATE static
@@ -373,6 +374,7 @@ PUBLIC void gameUpdate(Game theGame)
         SDL_Delay(1000 / 60); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
 }
+
 
 void process(Game theGame)
 {

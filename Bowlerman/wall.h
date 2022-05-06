@@ -6,13 +6,11 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+
+#include "game.h"
+
 typedef struct wall Wall;
 
-struct wall{
-    int id; //UDP?
-    int destroyedWall;
-    int x, y, w, h;
-};
 
 Wall initWalls(int amount, int width, int height);  //How many walls are going to be used
 Wall wallPlace(int x, int y);  //Place a wall in the window
