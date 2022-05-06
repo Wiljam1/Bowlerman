@@ -51,11 +51,8 @@ UDPData UDPDataTransfer()
 UDPInit SetUDPValues()
 {
     UDPInit u;
-
     return u;
 }
-
-
 //Funktionsprototyper ska väl ligga i .h-filen? ---- Tror inte om de är private då de endast används i denna fil? kanske inte spelar någon roll
 //Loading all game textures
 PRIVATE void loadAllTextures(Game theGame);
@@ -68,6 +65,7 @@ void initExplosionPosition(Game theGame, int playerID);
 PRIVATE void tryToPlaceBomb(Game theGame, int playerID);
 PRIVATE void initAllPlayers(Game theGame);
 PRIVATE void initAllWalls(Game theGame);
+PRIVATE void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues);
 
 // initializes game
 PUBLIC Game createWindow()
@@ -100,7 +98,6 @@ void initSDLNet(UDPInit *u)
         fprintf(stderr, "SDLNet_UDP_Open: %s\n", SDLNet_GetError());
         exit(EXIT_FAILURE);
     }
-    
     /* Resolve server name  */
     if (SDLNet_ResolveHost(&u->srvadd, "127.0.0.1", 2000) == -1)
     {
@@ -321,7 +318,6 @@ PRIVATE void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues)
         theGame->player[theGame->playerIDLocal].yPosOld = y_pos;
         flag=0;
     }
-
 
     // receive data
     if (SDLNet_UDP_Recv(udpValues->sd, udpValues->p2))
