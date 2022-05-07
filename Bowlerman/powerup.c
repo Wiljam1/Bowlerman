@@ -11,7 +11,7 @@
 void rollForPowerup(Game theGame, int xPos, int yPos)
 {
     static int currentPowerup = 0;            //Kanske vill göra på ett annat sätt här
-    theGame->powerups[currentPowerup] = initPowerup(70, 70); //Which place in array of powerups
+    //theGame->powerups[currentPowerup] = initPowerup(70, 70); //Which place in array of powerups
 
     printf("Powerup height: %d\n", theGame->powerups[currentPowerup].h);
     printf("Current Powerup: %d\n", currentPowerup);
@@ -42,6 +42,7 @@ void renderPowerups(Game theGame)
     }
 }
 
+/*
 Powerup initPowerup(int width, int height)
 {
     Powerup p;
@@ -52,11 +53,13 @@ Powerup initPowerup(int width, int height)
 
     return p;
 }
+*/
 
 Powerup powerupPlace(int xPos, int yPos, char type)
 {
     Powerup p;
-
+    p.w = 70;
+    p.h = 70;
     p.x = xPos;
     p.y = yPos;
     p.type = type;
