@@ -11,19 +11,11 @@
 #include "bomb.h"
 #define BOMBTIMER 3000
 
-PUBLIC void allowBombPlacementInit(Game theGame)
-{
-    for (int i = 0; i < 4; i++)
-    {
-        theGame->allowBombPlacement[i] = 1;
-    }
-}
+
+PUBLIC Bowlingball initBomb();
 
 
-PUBLIC Bowlingball initBomb(int playerID);
-
-
-PUBLIC Bowlingball initBomb(int playerID)
+PUBLIC Bowlingball initBomb()
 {
     //malloc(sizeof(struct bowling_ball));
     Bowlingball b;
@@ -35,8 +27,7 @@ PUBLIC Bowlingball initBomb(int playerID)
     b.timervalue = 0;           //också en initiering för bomberna
     b.timerinit = 0;            //initierar timer för bomber
     b.explosioninit = 1;        // initierar explosionerna
-    b.placedBombRestriction = 0; //gör så man inte kan lägga en bomb samtidigt som en är ute
-    b.powerUpExplosion = 2;             //powerupp för större explosioner
+    b.placedBombRestriction = 0; //gör så man inte kan lägga en bomb samtidigt som en är ute             
     b.isPlaced = 0;
     return b;
 }
@@ -45,7 +36,7 @@ PUBLIC Bowlingball initBomb(int playerID)
 //och sedan SDL_TimerID
 int initbowlingballtimer(int startTime, int timeAmount, int playerID)
 {
-    static int lastTime[4]={0}, currentTime[4] = {0};
+    static int lastTime[MAXBOMBAMOUNT] = {0}, currentTime[MAXBOMBAMOUNT] = {0};
     if(startTime != 0)
     {
         lastTime[playerID] = startTime;
@@ -54,64 +45,79 @@ int initbowlingballtimer(int startTime, int timeAmount, int playerID)
     if (currentTime[playerID] > lastTime[playerID] + timeAmount)
     {
         lastTime[playerID] = currentTime[playerID];
-        return 1;
+        return 1;               //returnar 1 om tiden är ute
     }
     return 0;
 }
 
-int serverTimer()
-{
-    
-}
-
-//centrerar bombernas position, i för inkommande possition, j och k för tillfälliga variabler 
-int correctBowlingBallPosx(int i)
-{
-    int j=0, k=0;
-    i -= 12;
-    k=i/70;
-    j=i%70;
-    if(j<35){
-        return (k*70);      //returnerar närmaste tile sen +3 för att få det helt centrerat
-    }
-    else{
-        return ((k+1)*70);
-    }   
-}
-
-int correctBowlingBallPosy(int i)
-{
-    int j=0, k=0;
-    k=+i/70;
-    j=i%70;
-    if(j<35){
-        return (k*70)+30;      //returnerar närmaste tile sen +3 för att få det helt centrerat
-    }
-    else{
-        return ((k+1)*70)+30;
-    }   
-}
-
+//försöker lägga ut en bomb, går det så görs det även.
+//tar platsen från spelaren samt initierar timer
 void tryToPlaceBomb(Game theGame, int playerID)
 {
-    if (theGame->allowBombPlacement[playerID] == 1) // man måste veta vilken player här
+    int amount = 0;
+    amount = theGame->player[playerID].amountOfBombsPlaced*4;
+
+    if (theGame->player[playerID].amountOfBombsPlaced < theGame->player[playerID].amountOfBombs) // man måste veta vilken player här
     {
-        theGame->allowBombPlacement[playerID] = 0;
-        theGame->bombs[playerID] = initBomb(playerID);
-        theGame->bombs[playerID].position.y = correctBowlingBallPosy(getPlayerYPosition(theGame->player[playerID]));
-        theGame->bombs[playerID].position.x = correctBowlingBallPosx(getPlayerXPosition(theGame->player[playerID]));
-        theGame->bombs[playerID].timervalue = initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID); // också viktigt att veta vilken player
-        theGame->bombs[playerID].timerinit = 1;           //detta värdet borde skickas som data till andra players
-        theGame->bombs[playerID].placedBombRestriction = 1;
-        theGame->bombs[playerID].isPlaced = 1;
+        theGame->bombs[playerID+amount] = initBomb();
+        theGame->bombs[playerID+amount].position.y = correctBowlingBallPosy(getPlayerYPosition(theGame->player[playerID]));
+        theGame->bombs[playerID+amount].position.x = correctBowlingBallPosx(getPlayerXPosition(theGame->player[playerID]));
+        theGame->bombs[playerID+amount].timervalue = initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID+amount); 
+        theGame->bombs[playerID+amount].timerinit = 1;                  //initieringsvariabel för timer
+        theGame->bombs[playerID+amount].placedBombRestriction = 1;      //bestämmer om spelaren står på bomben
+        theGame->bombs[playerID+amount].isPlaced = 1;                   //om bomb är placerad
+        theGame->player[playerID].amountOfBombsPlaced++;                //antal bomber som är placerade
     }
 }
 
+//som en game loop för bomber, kollar timer för explosioner samt bomber
+void process(Game theGame)
+{
+    //kollar bombernas timer, är den klar försvinner bomben och explosionstimer initieras
+    for (int i = 0; i < MAXBOMBAMOUNT; i++){
+        if (theGame->bombs[i].timerinit == 1){
+            theGame->bombs[i].timervalue = initbowlingballtimer(0, BOMBTIMER, i);       
+            if (theGame->bombs[i].timervalue == 1){
+                theGame->bombs[i].timerinit = 0;
+                theGame->bombs[i].explosioninit = 0;
+                initExplosionPosition(theGame, i);
+                initbowlingballtimer(SDL_GetTicks(), 1000, i);
+            }
+        }
+    }
+    //kollar explosionstimern
+    for (int i = 0; i < MAXBOMBAMOUNT; i++){
+        if (theGame->bombs[i].explosioninit == 0){
+            theGame->bombs[i].explosioninit = initbowlingballtimer(0, 1000, i);
+            for(int j=139;j<250;j++){
+                if(theGame->wall[j].destroyedWall == 0){
+                    theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
+                    if(theGame->wall[j].destroyedWall) //If wall is destroyed...
+                    {
+                        rollForPowerup(theGame, theGame->wall[j].x, theGame->wall[j].y);        //kallar på powerupp
+                    }
+                }
+            }
+            if (theGame->bombs[i].explosioninit == 1){
+                int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
+                if(theGame->player[returnarray[i]].amountOfBombsPlaced > 0)
+                {
+                    theGame->player[returnarray[i]].amountOfBombsPlaced--;          
+                }
+                theGame->bombs[i].isPlaced = 0;
+            }
+            
+        }
+    }
+}
+
+//sätter positionerna för explosionen efter vart bomben legat
 void initExplosionPosition(Game theGame, int playerID)
 {
     int tilesize = 66, diff=2; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
+    int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
     SDL_Rect temp = {0,0,tilesize,tilesize};
-    for(int i = 0; i < 1+4*theGame->bombs[playerID].powerUpExplosion; i++){
+    for(int i = 0; i < 1+4*theGame->player[returnarray[playerID]].explosionPower; i++){
         theGame->explosionPosition[playerID][i].h = tilesize;
         theGame->explosionPosition[playerID][i].w = tilesize;
     }
@@ -123,7 +129,7 @@ void initExplosionPosition(Game theGame, int playerID)
     theGame->explosionPosition[playerID][j].y = theGame->bombs[playerID].position.y + diff;
     theGame->explosionPosition[playerID][j].x = theGame->bombs[playerID].position.x + diff;
     //för resterande possitioner explosionen hamnar på
-    for(int i=1;i<theGame->bombs[playerID].powerUpExplosion+1;i++)
+    for(int i=1;i<theGame->player[returnarray[playerID]].explosionPower+1;i++)
     {
         
         j++;
@@ -145,11 +151,11 @@ void initExplosionPosition(Game theGame, int playerID)
     }
     //tar bort rect som träffar en vägg
     
-    for (int i=1;i<1+4*theGame->bombs[playerID].powerUpExplosion;i++)
+    for (int i=1;i<1+4*theGame->player[returnarray[playerID]].explosionPower;i++)
     {
-        if (testPossibilityToExplode(theGame, playerID, i) == 0)
+        if (testPossibilityToExplode(theGame, playerID, i) == 0)        //för oförstörbara väggar
         {
-            for(int j=0;j<theGame->bombs[playerID].powerUpExplosion;j++)
+            for(int j=0;j<theGame->player[returnarray[playerID]].explosionPower;j++)
             {
                 theGame->explosionPosition[playerID][i+4*j].h = 0;
                 theGame->explosionPosition[playerID][i+4*j].w = 0;
@@ -157,9 +163,9 @@ void initExplosionPosition(Game theGame, int playerID)
                 theGame->explosionPosition[playerID][i+4*j].x = 2000;
             }
         }
-        if (testPossibilityToExplodeDestroyableWalls(theGame, playerID, i) == 0)
+        if (testPossibilityToExplodeDestroyableWalls(theGame, playerID, i) == 0)    //för förstörbara väggar
         {
-            for(int j=1;j<theGame->bombs[playerID].powerUpExplosion;j++)
+            for(int j=1;j<theGame->player[returnarray[playerID]].explosionPower;j++)
             {
                 theGame->explosionPosition[playerID][i+4*j].h = 0;
                 theGame->explosionPosition[playerID][i+4*j].w = 0;
@@ -172,38 +178,33 @@ void initExplosionPosition(Game theGame, int playerID)
     
 }
 
-void process(Game theGame)
+//centrerar bombernas position, i för inkommande possition, j och k för tillfälliga variabler 
+int correctBowlingBallPosx(int i)
 {
-    for (int i = 0; i < 4; i++){
-        if (theGame->bombs[i].timerinit == 1){
-            theGame->bombs[i].timervalue = initbowlingballtimer(0, BOMBTIMER, i);
-            if (theGame->bombs[i].timervalue == 1){
-                theGame->bombs[i].timerinit = 0;
-                theGame->bombs[i].explosioninit = 0;
-                initExplosionPosition(theGame, i);
-                initbowlingballtimer(SDL_GetTicks(), 1000, i);
-            }
-        }
+    int j=0, k=0;
+    i -= 12;
+    k=i/70;
+    j=i%70;
+    if(j<35){
+        return (k*70);      //returnerar närmaste tile sen +3 för att få det helt centrerat
     }
-    for (int i = 0; i < 4; i++){
-        if (theGame->bombs[i].explosioninit == 0){
-            theGame->bombs[i].explosioninit = initbowlingballtimer(0, 1000, i);
-            for(int j=139;j<250;j++){
-                if(theGame->wall[j].destroyedWall == 0){
-                    theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
-                    if(theGame->wall[j].destroyedWall) //If wall is destroyed...
-                    {
-                        printf("Wall is destroyed! Rolling for powerup..\n");
-                        rollForPowerup(theGame, theGame->wall[j].x, theGame->wall[j].y);
-                    }
-                }
-            }
-            if (theGame->bombs[i].explosioninit == 1){
-                theGame->allowBombPlacement[i] = 1;
-                theGame->bombs[i].isPlaced = 0;
-            }
-        }
+    else{
+        return ((k+1)*70);
+    }   
+}
+
+
+int correctBowlingBallPosy(int i)
+{
+    int j=0, k=0;
+    k=+i/70;
+    j=i%70;
+    if(j<35){
+        return (k*70)+30;      //returnerar närmaste tile sen +3 för att få det helt centrerat
     }
+    else{
+        return ((k+1)*70)+30;
+    }   
 }
 
 //bomb rect possitioner i sprite sheet.

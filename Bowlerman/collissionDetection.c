@@ -113,11 +113,11 @@ PUBLIC void collisionDetect(Game theGame)
 // i är för antal spelare, j för antal bomber
 void testCollosionWithBombs(Game theGame)
 {
-    for (int i=0;i<4;i++)
+    for (int i=0;i<MAXBOMBAMOUNT;i++)
     {
         if (theGame->bombs[i].placedBombRestriction == 1)
         {
-            playerStandingOnBomb(theGame);
+            //playerStandingOnBomb(theGame);
         }
         if (theGame->bombs[i].isPlaced == 1)
         {
@@ -127,7 +127,7 @@ void testCollosionWithBombs(Game theGame)
             int bombX = theGame->bombs[i].position.x, bombY = theGame->bombs[i].position.y, bombW = theGame->bombs[i].position.w, bombH = theGame->bombs[i].position.h;
             if(theGame->bombs[i].placedBombRestriction == 0)
             {
-                if(moveDirection == 'w' || moveDirection == 's') 
+                if(moveDirection == 'w' || moveDirection == 's') //för upp och ner
                 {   
                     if(playerX + playerW > bombX && playerX < bombX + bombW)
                     {
@@ -143,7 +143,7 @@ void testCollosionWithBombs(Game theGame)
                         }
                     }
                 }
-                if(moveDirection == 'a' || moveDirection == 'd') 
+                if(moveDirection == 'a' || moveDirection == 'd')        //för vänster och höger
                 {
                     if(playerY + playerH > bombY && playerY + 30 < bombY + bombH)
                     {
@@ -170,11 +170,11 @@ void testCollosionWithExplosion(Game theGame)
 {
     for (int i=0;i<4;i++)
     {
-        for (int j=0;j<4;j++)
+        for (int j=0;j<MAXBOMBAMOUNT;j++)
         {
             if(theGame->bombs[j].explosioninit == 0)
             {
-                for (int k=0;k<1+4*theGame->bombs[i].powerUpExplosion;k++)
+                for (int k=0;k<1+4*theGame->player[i].explosionPower;k++)
                 {
                     if(theGame->explosionPosition[j][k].x < theGame->player[i].xPos + theGame->player[i].width &&
                        theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > theGame->player[i].xPos &&
@@ -221,7 +221,7 @@ void testCollisionWithWalls(Game theGame)
             if(theGame->wall[j].destroyedWall == 0)
             {
                 int wallX = theGame->wall[j].x, wallY = theGame->wall[j].y, wallW = theGame->wall[j].w, wallH = theGame->wall[j].h;
-                if(moveDirection == 'w' || moveDirection == 's') 
+                if(moveDirection == 'w' || moveDirection == 's')        //för upp och ner
                 {   
                     if(playerX + playerW > wallX && playerX < wallX + wallW)
                     {
@@ -237,7 +237,7 @@ void testCollisionWithWalls(Game theGame)
                         }
                     }
                 }
-                if(moveDirection == 'a' || moveDirection == 'd') 
+                if(moveDirection == 'a' || moveDirection == 'd') // för vänster och höger
                 {
                     if(playerY + playerH > wallY && playerY + 30 < wallY + wallH)
                     {
@@ -261,7 +261,7 @@ void testCollisionWithWalls(Game theGame)
 //gör så att explosioner inte går in i väggar
 int testCollisionExplosionWithWalls(Game theGame, int k)
 {
-    for(int j=0;j<4;j++)
+    for(int j=0;j<MAXBOMBAMOUNT;j++)
     {
         for (int i=0;i<136;i++)
         {
@@ -277,10 +277,11 @@ int testCollisionExplosionWithWalls(Game theGame, int k)
     return 0;
 }
 
-//testar om väggen explosionen träffar kan förstöras och förstör den
+//testar om väggen explosionen träffar kan förstöras och förstör den isåfall
 int testCollisionWithDestroyableWalls(Game theGame, int k, int j)
 {
-    for (int i=0;i<1+4*theGame->bombs[j].powerUpExplosion;i++)
+    int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
+    for (int i=0;i<1+4*theGame->player[returnarray[j]].explosionPower;i++)
     {
         if(theGame->wall[k].x < theGame->explosionPosition[j][i].x &&
            theGame->wall[k].x + theGame->wall[k].w > theGame->explosionPosition[j][i].x + theGame->explosionPosition[j][i].w &&
@@ -293,6 +294,7 @@ int testCollisionWithDestroyableWalls(Game theGame, int k, int j)
     return 0;
 }
 
+//testar om det går att explodera åt sidorna samt upp o ner med oförstörbara väggar
 int testPossibilityToExplode(Game theGame, int playerID, int i)
 {
     for(int k=0;k<136;k++)
@@ -308,6 +310,7 @@ int testPossibilityToExplode(Game theGame, int playerID, int i)
     return 1;
 }
 
+//testar om det går att explodera åt sidorna samt upp o ner med förstörbara väggar
 int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i)
 {
     for(int k=139;k<250;k++)

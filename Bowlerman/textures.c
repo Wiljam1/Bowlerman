@@ -39,15 +39,16 @@ void renderTextures(Game theGame)
     renderWalls(theGame);
 
     // render bombs and explosion
-    for (int i = 0; i < 4; i++)
+    int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
+    for (int i = 0; i < MAXBOMBAMOUNT; i++)
     {
         if (theGame->bombs[i].timervalue == 0)
         {
-            SDL_RenderCopy(renderer, theGame->bomb_texture[i], &bowlingballAnimation[0], &theGame->bombs[i].position);
+            SDL_RenderCopy(renderer, theGame->bomb_texture[returnarray[i]], &bowlingballAnimation[0], &theGame->bombs[i].position);
         }
         if (theGame->bombs[i].explosioninit == 0)
         {
-            for (int j = 0; j < 1+4*theGame->bombs[i].powerUpExplosion; j++)
+            for (int j = 0; j < 1+4*theGame->player[returnarray[i]].explosionPower; j++)
             {
                 if(testCollisionExplosionWithWalls(theGame, j) == 0)
                 {

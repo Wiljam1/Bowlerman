@@ -13,14 +13,14 @@ void rollForPowerup(Game theGame, int xPos, int yPos)
     static int currentPowerup = 0;            //Kanske vill göra på ett annat sätt här
     //theGame->powerups[currentPowerup] = initPowerup(70, 70); //Which place in array of powerups
 
-    printf("Powerup height: %d\n", theGame->powerups[currentPowerup].h);
-    printf("Current Powerup: %d\n", currentPowerup);
+    //printf("Powerup height: %d\n", theGame->powerups[currentPowerup].h);
+    //printf("Current Powerup: %d\n", currentPowerup);
 
     //if(1) // Implement random chance in future
     //{                                                      //Implement random chance for type in future
         theGame->powerups[currentPowerup] = powerupPlace(xPos, yPos, 's'); 
-        printf("Powerup xPos: %d\n", theGame->powerups[currentPowerup].x);
-        printf("Powerup yPos: %d\n", theGame->powerups[currentPowerup].y);
+        //printf("Powerup xPos: %d\n", theGame->powerups[currentPowerup].x);
+        //printf("Powerup yPos: %d\n", theGame->powerups[currentPowerup].y);
     //}
      currentPowerup++; //Go to next place in array for next powerup being made
      if(currentPowerup == POWERUPAMOUNT)

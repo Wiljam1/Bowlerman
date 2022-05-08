@@ -54,18 +54,11 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
     //Kollar player-ammount (hur många spelare som är online). Just nu är den satt till att alltid vara 4.
     checkPlayerAmmount(theGame);
 
-    // allow bomb placement init
-    allowBombPlacementInit(theGame);
-
+    //initierar spelare
     initAllPlayers(theGame);
     
+    //initierar väggar
     initAllWalls(theGame);
-
-    //Test hard-coded powerup
-    //theGame->powerups[0] = initPowerup(50, 50);
-    //theGame->powerups[0] = powerupPlace(220, 180, 's');
-    //theGame->powerups[1] = initPowerup(50, 50);
-    //theGame->powerups[1] = powerupPlace(0, 0, 's');
   
 }
 
@@ -104,7 +97,6 @@ bool checkEvents(Game theGame)
                 //Testing
                 playerAddSpeed(&theGame->player[theGame->playerIDLocal], 1);
                 printf("Speed is now: %d\n", getPlayerSpeed(theGame->player[theGame->playerIDLocal]));
-                //------
                 break;
             default:
                 break;

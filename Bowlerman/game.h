@@ -18,6 +18,7 @@
 
 #define WIDTH 1190 // Move eventually
 #define HEIGHT 910 + 100
+#define MAXBOMBAMOUNT 20
 //-------------------------------------------------
 
 struct wall{
@@ -48,7 +49,6 @@ struct bowling_ball
     int timerinit;
     int explosioninit;
     int placedBombRestriction;
-    int powerUpExplosion;
     int isPlaced;
 
     //int frame;
@@ -69,7 +69,7 @@ struct playerController
     bool isMoving; //is the player moving or not
 
     float speed;
-    int amountOfBombs, explosionPower;
+    int amountOfBombs, explosionPower, amountOfBombsPlaced;
     bool canRollBombs;
 
     int height;
@@ -108,10 +108,9 @@ struct game_type
     Powerup powerups[POWERUPAMOUNT];
 
     //bombs
-    Bowlingball bombs[PLAYERAMOUNT];
+    Bowlingball bombs[MAXBOMBAMOUNT];
     SDL_Rect *bowlingballAnimation[18];
-    SDL_Rect explosionPosition[PLAYERAMOUNT][WALLAMOUNT];
-    int allowBombPlacement[PLAYERAMOUNT];
+    SDL_Rect explosionPosition[MAXBOMBAMOUNT][WALLAMOUNT];
 
     //Renderer
     SDL_Renderer *renderer;
