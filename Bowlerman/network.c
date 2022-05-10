@@ -3,6 +3,51 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 
+PRIVATE sendBomb(Game theGame, UDPData *udpData, UDPInit *udpValues)
+{
+    int playerID = theGame->playerIDLocal;
+    udpData->placeBomb=0;
+    static int doPlaceBomb=0;
+    static int flagSendBomb[5]={0};
+
+    for(int i=0; i<5; i++)   //for-loop för vi vill kunna släppa upp till 5 bomber
+    {
+        if(theGame->bombs[playerID+i*4].timerinit==1){  
+            if(flagSendBomb[i]==0)    //vi ser till att skicka 1 packets, för om vi skickar för mycket blir det buggigt pga delay med UDP i slutet
+            {
+                //udpData->placeBomb=1;
+                flagSendBomb[i]=1;
+                doPlaceBomb=1;
+                //break;
+            }
+            else {
+                //udpData->placeBomb=0;
+            }
+        }
+        else{
+            flagSendBomb[i]=0;
+            //udpData->placeBomb=0;
+        }
+    }
+    //reset placeBomb
+    for (int i=0; i<5; i++)
+    {
+        if (flagSendBomb[i]==0)
+        {
+            udpData->placeBomb=0;
+        }
+    }
+    //check if we should placeBomb
+    for (int i=0; i<5; i++)
+    {
+        if(flagSendBomb[i]==1 && doPlaceBomb==1)
+        {
+            doPlaceBomb=0;
+            udpData->placeBomb=1;
+
+        }
+    }
+}
 
 
 PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues)
@@ -18,22 +63,7 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues)
     int y_pos = theGame->player[playerID].yPos;
 
     //check to see if we should send bomb with UDP
-    static int bombUDPtimer=0;
-    udpData->placeBomb=0;
-    if(theGame->bombs[playerID].timerinit==1){  
-        if(bombUDPtimer<1)    //vi ser till att skicka 1 packets, för om vi skickar för mycket blir det buggigt pga delay med UDP i slutet
-        {
-            udpData->placeBomb=1;
-            bombUDPtimer++;
-        }
-        else {
-            udpData->placeBomb=0;
-        }
-    }
-    else{
-        bombUDPtimer=0;
-        udpData->placeBomb=0;
-    }
+    sendBomb(theGame, udpData, udpValues);
 
         //flagga för att reset:a movement direction när spelaren står stilla.
     if( udpData->moveDirection != '0'){
@@ -45,7 +75,6 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues)
     }
 
     // send data if movement or bomb-placement
-    //problem med flag. det gör att det laggar
     if (abs(x_posOld - x_pos)>=5 || abs(y_posOld - y_pos)>=5 || flag == 1 || udpData->placeBomb==1)
     {
         printf("%d %d\n", (int)x_pos, (int)y_pos);
@@ -80,7 +109,7 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues)
 
         theGame->player[playerID].moveDirection = udpData->moveDirection;
         theGame->player[playerID].id = udpData->playerID;
-        printf("UDP Packet incoming, x,y-coord: %d %d of player %d\n", udpData->x, udpData->y, udpData->playerID);
+        printf("UDP Packet incoming, x,y-coord: %d %d of player %d, placebomb: %d\n", udpData->x, udpData->y, udpData->playerID, udpData->placeBomb);
     }
 }
 
