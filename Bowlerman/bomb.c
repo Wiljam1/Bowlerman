@@ -9,6 +9,7 @@
 #include "collissionDetection.h"
 #include "powerup.h"
 #include "bomb.h"
+#include "sounds.h"
 #define BOMBTIMER 3000
 
 
@@ -68,7 +69,7 @@ void tryToPlaceBomb(Game theGame, int playerID)
 }
 
 //som en game loop för bomber, kollar timer för explosioner samt bomber
-void process(Game theGame)
+void process(Game theGame, Sounds s)
 {
     //kollar bombernas timer, är den klar försvinner bomben och explosionstimer initieras
     for (int i = 0; i < MAXBOMBAMOUNT; i++){
@@ -79,6 +80,7 @@ void process(Game theGame)
                 theGame->bombs[i].explosioninit = 0;
                 initExplosionPosition(theGame, i);
                 initbowlingballtimer(SDL_GetTicks(), 1000, i);
+                playExplosion(s);
             }
         }
     }

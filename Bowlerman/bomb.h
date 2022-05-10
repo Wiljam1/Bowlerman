@@ -18,7 +18,7 @@ int correctBowlingBallPosy(int i);
 
 //int checkbowlingballtimer();
 
-void process(Game theGame);
+//void process(Game theGame);
 
 void initExplosionPosition(Game theGame, int playerID);
 

@@ -19,20 +19,20 @@ void initSounds()
     {
         printf("Error: %s", Mix_GetError());
     }
-    Mix_VolumeMusic(5);
 }
 
 void playBackroundMusic(Sounds s)
 {   
     if(!Mix_PlayingMusic())
     {
+        Mix_VolumeMusic(1);
         Mix_PlayMusic(s->backgroundMusic, -1);
     }
 }
 
 void playExplosion(Sounds s)
 {
-    Mix_VolumeChunk(s->explosion, 100);
+    Mix_VolumeChunk(s->explosion, 1);
     Mix_PlayChannel(-1, (s->explosion), 0);
 }
 
