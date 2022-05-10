@@ -197,10 +197,10 @@ void playerStandingOnBomb(Game theGame)
     {
         for (int i = 0;i<theGame->player[playerID].amountOfBombs;i++)
         {
-            if(theGame->bombs[i*4].position.x < theGame->player[playerID].xPos + theGame->player[playerID].width &&
-                theGame->bombs[i*4].position.x + theGame->bombs[i*4].position.w > theGame->player[playerID].xPos &&
-                theGame->bombs[i*4].position.y < theGame->player[playerID].yPos + theGame->player[playerID].height &&
-                theGame->bombs[i*4].position.h + theGame->bombs[i*4].position.y > theGame->player[playerID].yPos)
+            if(theGame->bombs[playerID+i*4].position.x < theGame->player[playerID].xPos + theGame->player[playerID].width &&
+                theGame->bombs[playerID+i*4].position.x + theGame->bombs[playerID+i*4].position.w > theGame->player[playerID].xPos &&
+                theGame->bombs[playerID+i*4].position.y < theGame->player[playerID].yPos + theGame->player[playerID].height &&
+                theGame->bombs[playerID+i*4].position.h + theGame->bombs[playerID+i*4].position.y > theGame->player[playerID].yPos)
             {         
                 theGame->bombs[playerID].placedBombRestriction = 1;
             }
