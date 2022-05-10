@@ -21,10 +21,10 @@ void rollForPowerup(Game theGame, int xPos, int yPos)
     //enum powerupEnum powerup = randomPowerup();
     static int currentPowerup = 0;            //Kanske vill göra på ett annat sätt här
 
-    //if(1) // Implement random chance in future
-    //{                                                      //Type = random number between 0 and how many types there are
+    if((rand() % 100+1) < 33) // Implement random chance in future
+    {                                                      //Type = random number between 0 and how many types there are
         theGame->powerups[currentPowerup] = powerupPlace(xPos, yPos, rand()%POWERUPTYPES); 
-    //}
+    }
      currentPowerup++; //Go to next place in array for next powerup being made
      if(currentPowerup == POWERUPAMOUNT)
         currentPowerup = 0;
