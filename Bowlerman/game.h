@@ -2,6 +2,7 @@
 #define game_h
 #include <stdbool.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 //denna .h-fil får INTE include:a några andra .h-filer. För då blir det "circular inclusion".
 //pga alla andra .h-filer är beroende av game.h
@@ -123,6 +124,11 @@ struct game_type
     SDL_Texture *textureWall[4];
     SDL_Texture *bombExplosion_texture;
     SDL_Texture *texturePowerups[4];
+    SDL_Texture *label;                                        
+    int labelW, labelH;
+
+    //Fonts
+    TTF_Font *font; //Gör till en array om vi ska ha mer fonts
 
     SDL_Event    window_event;
 };

@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_net.h>
 #include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -15,6 +16,7 @@
 #include "network.h"
 #include "powerup.h"
 #include "sounds.h"
+#include "gui.h"
 
 #define PUBLIC /* empty */
 #define PRIVATE static
@@ -66,6 +68,9 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
     
     //initierar väggar
     initAllWalls(theGame);
+
+    //Init GUI
+    initGUI(theGame);
 }
 
 // handles processes, like keyboard-inputs etc
@@ -105,7 +110,7 @@ bool checkEvents(Game theGame)
                 break;
             case SDLK_t:
                 //Testing
-                playerAddSpeed(&theGame->player[theGame->playerIDLocal], 1);
+                playerAddSpeed(&theGame->player[theGame->playerIDLocal], 0.5);
                 printf("Speed is now: %d\n", getPlayerSpeed(theGame->player[theGame->playerIDLocal]));
                 break;
             default:
@@ -184,6 +189,7 @@ PUBLIC void gameUpdate(Game theGame)
         // Process events (time based stuff)
         process(theGame, sounds);
         //playBackroundMusic(sounds);
+
         // Collisiondetection
         collisionDetect(theGame);
         testCollosionWithBombs(theGame);     //Alla dessa kan flyttas in i collisionDetect();
@@ -196,12 +202,15 @@ PUBLIC void gameUpdate(Game theGame)
         // Send/receive data to server
         manageUDP(theGame, &udpData, &udpValues);
 
+        // Update GUI labels
+        updateGUI(theGame);
+
         // render display
         renderTextures(theGame);
 
         SDL_Delay(1000 / 60); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
-    destroySoundFiles(sounds);
+    destroySoundFiles(sounds); 
 }
 
 // renders background and players etc.
@@ -223,6 +232,7 @@ PUBLIC void destroyGame(Game theGame)
         SDL_DestroyTexture(theGame->textureWall[i]);
     }
     SDL_DestroyTexture(theGame->bombExplosion_texture);
+    destroyGUI(theGame);
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();

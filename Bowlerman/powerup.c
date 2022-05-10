@@ -9,21 +9,12 @@
 #include "player.h"
 #include "game.h"
 
-// typedef enum powerupEnum{SPEED, POWER, BOMBS, TURTLE} powerup;
-
-// powerup randomPowerup()
-// {
-    
-// }
-
 void rollForPowerup(Game theGame, int xPos, int yPos)
 {
-    //enum powerupEnum powerup = randomPowerup();
-    static int currentPowerup = 0;            //Kanske vill göra på ett annat sätt här
+    static int currentPowerup = 0;    //Kanske vill göra på ett annat sätt här
 
-    if((rand() % 100+1) < 33) // Implement random chance in future
-    {                                                      //Type = random number between 0 and how many types there are
-        theGame->powerups[currentPowerup] = powerupPlace(xPos, yPos, rand()%POWERUPTYPES); 
+    if((rand() % 100+1) < 33){ // 33% chance to spawn a powerup                                                      
+        theGame->powerups[currentPowerup] = powerupPlace(xPos, yPos, rand()%POWERUPTYPES); //Type = random number between 0 and how many types there are
     }
      currentPowerup++; //Go to next place in array for next powerup being made
      if(currentPowerup == POWERUPAMOUNT)
@@ -32,9 +23,9 @@ void rollForPowerup(Game theGame, int xPos, int yPos)
 
 void renderPowerups(Game theGame)
 {
-    // //Draw powerups                  //This works but not when assigned new 
+    // //Draw powerups
     for(int i = 0; i < POWERUPAMOUNT; i++){
-        if(theGame->powerups[i].isPickedUp == false)
+        if(theGame->powerups[i].isPickedUp == false) //Draw until picked up
         {
             SDL_Rect powerupRect = {theGame->powerups[i].x, theGame->powerups[i].y, 
                                     theGame->powerups[i].w, theGame->powerups[i].h};

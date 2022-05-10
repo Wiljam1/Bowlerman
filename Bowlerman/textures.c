@@ -5,6 +5,7 @@
 #include "collissionDetection.h"
 #include "wall.h"
 #include "powerup.h"
+#include "gui.h"
 #include <string.h>
 
 PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[]) // loadmedia
@@ -61,6 +62,7 @@ void renderTextures(Game theGame)
     UpdatePlayerTextures(theGame);
     
     // Draw GUI last (top of screenlayers)
+    drawGUI(theGame);
 
     SDL_RenderPresent(renderer); // present renderer
 }
@@ -105,7 +107,7 @@ PUBLIC void loadAllTextures(Game theGame)
     theGame->texturePowerups[0] = (SDL_Texture *)loadTextures(theGame, "speedPowerup.png");
     theGame->texturePowerups[1] = (SDL_Texture *)loadTextures(theGame, "explosionPowerPowerup.png");
     theGame->texturePowerups[2] = (SDL_Texture *)loadTextures(theGame, "moreBombsPowerup.png");
-    theGame->texturePowerups[3] = (SDL_Texture *)loadTextures(theGame, "canRollBombsPowerup.png");
+    //theGame->texturePowerups[3] = (SDL_Texture *)loadTextures(theGame, "canRollBombsPowerup.png");
 
     SDL_FreeSurface(theGame->window_surface);
     // Load player sprites
