@@ -10,7 +10,7 @@
 
 typedef struct powerup Powerup;
 
-#define POWERUPTYPES 4
+#define POWERUPTYPES 3
 
 void rollForPowerup(Game theGame, int xPos, int yPos); //Roll for a chance to place a random powerup
 void renderPowerups(Game theGame);                     //Render powerups

@@ -32,6 +32,7 @@ struct powerup{
     int id; //UDP?
     int x, y, w, h;
     int type; // 0 = speed, 1 = power, 2 = morebombs, 3 = turtle
+    bool isPickedUp;
 };
 typedef struct powerup Powerup;
 

@@ -34,10 +34,13 @@ void renderPowerups(Game theGame)
 {
     // //Draw powerups                  //This works but not when assigned new 
     for(int i = 0; i < POWERUPAMOUNT; i++){
-        SDL_Rect powerupRect = {theGame->powerups[i].x, theGame->powerups[i].y, 
-                                theGame->powerups[i].w, theGame->powerups[i].h};
+        if(theGame->powerups[i].isPickedUp == false)
+        {
+            SDL_Rect powerupRect = {theGame->powerups[i].x, theGame->powerups[i].y, 
+                                    theGame->powerups[i].w, theGame->powerups[i].h};
         
-        SDL_RenderCopy(theGame->renderer, theGame->texturePowerups[theGame->powerups[i].type], NULL, &powerupRect);
+            SDL_RenderCopy(theGame->renderer, theGame->texturePowerups[theGame->powerups[i].type], NULL, &powerupRect); 
+        }
     }
 }
 
@@ -49,6 +52,7 @@ Powerup powerupPlace(int xPos, int yPos, int type)
     p.x = xPos + 10;
     p.y = yPos + 10;
     p.type = type;
+    p.isPickedUp = false;
     
     return p;
 }
