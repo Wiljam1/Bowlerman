@@ -189,6 +189,8 @@ PUBLIC void gameUpdate(Game theGame)
         testCollosionWithExplosion(theGame);
         //testPossibilityToExplodeWithBombs(theGame);
         playerCollisionWithPowerup(theGame);
+        //explosionCollisionWithPowerup(theGame);       //för att förstöra powerups med explosioner
+
         // Send/receive data to server
         manageUDP(theGame, &udpData, &udpValues);
 

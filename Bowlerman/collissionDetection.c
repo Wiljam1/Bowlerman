@@ -388,6 +388,31 @@ void playerCollisionWithPowerup(Game theGame)
     }
 }
 
+//collision mellan powerups och explosioner
+void explosionCollisionWithPowerup(Game theGame)
+{
+    for(int i=0;i<POWERUPAMOUNT;i++) 
+    {
+        for (int k = 0;k<100;k++)
+        {
+            for(int j=0;j<MAXBOMBAMOUNT;j++)   
+            {
+                if(theGame->powerups[i].isPickedUp == false)
+                {
+                    if(theGame->explosionPosition[j][k].x < theGame->powerups[i].x &&
+                        theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > theGame->powerups[i].x + theGame->powerups[i].w &&
+                        theGame->explosionPosition[j][k].y < theGame->powerups[i].y &&
+                        theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y > theGame->powerups[i].y + theGame->powerups[i].h)
+                    {         
+                        theGame->powerups[i].isPickedUp = true;
+                        printf("skoj");
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 /*
 if(theGame->explosionPosition[j][k].x < theGame->wall[i].x + theGame->wall[i].w &&

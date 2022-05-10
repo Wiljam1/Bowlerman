@@ -16,5 +16,6 @@ int testPossibilityToExplode(Game theGame, int playerID, int i);
 int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i);
 void testPossibilityToExplodeWithBombs(Game theGame, int j);
 void playerCollisionWithPowerup(Game theGame);
+void explosionCollisionWithPowerup(Game theGame);
 
 #endif
