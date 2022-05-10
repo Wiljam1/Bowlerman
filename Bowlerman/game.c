@@ -14,6 +14,7 @@
 #include "wall.h"
 #include "network.h"
 #include "powerup.h"
+#include "sounds.h"
 
 #define PUBLIC /* empty */
 #define PRIVATE static
@@ -51,6 +52,8 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
     
     // Loading textures from file
     loadAllTextures(theGame);
+    // Init sounds
+    initSounds();
 
     // get playerID via UDP and saves it in theGame->playerIDLocal
     getPlayerIDviaUDP(theGame, udpData, udpValues);
@@ -170,7 +173,7 @@ PUBLIC void gameUpdate(Game theGame)
     UDPInit udpValues = SetUDPValues();     //returns a struct for udp-init-struct. Like IP-adress etc.
     UDPData udpData = UDPDataTransfer();    //Resets data struct, Like player x,y -positions etc.
     initGame(theGame, &udpData, &udpValues);         // initializes startvalues. coordinates etc.
-
+    Sounds sounds = initSoundFiles();
     // Game Loop:
     bool done = false;
     while (!done)
@@ -179,8 +182,8 @@ PUBLIC void gameUpdate(Game theGame)
         done = checkEvents(theGame);
         
         // Process events (time based stuff)
-        process(theGame);
-
+        process(theGame, sounds);
+        playBackroundMusic(sounds);
         // Collisiondetection
         collisionDetect(theGame);
         testCollosionWithBombs(theGame);     //Alla dessa kan flyttas in i collisionDetect();
@@ -198,6 +201,7 @@ PUBLIC void gameUpdate(Game theGame)
 
         SDL_Delay(1000 / 60); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
+    destroySoundFiles(sounds);
 }
 
 // renders background and players etc.
