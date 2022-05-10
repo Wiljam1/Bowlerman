@@ -195,18 +195,18 @@ void playerStandingOnBomb(Game theGame)
 {
     for(int playerID=0;playerID<theGame->playerAmount;playerID++) 
     {
-        for (int i = 0;i<theGame->player[playerID].amountOfBombs;i++)
+        for (int i = 0;i<theGame->player[playerID].amountOfBombsPlaced;i++)
         {
             if(theGame->bombs[playerID+i*4].position.x < theGame->player[playerID].xPos + theGame->player[playerID].width &&
                 theGame->bombs[playerID+i*4].position.x + theGame->bombs[playerID+i*4].position.w > theGame->player[playerID].xPos &&
                 theGame->bombs[playerID+i*4].position.y < theGame->player[playerID].yPos + theGame->player[playerID].height &&
                 theGame->bombs[playerID+i*4].position.h + theGame->bombs[playerID+i*4].position.y > theGame->player[playerID].yPos)
             {         
-                theGame->bombs[playerID].placedBombRestriction = 1;
+                theGame->bombs[playerID+i*4].placedBombRestriction = 1;
             }
             else 
             {
-                theGame->bombs[playerID].placedBombRestriction = 0;
+                theGame->bombs[playerID+i*4].placedBombRestriction = 0;
             }
         }
     }
