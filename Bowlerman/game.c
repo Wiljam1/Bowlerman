@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "game.h"
 #include "collissionDetection.h"
 #include "bomb.h"
@@ -44,6 +45,9 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
 {
     //inits SDL-net and loads in correct IP-adresses etc.
     initSDLNet(udpValues);
+
+    //Init random seed
+    srand(time(NULL));
     
     // Loading textures from file
     loadAllTextures(theGame);

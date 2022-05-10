@@ -5,18 +5,25 @@
 #include <string.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <time.h>
 #include "player.h"
 #include "game.h"
 
-enum week{Mon, Tue, Wed, Thur, Fri, Sat, Sun};
+// typedef enum powerupEnum{SPEED, POWER, BOMBS, TURTLE} powerup;
+
+// powerup randomPowerup()
+// {
+    
+// }
 
 void rollForPowerup(Game theGame, int xPos, int yPos)
 {
+    //enum powerupEnum powerup = randomPowerup();
     static int currentPowerup = 0;            //Kanske vill göra på ett annat sätt här
 
     //if(1) // Implement random chance in future
-    //{                                                      //Implement random chance for type in future
-        theGame->powerups[currentPowerup] = powerupPlace(xPos, yPos, 's'); 
+    //{                                                      //Type = random number between 0 and how many types there are
+        theGame->powerups[currentPowerup] = powerupPlace(xPos, yPos, rand()%POWERUPTYPES); 
     //}
      currentPowerup++; //Go to next place in array for next powerup being made
      if(currentPowerup == POWERUPAMOUNT)
@@ -29,17 +36,12 @@ void renderPowerups(Game theGame)
     for(int i = 0; i < POWERUPAMOUNT; i++){
         SDL_Rect powerupRect = {theGame->powerups[i].x, theGame->powerups[i].y, 
                                 theGame->powerups[i].w, theGame->powerups[i].h};
-
-        //printf("Powerup xPos: %d\n", theGame->powerups[i].x);
-        //printf("Powerup yPos: %d\n------------\n", theGame->powerups[i].y);
-
-        //Add if statements to determine which texture to draw depending on type of powerup in future
         
-        SDL_RenderCopy(theGame->renderer, theGame->texturePowerups[0], NULL, &powerupRect);
+        SDL_RenderCopy(theGame->renderer, theGame->texturePowerups[theGame->powerups[i].type], NULL, &powerupRect);
     }
 }
 
-Powerup powerupPlace(int xPos, int yPos, char type)
+Powerup powerupPlace(int xPos, int yPos, int type)
 {
     Powerup p;
     p.w = 50;

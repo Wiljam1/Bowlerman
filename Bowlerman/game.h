@@ -31,7 +31,7 @@ typedef struct wall Wall;
 struct powerup{
     int id; //UDP?
     int x, y, w, h;
-    char type; // 's' = speed, 'm' = moreBombs, 'x' = explosionPower, 'r' = canRollBombs...
+    int type; // 0 = speed, 1 = power, 2 = morebombs, 3 = turtle
 };
 typedef struct powerup Powerup;
 
