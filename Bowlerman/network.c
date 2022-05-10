@@ -3,7 +3,7 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 
-PRIVATE sendBomb(Game theGame, UDPData *udpData, UDPInit *udpValues)
+PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPInit *udpValues)
 {
     int playerID = theGame->playerIDLocal;
     udpData->placeBomb=0;
