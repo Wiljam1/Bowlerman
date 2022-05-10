@@ -89,8 +89,7 @@ void process(Game theGame)
             for(int j=139;j<250;j++){
                 if(theGame->wall[j].destroyedWall == 0){
                     theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
-                    if(theGame->wall[j].destroyedWall) //If wall is destroyed...
-                    {
+                    if(theGame->wall[j].destroyedWall){ //If wall is destroyed...
                         rollForPowerup(theGame, theGame->wall[j].x, theGame->wall[j].y);        //kallar på powerupp
                     }
                 }

@@ -59,7 +59,6 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
     
     //initierar väggar
     initAllWalls(theGame);
-  
 }
 
 // handles processes, like keyboard-inputs etc
