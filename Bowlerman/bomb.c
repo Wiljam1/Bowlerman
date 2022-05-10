@@ -25,10 +25,10 @@ PUBLIC Bowlingball initBomb()
     b.position.h = 70;
     b.speed = 0;
     b.timervalue = 0;           //också en initiering för bomberna
-    b.timerinit = 0;            //initierar timer för bomber
+    b.timerinit = 1;            //initierar timer för bomber
     b.explosioninit = 1;        // initierar explosionerna
-    b.placedBombRestriction = 0; //gör så man inte kan lägga en bomb samtidigt som en är ute             
-    b.isPlaced = 0;
+    b.placedBombRestriction = 1; //gör så man inte kan lägga en bomb samtidigt som en är ute             
+    b.isPlaced = 1;
     return b;
 }
 
@@ -62,10 +62,7 @@ void tryToPlaceBomb(Game theGame, int playerID)
         theGame->bombs[playerID+amount] = initBomb();
         theGame->bombs[playerID+amount].position.y = correctBowlingBallPosy(getPlayerYPosition(theGame->player[playerID]));
         theGame->bombs[playerID+amount].position.x = correctBowlingBallPosx(getPlayerXPosition(theGame->player[playerID]));
-        theGame->bombs[playerID+amount].timervalue = initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID+amount); 
-        theGame->bombs[playerID+amount].timerinit = 1;                  //initieringsvariabel för timer
-        theGame->bombs[playerID+amount].placedBombRestriction = 1;      //bestämmer om spelaren står på bomben
-        theGame->bombs[playerID+amount].isPlaced = 1;                   //om bomb är placerad
+        theGame->bombs[playerID+amount].timervalue = initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID+amount);
         theGame->player[playerID].amountOfBombsPlaced++;                //antal bomber som är placerade
     }
 }
