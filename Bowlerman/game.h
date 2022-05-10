@@ -140,7 +140,7 @@ void gameUpdate(Game newGame);  // Game loop
 bool checkEvents(Game theGame);
 void manageMovementInputs(Game theGame);
 void updatePlayerPos(Game theGame, int velX, int velY); //Flytta till player.c nångång
-void process(Game theGame, Sounds s);
+void process(Game theGame);
 void collisionDetect(Game theGame);
 void renderTextures(Game theGame);
 void destroyGame(Game theGame); // Function for easily destroying the application.

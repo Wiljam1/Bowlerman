@@ -7,7 +7,7 @@
 void collisionDetect(Game theGame);
 
 void testCollosionWithBombs(Game theGame);
-void testCollosionWithExplosion(Game theGame, Sounds s);
+void testCollosionWithExplosion(Game theGame);
 void playerStandingOnBomb(Game theGame);
 void testCollisionWithWalls(Game theGame);
 int testCollisionExplosionWithWalls(Game theGame, int k);
@@ -16,5 +16,6 @@ int testPossibilityToExplode(Game theGame, int playerID, int i);
 int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i);
 void testPossibilityToExplodeWithBombs(Game theGame, int j);
 void playerCollisionWithPowerup(Game theGame);
+void explosionCollisionWithPowerup(Game theGame);
 
 #endif

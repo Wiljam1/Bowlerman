@@ -33,10 +33,10 @@ void playBackroundMusic(Sounds s)
     }
 }
 
-void playChunk(Mix_Chunk *sound)
+void playChunk(Sounds s)
 {
-    Mix_VolumeChunk(sound, BOMBVOLUME);
-    Mix_PlayChannel(-1, (sound), 0);
+    Mix_VolumeChunk(s->death, BOMBVOLUME);
+    Mix_PlayChannel(-1, (s->death), 0);
 }
 
 void destroySoundFiles(Sounds s)

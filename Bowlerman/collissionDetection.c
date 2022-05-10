@@ -169,7 +169,7 @@ void testCollosionWithBombs(Game theGame)
 
 // collison detection mellan spelare och explosioner
 // i är för antal spelare, j för antal bomber och k för de olika rectanglar som explosionerna finns på
-void testCollosionWithExplosion(Game theGame, Sounds s)
+void testCollosionWithExplosion(Game theGame)
 {
     for (int i=0;i<4;i++)
     {
@@ -186,7 +186,7 @@ void testCollosionWithExplosion(Game theGame, Sounds s)
                     {
                         //player dead
                         theGame->player[i].isDead = true;
-                        //playChunk(s->death);
+                        //playChunk(s);
                     }
                 }
             }
@@ -382,6 +382,31 @@ void playerCollisionWithPowerup(Game theGame)
                     printf("give POWERUP\n");
                     powerupGive(theGame, playerID, i);
                     //theGame->powerups[i].isPickedUp = true;
+                }
+            }
+        }
+    }
+}
+
+//collision mellan powerups och explosioner
+void explosionCollisionWithPowerup(Game theGame)
+{
+    for(int i=0;i<POWERUPAMOUNT;i++) 
+    {
+        for (int k = 0;k<100;k++)
+        {
+            for(int j=0;j<MAXBOMBAMOUNT;j++)   
+            {
+                if(theGame->powerups[i].isPickedUp == false)
+                {
+                    if(theGame->explosionPosition[j][k].x < theGame->powerups[i].x &&
+                        theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > theGame->powerups[i].x + theGame->powerups[i].w &&
+                        theGame->explosionPosition[j][k].y < theGame->powerups[i].y &&
+                        theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y > theGame->powerups[i].y + theGame->powerups[i].h)
+                    {         
+                        theGame->powerups[i].isPickedUp = true;
+                        printf("skoj");
+                    }
                 }
             }
         }
