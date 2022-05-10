@@ -9,6 +9,7 @@
 #include "wall.h"
 #include "collissionDetection.h"
 #include "powerup.h"
+#include "sounds.h"
 
 
 PUBLIC void collisionDetect(Game theGame)
@@ -167,7 +168,7 @@ void testCollosionWithBombs(Game theGame)
 
 // collison detection mellan spelare och explosioner
 // i är för antal spelare, j för antal bomber och k för de olika rectanglar som explosionerna finns på
-void testCollosionWithExplosion(Game theGame)
+void testCollosionWithExplosion(Game theGame, Sounds s)
 {
     for (int i=0;i<4;i++)
     {
@@ -184,6 +185,7 @@ void testCollosionWithExplosion(Game theGame)
                     {
                         //player dead
                         theGame->player[i].isDead = true;
+                        playChunk(s->death);
                     }
                 }
             }

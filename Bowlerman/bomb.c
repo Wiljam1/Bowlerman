@@ -80,7 +80,8 @@ void process(Game theGame, Sounds s)
                 theGame->bombs[i].explosioninit = 0;
                 initExplosionPosition(theGame, i);
                 initbowlingballtimer(SDL_GetTicks(), 1000, i);
-                playExplosion(s);
+                printf("Crash\n");
+                playChunk(s->explosion);
             }
         }
     }
