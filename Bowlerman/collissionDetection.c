@@ -117,7 +117,7 @@ void testCollosionWithBombs(Game theGame)
     {
         if (theGame->bombs[i].placedBombRestriction == 1)
         {
-            //playerStandingOnBomb(theGame);
+            playerStandingOnBomb(theGame);
         }
         if (theGame->bombs[i].isPlaced == 1)
         {
@@ -193,18 +193,21 @@ void testCollosionWithExplosion(Game theGame)
 // om spelare släpper bomb så är kollision avstängt mellan spelaren och bomben tills man kliver av bomben
 void playerStandingOnBomb(Game theGame)
 {
-    for(int playerID=0;playerID<theGame->playerAmount;playerID++)
+    for(int playerID=0;playerID<theGame->playerAmount;playerID++) 
     {
-        if(theGame->bombs[playerID].position.x < theGame->player[playerID].xPos + theGame->player[playerID].width &&
-            theGame->bombs[playerID].position.x + theGame->bombs[playerID].position.w > theGame->player[playerID].xPos &&
-            theGame->bombs[playerID].position.y < theGame->player[playerID].yPos + theGame->player[playerID].height &&
-            theGame->bombs[playerID].position.h + theGame->bombs[playerID].position.y > theGame->player[playerID].yPos)
-        {         
-            theGame->bombs[playerID].placedBombRestriction = 1;
-        }
-        else 
+        for (int i = 0;i<MAXBOMBAMOUNT;i++)
         {
-            theGame->bombs[playerID].placedBombRestriction = 0;
+            if(theGame->bombs[i].position.x < theGame->player[playerID].xPos + theGame->player[playerID].width &&
+                theGame->bombs[i].position.x + theGame->bombs[i].position.w > theGame->player[playerID].xPos &&
+                theGame->bombs[i].position.y < theGame->player[playerID].yPos + theGame->player[playerID].height &&
+                theGame->bombs[i].position.h + theGame->bombs[i].position.y > theGame->player[playerID].yPos)
+            {         
+                theGame->bombs[playerID].placedBombRestriction = 1;
+            }
+            else 
+            {
+                theGame->bombs[playerID].placedBombRestriction = 0;
+            }
         }
     }
 }
