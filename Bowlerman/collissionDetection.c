@@ -332,6 +332,7 @@ int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i)
     return 1;
 }
 
+/*
 //testar explosion med bomber
 void testPossibilityToExplodeWithBombs(Game theGame)
 {
@@ -360,8 +361,28 @@ void testPossibilityToExplodeWithBombs(Game theGame)
     }
     return 1;
 }
+*/
 
-
+//test collision with powerup
+void playerCollisionWithPowerup(Game theGame)
+{
+    for(int playerID=0;playerID<theGame->playerAmount;playerID++) 
+    {
+        for (int i = 0;i<POWERUPAMOUNT;i++)
+        {
+            //if(powerup[i].isPlaced == 1)   //ha något här som gör att man inte kollar exkeverade powerups
+            {
+                if(theGame->powerups[i].x < theGame->player[playerID].xPos + theGame->player[playerID].width &&
+                    theGame->powerups[i].x + theGame->powerups[i].w > theGame->player[playerID].xPos &&
+                    theGame->powerups[i].y < theGame->player[playerID].yPos + theGame->player[playerID].height &&
+                    theGame->powerups[i].h + theGame->powerups[i].y > theGame->player[playerID].yPos)
+                {         
+                    printf("give POWERUP");
+                }
+            }
+        }
+    }
+}
 
 
 /*
