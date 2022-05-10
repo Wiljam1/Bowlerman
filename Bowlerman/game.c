@@ -65,6 +65,10 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
 // handles processes, like keyboard-inputs etc
 bool checkEvents(Game theGame)
 {
+
+    // Manage movement inputs
+    manageMovementInputs(theGame);
+    
     // Enter game loop (SDL_PollEvent)
     bool done = false;
     while (SDL_PollEvent(&theGame->window_event))
@@ -115,8 +119,7 @@ bool checkEvents(Game theGame)
             break;
         }
     }
-    // Manage movement inputs
-    manageMovementInputs(theGame);
+    
 
     return done;
 }
