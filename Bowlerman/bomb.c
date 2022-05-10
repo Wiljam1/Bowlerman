@@ -86,7 +86,7 @@ void process(Game theGame, Sounds s)
                 //playExplosion(s);
                 
                 printf("Crash\n");
-                playChunk(s->explosion);
+                //playChunk(s->explosion);
             }
             else {
                 theGame->bombs[i].timervalue = initbowlingballtimer(0, BOMBTIMER, i);

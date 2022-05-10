@@ -186,7 +186,7 @@ void testCollosionWithExplosion(Game theGame, Sounds s)
                     {
                         //player dead
                         theGame->player[i].isDead = true;
-                        playChunk(s->death);
+                        //playChunk(s->death);
                     }
                 }
             }

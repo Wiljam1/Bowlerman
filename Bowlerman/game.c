@@ -53,7 +53,7 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
     // Loading textures from file
     loadAllTextures(theGame);
     // Init sounds
-    initSounds();
+    //initSounds();
 
     // get playerID via UDP and saves it in theGame->playerIDLocal
     getPlayerIDviaUDP(theGame, udpData, udpValues);
@@ -183,7 +183,7 @@ PUBLIC void gameUpdate(Game theGame)
         
         // Process events (time based stuff)
         process(theGame, sounds);
-        playBackroundMusic(sounds);
+        //playBackroundMusic(sounds);
         // Collisiondetection
         collisionDetect(theGame);
         testCollosionWithBombs(theGame);     //Alla dessa kan flyttas in i collisionDetect();
