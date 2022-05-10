@@ -81,10 +81,12 @@ void process(Game theGame, Sounds s)
                 testPossibilityToExplodeWithBombs(theGame, i);
                 theGame->bombs[i].timerinit = 0;
                 theGame->bombs[i].explosioninit = 0;
-                printf("skoj %d\n", i);
+                //printf("skoj %d\n", i);
                 
-                playExplosion(s);
+                //playExplosion(s);
                 
+                printf("Crash\n");
+                playChunk(s->explosion);
             }
             else {
                 theGame->bombs[i].timervalue = initbowlingballtimer(0, BOMBTIMER, i);

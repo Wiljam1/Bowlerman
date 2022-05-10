@@ -7,13 +7,14 @@ struct sounds
 {
     Mix_Music *backgroundMusic;
     Mix_Chunk *explosion;
+    Mix_Chunk *death;
 };
 typedef struct sounds *Sounds;
 
 Sounds initSoundFiles();
 void initSounds();
 void playBackroundMusic();
-void playExplosion();
+void playChunk();
 void destroySoundFiles();
 
 #endif
