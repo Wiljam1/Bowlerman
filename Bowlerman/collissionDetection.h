@@ -14,5 +14,6 @@ int testCollisionExplosionWithWalls(Game theGame, int k);
 int testCollisionWithDestroyableWalls(Game theGame, int k, int j);
 int testPossibilityToExplode(Game theGame, int playerID, int i);
 int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i);
+void testPossibilityToExplodeWithBombs(Game theGame);
 
 #endif
