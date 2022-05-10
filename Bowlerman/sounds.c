@@ -43,4 +43,5 @@ void destroySoundFiles(Sounds s)
 {
     Mix_FreeMusic(s->backgroundMusic);
     Mix_FreeChunk(s->explosion);
+    Mix_FreeChunk(s->death);
 }
