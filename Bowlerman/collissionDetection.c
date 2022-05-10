@@ -333,33 +333,33 @@ int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i)
 }
 
 //testar explosion med bomber
-void testPossibilityToExplodeWithBombs(Game theGame)
-{
-    for(int playerID=0;playerID<4;playerID++)
-    {
-        for(int i = 0;i<MAXBOMBAMOUNT;i++)
-        {
-            for(int j = 0;j<MAXBOMBAMOUNT;j++)
-            {
-                for (int k=0;k<theGame->player[i].explosionPower;k++)
-                {
-                    if(theGame->bombs[i].isPlaced == 1)
-                    {
-                        if(theGame->bombs[i].position.x < theGame->explosionPosition[j][k].x &&
-                        theGame->bombs[i].position.x + theGame->bombs[i].position.w > theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w &&
-                        theGame->bombs[i].position.y < theGame->explosionPosition[j][k].y &&
-                        theGame->bombs[i].position.h + theGame->bombs[i].position.y > theGame->explosionPosition[j][k].y + theGame->explosionPosition[j][k].h)
-                        {
-                            printf("denna bomb ska explodera");
-                            //theGame->bombs[i] ska gå boom
-                        } 
-                    }
-                }
-            }
-        }
-    }
-    return 1;
-}
+// void testPossibilityToExplodeWithBombs(Game theGame)
+// {
+//     for(int playerID=0;playerID<4;playerID++)
+//     {
+//         for(int i = 0;i<MAXBOMBAMOUNT;i++)
+//         {
+//             for(int j = 0;j<MAXBOMBAMOUNT;j++)
+//             {
+//                 for (int k=0;k<theGame->player[i].explosionPower;k++)
+//                 {
+//                     if(theGame->bombs[i].isPlaced == 1)
+//                     {
+//                         if(theGame->bombs[i].position.x < theGame->explosionPosition[j][k].x &&
+//                         theGame->bombs[i].position.x + theGame->bombs[i].position.w > theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w &&
+//                         theGame->bombs[i].position.y < theGame->explosionPosition[j][k].y &&
+//                         theGame->bombs[i].position.h + theGame->bombs[i].position.y > theGame->explosionPosition[j][k].y + theGame->explosionPosition[j][k].h)
+//                         {
+//                             printf("denna bomb ska explodera");
+//                             //theGame->bombs[i] ska gå boom
+//                         } 
+//                     }
+//                 }
+//             }
+//         }
+//     }
+//     return 1;
+// }
 
 
 

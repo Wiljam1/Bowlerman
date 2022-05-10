@@ -7,10 +7,11 @@ PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPInit *udpValues)
 {
     int playerID = theGame->playerIDLocal;
     udpData->placeBomb=0;
+    #define MAXAMMOUNTOFBOMBS 5   //how many bombs are allowed to be placed by one player
     static int doPlaceBomb=0;
     static int flagSendBomb[5]={0};
 
-    for(int i=0; i<5; i++)   //for-loop för vi vill kunna släppa upp till 5 bomber
+    for(int i=0; i<MAXAMMOUNTOFBOMBS; i++)   //for-loop för vi vill kunna släppa upp till 5 bomber
     {
         if(theGame->bombs[playerID+i*4].timerinit==1){  
             if(flagSendBomb[i]==0)    //vi ser till att skicka 1 packets, för om vi skickar för mycket blir det buggigt pga delay med UDP i slutet
@@ -29,16 +30,16 @@ PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPInit *udpValues)
             //udpData->placeBomb=0;
         }
     }
-    //reset placeBomb
-    for (int i=0; i<5; i++)
+    //reset placeBomb (udpData->placeBomb)
+    for (int i=0; i<MAXAMMOUNTOFBOMBS; i++)
     {
         if (flagSendBomb[i]==0)
         {
             udpData->placeBomb=0;
         }
     }
-    //check if we should placeBomb
-    for (int i=0; i<5; i++)
+    //check if we should placeBomb (udpData->placeBomb)
+    for (int i=0; i<MAXAMMOUNTOFBOMBS; i++)
     {
         if(flagSendBomb[i]==1 && doPlaceBomb==1)
         {
