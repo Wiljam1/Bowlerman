@@ -46,14 +46,14 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
 {
     //inits SDL-net and loads in correct IP-adresses etc.
     initSDLNet(udpValues);
+    // Init sounds
+    initSounds();
 
     //Init random seed
     srand(time(NULL));
     
     // Loading textures from file
     loadAllTextures(theGame);
-    // Init sounds
-    //initSounds();
 
     // get playerID via UDP and saves it in theGame->playerIDLocal
     getPlayerIDviaUDP(theGame, udpData, udpValues);
@@ -80,7 +80,6 @@ bool checkEvents(Game theGame)
     while (SDL_PollEvent(&theGame->window_event))
     {
         SDL_Event event = theGame->window_event;
-
         switch (event.type)
         {
         case SDL_QUIT:
@@ -126,7 +125,6 @@ bool checkEvents(Game theGame)
         }
     }
     
-
     return done;
 }
 
@@ -173,7 +171,7 @@ PUBLIC void gameUpdate(Game theGame)
     UDPInit udpValues = SetUDPValues();     //returns a struct for udp-init-struct. Like IP-adress etc.
     UDPData udpData = UDPDataTransfer();    //Resets data struct, Like player x,y -positions etc.
     initGame(theGame, &udpData, &udpValues);         // initializes startvalues. coordinates etc.
-    Sounds sounds = initSoundFiles();
+    //Sounds sounds = initSoundFiles();
     // Game Loop:
     bool done = false;
     while (!done)
@@ -182,17 +180,15 @@ PUBLIC void gameUpdate(Game theGame)
         done = checkEvents(theGame);
         
         // Process events (time based stuff)
-        process(theGame, sounds);
+        process(theGame);
         //playBackroundMusic(sounds);
         // Collisiondetection
         collisionDetect(theGame);
         testCollosionWithBombs(theGame);     //Alla dessa kan flyttas in i collisionDetect();
         testCollisionWithWalls(theGame);
-        testCollosionWithExplosion(theGame, sounds);
+        testCollosionWithExplosion(theGame);
         //testPossibilityToExplodeWithBombs(theGame);
         playerCollisionWithPowerup(theGame);
-        
-
         // Send/receive data to server
         manageUDP(theGame, &udpData, &udpValues);
 
@@ -201,7 +197,7 @@ PUBLIC void gameUpdate(Game theGame)
 
         SDL_Delay(1000 / 60); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
-    destroySoundFiles(sounds);
+    //destroySoundFiles(sounds);
 }
 
 // renders background and players etc.

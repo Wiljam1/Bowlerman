@@ -69,7 +69,7 @@ void tryToPlaceBomb(Game theGame, int playerID)
 }
 
 //som en game loop för bomber, kollar timer för explosioner samt bomber
-void process(Game theGame, Sounds s)
+void process(Game theGame)
 {
     //kollar bombernas timer, är den klar försvinner bomben och explosionstimer initieras
     for (int i = 0; i < MAXBOMBAMOUNT; i++){
@@ -85,7 +85,6 @@ void process(Game theGame, Sounds s)
                 
                 //playExplosion(s);
                 
-                printf("Crash\n");
                 //playChunk(s->explosion);
             }
             else {
