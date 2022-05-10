@@ -12,7 +12,7 @@ Sounds initSoundFiles()
     Sounds s = malloc(sizeof(Sounds));
     s->backgroundMusic = Mix_LoadMUS("resources/sounds/upbeat.wav");
     s->explosion = Mix_LoadWAV("resources/sounds/explosion.wav");
-    s->death = Mix_LoadWAV("resources/sounds/death.wav");
+    s->death = Mix_LoadWAV("resources/sounds/strike.wav");
     return s;
 }
 
