@@ -14,7 +14,7 @@ typedef struct powerup Powerup;
 
 void rollForPowerup(Game theGame, int xPos, int yPos); //Roll for a chance to place a random powerup
 void renderPowerups(Game theGame);                     //Render powerups
-Powerup initPowerup(int width, int height); //How many powerups are going to be used
+void powerupGive(Game theGame, int playerID, int i);
 Powerup powerupPlace(int xPos, int yPos, int type); //Place a powerup in the window
 
 #endif

@@ -44,6 +44,20 @@ void renderPowerups(Game theGame)
     }
 }
 
+void powerupGive(Game theGame, int playerID, int i)
+{
+    if(theGame->powerups[i].type == 0){ //give speed
+        playerAddSpeed(&theGame->player[playerID], 0.5);
+    }
+    else if(theGame->powerups[i].type == 1){ //give more power
+        playerAddExplosionPower(&theGame->player[playerID], 1);
+    }
+    else if(theGame->powerups[i].type == 2){ //give more bombs
+        playerAddAmountOfBombs(&theGame->player[playerID], 1);
+    }
+    theGame->powerups[i].isPickedUp = true;
+}
+
 Powerup powerupPlace(int xPos, int yPos, int type)
 {
     Powerup p;

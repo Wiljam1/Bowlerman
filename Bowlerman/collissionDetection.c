@@ -8,6 +8,7 @@
 #include "player.h"
 #include "wall.h"
 #include "collissionDetection.h"
+#include "powerup.h"
 
 
 PUBLIC void collisionDetect(Game theGame)
@@ -332,7 +333,7 @@ int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i)
     return 1;
 }
 
-/*
+
 //testar explosion med bomber
 void testPossibilityToExplodeWithBombs(Game theGame)
 {
@@ -359,9 +360,8 @@ void testPossibilityToExplodeWithBombs(Game theGame)
             }
         }
     }
-    return 1;
 }
-*/
+
 
 //test collision with powerup
 void playerCollisionWithPowerup(Game theGame)
@@ -375,10 +375,11 @@ void playerCollisionWithPowerup(Game theGame)
                 if(theGame->powerups[i].x < theGame->player[playerID].xPos + theGame->player[playerID].width &&
                     theGame->powerups[i].x + theGame->powerups[i].w > theGame->player[playerID].xPos &&
                     theGame->powerups[i].y < theGame->player[playerID].yPos + theGame->player[playerID].height &&
-                    theGame->powerups[i].h + theGame->powerups[i].y > theGame->player[playerID].yPos)
+                    theGame->powerups[i].h + theGame->powerups[i].y - 30 > theGame->player[playerID].yPos)
                 {         
                     printf("give POWERUP\n");
-                    theGame->powerups[i].isPickedUp = true;
+                    powerupGive(theGame, playerID, i);
+                    //theGame->powerups[i].isPickedUp = true;
                 }
             }
         }

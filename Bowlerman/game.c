@@ -186,6 +186,7 @@ PUBLIC void gameUpdate(Game theGame)
         testCollosionWithBombs(theGame);     //Alla dessa kan flyttas in i collisionDetect();
         testCollisionWithWalls(theGame);
         testCollosionWithExplosion(theGame);
+        testPossibilityToExplodeWithBombs(theGame);
         playerCollisionWithPowerup(theGame);
         
 

@@ -10,6 +10,7 @@
 
 #define MAXSPEED 8
 #define MINSPEED 1
+#define MAXBOMBS 5
 
 PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
 {
@@ -27,9 +28,9 @@ PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
     p.playerRect.x = p.xPos = p.xPosOld = xPos;
     p.playerRect.y = p.yPos = p.yPosOld = yPos;
     p.speed = 4;
-    p.amountOfBombs = 3;        //antal bomber, börjar på 1
+    p.amountOfBombs = 1;        //antal bomber, börjar på 1
     p.amountOfBombsPlaced = 0;  //antal bomber placerade, börjar på 0    
-    p.explosionPower = 2;       //hur stor explosionen ska vara, börjar på 1
+    p.explosionPower = 1;       //hur stor explosionen ska vara, börjar på 1
     p.canRollBombs = false;
     p.playerRect.h = p.height = 100*0.7;
     p.playerRect.w = p.width = 64*0.7;
@@ -252,7 +253,7 @@ PUBLIC void getStartPos(Player *p)
             break;
     }
 }
-void playerAddSpeed(Player *p, int speed)
+void playerAddSpeed(Player *p, float speed)
 {
     p->speed += speed;
     if(p->speed > MAXSPEED) 
@@ -267,6 +268,8 @@ void playerAddExplosionPower(Player *p, int explosionPower)
 void playerAddAmountOfBombs(Player *p, int amountOfBombs)
 {
     p->amountOfBombs += amountOfBombs;
+    if(p->explosionPower > MAXBOMBS)
+        p->amountOfBombs = MAXBOMBS;
 }
 
 
