@@ -65,7 +65,7 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues)
     //check to see if we should send bomb with UDP
     sendBomb(theGame, udpData, udpValues);
 
-        //flagga för att reset:a movement direction när spelaren står stilla.
+    //flagga för att reset:a movement direction när spelaren står stilla.
     if( udpData->moveDirection != '0'){
        flag2=1;
     }
