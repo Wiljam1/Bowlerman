@@ -45,7 +45,7 @@ int initbowlingballtimer(int startTime, int timeAmount, int playerID)
     currentTime[playerID] = SDL_GetTicks();
     if (currentTime[playerID] > lastTime[playerID] + timeAmount)
     {
-        lastTime[playerID] = currentTime[playerID];
+        //lastTime[playerID] = currentTime[playerID];
         return 1;               //returnar 1 om tiden är ute
     }
     return 0;
@@ -74,14 +74,22 @@ void process(Game theGame, Sounds s)
     //kollar bombernas timer, är den klar försvinner bomben och explosionstimer initieras
     for (int i = 0; i < MAXBOMBAMOUNT; i++){
         if (theGame->bombs[i].timerinit == 1){
-            theGame->bombs[i].timervalue = initbowlingballtimer(0, BOMBTIMER, i);       
+                  
             if (theGame->bombs[i].timervalue == 1){
-                theGame->bombs[i].timerinit = 0;
-                theGame->bombs[i].explosioninit = 0;
                 initExplosionPosition(theGame, i);
                 initbowlingballtimer(SDL_GetTicks(), 1000, i);
+                testPossibilityToExplodeWithBombs(theGame, i);
+                theGame->bombs[i].timerinit = 0;
+                theGame->bombs[i].explosioninit = 0;
+                printf("skoj %d\n", i);
+                
                 playExplosion(s);
+                
             }
+            else {
+                theGame->bombs[i].timervalue = initbowlingballtimer(0, BOMBTIMER, i);
+            }
+             
         }
     }
     //kollar explosionstimern
