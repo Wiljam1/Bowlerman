@@ -12,6 +12,7 @@
 
 
 void initGUI(Game theGame);
+void createLabel(Game theGame, int labelID, char text[20], float value, SDL_Color color);
 void updateGUI(Game theGame);
 void drawGUI(Game theGame);
 void destroyGUI(Game theGame);

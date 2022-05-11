@@ -16,7 +16,8 @@
 
 #define PLAYERAMOUNT 4    //how many players are online
 #define WALLAMOUNT 100
-#define POWERUPAMOUNT 100 //How many powerups per map  
+#define POWERUPAMOUNT 100 //How many powerups per map
+#define LABELAMOUNT 3
 
 #define WIDTH 1190 // Move eventually
 #define HEIGHT 910 + 100
