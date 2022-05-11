@@ -24,6 +24,7 @@ void initExplosionPosition(Game theGame, int playerID);
 
 Bowlingball initBomb();
 void loadBomb();
+int timeleft(int time, int playerID);
 
 //SDL_Rect setBowlingBallPosition(Game theGame, Player player);
 

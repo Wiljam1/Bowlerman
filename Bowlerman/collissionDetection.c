@@ -354,9 +354,7 @@ void testPossibilityToExplodeWithBombs(Game theGame, int j)
                         theGame->bombs[i].position.y < theGame->explosionPosition[j][k].y &&
                         theGame->bombs[i].position.h + theGame->bombs[i].position.y > theGame->explosionPosition[j][k].y + theGame->explosionPosition[j][k].h)
                     {
-                        printf("hej\n");
                         theGame->bombs[i].timervalue = 1;
-                        //initbowlingballtimer(1, 0, i);  
                     }
                 } 
             }
@@ -379,9 +377,7 @@ void playerCollisionWithPowerup(Game theGame)
                     theGame->powerups[i].y < theGame->player[playerID].yPos + theGame->player[playerID].height &&
                     theGame->powerups[i].h + theGame->powerups[i].y - 30 > theGame->player[playerID].yPos)
                 {         
-                    printf("give POWERUP\n");
                     powerupGive(theGame, playerID, i);
-                    //theGame->powerups[i].isPickedUp = true;
                 }
             }
         }
@@ -389,6 +385,7 @@ void playerCollisionWithPowerup(Game theGame)
 }
 
 //collision mellan powerups och explosioner
+//funkar inte ännu, måste ändra något så att explosionerna inte tar ut powerups direkt
 void explosionCollisionWithPowerup(Game theGame)
 {
     for(int i=0;i<POWERUPAMOUNT;i++) 
@@ -405,7 +402,6 @@ void explosionCollisionWithPowerup(Game theGame)
                         theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y > theGame->powerups[i].y + theGame->powerups[i].h)
                     {         
                         theGame->powerups[i].isPickedUp = true;
-                        printf("skoj");
                     }
                 }
             }
