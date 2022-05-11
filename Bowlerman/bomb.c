@@ -14,6 +14,7 @@
 
 
 PUBLIC Bowlingball initBomb();
+void sortBombsArray(Game theGame,int i);
 
 
 PUBLIC Bowlingball initBomb()
@@ -81,7 +82,6 @@ void process(Game theGame, Sounds *s)
                 testPossibilityToExplodeWithBombs(theGame, i);
                 theGame->bombs[i].timerinit = 0;
                 theGame->bombs[i].explosioninit = 0;
-                //printf("skoj %d\n", i);
                 playBomb(s);
             }
             else {
@@ -104,14 +104,36 @@ void process(Game theGame, Sounds *s)
             }
             if (theGame->bombs[i].explosioninit == 1){
                 int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
+                theGame->bombs[i].isPlaced = 0;
+                sortBombsArray(theGame, returnarray[i]);
                 if(theGame->player[returnarray[i]].amountOfBombsPlaced > 0)
                 {
                     theGame->player[returnarray[i]].amountOfBombsPlaced--;          
                 }
-                theGame->bombs[i].isPlaced = 0;
             }
-            
         }
+    }
+}
+
+//sorterar bomber så att sprängda bomber åker iväg, funkar inte helt med timer dock
+void sortBombsArray(Game theGame,int i)
+{
+    Bowlingball tmp;
+    int temporarytime=0;
+    //for (int k=0;k<theGame->player[i].amountOfBombsPlaced;k++)
+    {
+        for (int j = 1;j<theGame->player[i].amountOfBombsPlaced;j++)
+        {
+            if(theGame->bombs[i+j*4].isPlaced == 1)
+            {
+                if(theGame->bombs[i+j*4-4].isPlaced == 0)
+                {
+                    tmp = theGame->bombs[i+j*4-4];
+                    theGame->bombs[i+j*4-4] = theGame->bombs[i+j*4];
+                    theGame->bombs[i+j*4] = tmp;
+                }
+            }
+        }  
     }
 }
 
