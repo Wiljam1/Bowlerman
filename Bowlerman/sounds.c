@@ -6,16 +6,18 @@
 /*Ändra här ifall du tröttnar på ljudet*/
 #define MUSICVOLUME 1
 #define BOMBVOLUME 1
+#define STRIKEVOLUME 1
 
 Sounds initSoundFiles()
 {
     Sounds s;
-    s.backgroundMusic = Mix_LoadMUS("resources/sounds/upbeat.wav");
+    s.backgroundMusic = Mix_LoadMUS("resources/sounds/song.wav");
     s.explosion = Mix_LoadWAV("resources/sounds/explosion.wav");
     s.death = Mix_LoadWAV("resources/sounds/strike.wav");
 
     Mix_VolumeMusic(MUSICVOLUME);
-    Mix_VolumeChunk(s.death, BOMBVOLUME);
+    Mix_VolumeChunk(s.death, STRIKEVOLUME);
+    Mix_VolumeChunk(s.explosion, BOMBVOLUME);
     
     return s;
 }
@@ -36,9 +38,14 @@ void playBackroundMusic(Sounds *s)
     }
 }
 
-void playChunk(Sounds *s)
+void playDeath(Sounds *s)
 {
     Mix_PlayChannel(-1, (s->death), 0);
+}
+
+void playBomb(Sounds *s)
+{
+    Mix_PlayChannel(-1, (s->explosion), 0);
 }
 
 void destroySoundFiles(Sounds *s)

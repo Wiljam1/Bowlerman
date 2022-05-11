@@ -185,14 +185,14 @@ PUBLIC void gameUpdate(Game theGame)
         done = checkEvents(theGame);
         
         // Process events (time based stuff)
-        process(theGame);
+        process(theGame, &sounds);
         playBackroundMusic(&sounds);
 
         // Collisiondetection
         collisionDetect(theGame);
         testCollosionWithBombs(theGame);     //Alla dessa kan flyttas in i collisionDetect();
         testCollisionWithWalls(theGame);
-        testCollosionWithExplosion(theGame);
+        testCollosionWithExplosion(theGame, &sounds);
         //testPossibilityToExplodeWithBombs(theGame);
         playerCollisionWithPowerup(theGame);
         //explosionCollisionWithPowerup(theGame);       //för att förstöra powerups med explosioner

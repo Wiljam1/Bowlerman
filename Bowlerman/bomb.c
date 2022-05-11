@@ -69,7 +69,7 @@ void tryToPlaceBomb(Game theGame, int playerID)
 }
 
 //som en game loop för bomber, kollar timer för explosioner samt bomber
-void process(Game theGame)
+void process(Game theGame, Sounds *s)
 {
     //kollar bombernas timer, är den klar försvinner bomben och explosionstimer initieras
     for (int i = 0; i < MAXBOMBAMOUNT; i++){
@@ -82,10 +82,7 @@ void process(Game theGame)
                 theGame->bombs[i].timerinit = 0;
                 theGame->bombs[i].explosioninit = 0;
                 //printf("skoj %d\n", i);
-                
-                //playExplosion(s);
-                
-                //playChunk(s->explosion);
+                playBomb(s);
             }
             else {
                 theGame->bombs[i].timervalue = initbowlingballtimer(0, BOMBTIMER, i);

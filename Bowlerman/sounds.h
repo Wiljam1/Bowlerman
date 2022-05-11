@@ -8,7 +8,8 @@ typedef struct sounds Sounds;
 Sounds initSoundFiles();
 void initSounds();
 void playBackroundMusic();
-void playChunk();
+void playDeath(Sounds *s);
+void playBomb(Sounds *s);
 void destroySoundFiles();
 
 #endif
