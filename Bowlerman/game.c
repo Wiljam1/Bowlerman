@@ -101,6 +101,7 @@ bool checkEvents(Game theGame)
             switch (event.key.keysym.sym)
             {
             case SDLK_SPACE:
+                tryToPlaceBomb(theGame, theGame->playerIDLocal);
                 break;
             case SDLK_ESCAPE:
                 done = true;
@@ -137,7 +138,7 @@ void manageMovementInputs(Game theGame)
     Player player = theGame->player[theGame->playerIDLocal];
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if(state[SDL_SCANCODE_SPACE]){
-        tryToPlaceBomb(theGame, theGame->playerIDLocal);
+        
     }
     if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
     {

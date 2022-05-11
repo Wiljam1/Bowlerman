@@ -201,8 +201,8 @@ int correctBowlingBallPosx(int i)
 int correctBowlingBallPosy(int i)
 {
     int j=0, k=0;
-    k=+i/70;
-    j=i%70;
+    k=(i-4)/70;
+    j=(i-4)%70;
     if(j<35){
         return (k*70)+30;      //returnerar närmaste tile sen +3 för att få det helt centrerat
     }

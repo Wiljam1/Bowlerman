@@ -268,7 +268,7 @@ void playerAddExplosionPower(Player *p, int explosionPower)
 void playerAddAmountOfBombs(Player *p, int amountOfBombs)
 {
     p->amountOfBombs += amountOfBombs;
-    if(p->explosionPower > MAXBOMBS)
+    if(p->amountOfBombs > MAXBOMBS)
         p->amountOfBombs = MAXBOMBS;
 }
 
