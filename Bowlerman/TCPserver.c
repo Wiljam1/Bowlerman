@@ -49,7 +49,6 @@ int threadTCPReceive(void * data)
 				printf("Quit program\n");
 			}
 
-			printf("inside send info back\n");
 			//send info back
 			int len = strlen(buffer) + 1;
 			if (SDLNet_TCP_Send(csd[threadID], (void *)buffer, len) < len)
@@ -122,7 +121,7 @@ int main(int argc, char **argv)
 	for(int i=0; i<MAXPLAYERS+2; i++)
 	{
     	SDL_WaitThread(threadID[i], NULL );
-		threadID[i] = NULL;  //ska man göra detta? Då pekar de på ingenting. Tänker att det är bra
+		threadID[i] = NULL;  //Nu pekar de på ingenting. Tänker att det är bra
 	}
 
 	//Destroy conditions
