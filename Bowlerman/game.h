@@ -132,7 +132,7 @@ struct game_type
     SDL_Texture *textureWall[4];
     SDL_Texture *bombExplosion_texture;
     SDL_Texture *texturePowerups[4];
-    SDL_Texture *label;                                        
+    SDL_Texture *labels[5];                                        
     int labelW, labelH;
 
     //Fonts
