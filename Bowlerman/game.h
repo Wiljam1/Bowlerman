@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 //denna .h-fil får INTE include:a några andra .h-filer. För då blir det "circular inclusion".
 //pga alla andra .h-filer är beroende av game.h
@@ -21,6 +22,13 @@
 #define HEIGHT 910 + 100
 #define MAXBOMBAMOUNT 20
 //-------------------------------------------------
+struct sounds
+{
+    Mix_Music *backgroundMusic;
+    Mix_Chunk *explosion;
+    Mix_Chunk *death;
+};
+typedef struct sounds Sounds;
 
 struct wall{
     int id; //UDP?
@@ -133,7 +141,7 @@ struct game_type
     SDL_Event    window_event;
 };
 typedef struct game_type *Game;
-typedef struct sounds *Sounds;
+
 Game createWindow();              // Struct for app initialization
 SDL_Texture *loadTextures(Game newGame, char fileLocation[]); // Load any image you want in the resources/ folder!
 void gameUpdate(Game newGame);  // Game loop

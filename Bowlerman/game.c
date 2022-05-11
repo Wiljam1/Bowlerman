@@ -176,7 +176,7 @@ PUBLIC void gameUpdate(Game theGame)
     UDPInit udpValues = SetUDPValues();     //returns a struct for udp-init-struct. Like IP-adress etc.
     UDPData udpData = UDPDataTransfer();    //Resets data struct, Like player x,y -positions etc.
     initGame(theGame, &udpData, &udpValues);         // initializes startvalues. coordinates etc.
-    //Sounds sounds = initSoundFiles();
+    Sounds sounds = initSoundFiles();
     // Game Loop:
     bool done = false;
     while (!done)
@@ -186,7 +186,7 @@ PUBLIC void gameUpdate(Game theGame)
         
         // Process events (time based stuff)
         process(theGame);
-        //playBackroundMusic(sounds);
+        playBackroundMusic(&sounds);
 
         // Collisiondetection
         collisionDetect(theGame);

@@ -9,10 +9,14 @@
 
 Sounds initSoundFiles()
 {
-    Sounds s = malloc(sizeof(Sounds));
-    s->backgroundMusic = Mix_LoadMUS("resources/sounds/upbeat.wav");
-    s->explosion = Mix_LoadWAV("resources/sounds/explosion.wav");
-    s->death = Mix_LoadWAV("resources/sounds/strike.wav");
+    Sounds s;
+    s.backgroundMusic = Mix_LoadMUS("resources/sounds/upbeat.wav");
+    s.explosion = Mix_LoadWAV("resources/sounds/explosion.wav");
+    s.death = Mix_LoadWAV("resources/sounds/strike.wav");
+
+    Mix_VolumeMusic(MUSICVOLUME);
+    Mix_VolumeChunk(s.death, BOMBVOLUME);
+    
     return s;
 }
 
@@ -24,22 +28,20 @@ void initSounds()
     }
 }
 
-void playBackroundMusic(Sounds s)
+void playBackroundMusic(Sounds *s)
 {   
     if(!Mix_PlayingMusic())
     {
-        Mix_VolumeMusic(MUSICVOLUME);
         Mix_PlayMusic(s->backgroundMusic, -1);
     }
 }
 
-void playChunk(Sounds s)
+void playChunk(Sounds *s)
 {
-    Mix_VolumeChunk(s->death, BOMBVOLUME);
     Mix_PlayChannel(-1, (s->death), 0);
 }
 
-void destroySoundFiles(Sounds s)
+void destroySoundFiles(Sounds *s)
 {
     Mix_FreeMusic(s->backgroundMusic);
     Mix_FreeChunk(s->explosion);
