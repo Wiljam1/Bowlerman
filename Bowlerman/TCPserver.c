@@ -15,14 +15,19 @@ int playerAmmount=0; 		//hur många klienter är inne just nu
 #define MAXPLAYERS 5 		//max antal spelare tillåtna på servern
 TCPsocket csd[MAXPLAYERS+2]; /* Client socket descriptor. En extra socket för UDP servern */
 SDL_cond* gWakeUpMain = NULL;    //condition för att väcka main-loopen. Just nu en NULL-pointer
+SDL_mutex* gMainLock = NULL;   //The protective mutex
+	
 
 int threadTCPReceive(void * data)
 {
+	SDL_LockMutex( gMainLock ); //Lock
 	//vet inte varför jag måste konvertera på detta sätt:
 	int *test= (int*) &data;
 	int threadID = *test;
-    SDL_CondSignal( gWakeUpMain ); //wake up main thread here. Signal producer
-	//väcker main efter att ha läst av threadID värdet (playerammount)
+	SDL_UnlockMutex( gMainLock );	//Unlock
+    SDL_CondSignal( gWakeUpMain ); //wake up main thread here. Signal producer. väcker main efter att ha läst av threadID värdet (playerammount)
+	
+
 
 	printf("threadID: %d woken up\n", threadID);
 
@@ -49,6 +54,7 @@ int threadTCPReceive(void * data)
 				printf("Quit program\n");
 			}
 
+			printf("inside send info back\n");
 			//send info back
 			int len = strlen(buffer) + 1;
 			if (SDLNet_TCP_Send(csd[threadID], (void *)buffer, len) < len)
@@ -69,6 +75,7 @@ int main(int argc, char **argv)
 	int quit=0;
 	SDL_Thread* threadID[MAXPLAYERS+2];   //trådar
     gWakeUpMain = SDL_CreateCond();  //Create conditions för att väcka main-loopen.
+    gMainLock = SDL_CreateMutex();  //Create the mutex
 
 	if (SDLNet_Init() < 0)
 	{
@@ -107,9 +114,11 @@ int main(int argc, char **argv)
 				/* Print the address, converting in the host format */
 				printf("Host connected: %x %d\n", SDLNet_Read32(&remoteIP->host), SDLNet_Read16(&remoteIP->port));
 				//threadTCPReceive(&playerAmmount);
-				threadID[playerAmmount]= SDL_CreateThread(threadTCPReceive, "threadForServer", (void*) playerAmmount );
 				
-				SDL_CondWait(gWakeUpMain, NULL); //make main fall asleep. Detta pga att det annars blir trådosäkert med variabeln playerAmmount.
+    			SDL_LockMutex( gMainLock ); //Lock
+				threadID[playerAmmount]= SDL_CreateThread(threadTCPReceive, "threadForServer", (void*) playerAmmount );
+				SDL_CondWait(gWakeUpMain, gMainLock); //make main fall asleep. Detta pga att det annars blir trådosäkert med variabeln playerAmmount.
+    			SDL_UnlockMutex( gMainLock );	//Unlock
 				playerAmmount++;
 			}
 			else
@@ -121,12 +130,16 @@ int main(int argc, char **argv)
 	for(int i=0; i<MAXPLAYERS+2; i++)
 	{
     	SDL_WaitThread(threadID[i], NULL );
-		threadID[i] = NULL;  //Nu pekar de på ingenting. Tänker att det är bra
+		threadID[i] = NULL;  //ska man göra detta? Då pekar de på ingenting. Tänker att det är bra
 	}
 
 	//Destroy conditions
     SDL_DestroyCond(gWakeUpMain);
     gWakeUpMain = NULL;
+
+	//Destroy the mutex
+    SDL_DestroyMutex(gMainLock);
+    gMainLock = NULL;
 
 	SDLNet_TCP_Close(sd);
 	SDLNet_Quit();
