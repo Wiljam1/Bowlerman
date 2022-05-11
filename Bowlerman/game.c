@@ -17,6 +17,7 @@
 #include "powerup.h"
 #include "sounds.h"
 #include "gui.h"
+#include "tcpclient.h"
 
 #define PUBLIC /* empty */
 #define PRIVATE static

@@ -8,8 +8,8 @@ exit
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
- 
 #include "SDL2/SDL_net.h"
+#include "tcpclient.h"
  
 int main(int argc, char **argv)
 {
