@@ -14,7 +14,7 @@ exit
 #define PRIVATE static
 
 
-PUBLIC TCPstruct SetTCPValues()
+PUBLIC TCPstruct createTCPstruct()
 {
     TCPstruct u;
     return u;
@@ -47,7 +47,7 @@ PUBLIC void manageTCP(TCPstruct *u)
 	char buffer[512];
  
 	//kanske skapa tråd här och sen stäng tråden efter menysystemet e klart.
-	
+
 	/* Send messages */
 	quit = 0;
 	while (!quit)

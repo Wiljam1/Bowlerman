@@ -124,7 +124,7 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
        flag2=0;
     }
 
-    //send udp data
+    //send udp data (if e.g. movement has been updated)
     sendUDP(theGame, udpData, udpValues, &flag);
 
     //receive udp data
@@ -133,7 +133,7 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 
 }
 
-PUBLIC UDPData UDPDataTransfer()
+PUBLIC UDPData UDPDataReset()
 {
     UDPData u;
     u.x = 0;
@@ -145,7 +145,7 @@ PUBLIC UDPData UDPDataTransfer()
     return u;
 }
 
-PUBLIC UDPStruct SetUDPValues()
+PUBLIC UDPStruct createUDPstruct()
 {
     UDPStruct u;
     return u;
