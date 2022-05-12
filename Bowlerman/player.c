@@ -25,7 +25,7 @@ PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
     p.left = 0;
     p.xVel = 0;
     p.yVel = 0;
-    p.playerRect.x = p.xPos = p.xPosOld = xPos;
+    p.playerRect.x = p.xPos = p.xPosOld = xPos; // Startvärden för x och y ges till alla variabler.
     p.playerRect.y = p.yPos = p.yPosOld = yPos;
     p.speed = 4;
     p.amountOfBombs = 1;        //antal bomber, börjar på 1
@@ -202,6 +202,21 @@ PlayerSprites GetPlayerSprite()
     
     return p;
 }
+
+PUBLIC void updateMovementDirection(Game theGame, int id, char c)
+{
+    theGame->player[id].moveDirection = c;
+}
+
+PUBLIC void updatePlayerXPosition(Game theGame, int id, int velX)
+{
+    theGame->player[id].xPos += velX;
+}
+PUBLIC void updatePlayerYPosition(Game theGame, int id, int velY)
+{
+    theGame->player[id].yPos += velY;
+}
+
 
 PUBLIC int getPlayerHeight(Player p)
 {

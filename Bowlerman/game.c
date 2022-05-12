@@ -115,60 +115,51 @@ bool checkEvents(Game theGame)
             default:
                 break;
             }
-            break;
-        case SDL_KEYUP:
-            switch (event.key.keysym.scancode)
-            {
-            // case SDLK_w: case SDLK_UP:
-            //     up = false;
-            default:
-                break;
-            }
-            break;
         default:
             break;
         }
     }
-    
     return done;
 }
 
 void manageMovementInputs(Game theGame)
 {
     int velX = 0, velY = 0;
+    int id = theGame->playerIDLocal;
+    char direction;
     Player player = theGame->player[theGame->playerIDLocal];
     const Uint8 *state = SDL_GetKeyboardState(NULL);
-    if(state[SDL_SCANCODE_SPACE]){
-        
-    }
+    
     if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
     {
         velX = -getPlayerSpeed(player);
-        theGame->player[theGame->playerIDLocal].moveDirection = 'a';
+        direction = 'a';
     }
     else if (state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
     {
         velX = getPlayerSpeed(player);
-        theGame->player[theGame->playerIDLocal].moveDirection = 'd';
+        direction = 'd';
     }
     if (velX == 0)
     {
         if (state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_S])
         {
             velY = -getPlayerSpeed(player);
-            theGame->player[theGame->playerIDLocal].moveDirection = 'w';
+            direction = 'w';
         }
         else if (state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D])
         {
             velY = getPlayerSpeed(player);
-            theGame->player[theGame->playerIDLocal].moveDirection = 's';
+            direction = 's';
         }
     }
-    if (!velX && !velY)
-        theGame->player[theGame->playerIDLocal].moveDirection = '0';
+    if (!velX && !velY) {
+        direction = '0';
+    }
     // Update player positions
-    theGame->player[theGame->playerIDLocal].xPos += velX;
-    theGame->player[theGame->playerIDLocal].yPos += velY;
+    updateMovementDirection(theGame, id, direction);
+    updatePlayerXPosition(theGame, id, velX);
+    updatePlayerYPosition(theGame, id, velY);
 }
 
 // game loop
