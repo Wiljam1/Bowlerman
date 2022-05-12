@@ -100,9 +100,8 @@ void process(Game theGame, Sounds *s)
                 if(theGame->wall[j].destroyedWall == 0){
                     theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
                     if(theGame->wall[j].destroyedWall){ //If wall is destroyed...
-                        if(1){
+                        if(theGame->playerIDLocal % j == 1){
                             printf("Own Explosion! on client %d\n", theGame->playerIDLocal);
-                            printf("playerID: %d\n", theGame->playerIDLocal);
                             rollForPowerup(theGame, theGame->wall[j].x, theGame->wall[j].y);        //kallar på powerupp
                         }
                     }
@@ -126,7 +125,7 @@ void sortBombsArray(Game theGame,int i)
 {
     Bowlingball tmp;
     int temporarytime=0;
-    for (int k=0;k<theGame->player[i].amountOfBombsPlaced;k++)
+    //for (int k=0;k<theGame->player[i].amountOfBombsPlaced;k++)
     {
         for (int j = 1;j<theGame->player[i].amountOfBombsPlaced;j++)
         {
