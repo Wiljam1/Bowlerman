@@ -193,7 +193,7 @@ PUBLIC void gameUpdate(Game theGame)
         // render display
         renderTextures(theGame);
 
-        SDL_Delay(1000 / 60); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
+        SDL_Delay(1); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
     //destroySoundFiles(sounds);
 }
