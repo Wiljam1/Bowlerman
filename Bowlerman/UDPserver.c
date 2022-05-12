@@ -22,6 +22,11 @@ struct data {
    int playerID;
    char moveDirection;
     int placeBomb;
+
+    int powerupsX;
+    int powerupsY;
+    int powerupsType;
+    int powerupsID;
 };
 
 int main(int argc, char **argv)

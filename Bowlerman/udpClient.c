@@ -1,5 +1,6 @@
 #include "udpClient.h"
 #include "bomb.h"
+#include "powerup.h"
 #define PUBLIC /* empty */
 #define PRIVATE static
 
@@ -82,6 +83,21 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
         udpData->playerID = playerID;
         udpData->x = x_pos;
         udpData->y = y_pos;
+        udpData->powerupsX = 0;
+        for(int i=0;i<POWERUPAMOUNT;i++)
+        {
+            if(theGame->powerups[i].sentViaUDP == 0)
+            {
+                udpData->powerupsX = theGame->powerups[i].x;
+                udpData->powerupsY = theGame->powerups[i].y;
+                udpData->powerupsID = theGame->powerups[i].id;
+                udpData->powerupsType = theGame->powerups[i].type;
+                theGame->powerups[i].sentViaUDP = 1;
+                break;
+            }     
+        }
+       
+
         memcpy(udpValues->p->data, &(*udpData), sizeof(UDPData) + 1);
         // fwrite(&udpData, sizeof(struct data), 1, p->data);
         udpValues->p->len = sizeof(UDPData) + 1;
@@ -107,6 +123,12 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
         if (udpData->placeBomb==1){ 
             tryToPlaceBomb(theGame, playerID);
         }
+        
+        if(udpData->powerupsX != 0)
+        {
+            theGame->powerups[udpData->powerupsID] = powerupPlace(udpData->powerupsX-10, udpData->powerupsY-10, udpData->powerupsType);
+        }
+        
 
         theGame->player[playerID].moveDirection = udpData->moveDirection;
         theGame->player[playerID].id = udpData->playerID;
@@ -123,6 +145,11 @@ PUBLIC UDPData UDPDataTransfer()
     u.playerID = 0;
     u.moveDirection = '0';
     u.placeBomb = 0;
+
+    u.powerupsX = 0;
+    u.powerupsY = 0;
+    u.powerupsType = 0;
+    u.powerupsID = 0;
     return u;
 }
 

@@ -21,6 +21,11 @@ struct data
     int playerID;
     char moveDirection;
     int placeBomb;
+
+    int powerupsX;
+    int powerupsY;
+    int powerupsType;
+    int powerupsID;
 };
 typedef struct data UDPData;
 

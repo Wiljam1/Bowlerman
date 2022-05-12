@@ -12,11 +12,16 @@
 void rollForPowerup(Game theGame, int xPos, int yPos)
 {
     static int currentPowerup = 0;    //Kanske vill göra på ett annat sätt här
-
+    if(currentPowerup == 0)
+    {
+        currentPowerup = theGame->playerIDLocal;
+    }
     if((rand() % 100+1) < 33){ // 33% chance to spawn a powerup                                                      
         theGame->powerups[currentPowerup] = powerupPlace(xPos, yPos, rand()%POWERUPTYPES); //Type = random number between 0 and how many types there are
+        theGame->powerups[currentPowerup].id = currentPowerup;
+        currentPowerup += 4; //Go to next place in array for next powerup being made
     }
-     currentPowerup++; //Go to next place in array for next powerup being made
+     
      if(currentPowerup == POWERUPAMOUNT)
         currentPowerup = 0;
 }
@@ -58,6 +63,7 @@ Powerup powerupPlace(int xPos, int yPos, int type)
     p.y = yPos + 10;
     p.type = type;
     p.isPickedUp = false;
+    p.sentViaUDP = 0;
     
     return p;
 }
