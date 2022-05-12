@@ -3,7 +3,7 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 
-PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPInit *udpValues)
+PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 {
     int playerID = theGame->playerIDLocal;
     udpData->placeBomb=0;
@@ -51,7 +51,7 @@ PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPInit *udpValues)
 }
 
 
-PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues)
+PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 {
     static int flag=0;
     static int flag2=0;
@@ -126,13 +126,13 @@ PUBLIC UDPData UDPDataTransfer()
     return u;
 }
 
-PUBLIC UDPInit SetUDPValues()
+PUBLIC UDPStruct SetUDPValues()
 {
-    UDPInit u;
+    UDPStruct u;
     return u;
 }
 
-PUBLIC void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPInit *udpValues)
+PUBLIC void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 {
      // 1st: send info to UDP-server
     memcpy(udpValues->p->data, &(*udpData), sizeof(UDPData) + 1);
@@ -166,7 +166,7 @@ PUBLIC void initSDLNet()
         exit(EXIT_FAILURE);
     }
 }
-PUBLIC void initUDP(UDPInit *u)
+PUBLIC void initUDP(UDPStruct *u)
 {
     if (!(u->sd = SDLNet_UDP_Open(0)))
     {

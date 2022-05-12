@@ -23,7 +23,7 @@
 #define PRIVATE static
 #define LENGTH 100
 
-void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues);
+void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues);
 
 // initializes game-window
 PUBLIC Game createWindow()
@@ -45,7 +45,7 @@ PUBLIC Game createWindow()
 }
 
 // initializes startvalues for game
-void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
+void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 {
     //inits SDL-net and loads in correct IP-adresses etc.
     initSDLNet();
@@ -175,7 +175,7 @@ PUBLIC void gameUpdate(Game theGame)
 {
     // Initialize
     Player player[MAXPLAYERS]; // declares x-amounts of players
-    UDPInit udpValues = SetUDPValues();     //returns a struct for udp-init-struct. Like IP-adress etc.
+    UDPStruct udpValues = SetUDPValues();     //returns a struct for udp-init-struct. Like IP-adress etc.
     UDPData udpData = UDPDataTransfer();    //Resets data struct, Like player x,y -positions etc.
     initGame(theGame, &udpData, &udpValues);         // initializes startvalues. coordinates etc.
     Sounds sounds = initSoundFiles();
