@@ -70,6 +70,9 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
 
     //Init GUI
     initGUI(theGame);
+
+    //set game-delay to x-miliseconds. You should have lower delay if you have a slower computer
+    theGame->delayInMS=10;
 }
 
 // handles processes, like keyboard-inputs etc
@@ -193,7 +196,7 @@ PUBLIC void gameUpdate(Game theGame)
         // render display
         renderTextures(theGame);
 
-        SDL_Delay(1); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
+        SDL_Delay(theGame->delayInMS); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
     //destroySoundFiles(sounds);
 }

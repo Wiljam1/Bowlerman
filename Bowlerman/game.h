@@ -127,6 +127,9 @@ struct game_type
     //Renderer
     SDL_Renderer *renderer;
 
+    //Hur snabbt spelet ska uppdateras. i millisekunder
+    int delayInMS;
+
     //Images
     SDL_Texture *background;
     SDL_Texture *player_texture[MAXPLAYERS][PLAYERTEXTURES];     //4  players, måste stå 4 annars blir de segmentation fault.

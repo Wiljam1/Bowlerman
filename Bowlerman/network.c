@@ -76,7 +76,7 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPInit *udpValues)
     }
 
     // send data if movement or bomb-placement
-    if (abs(x_posOld - x_pos)>=20 || abs(y_posOld - y_pos)>=20 || flag == 1 || udpData->placeBomb==1)
+    if (abs(x_posOld - x_pos)>=10 || abs(y_posOld - y_pos)>=10 || flag == 1 || udpData->placeBomb==1)
     {
         printf("%d %d\n", (int)x_pos, (int)y_pos);
         udpData->playerID = playerID;
