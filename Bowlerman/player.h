@@ -43,6 +43,14 @@ void playerAddAmountOfBombs(Player *p, int amountOfBombs);
 PUBLIC void getStartPos(Player *p);
 PUBLIC int getLocalID(Game theGame);
 
+//Change players movedirection
+PUBLIC void updateMovementDirection(Game theGame, int id, char c);
+
+//Change player x position
+PUBLIC void updatePlayerXPosition(Game theGame, int id, int velX);
+//Change player y position
+PUBLIC void updatePlayerYPosition(Game theGame, int id, int velY);
+
 //ändrar spelarens (clientmässiga) position
 //void playerPositionUpdate(int x, int y);
 

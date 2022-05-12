@@ -25,7 +25,7 @@ PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
     p.left = 0;
     p.xVel = 0;
     p.yVel = 0;
-    p.playerRect.x = p.xPos = p.xPosOld = xPos;
+    p.playerRect.x = p.xPos = p.xPosOld = xPos; // Startvärden för x och y ges till alla variabler.
     p.playerRect.y = p.yPos = p.yPosOld = yPos;
     p.speed = 4;
     p.amountOfBombs = 1;        //antal bomber, börjar på 1
@@ -71,10 +71,10 @@ void UpdatePlayerTextures(Game theGame)
     SDL_Rect playerRect[4];
     for(int i=0; i<theGame->playerAmount; i++)
     {
-        playerRect[i].x = theGame->player[i].xPos;
-        playerRect[i].y = theGame->player[i].yPos;
-        playerRect[i].w= theGame->player->width;
-        playerRect[i].h = theGame->player->height;
+        playerRect[i].x = getPlayerXPosition(theGame->player[i]);
+        playerRect[i].y = getPlayerYPosition(theGame->player[i]);
+        playerRect[i].w = getPlayerWidth(theGame->player[i]);
+        playerRect[i].h = getPlayerHeight(theGame->player[i]);
     }
     /*Managing sprite updates*/
     for(int i=0; i < theGame->playerAmount; i++)
@@ -201,6 +201,25 @@ PlayerSprites GetPlayerSprite()
     p.BowlerManHori[7].y = 0;
     
     return p;
+}
+
+PUBLIC void updateMovementDirection(Game theGame, int id, char c)
+{
+    theGame->player[id].moveDirection = c;
+}
+
+PUBLIC void updatePlayerXPosition(Game theGame, int id, int velX)
+{
+    theGame->player[id].xPos += velX;
+}
+PUBLIC void updatePlayerYPosition(Game theGame, int id, int velY)
+{
+    theGame->player[id].yPos += velY;
+}
+
+PUBLIC char getMoveDirection(Player p)
+{
+    return p.moveDirection;
 }
 
 PUBLIC int getPlayerHeight(Player p)
