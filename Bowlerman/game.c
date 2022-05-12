@@ -54,7 +54,6 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues)
     //TCPstruct tcpValues = SetTCPValues();     //returns a struct for tcp-init-struct.	
 	//initTCP(&tcpValues);            //initiates TCP
 	//manageTCP(&tcpValues);          //starts TCP
-    //printf("hello\n");
 	//closeTCP(&tcpValues);           //closes TCP
 
     // Init sounds
