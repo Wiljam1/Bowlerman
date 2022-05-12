@@ -130,10 +130,11 @@ void sortBombsArray(Game theGame,int i)
             {
                 if(theGame->bombs[i+j*4-4].isPlaced == 0)
                 {
+                    initbowlingballtimer(theGame->bombs[i+j*4].startvaluetimer, BOMBTIMER, i+j*4-4);
                     tmp = theGame->bombs[i+j*4-4];
                     theGame->bombs[i+j*4-4] = theGame->bombs[i+j*4];
                     theGame->bombs[i+j*4] = tmp;
-                    initbowlingballtimer(theGame->bombs[i+j*4].startvaluetimer, BOMBTIMER, i+j*4-4);
+                    
                 }
             }
         }  
@@ -234,6 +235,23 @@ int correctBowlingBallPosy(int i)
     else{
         return ((k+1)*70)+30;
     }   
+}
+
+PUBLIC int getBombHeight(Bowlingball b)
+{
+    return b.position.h;
+}
+PUBLIC int getBombWidth(Bowlingball b)
+{
+    return b.position.w ;
+}
+PUBLIC int getBombXPosition(Bowlingball b)
+{
+    return b.position.x;
+}
+PUBLIC int getBombPosition(Bowlingball b)
+{
+    return b.position.y;
 }
 
 //bomb rect possitioner i sprite sheet.

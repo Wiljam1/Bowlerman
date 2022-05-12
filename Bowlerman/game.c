@@ -192,13 +192,8 @@ PUBLIC void gameUpdate(Game theGame)
         playBackroundMusic(&sounds);
 
         // Collisiondetection
-        collisionDetect(theGame);
-        testCollosionWithBombs(theGame);     //Alla dessa kan flyttas in i collisionDetect();
-        testCollisionWithWalls(theGame);
-        testCollosionWithExplosion(theGame, &sounds);
-        //testPossibilityToExplodeWithBombs(theGame);
-        playerCollisionWithPowerup(theGame);
-        //explosionCollisionWithPowerup(theGame);       //för att förstöra powerups med explosioner
+        collisionDetect(theGame, &sounds);
+        
 
         // Send/receive data to server
         manageUDP(theGame, &udpData, &udpValues);

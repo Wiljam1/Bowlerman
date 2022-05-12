@@ -177,3 +177,20 @@ void renderWalls(Game theGame)
         }     
     }
 }
+
+PUBLIC int getWallHeight(Wall w)
+{
+    return w.h;
+}
+PUBLIC int getWallWidth(Wall w)
+{
+    return w.w;
+}
+PUBLIC int getWallXPosition(Wall w)
+{
+    return w.x;
+}
+PUBLIC int getWallPosition(Wall w)
+{
+    return w.y;
+}

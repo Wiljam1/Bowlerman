@@ -8,35 +8,18 @@
 
 void allowBombPlacementInit(Game theGame);
 struct bowling_ball typedef Bowlingball;
-
 void tryToPlaceBomb(Game theGame, int playerID);
-
 int initbowlingballtimer(int startTime, int timeAmount, int playerID);
-
 int correctBowlingBallPosx(int i);
 int correctBowlingBallPosy(int i);
-
-//int checkbowlingballtimer();
-
-//void process(Game theGame);
-
 void initExplosionPosition(Game theGame, int playerID);
-
 Bowlingball initBomb();
 void loadBomb();
 int timeleft(int time, int playerID);
-
-//SDL_Rect setBowlingBallPosition(Game theGame, Player player);
-
-//Bowlingball createBowlingBall();
-
-//int getBowlingBallPositionX(Bowlingball ball);
-//int getBowlingBallPositionY(Bowlingball ball);
-//int getBowlingBallWidth();
-//int getBowlingBallHeight();
-//int getBowlingBallFrame(Bowlingball ball);
-
-
+int getBombXPosition(Bowlingball b);
+int getBombYPosition(Bowlingball b);
+int getBombHeight(Bowlingball b);
+int getBombWidth(Bowlingball b);
 
 
 
