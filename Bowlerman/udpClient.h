@@ -1,5 +1,5 @@
-#ifndef network_h
-#define network_h
+#ifndef udpClient_h
+#define udpClient_h
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

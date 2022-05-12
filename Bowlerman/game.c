@@ -13,11 +13,11 @@
 #include "bomb.h"
 #include "textures.h"
 #include "wall.h"
-#include "network.h"
+#include "udpClient.h"
+#include "tcpClient.h"
 #include "powerup.h"
 #include "sounds.h"
 #include "gui.h"
-#include "tcpclient.h"
 
 #define PUBLIC /* empty */
 #define PRIVATE static
@@ -50,6 +50,12 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
     //inits SDL-net and loads in correct IP-adresses etc.
     initSDLNet();
     initUDP(udpValues);
+
+    // TCPstruct tcpValues = SetTCPValues();     //returns a struct for tcp-init-struct.	
+	// initTCP(&tcpValues);            //initiates TCP
+	// manageTCP(&tcpValues);          //starts TCP
+	// closeTCP(&tcpValues);           //closes TCP
+
     // Init sounds
     initSounds();
     //Init random seed

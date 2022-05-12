@@ -1,11 +1,11 @@
 make clean_windows
-make UDPserver
+make udpServer
 make windows
-start UDPserver.exe        
+start udpServer.exe        
 :: ^START GÖR ATT DEN GÅR VIDARE TILL NÄSTA "RAD" MEDAN .EXE-FILEN KÖRS
 start main.exe    
 main.exe                   
 :: ^INGEN START BETYDER ATT DEN VÄNTAR MED NÄSTA RAD TILLS MAN STÄNGT NER .EXE FILEN
-taskkill /im UDPserver.exe 
+taskkill /im udpServer.exe 
 :: ^STÄNGER NER SERVERN EFTER MAN STÄNGT SIN CLIENT
 taskkill /im main.exe

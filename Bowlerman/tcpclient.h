@@ -1,6 +1,6 @@
-#ifndef tcpclient_h
-#define tcpclient_h
-#include "game.h"
+#ifndef tcpClient_h
+#define tcpClient_h
+
 
 //values for TCP, like IP-adress etc.
 struct tcp_struct
