@@ -51,10 +51,8 @@ void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
     initSDLNet(udpValues);
     // Init sounds
     initSounds();
-
     //Init random seed
     srand(time(NULL));
-    
     // Loading textures from file
     loadAllTextures(theGame);
 

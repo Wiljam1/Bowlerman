@@ -217,6 +217,10 @@ PUBLIC void updatePlayerYPosition(Game theGame, int id, int velY)
     theGame->player[id].yPos += velY;
 }
 
+PUBLIC char getMoveDirection(Player p)
+{
+    return p.moveDirection;
+}
 
 PUBLIC int getPlayerHeight(Player p)
 {
