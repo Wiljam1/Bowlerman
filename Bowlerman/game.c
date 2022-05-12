@@ -121,6 +121,16 @@ bool checkEvents(Game theGame)
                 playerAddSpeed(&theGame->player[theGame->playerIDLocal], 0.5);
                 printf("Speed is now: %d\n", getPlayerSpeed(theGame->player[theGame->playerIDLocal]));
                 break;
+            case SDLK_y:
+                //Testing
+                playerAddExplosionPower(&theGame->player[theGame->playerIDLocal], 1);
+                printf("Power is now: %d\n", theGame->player[theGame->playerIDLocal].explosionPower);
+                break;
+            case SDLK_u:
+                //Testing
+                playerAddAmountOfBombs(&theGame->player[theGame->playerIDLocal], 1);
+                printf("Bombs is now: %d\n", theGame->player[theGame->playerIDLocal].amountOfBombs);
+                break;
             default:
                 break;
             }
@@ -196,8 +206,8 @@ PUBLIC void gameUpdate(Game theGame)
         // Send/receive data to server
         manageUDP(theGame, &udpData, &udpValues);
 
-        // Update GUI labels
-        //updateGUI(theGame); //behövs göras om, mem leak
+        // Update GUI labels (only updates when updateFlag = true)
+        updateGUI(theGame); //behövs göras om, mem leak (mem leak löst med flagga temporärt)
 
         // render display
         renderTextures(theGame);

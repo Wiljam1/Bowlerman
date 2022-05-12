@@ -11,6 +11,7 @@
 #define MAXSPEED 8
 #define MINSPEED 1
 #define MAXBOMBS 5
+#define MAXPOWER 20
 Uint32 pDeathCallBack();
 PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
 {
@@ -286,6 +287,8 @@ void playerAddSpeed(Player *p, float speed)
 void playerAddExplosionPower(Player *p, int explosionPower)
 {
     p->explosionPower += explosionPower;
+    if(p->explosionPower > MAXPOWER)
+        p->explosionPower = MAXPOWER;
 }
 void playerAddAmountOfBombs(Player *p, int amountOfBombs)
 {
