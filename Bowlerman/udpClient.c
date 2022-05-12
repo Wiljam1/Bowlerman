@@ -51,33 +51,17 @@ PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
     }
 }
 
-
-PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
+PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *flag)
 {
-    static int flag=0;
-    static int flag2=0;
-    
     int playerID = theGame->playerIDLocal;
-    udpData->moveDirection = theGame->player[playerID].moveDirection;
     int x_posOld = theGame->player[playerID].xPosOld;
     int y_posOld = theGame->player[playerID].yPosOld;
     int x_pos = theGame->player[playerID].xPos;
     int y_pos = theGame->player[playerID].yPos;
 
-    //check to see if we should send bomb with UDP
-    sendBomb(theGame, udpData, udpValues);
-
-    //flagga för att reset:a movement direction när spelaren står stilla.
-    if( udpData->moveDirection != '0'){
-       flag2=1;
-    }
-    if( (udpData->moveDirection == '0') && flag2){
-       flag=1;
-       flag2=0;
-    }
 
     // send data if movement or bomb-placement
-    if (abs(x_posOld - x_pos)>=10 || abs(y_posOld - y_pos)>=10 || flag == 1 || udpData->placeBomb==1)
+    if (abs(x_posOld - x_pos)>=10 || abs(y_posOld - y_pos)>=10 || *flag == 1 || udpData->placeBomb==1)
     {
         printf("%d %d\n", (int)x_pos, (int)y_pos);
         udpData->playerID = playerID;
@@ -108,8 +92,12 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
         SDLNet_UDP_Send(udpValues->sd, -1, udpValues->p);
         theGame->player[playerID].xPosOld = x_pos; 
         theGame->player[playerID].yPosOld = y_pos;
-        flag=0;
+        *flag=0;
     }
+}
+
+PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
+{
 
     // receive data
     if (SDLNet_UDP_Recv(udpValues->sd, udpValues->p2))
@@ -136,7 +124,38 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
     }
 }
 
-PUBLIC UDPData UDPDataTransfer()
+
+PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
+{
+    static int flag=0;
+    static int flag2=0;
+    
+    int playerID = theGame->playerIDLocal;
+    udpData->moveDirection = theGame->player[playerID].moveDirection;
+    
+
+    //check to see if we should send bomb with UDP
+    sendBomb(theGame, udpData, udpValues);
+
+    //flagga för att reset:a movement direction när spelaren står stilla.
+    if( udpData->moveDirection != '0'){
+       flag2=1;
+    }
+    if( (udpData->moveDirection == '0') && flag2){
+       flag=1;
+       flag2=0;
+    }
+
+    //send udp data (if e.g. movement has been updated)
+    sendUDP(theGame, udpData, udpValues, &flag);
+
+    //receive udp data
+    receiveUDP(theGame, udpData, udpValues);
+
+
+}
+
+PUBLIC UDPData UDPDataReset()
 {
     UDPData u;
     u.x = 0;
@@ -153,7 +172,7 @@ PUBLIC UDPData UDPDataTransfer()
     return u;
 }
 
-PUBLIC UDPStruct SetUDPValues()
+PUBLIC UDPStruct createUDPstruct()
 {
     UDPStruct u;
     return u;

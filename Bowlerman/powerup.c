@@ -52,6 +52,7 @@ void powerupGive(Game theGame, int playerID, int i)
         playerAddAmountOfBombs(&theGame->player[playerID], 1);
     }
     theGame->powerups[i].isPickedUp = true;
+    theGame->updateFlag = true;
 }
 
 Powerup powerupPlace(int xPos, int yPos, int type)

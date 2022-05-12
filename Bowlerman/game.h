@@ -142,6 +142,7 @@ struct game_type
     SDL_Texture *texturePowerups[4];
     SDL_Texture *labels[5];                                        
     int labelW, labelH;
+    bool updateFlag;
 
     //Fonts
     TTF_Font *font; //Gör till en array om vi ska ha mer fonts

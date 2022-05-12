@@ -53,7 +53,10 @@ int threadTCPReceive(void * data)
 				quit = 1;
 				printf("Quit program\n");
 			}
-
+			if(strcmp(buffer, "playerAmmount") == 0)	/* Send back playerAmmount */
+			{
+				
+			}
 			printf("inside send info back\n");
 			//send info back
 			int len = strlen(buffer) + 1;

@@ -51,10 +51,9 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues)
     initSDLNet();
     initUDP(udpValues);
 
-    //TCPstruct tcpValues = SetTCPValues();     //returns a struct for tcp-init-struct.	
+    //TCPstruct tcpValues = createTCPstruct();     //returns a struct for tcp-init-struct.	
 	//initTCP(&tcpValues);            //initiates TCP
 	//manageTCP(&tcpValues);          //starts TCP
-    //printf("hello\n");
 	//closeTCP(&tcpValues);           //closes TCP
 
     // Init sounds
@@ -121,6 +120,16 @@ bool checkEvents(Game theGame)
                 playerAddSpeed(&theGame->player[theGame->playerIDLocal], 0.5);
                 printf("Speed is now: %d\n", getPlayerSpeed(theGame->player[theGame->playerIDLocal]));
                 break;
+            case SDLK_y:
+                //Testing
+                playerAddExplosionPower(&theGame->player[theGame->playerIDLocal], 1);
+                printf("Power is now: %d\n", theGame->player[theGame->playerIDLocal].explosionPower);
+                break;
+            case SDLK_u:
+                //Testing
+                playerAddAmountOfBombs(&theGame->player[theGame->playerIDLocal], 1);
+                printf("Bombs is now: %d\n", theGame->player[theGame->playerIDLocal].amountOfBombs);
+                break;
             default:
                 break;
             }
@@ -176,8 +185,8 @@ PUBLIC void gameUpdate(Game theGame)
 {
     // Initialize
     Player player[MAXPLAYERS]; // declares x-amounts of players
-    UDPStruct udpValues = SetUDPValues();     //returns a struct for udp-init-struct. Like IP-adress etc.
-    UDPData udpData = UDPDataTransfer();    //Resets data struct, Like player x,y -positions etc.
+    UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
+    UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
     initGame(theGame, &udpData, &udpValues);         // initializes startvalues. coordinates etc.
     Sounds sounds = initSoundFiles();
     playBackroundMusic(&sounds);
@@ -196,8 +205,8 @@ PUBLIC void gameUpdate(Game theGame)
         // Send/receive data to server
         manageUDP(theGame, &udpData, &udpValues);
 
-        // Update GUI labels
-        //updateGUI(theGame); //behövs göras om, mem leak
+        // Update GUI labels (only updates when updateFlag = true)
+        updateGUI(theGame); //behövs göras om, mem leak (mem leak löst med flagga temporärt)
 
         // render display
         renderTextures(theGame);
