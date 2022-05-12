@@ -71,10 +71,10 @@ void UpdatePlayerTextures(Game theGame)
     SDL_Rect playerRect[4];
     for(int i=0; i<theGame->playerAmount; i++)
     {
-        playerRect[i].x = theGame->player[i].xPos;
-        playerRect[i].y = theGame->player[i].yPos;
-        playerRect[i].w= theGame->player->width;
-        playerRect[i].h = theGame->player->height;
+        playerRect[i].x = getPlayerXPosition(theGame->player[i]);
+        playerRect[i].y = getPlayerYPosition(theGame->player[i]);
+        playerRect[i].w = getPlayerWidth(theGame->player[i]);
+        playerRect[i].h = getPlayerHeight(theGame->player[i]);
     }
     /*Managing sprite updates*/
     for(int i=0; i < theGame->playerAmount; i++)
