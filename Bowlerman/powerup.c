@@ -65,6 +65,6 @@ Powerup powerupPlace(int xPos, int yPos, int type)
     p.type = type;
     p.isPickedUp = false;
     p.sentViaUDP = 0;
-    
+    p.id = 0;
     return p;
 }
