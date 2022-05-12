@@ -93,6 +93,7 @@ void process(Game theGame, Sounds *s)
         }
     }
     //kollar explosionstimern
+    int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
     for (int i = 0; i < MAXBOMBAMOUNT; i++){
         if (theGame->bombs[i].explosioninit == 0){
             theGame->bombs[i].explosioninit = initbowlingballtimer(0, 1000, i);
@@ -100,7 +101,7 @@ void process(Game theGame, Sounds *s)
                 if(theGame->wall[j].destroyedWall == 0){
                     theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
                     if(theGame->wall[j].destroyedWall){ //If wall is destroyed...
-                        if(i+4 % theGame->playerIDLocal+4 == 0){
+                        if(returnarray[i] == theGame->playerIDLocal){
                             printf("Own Explosion! on client %d\n", theGame->playerIDLocal);
                             rollForPowerup(theGame, theGame->wall[j].x, theGame->wall[j].y);        //kallar på powerupp
                         }
@@ -108,7 +109,7 @@ void process(Game theGame, Sounds *s)
                 }
             }
             if (theGame->bombs[i].explosioninit == 1){
-                int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
+                //int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
                 theGame->bombs[i].isPlaced = 0;
                 sortBombsArray(theGame, returnarray[i]);
                 if(theGame->player[returnarray[i]].amountOfBombsPlaced > 0)
