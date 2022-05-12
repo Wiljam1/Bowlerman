@@ -173,6 +173,7 @@ PUBLIC void gameUpdate(Game theGame)
     UDPData udpData = UDPDataTransfer();    //Resets data struct, Like player x,y -positions etc.
     initGame(theGame, &udpData, &udpValues);         // initializes startvalues. coordinates etc.
     Sounds sounds = initSoundFiles();
+    playBackroundMusic(&sounds);
     // Game Loop:
     bool done = false;
     while (!done)
@@ -182,17 +183,14 @@ PUBLIC void gameUpdate(Game theGame)
         
         // Process events (time based stuff)
         process(theGame, &sounds);
-        playBackroundMusic(&sounds);
 
         // Collisiondetection
         collisionDetect(theGame, &sounds);
-        
-
         // Send/receive data to server
         manageUDP(theGame, &udpData, &udpValues);
 
         // Update GUI labels
-        //updateGUI(theGame); //behövs göras om
+        //updateGUI(theGame); //behövs göras om, mem leak
 
         // render display
         renderTextures(theGame);

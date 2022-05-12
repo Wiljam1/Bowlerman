@@ -88,6 +88,7 @@ struct playerController
     int width;
     char name[40];
     bool isDead;
+    bool isInvulnerable;
     SDL_Rect playerRect;   //struct to hold the position and size of the sprite
     char moveDirection;  // Keeps track of player movement direction for sprite rendering
 };
@@ -110,6 +111,7 @@ struct game_type
     Player player[MAXPLAYERS];
     int playerIDLocal;        //the local players ID (only on this computer). 
     int playerAmount;  //amount of players online
+    int invulnerable;
     SDL_Rect playerRect[4][3];
     PlayerSprites pSprites;
 

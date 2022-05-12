@@ -11,7 +11,7 @@
 #define MAXSPEED 8
 #define MINSPEED 1
 #define MAXBOMBS 5
-
+Uint32 pDeathCallBack();
 PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
 {
     //malloc(sizeof(struct playerController));
@@ -35,8 +35,11 @@ PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
     p.playerRect.h = p.height = 100*0.7;
     p.playerRect.w = p.width = 64*0.7;
     p.moveDirection = '0';
-    p.isMoving=false;  //is not enforced by keyboard inputs though.
+    p.isMoving = false;  //is not enforced by keyboard inputs though.
     p.isDead = false;
+    p.isInvulnerable = false;
+
+
 
     return p;
 }
@@ -291,6 +294,23 @@ void playerAddAmountOfBombs(Player *p, int amountOfBombs)
         p->amountOfBombs = MAXBOMBS;
 }
 
+void playerDeathTimer(Game theGame)
+{
+        int flag = 1;
+        if (theGame->player[theGame->invulnerable].isInvulnerable == true && flag == 1)
+        {
+            printf("%d\n", theGame->player[theGame->invulnerable].isInvulnerable);
+            SDL_TimerID timerID = SDL_AddTimer( 3 * 1000, pDeathCallBack, (Game)theGame);
+            flag = 0;
+        }
+}
+
+Uint32 pDeathCallBack(Uint32 interval, Game theGame)
+{
+    theGame->player[theGame->invulnerable].isInvulnerable = false;
+    printf("%d\n", theGame->player[theGame->invulnerable].isInvulnerable);
+    return 0;
+}
 
 // REplaced by different movement-implementation
 

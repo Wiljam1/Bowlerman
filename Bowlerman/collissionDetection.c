@@ -103,7 +103,7 @@ void testCollosionWithBombs(Game theGame)
         {
             playerStandingOnBomb(theGame);
         }
-        if (theGame->bombs[i].isPlaced == 1)
+        if (theGame->bombs[i].isPlaced == 1 && theGame->player[i].isInvulnerable == false)
         {
             int id = getLocalID(theGame);
             float playerW = getPlayerWidth(theGame->player[theGame->playerIDLocal]), playerH = getPlayerHeight(theGame->player[theGame->playerIDLocal]);
@@ -153,27 +153,38 @@ void testCollosionWithBombs(Game theGame)
 // i är för antal spelare, j för antal bomber och k för de olika rectanglar som explosionerna finns på
 void testCollosionWithExplosion(Game theGame, Sounds *s)
 {
-    
+    int flag = 1;
     for (int i=0;i<PLAYERAMOUNT;i++)
     {
-        float playerW = getPlayerWidth(theGame->player[i]), playerH = getPlayerHeight(theGame->player[i]);
-        float playerX = getPlayerXPosition(theGame->player[i]), playerY = getPlayerYPosition(theGame->player[i]);
-        for (int j=0;j<MAXBOMBAMOUNT;j++)
-        {
-            if(theGame->bombs[j].explosioninit == 0) // J kan användas vid Score sen
+        if(theGame->player[i].isInvulnerable == false) {
+
+            float playerW = getPlayerWidth(theGame->player[i]), playerH = getPlayerHeight(theGame->player[i]);
+            float playerX = getPlayerXPosition(theGame->player[i]), playerY = getPlayerYPosition(theGame->player[i]);
+            for (int j=0;j<MAXBOMBAMOUNT;j++)
             {
-                for (int l = 0; l < PLAYERAMOUNT; l++)
+                if(theGame->bombs[j].explosioninit == 0) // J kan användas vid Score sen
                 {
-                    for (int k=0;k<(1+4*theGame->player[l].explosionPower);k++)
+                    for (int l = 0; l < PLAYERAMOUNT; l++)
                     {
-                        if(theGame->explosionPosition[j][k].x < playerX + playerW &&
-                        theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > playerX &&
-                        theGame->explosionPosition[j][k].y < playerY + playerH &&
-                        theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y - 30 > playerY)
+                        for (int k=0;k<(1+4*theGame->player[l].explosionPower);k++)
                         {
-                            //player dead
-                            theGame->player[i].isDead = true;
-                            playDeath(s);
+                            if(theGame->explosionPosition[j][k].x < playerX + playerW &&
+                            theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > playerX &&
+                            theGame->explosionPosition[j][k].y < playerY + playerH &&
+                            theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y - 30 > playerY)
+                            {
+                                //player dead
+                                if (flag == 1)      // testar med odödlighet
+                                {
+                                    theGame->player[i].isDead = true;
+                                    theGame->player[i].isInvulnerable = true;
+                                    theGame->invulnerable = i;
+                                    playerDeathTimer(theGame);
+                                    playDeath(s);
+                                    flag = 0;
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
