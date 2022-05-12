@@ -1,5 +1,5 @@
-windows: main.o game.o player.o bomb.o wall.o collissionDetection.o textures.o udpClient.o powerup.o gui.o sounds.o
-	gcc -o main main.o game.o player.o bomb.o wall.o collissionDetection.o textures.o udpClient.o powerup.o gui.o sounds.o -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_mixer -lSDL2_ttf
+windows: main.o game.o player.o bomb.o wall.o collissionDetection.o textures.o udpClient.o powerup.o gui.o sounds.o tcpClient.o
+	gcc -o main main.o game.o player.o bomb.o wall.o collissionDetection.o textures.o udpClient.o powerup.o gui.o sounds.o tcpClient.o -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_mixer -lSDL2_ttf
 main.o:
 	gcc -c main.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL_ttf
 game.o:
@@ -16,6 +16,8 @@ textures.o:
 	gcc -c textures.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL_ttf
 udpClient.o:
 	gcc -c udpClient.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
+tcpClient.o:
+	gcc -c tcpClient.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
 powerup.o:
 	gcc -c powerup.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
 gui.o:
@@ -23,9 +25,10 @@ gui.o:
 sounds.o:
 	gcc -c sounds.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer
 clean_windows:
-	del /Q /F main.exe udpServer.exe *.o
+	del /Q /F main.exe udpServer.exe tcpServer.exe *.o
 
 udpServer:
 	gcc -o udpServer udpServer.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
-
+tcpServer:
+	gcc -o tcpServer tcpServer.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
 	

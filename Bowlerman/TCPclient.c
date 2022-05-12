@@ -5,11 +5,11 @@ gcc -Wall `sdl-config --cflags` tcpc.c -o tcpc `sdl-config --libs` -lSDL_net
 exit
 #endif
  
-#include <stdio.h>-*+
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "SDL2/SDL_net.h"
-#include "tcpclient.h"
+#include "tcpClient.h"
 #define PUBLIC /* empty */
 #define PRIVATE static
 
@@ -46,6 +46,8 @@ PUBLIC void manageTCP(TCPstruct *u)
 	int quit, len;
 	char buffer[512];
  
+	//kanske skapa tråd här och sen stäng tråden efter menysystemet e klart.
+	
 	/* Send messages */
 	quit = 0;
 	while (!quit)
