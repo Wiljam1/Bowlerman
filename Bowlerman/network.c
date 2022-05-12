@@ -157,7 +157,7 @@ PUBLIC void checkPlayerAmmount(Game theGame)
     theGame->playerAmount = PLAYERAMOUNT;
 }
 
-PUBLIC void initSDLNet(UDPInit *u)
+PUBLIC void initSDLNet()
 {
     // initiera SDL NET
     if (SDLNet_Init() < 0)
@@ -165,6 +165,9 @@ PUBLIC void initSDLNet(UDPInit *u)
         fprintf(stderr, "SDLNet_Init: %s\n", SDLNet_GetError());
         exit(EXIT_FAILURE);
     }
+}
+PUBLIC void initUDP(UDPInit *u)
+{
     if (!(u->sd = SDLNet_UDP_Open(0)))
     {
         fprintf(stderr, "SDLNet_UDP_Open: %s\n", SDLNet_GetError());

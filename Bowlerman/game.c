@@ -48,7 +48,8 @@ PUBLIC Game createWindow()
 void initGame(Game theGame, UDPData *udpData, UDPInit *udpValues)
 {
     //inits SDL-net and loads in correct IP-adresses etc.
-    initSDLNet(udpValues);
+    initSDLNet();
+    initUDP(udpValues);
     // Init sounds
     initSounds();
     //Init random seed
@@ -221,6 +222,7 @@ PUBLIC void destroyGame(Game theGame)
     }
     SDL_DestroyTexture(theGame->bombExplosion_texture);
     destroyGUI(theGame);
+    SDLNet_Quit();
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();
