@@ -151,7 +151,7 @@ bool checkEvents(Game theGame);
 void manageMovementInputs(Game theGame);
 void updatePlayerPos(Game theGame, int velX, int velY); //Flytta till player.c nångång
 void process(Game theGame, Sounds *s);
-void collisionDetect(Game theGame);
+void collisionDetect(Game theGame, Sounds *s);
 void renderTextures(Game theGame);
 void destroyGame(Game theGame); // Function for easily destroying the application.
 

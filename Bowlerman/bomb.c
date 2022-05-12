@@ -249,7 +249,7 @@ PUBLIC int getBombXPosition(Bowlingball b)
 {
     return b.position.x;
 }
-PUBLIC int getBombPosition(Bowlingball b)
+PUBLIC int getBombYPosition(Bowlingball b)
 {
     return b.position.y;
 }

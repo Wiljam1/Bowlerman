@@ -190,7 +190,7 @@ PUBLIC int getWallXPosition(Wall w)
 {
     return w.x;
 }
-PUBLIC int getWallPosition(Wall w)
+PUBLIC int getWallYPosition(Wall w)
 {
     return w.y;
 }

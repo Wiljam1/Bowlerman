@@ -3,8 +3,9 @@
 #include <SDL2/SDL.h>
 #define PUBLIC /* empty */
 #define PRIVATE static
+#include "game.h"
 
-void collisionDetect(Game theGame, Sounds *sounds);
+//void collisionDetect(Game theGame, Sounds *sounds);
 
 
 
