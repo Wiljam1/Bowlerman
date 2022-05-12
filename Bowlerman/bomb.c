@@ -100,7 +100,7 @@ void process(Game theGame, Sounds *s)
                 if(theGame->wall[j].destroyedWall == 0){
                     theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
                     if(theGame->wall[j].destroyedWall){ //If wall is destroyed...
-                        if(theGame->playerIDLocal % j == 1){
+                        if(i+4 % theGame->playerIDLocal+4 == 0){
                             printf("Own Explosion! on client %d\n", theGame->playerIDLocal);
                             rollForPowerup(theGame, theGame->wall[j].x, theGame->wall[j].y);        //kallar på powerupp
                         }
