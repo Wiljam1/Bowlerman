@@ -31,6 +31,7 @@ PUBLIC Bowlingball initBomb()
     b.explosioninit = 1;        // initierar explosionerna
     b.placedBombRestriction = 1; //gör så man inte kan lägga en bomb samtidigt som en är ute             
     b.isPlaced = 1;
+    b.startvaluetimer = 0;
     return b;
 }
 
@@ -66,6 +67,7 @@ void tryToPlaceBomb(Game theGame, int playerID)
         theGame->bombs[playerID+amount].position.x = correctBowlingBallPosx(getPlayerXPosition(theGame->player[playerID]));
         theGame->bombs[playerID+amount].timervalue = initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID+amount);
         theGame->player[playerID].amountOfBombsPlaced++;                //antal bomber som är placerade
+        theGame->bombs[playerID+amount].startvaluetimer = SDL_GetTicks();
     }
 }
 
@@ -131,6 +133,7 @@ void sortBombsArray(Game theGame,int i)
                     tmp = theGame->bombs[i+j*4-4];
                     theGame->bombs[i+j*4-4] = theGame->bombs[i+j*4];
                     theGame->bombs[i+j*4] = tmp;
+                    initbowlingballtimer(theGame->bombs[i+j*4].startvaluetimer, BOMBTIMER, i+j*4-4);
                 }
             }
         }  
