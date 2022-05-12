@@ -160,7 +160,7 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
         float playerX = getPlayerXPosition(theGame->player[i]), playerY = getPlayerYPosition(theGame->player[i]);
         for (int j=0;j<MAXBOMBAMOUNT;j++)
         {
-            if(theGame->bombs[j].explosioninit == 0)
+            if(theGame->bombs[j].explosioninit == 0) // J kan användas vid Score sen
             {
                 for (int l = 0; l < PLAYERAMOUNT; l++)
                 {
