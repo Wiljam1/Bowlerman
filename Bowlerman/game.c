@@ -191,7 +191,7 @@ PUBLIC void gameUpdate(Game theGame)
         manageUDP(theGame, &udpData, &udpValues);
 
         // Update GUI labels
-        updateGUI(theGame);
+        //updateGUI(theGame); //behövs göras om
 
         // render display
         renderTextures(theGame);
