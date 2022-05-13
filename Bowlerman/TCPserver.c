@@ -16,8 +16,23 @@ int playerAmmount=0; 		//hur många klienter är inne just nu
 TCPsocket csd[MAXPLAYERS+2]; /* Client socket descriptor. En extra socket för UDP servern */
 SDL_cond* gWakeUpMain = NULL;    //condition för att väcka main-loopen. Just nu en NULL-pointer
 SDL_mutex* gMainLock = NULL;   //The protective mutex
-	
 
+//sends data via TCP:
+//socketID is what socket-descriptor to send to.
+//buffer is what data is to be sent
+//len is the length of the buffer
+void sendTCP(int socketID, char * buffer, int len)
+{
+	if (SDLNet_TCP_Send(csd[socketID], (void *)buffer, len) < len)
+	{
+		fprintf(stderr, "SDLNet_TCP_Send: %s\n", SDLNet_GetError());
+		exit(EXIT_FAILURE);
+	}
+}
+
+
+//the function each thread enters:
+//receives and handles TCP requests
 int threadTCPReceive(void * data)
 {
 	SDL_LockMutex( gMainLock ); //Lock
@@ -31,7 +46,9 @@ int threadTCPReceive(void * data)
 
 	printf("threadID: %d woken up\n", threadID);
 
-	char buffer[512];
+	char buffer[512]; //måste man använda malloc här för att trådarna inte ska använda sig av buffern?
+						//glöm isf inte att free:a när tråden stängs
+	
 	int quit=0;
 
 	while(!quit)
@@ -48,18 +65,35 @@ int threadTCPReceive(void * data)
 				//kommer ej skicka tillbaka data här eftersom csd stängs.
 				//minska på counter här också och förskjut hela arrayen
 			}
-			if(strcmp(buffer, "quit") == 0)	/* Quit the program */
+			else if(strcmp(buffer, "quit") == 0)	/* Quit the program */
 			{
 				quit = 1;
 				printf("Quit program\n");
 			}
-			if(strcmp(buffer, "playerAmmount") == 0)	/* Send back playerAmmount */
+			else if(strcmp(buffer, "playerID") == 0)	/* Send back playerID */
+			{
+				int playerID=playerAmmount-1;
+				memcpy(buffer, &playerID, strlen(&playerID)+1);
+				int len = strlen(buffer) + 1;
+				//sendTCP(threadID, buffer, len);
+			}
+			else if(strcmp(buffer, "playerAmmount") == 0)	/* Send back playerAmmount */
 			{
 				
 			}
+			else if(strcmp(buffer, "start") == 0)	/* start game */
+			{
+				
+			}
+			else if(strcmp(buffer, "udpServer") == 0)	/* establish UDB server IP */
+			{
+				
+			}
+
 			printf("inside send info back\n");
 			//send info back
 			int len = strlen(buffer) + 1;
+			//sendTCP(threadID, buffer, len);
 			if (SDLNet_TCP_Send(csd[threadID], (void *)buffer, len) < len)
 			{
 				fprintf(stderr, "SDLNet_TCP_Send: %s\n", SDLNet_GetError());

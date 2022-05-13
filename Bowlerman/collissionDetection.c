@@ -153,9 +153,9 @@ void testCollosionWithBombs(Game theGame)
 // i är för antal spelare, j för antal bomber och k för de olika rectanglar som explosionerna finns på
 void testCollosionWithExplosion(Game theGame, Sounds *s)
 {
-    int flag = 1;
     for (int i=0;i<PLAYERAMOUNT;i++)
     {
+        int flag = 1;
         if(theGame->player[i].isInvulnerable == false) {
 
             float playerW = getPlayerWidth(theGame->player[i]), playerH = getPlayerHeight(theGame->player[i]);
@@ -178,7 +178,8 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
                                 {
                                     theGame->player[i].isDead = true;
                                     theGame->player[i].isInvulnerable = true;
-                                    theGame->invulnerable = i;
+                                    
+                                    theGame->invulnerabiltyFlag[i] = true; /*Flagga för att inte komma in i timern mer en än gång*/
                                     playerDeathTimer(theGame);
                                     playDeath(s);
                                     flag = 0;

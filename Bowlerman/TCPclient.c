@@ -75,7 +75,6 @@ PUBLIC void manageTCP(TCPstruct *u)
 		{
 			printf("Received from server: %s\n", buffer);
 		}
-		
 	}
 } 
 
