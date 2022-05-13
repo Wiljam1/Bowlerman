@@ -26,7 +26,7 @@ PUBLIC void collisionDetect(Game theGame, Sounds *sounds)
     testCollisionWithWalls(theGame);
     testCollosionWithExplosion(theGame, sounds);
     playerCollisionWithPowerup(theGame);
-    //explosionCollisionWithPowerup(theGame);       //för att förstöra powerups med explosioner
+    explosionCollisionWithPowerup(theGame);       //för att förstöra powerups med explosioner
 }
 
 //collision with outer walls and the screen size
@@ -424,8 +424,13 @@ void explosionCollisionWithPowerup(Game theGame)
                         theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > theGame->powerups[i].x + theGame->powerups[i].w &&
                         theGame->explosionPosition[j][k].y < theGame->powerups[i].y &&
                         theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y > theGame->powerups[i].y + theGame->powerups[i].h)
-                    {         
-                        theGame->powerups[i].isPickedUp = true;
+                    {    
+                        theGame->powerups[i].indestructable = timerForPowerups(0, 1500, i);     
+                        if(theGame->powerups[i].indestructable == 0 && theGame->bombs[j].explosioninit == 0)
+                        {
+                            theGame->powerups[i].isPickedUp = true;
+                        }
+                        
                     }
                 }
             }

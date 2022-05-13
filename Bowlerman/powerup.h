@@ -16,5 +16,6 @@ void rollForPowerup(Game theGame, int xPos, int yPos); //Roll for a chance to pl
 void renderPowerups(Game theGame);                     //Render powerups
 void powerupGive(Game theGame, int playerID, int i);
 Powerup powerupPlace(int xPos, int yPos, int type); //Place a powerup in the window
+int timerForPowerups(int startTime, int timeAmount, int powerUpID);
 
 #endif

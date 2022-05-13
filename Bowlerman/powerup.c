@@ -19,6 +19,7 @@ void rollForPowerup(Game theGame, int xPos, int yPos)
     if((rand() % 100+1) < 33){ // 33% chance to spawn a powerup                                                      
         theGame->powerups[currentPowerup] = powerupPlace(xPos, yPos, rand()%POWERUPTYPES); //Type = random number between 0 and how many types there are
         theGame->powerups[currentPowerup].id = currentPowerup;
+        theGame->powerups[currentPowerup].indestructable = timerForPowerups(SDL_GetTicks(), 1500, currentPowerup);
         currentPowerup += 4; //Go to next place in array for next powerup being made
     }
      
@@ -66,5 +67,22 @@ Powerup powerupPlace(int xPos, int yPos, int type)
     p.isPickedUp = false;
     p.sentViaUDP = 0;
     p.id = 0;
+    p.indestructable=1;
     return p;
+}
+
+int timerForPowerups(int startTime, int timeAmount, int powerUpID)
+{
+    static int lastTime[POWERUPAMOUNT] = {0}, currentTime[POWERUPAMOUNT] = {0};
+    if(startTime != 0)
+    {
+        lastTime[powerUpID] = startTime;
+    }
+    currentTime[powerUpID] = SDL_GetTicks();
+    if (currentTime[powerUpID] > lastTime[powerUpID] + timeAmount)
+    {
+        //lastTime[powerUpID] = currentTime[powerUpID];
+        return 0;               //returnar 1 om tiden är ute
+    }
+    return 1;
 }

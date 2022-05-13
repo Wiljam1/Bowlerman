@@ -115,6 +115,7 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
         if(udpData->powerupsX != 0)
         {
             theGame->powerups[udpData->powerupsID] = powerupPlace(udpData->powerupsX-10, udpData->powerupsY-10, udpData->powerupsType);
+            theGame->powerups[udpData->powerupsID].indestructable = timerForPowerups(SDL_GetTicks(), 1500, udpData->powerupsID);
         }
         
 

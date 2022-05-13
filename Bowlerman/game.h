@@ -44,6 +44,7 @@ struct powerup{
     int type; // 0 = speed, 1 = power, 2 = morebombs, 3 = turtle
     bool isPickedUp;
     int sentViaUDP;
+    int indestructable;
 };
 typedef struct powerup Powerup;
 
