@@ -60,7 +60,7 @@ void tryToPlaceBomb(Game theGame, int playerID)
     int amount = 0;
     amount = theGame->player[playerID].amountOfBombsPlaced*4;
 
-    if (theGame->player[playerID].amountOfBombsPlaced < theGame->player[playerID].amountOfBombs) // man måste veta vilken player här
+    if (theGame->player[playerID].amountOfBombsPlaced < theGame->player[playerID].amountOfBombs && theGame->player[playerID].isInvulnerable == false) // man måste veta vilken player här
     {
         theGame->bombs[playerID+amount] = initBomb();
         theGame->bombs[playerID+amount].position.y = correctBowlingBallPosy(getPlayerYPosition(theGame->player[playerID]));

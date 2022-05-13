@@ -42,6 +42,7 @@ PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
     p.isMoving = false;  //is not enforced by keyboard inputs though.
     p.isDead = false;
     p.isInvulnerable = false;
+    p.noOfLives = 3;
 
 
 
@@ -87,7 +88,7 @@ void UpdatePlayerTextures(Game theGame)
     /*Managing sprite updates*/
     for(int i=0; i < theGame->playerAmount; i++)
     {
-        if (theGame->player[i].isDead == false){
+        if (theGame->player[i].isDead == false && theGame->player[i].noOfLives > 0){
             if (spriteTimer[i] > 10){ //Slowing down sprite updates
                 spriteTimer[i] = 0; 
             }
@@ -118,9 +119,13 @@ void UpdatePlayerTextures(Game theGame)
                         updateSprite[i] = 0;
                 }
         }
-        else{
+        else if (theGame->player[i].noOfLives > 0) {
             getStartPos(&theGame->player[i]); // If player is dead it respawns at starting pos
             theGame->player[i].isDead = false;
+        }
+        else {
+            theGame->player[i].isDead = true;
+            theGame->player[i].isInvulnerable = true;
         }
     }
 }
@@ -332,6 +337,15 @@ Uint32 pDeathCallback(Uint32 interval, Game theGame)
         }
     }
     return 0;
+}
+
+void setPlayerDeathFlags(Game theGame, int i)
+{
+    theGame->player[i].noOfLives--;
+    printf("Lives left for player %d: %d\n", i, theGame->player[i].noOfLives);
+    theGame->player[i].isDead = true;
+    theGame->player[i].isInvulnerable = true;
+    theGame->invulnerabiltyFlag[i] = true; /*Flagga för att inte komma in i timern mer en än gång*/
 }
 
 // REplaced by different movement-implementation

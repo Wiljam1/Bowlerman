@@ -147,28 +147,30 @@ void manageMovementInputs(Game theGame)
     char direction;
     Player player = theGame->player[theGame->playerIDLocal];
     const Uint8 *state = SDL_GetKeyboardState(NULL);
-    
-    if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
+    if (player.isDead == false)
     {
-        velX = -getPlayerSpeed(player);
-        direction = 'a';
-    }
-    else if (state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
-    {
-        velX = getPlayerSpeed(player);
-        direction = 'd';
-    }
-    if (velX == 0)
-    {
-        if (state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_S])
+        if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
         {
-            velY = -getPlayerSpeed(player);
-            direction = 'w';
+            velX = -getPlayerSpeed(player);
+            direction = 'a';
         }
-        else if (state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D])
+        else if (state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
         {
-            velY = getPlayerSpeed(player);
-            direction = 's';
+            velX = getPlayerSpeed(player);
+            direction = 'd';
+        }
+        if (velX == 0)
+        {
+            if (state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_S])
+            {
+                velY = -getPlayerSpeed(player);
+                direction = 'w';
+            }
+            else if (state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D])
+            {
+                velY = getPlayerSpeed(player);
+                direction = 's';
+            }
         }
     }
     if (!velX && !velY) {

@@ -93,6 +93,7 @@ struct playerController
     bool isInvulnerable;
     SDL_Rect playerRect;   //struct to hold the position and size of the sprite
     char moveDirection;  // Keeps track of player movement direction for sprite rendering
+    int noOfLives;
 };
 typedef struct playerController Player;
 

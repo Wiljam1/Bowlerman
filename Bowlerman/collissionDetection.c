@@ -176,10 +176,7 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
                                 //player dead
                                 if (flag == 1)      // testar med odödlighet
                                 {
-                                    theGame->player[i].isDead = true;
-                                    theGame->player[i].isInvulnerable = true;
-                                    
-                                    theGame->invulnerabiltyFlag[i] = true; /*Flagga för att inte komma in i timern mer en än gång*/
+                                    setPlayerDeathFlags(theGame, i);
                                     playerDeathTimer(theGame);
                                     playDeath(s);
                                     flag = 0;
