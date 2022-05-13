@@ -88,7 +88,7 @@ void UpdatePlayerTextures(Game theGame)
     /*Managing sprite updates*/
     for(int i=0; i < theGame->playerAmount; i++)
     {
-        if (theGame->player[i].isDead == false && theGame->player[i].noOfLives > 0){
+        if (theGame->player[i].isInvulnerable == false && theGame->player[i].noOfLives > 0){
             if (spriteTimer[i] > 10){ //Slowing down sprite updates
                 spriteTimer[i] = 0; 
             }
@@ -119,7 +119,11 @@ void UpdatePlayerTextures(Game theGame)
                         updateSprite[i] = 0;
                 }
         }
-        else if (theGame->player[i].noOfLives > 0) {
+        else if (theGame->player[i].noOfLives > 0 && theGame->player[i].isInvulnerable == true) {
+            if (i % 2 == 0)
+                SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], 270, 0, 0);
+            else
+                SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], 90, 0, 0);
             getStartPos(&theGame->player[i]); // If player is dead it respawns at starting pos
             theGame->player[i].isDead = false;
         }
