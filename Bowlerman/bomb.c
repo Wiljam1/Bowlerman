@@ -108,8 +108,8 @@ void process(Game theGame, Sounds *s)
                 }
             }
             if (theGame->bombs[i].explosioninit == 1){
-                sortBombsArray(theGame, returnarray[i]);
                 theGame->bombs[i].isPlaced = 0;
+                sortBombsArray(theGame, returnarray[i]);
                 if(theGame->player[returnarray[i]].amountOfBombsPlaced > 0)
                 {
                     theGame->player[returnarray[i]].amountOfBombsPlaced--;          
@@ -136,6 +136,7 @@ void sortBombsArray(Game theGame,int i)
                     tmp = theGame->bombs[i+j*4-4];
                     theGame->bombs[i+j*4-4] = theGame->bombs[i+j*4];
                     theGame->bombs[i+j*4] = tmp;
+                    
                 }
             }
         }  
