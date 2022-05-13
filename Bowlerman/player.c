@@ -14,8 +14,8 @@
 #define MAXPOWER 20
 #define INVULNERABILITYTIME 3000
 
+PRIVATE Uint32 pDeathCallback(Uint32 interval, Game theGame);
 
-Uint32 pDeathCallBack();
 PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
 {
     //malloc(sizeof(struct playerController));
@@ -301,14 +301,14 @@ void playerAddAmountOfBombs(Player *p, int amountOfBombs)
         p->amountOfBombs = MAXBOMBS;
 }
 
-void playerDeathTimer(Game theGame)
+PUBLIC void playerDeathTimer(Game theGame)
 {
         for (int i = 0; i < PLAYERAMOUNT; i++)
         {
             if (theGame->invulnerabiltyFlag[i] == true)
             {
                 printf("Player %d invulnerability is: %s\n", i, theGame->player[i].isInvulnerable ? "On" : "Off");
-                SDL_TimerID timerID = SDL_AddTimer(INVULNERABILITYTIME, pDeathCallBack, (Game)theGame); // Funktionen körs efter antal ms som INVULTIME är satt till (ny tråd)
+                SDL_TimerID timerID = SDL_AddTimer(INVULNERABILITYTIME, pDeathCallback, (Game)theGame); // Funktionen körs efter antal ms som INVULTIME är satt till (ny tråd)
                 if (!timerID) {
                     SDL_RemoveTimer(timerID);
                     printf("Timer failed\n");
@@ -321,7 +321,7 @@ void playerDeathTimer(Game theGame)
         }
 }
 
-Uint32 pDeathCallBack(Uint32 interval, Game theGame)
+PRIVATE Uint32 pDeathCallback(Uint32 interval, Game theGame)
 {
     for (int i = 0; i < PLAYERAMOUNT; i++)
     {
