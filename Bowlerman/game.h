@@ -112,7 +112,7 @@ struct game_type
     Player player[MAXPLAYERS];
     int playerIDLocal;        //the local players ID (only on this computer). 
     int playerAmount;  //amount of players online
-    int invulnerable[4];
+    bool invulnerabiltyFlag[4];
     SDL_Rect playerRect[4][3];
     PlayerSprites pSprites;
 
