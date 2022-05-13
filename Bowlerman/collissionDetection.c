@@ -178,7 +178,8 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
                                 {
                                     theGame->player[i].isDead = true;
                                     theGame->player[i].isInvulnerable = true;
-                                    theGame->invulnerable = i;
+                                    
+                                    theGame->invulnerable[i] = 1; /*Flagga för att inte komma in i timern mer en än gång*/
                                     playerDeathTimer(theGame);
                                     playDeath(s);
                                     flag = 0;
