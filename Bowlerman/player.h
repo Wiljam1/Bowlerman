@@ -56,8 +56,7 @@ PUBLIC void updatePlayerYPosition(Game theGame, int id, int velY);
 
 //inits a player_rect with the x-and-y-position of player
 void initPlayerRect(SDL_Rect *playerRect, Player player); 
-
-PUBLIC void playerDeathTimer(Game theGame);
+void playerDeathTimer(Game theGame);
 
 //void destroyPlayer();
 

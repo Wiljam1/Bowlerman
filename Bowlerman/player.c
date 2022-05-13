@@ -14,7 +14,7 @@
 #define MAXPOWER 20
 #define INVULNERABILITYTIME 3000
 
-PRIVATE Uint32 pDeathCallback(Uint32 interval, Game theGame);
+Uint32 pDeathCallback();
 
 PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
 {
@@ -301,7 +301,7 @@ void playerAddAmountOfBombs(Player *p, int amountOfBombs)
         p->amountOfBombs = MAXBOMBS;
 }
 
-PUBLIC void playerDeathTimer(Game theGame)
+void playerDeathTimer(Game theGame)
 {
         for (int i = 0; i < PLAYERAMOUNT; i++)
         {
@@ -321,7 +321,7 @@ PUBLIC void playerDeathTimer(Game theGame)
         }
 }
 
-PRIVATE Uint32 pDeathCallback(Uint32 interval, Game theGame)
+Uint32 pDeathCallback(Uint32 interval, Game theGame)
 {
     for (int i = 0; i < PLAYERAMOUNT; i++)
     {
