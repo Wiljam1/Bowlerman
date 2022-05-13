@@ -52,7 +52,6 @@ void initAllPlayers(Game theGame)
 {
     // init x amount of players
     theGame->player[0] = initPlayer(LEFT_X, TOP_Y, 0); // sets x and y coordinates and resets values.
-
     if (theGame->playerAmount > 1)
     {
         theGame->player[1] = initPlayer(RIGHT_X, TOP_Y, 1); // sets x and y coordinates and resets values.
@@ -65,6 +64,8 @@ void initAllPlayers(Game theGame)
     {
         theGame->player[3] = initPlayer(RIGHT_X, BOTTOM_Y, 3); // sets x and y coordinates and resets values.
     }
+    for (int i = 0; i < theGame->playerAmount; i++)
+        theGame->invulnerabiltyFlag[i] = false;
 }
 
 void UpdatePlayerTextures(Game theGame)
@@ -306,7 +307,7 @@ void playerDeathTimer(Game theGame)
         {
             if (theGame->invulnerabiltyFlag[i] == true)
             {
-                printf("Player %d invulnerability is: %d\n", i, theGame->player[i].isInvulnerable);
+                printf("Player %d invulnerability is: %s\n", i, theGame->player[i].isInvulnerable ? "On" : "Off");
                 SDL_TimerID timerID = SDL_AddTimer(INVULNERABILITYTIME, pDeathCallBack, (Game)theGame); // Funktionen körs efter antal ms som INVULTIME är satt till (ny tråd)
                 if (!timerID) {
                     SDL_RemoveTimer(timerID);
@@ -327,7 +328,7 @@ Uint32 pDeathCallBack(Uint32 interval, Game theGame)
         if(theGame->player[i].isInvulnerable == true)
         {
             theGame->player[i].isInvulnerable = false;
-            printf("Player %d invulnerability is: %d\n", i, theGame->player[i].isInvulnerable);
+            printf("Player %d invulnerability is: %s\n", i, theGame->player[i].isInvulnerable ? "On" : "Off");
         }
     }
     return 0;
