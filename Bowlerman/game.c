@@ -244,5 +244,6 @@ PUBLIC void destroyGame(Game theGame)
     SDLNet_Quit();
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
+    free(theGame);
     SDL_Quit();
 }
