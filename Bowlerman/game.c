@@ -130,6 +130,9 @@ bool checkEvents(Game theGame)
                 playerAddAmountOfBombs(&theGame->player[theGame->playerIDLocal], 1);
                 printf("Bombs is now: %d\n", theGame->player[theGame->playerIDLocal].amountOfBombs);
                 break;
+            case SDLK_i:
+                playerAddLives(&theGame->player[theGame->playerIDLocal], 1);
+                printf("You have now: %d lives\n", theGame->player[theGame->playerIDLocal].noOfLives);
             default:
                 break;
             }

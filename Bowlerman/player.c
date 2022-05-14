@@ -12,6 +12,7 @@
 #define MINSPEED 1
 #define MAXBOMBS 5
 #define MAXPOWER 20
+#define MAXLIVES 10
 #define INVULNERABILITYTIME 3000
 
 Uint32 pDeathCallback();
@@ -308,6 +309,12 @@ void playerAddAmountOfBombs(Player *p, int amountOfBombs)
     p->amountOfBombs += amountOfBombs;
     if(p->amountOfBombs > MAXBOMBS)
         p->amountOfBombs = MAXBOMBS;
+}
+void playerAddLives(Player *p, int lives)
+{
+    p->noOfLives += lives;
+    if(p->noOfLives > MAXLIVES)
+        p->noOfLives = MAXLIVES;
 }
 
 void playerDeathTimer(Game theGame)
