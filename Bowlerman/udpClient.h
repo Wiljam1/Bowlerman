@@ -21,6 +21,7 @@ struct data
     int playerID;
     char moveDirection;
     int placeBomb;
+    int noOfLives;
 
     int powerupsX;
     int powerupsY;

@@ -147,7 +147,7 @@ void manageMovementInputs(Game theGame)
     char direction;
     Player player = theGame->player[theGame->playerIDLocal];
     const Uint8 *state = SDL_GetKeyboardState(NULL);
-    if (player.isInvulnerable == false)
+    if (player.isInvulnerable == false || player.isDead == false)
     {
         if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
         {
