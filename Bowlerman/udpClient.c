@@ -3,6 +3,7 @@
 #include "powerup.h"
 #define PUBLIC /* empty */
 #define PRIVATE static
+#define UPDATESPEED 1
 
 PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 {
@@ -61,7 +62,7 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
     int noOfLives = theGame->player[playerID].noOfLives;
 
     // send data if movement or bomb-placement
-    if (abs(x_posOld - x_pos)>=10 || abs(y_posOld - y_pos)>=10 || *flag == 1 || udpData->placeBomb==1)
+    if (abs(x_posOld - x_pos)>=UPDATESPEED || abs(y_posOld - y_pos)>=UPDATESPEED || *flag == 1 || udpData->placeBomb==1)
     {
         //printf("%d %d\n", (int)x_pos, (int)y_pos);
         udpData->playerID = playerID;
