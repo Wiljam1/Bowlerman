@@ -201,7 +201,7 @@ PUBLIC void gameUpdate(Game theGame)
     {
         // Check for events
         
-        
+    
         // Process events (time based stuff)
         process(theGame, &sounds);
 
@@ -220,7 +220,7 @@ PUBLIC void gameUpdate(Game theGame)
 
         SDL_Delay(theGame->delayInMS); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
-    //destroySoundFiles(sounds);
+    destroySoundFiles(sounds);
 }
 
 // renders background and players etc.
