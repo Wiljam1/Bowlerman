@@ -200,10 +200,12 @@ PUBLIC void gameUpdate(Game theGame)
     while (!done)
     {
         // Check for events
-        done = checkEvents(theGame);
+        
         
         // Process events (time based stuff)
         process(theGame, &sounds);
+
+        done = checkEvents(theGame);
 
         // Collisiondetection
         collisionDetect(theGame, &sounds);
