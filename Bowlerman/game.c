@@ -22,7 +22,7 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 #define LENGTH 100
-
+bool menu(Game theGame);
 void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues);
 
 // initializes game-window
@@ -197,6 +197,9 @@ PUBLIC void gameUpdate(Game theGame)
     playBackroundMusic(&sounds);
     // Game Loop:
     bool done = false;
+
+    //done = menu(theGame);
+
     while (!done)
     {
         // Check for events
@@ -222,7 +225,62 @@ PUBLIC void gameUpdate(Game theGame)
     }
     destroySoundFiles(sounds);
 }
+bool menu(Game theGame)
+{
+    SDL_Color black = {0, 0, 0, 0};
+    SDL_Rect backRect = {0, 0, WIDTH, HEIGHT};
+    SDL_RenderCopy(theGame->renderer, theGame->background, NULL, &backRect);
+    
+    theGame->window_surface = TTF_RenderText_Blended(theGame->font, "1) HOST SERVER", black);
+    SDL_Texture *menuT1 = SDL_CreateTextureFromSurface(theGame->renderer, theGame->window_surface);
+    theGame->window_surface = TTF_RenderText_Blended(theGame->font, "2) JOIN SERVER", black);
+    SDL_Texture *menuT2 = SDL_CreateTextureFromSurface(theGame->renderer, theGame->window_surface);
+    theGame->window_surface = TTF_RenderText_Blended(theGame->font, "3) QUIT GAME", black);
+    SDL_Texture *menuT3 = SDL_CreateTextureFromSurface(theGame->renderer, theGame->window_surface);
+    SDL_FreeSurface(theGame->window_surface);
 
+    SDL_Rect textRect1 = {200, 200, 400, 100};
+    SDL_Rect textRect2 = {200, 300, 400, 100};
+    SDL_Rect textRect3 = {200, 400, 400, 100}; 
+    SDL_RenderCopy(theGame->renderer, menuT1, NULL, &textRect1);
+    SDL_RenderCopy(theGame->renderer, menuT2, NULL, &textRect2);
+    SDL_RenderCopy(theGame->renderer, menuT3, NULL, &textRect3);
+
+    SDL_RenderPresent(theGame->renderer); // present renderer
+
+    while (1)
+    {
+        while(SDL_PollEvent(&theGame->window_event))
+        {
+            SDL_Event event = theGame->window_event;
+            switch(event.type)
+            {
+                case SDL_QUIT:
+                    return true;
+                case SDL_WINDOWEVENT_CLOSE:
+                    if(theGame->window)
+                    {
+                        SDL_DestroyWindow(theGame->window);
+                        theGame->window = NULL;
+                        return true;
+                    }
+                case SDL_KEYDOWN:
+                    switch(event.key.keysym.sym)
+                    {
+                        case SDLK_1:
+                            printf("\nHOST SERVER\n");
+                            return false;
+                        case SDLK_2:
+                            printf("\nJOIN SERVER\n");
+                            return false;
+                        case SDLK_3:
+                            printf("\nQUIT GAME\n");
+                            return true;
+                    }
+            }
+        }
+    }
+}
 // renders background and players etc.
 PUBLIC void destroyGame(Game theGame)
 {
@@ -246,6 +304,6 @@ PUBLIC void destroyGame(Game theGame)
     SDLNet_Quit();
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
-    free(theGame);
     SDL_Quit();
+    free(theGame);
 }
