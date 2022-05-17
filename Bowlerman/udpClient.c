@@ -3,6 +3,7 @@
 #include "powerup.h"
 #define PUBLIC /* empty */
 #define PRIVATE static
+#define UPDATESPEED 1
 
 PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 {
@@ -58,16 +59,17 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
     int y_posOld = theGame->player[playerID].yPosOld;
     int x_pos = theGame->player[playerID].xPos;
     int y_pos = theGame->player[playerID].yPos;
-
+    int noOfLives = theGame->player[playerID].noOfLives;
 
     // send data if movement or bomb-placement
-    if (abs(x_posOld - x_pos)>=10 || abs(y_posOld - y_pos)>=10 || *flag == 1 || udpData->placeBomb==1)
+    if (abs(x_posOld - x_pos)>=UPDATESPEED || abs(y_posOld - y_pos)>=UPDATESPEED || *flag == 1 || udpData->placeBomb==1)
     {
-        printf("%d %d\n", (int)x_pos, (int)y_pos);
+        //printf("%d %d\n", (int)x_pos, (int)y_pos);
         udpData->playerID = playerID;
         udpData->x = x_pos;
         udpData->y = y_pos;
         udpData->powerupsX = 0;
+        udpData->noOfLives = noOfLives;
         for(int i=0;i<POWERUPAMOUNT;i++)
         {
             if(theGame->powerups[i].sentViaUDP == 0)
@@ -121,6 +123,7 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
 
         theGame->player[playerID].moveDirection = udpData->moveDirection;
         theGame->player[playerID].id = udpData->playerID;
+        theGame->player[playerID].noOfLives = udpData->noOfLives;
         printf("UDP Packet incoming, x,y-coord: %d %d of player %d, placebomb: %d\n", udpData->x, udpData->y, udpData->playerID, udpData->placeBomb);
     }
 }
@@ -165,6 +168,7 @@ PUBLIC UDPData UDPDataReset()
     u.playerID = 0;
     u.moveDirection = '0';
     u.placeBomb = 0;
+    u.noOfLives = 3;
 
     u.powerupsX = 0;
     u.powerupsY = 0;
@@ -191,7 +195,6 @@ PUBLIC void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPStruct *udpValu
     while (!SDLNet_UDP_Recv(udpValues->sd, udpValues->p2))
         ; // spin-lock tills received info from UDP-server
     memcpy(udpData, (char *)udpValues->p2->data, sizeof(UDPData));
-    printf("crash");
     theGame->playerIDLocal = udpData->playerID;
     printf("UDP Packet incoming %d\n", udpData->playerID);
     printf("%d", theGame->playerIDLocal);

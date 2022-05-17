@@ -20,6 +20,7 @@ struct data {
    int y;
    int status;
    int playerID;
+   int noOfLives;
    char moveDirection;
     int placeBomb;
 

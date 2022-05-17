@@ -40,6 +40,7 @@ void getStartPos(Player *p);
 void playerAddSpeed(Player *p, float speed);
 void playerAddExplosionPower(Player *p, int explosionPower);
 void playerAddAmountOfBombs(Player *p, int amountOfBombs);
+void playerAddLives(Player *p, int amountOfBombs);
 PUBLIC void getStartPos(Player *p);
 PUBLIC int getLocalID(Game theGame);
 
@@ -57,7 +58,7 @@ PUBLIC void updatePlayerYPosition(Game theGame, int id, int velY);
 //inits a player_rect with the x-and-y-position of player
 void initPlayerRect(SDL_Rect *playerRect, Player player); 
 void playerDeathTimer(Game theGame);
-
+void setPlayerDeathFlags(Game theGame, int i);
 //void destroyPlayer();
 
 #endif

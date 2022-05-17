@@ -60,14 +60,17 @@ void tryToPlaceBomb(Game theGame, int playerID)
     int amount = 0;
     amount = theGame->player[playerID].amountOfBombsPlaced*4;
 
-    if (theGame->player[playerID].amountOfBombsPlaced < theGame->player[playerID].amountOfBombs) // man måste veta vilken player här
+    if (theGame->player[playerID].amountOfBombsPlaced < theGame->player[playerID].amountOfBombs && theGame->player[playerID].isInvulnerable == false) // man måste veta vilken player här
     {
-        theGame->bombs[playerID+amount] = initBomb();
-        theGame->bombs[playerID+amount].position.y = correctBowlingBallPosy(getPlayerYPosition(theGame->player[playerID]));
-        theGame->bombs[playerID+amount].position.x = correctBowlingBallPosx(getPlayerXPosition(theGame->player[playerID]));
-        theGame->bombs[playerID+amount].timervalue = initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID+amount);
-        theGame->player[playerID].amountOfBombsPlaced++;                //antal bomber som är placerade
-        theGame->bombs[playerID+amount].startvaluetimerbomb = SDL_GetTicks();
+        if(theGame->bombs[playerID+amount].isPlaced == 0)
+        {
+            theGame->bombs[playerID+amount] = initBomb();
+            theGame->bombs[playerID+amount].position.y = correctBowlingBallPosy(getPlayerYPosition(theGame->player[playerID]));
+            theGame->bombs[playerID+amount].position.x = correctBowlingBallPosx(getPlayerXPosition(theGame->player[playerID]));
+            theGame->bombs[playerID+amount].timervalue = initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID+amount);
+            theGame->player[playerID].amountOfBombsPlaced++;                //antal bomber som är placerade
+            theGame->bombs[playerID+amount].startvaluetimerbomb = SDL_GetTicks();
+        }
     }
 }
 
@@ -84,6 +87,7 @@ void process(Game theGame, Sounds *s)
                 testPossibilityToExplodeWithBombs(theGame, i);
                 theGame->bombs[i].timerinit = 0;
                 theGame->bombs[i].explosioninit = 0;
+                theGame->bombs[i].startvaluetimerbomb = SDL_GetTicks();
                 playBomb(s);
             }
             else {
@@ -109,11 +113,12 @@ void process(Game theGame, Sounds *s)
             }
             if (theGame->bombs[i].explosioninit == 1){
                 theGame->bombs[i].isPlaced = 0;
-                sortBombsArray(theGame, returnarray[i]);
                 if(theGame->player[returnarray[i]].amountOfBombsPlaced > 0)
                 {
                     theGame->player[returnarray[i]].amountOfBombsPlaced--;          
                 }
+                sortBombsArray(theGame, returnarray[i]);
+                
             }
         }
     }
@@ -136,7 +141,8 @@ void sortBombsArray(Game theGame,int i)
                     tmp = theGame->bombs[i+j*4-4];
                     theGame->bombs[i+j*4-4] = theGame->bombs[i+j*4];
                     theGame->bombs[i+j*4] = tmp;
-                    
+                    theGame->bombs[i+j*4-4].isPlaced == 1;
+                    theGame->bombs[i+j*4].isPlaced == 0;
                 }
             }
         }  

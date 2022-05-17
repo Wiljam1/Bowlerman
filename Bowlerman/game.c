@@ -130,6 +130,9 @@ bool checkEvents(Game theGame)
                 playerAddAmountOfBombs(&theGame->player[theGame->playerIDLocal], 1);
                 printf("Bombs is now: %d\n", theGame->player[theGame->playerIDLocal].amountOfBombs);
                 break;
+            case SDLK_i:
+                playerAddLives(&theGame->player[theGame->playerIDLocal], 1);
+                printf("You have now: %d lives\n", theGame->player[theGame->playerIDLocal].noOfLives);
             default:
                 break;
             }
@@ -147,28 +150,30 @@ void manageMovementInputs(Game theGame)
     char direction;
     Player player = theGame->player[theGame->playerIDLocal];
     const Uint8 *state = SDL_GetKeyboardState(NULL);
-    
-    if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
+    if (player.isInvulnerable == false || player.isDead == false)
     {
-        velX = -getPlayerSpeed(player);
-        direction = 'a';
-    }
-    else if (state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
-    {
-        velX = getPlayerSpeed(player);
-        direction = 'd';
-    }
-    if (velX == 0)
-    {
-        if (state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_S])
+        if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
         {
-            velY = -getPlayerSpeed(player);
-            direction = 'w';
+            velX = -getPlayerSpeed(player);
+            direction = 'a';
         }
-        else if (state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D])
+        else if (state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
         {
-            velY = getPlayerSpeed(player);
-            direction = 's';
+            velX = getPlayerSpeed(player);
+            direction = 'd';
+        }
+        if (velX == 0)
+        {
+            if (state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_S])
+            {
+                velY = -getPlayerSpeed(player);
+                direction = 'w';
+            }
+            else if (state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D])
+            {
+                velY = getPlayerSpeed(player);
+                direction = 's';
+            }
         }
     }
     if (!velX && !velY) {
@@ -195,10 +200,12 @@ PUBLIC void gameUpdate(Game theGame)
     while (!done)
     {
         // Check for events
-        done = checkEvents(theGame);
         
+    
         // Process events (time based stuff)
         process(theGame, &sounds);
+
+        done = checkEvents(theGame);
 
         // Collisiondetection
         collisionDetect(theGame, &sounds);
@@ -213,7 +220,7 @@ PUBLIC void gameUpdate(Game theGame)
 
         SDL_Delay(theGame->delayInMS); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
-    //destroySoundFiles(sounds);
+    destroySoundFiles(sounds);
 }
 
 // renders background and players etc.
@@ -239,5 +246,6 @@ PUBLIC void destroyGame(Game theGame)
     SDLNet_Quit();
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
+    free(theGame);
     SDL_Quit();
 }

@@ -23,6 +23,8 @@ void updateGUI(Game theGame)
         createLabel(theGame, 1, tmpstr2, theGame->player[theGame->playerIDLocal].explosionPower, white);
         char tmpstr3[LEN] = "Bombs: ";
         createLabel(theGame, 2, tmpstr3, theGame->player[theGame->playerIDLocal].amountOfBombs, white); 
+        char tmpstr4[LEN] = "Lives: ";
+        createLabel(theGame, 3, tmpstr4, theGame->player[theGame->playerIDLocal].noOfLives, white); 
         theGame->updateFlag = false;
     }
 
