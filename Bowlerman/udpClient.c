@@ -224,7 +224,7 @@ PUBLIC void initUDP(UDPStruct *u)
         exit(EXIT_FAILURE);
     }
     /* Resolve server name  */
-    if (SDLNet_ResolveHost(&u->srvadd, "127.0.0.1", 2000) == -1)
+    if (SDLNet_ResolveHost(&u->srvadd, u->serverIp, 2000) == -1)
     {
         fprintf(stderr, "SDLNet_ResolveHost(192.0.0.1 2000): %s\n", SDLNet_GetError());
         exit(EXIT_FAILURE);

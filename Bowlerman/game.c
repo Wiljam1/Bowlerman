@@ -54,7 +54,7 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *done)
      //Init GUI
     initGUI(theGame);
     //Menu loop
-    menu(theGame, done);
+    menu(theGame, done, udpValues);
 
     initUDP(udpValues);
     //TCPstruct tcpValues = createTCPstruct();     //returns a struct for tcp-init-struct.	
@@ -226,9 +226,10 @@ PUBLIC void gameUpdate(Game theGame)
     }
     destroySoundFiles(sounds);
 }
-void menu(Game theGame, bool *done)
+void menu(Game theGame, bool *done, UDPStruct *udpvalues)
 {
     bool loop = true;
+    int status;
     SDL_Color black = {0, 0, 0, 0};
     SDL_Rect backRect = {0, 0, WIDTH, HEIGHT};
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, &backRect);
@@ -273,13 +274,19 @@ void menu(Game theGame, bool *done)
                     switch(event.key.keysym.sym)
                     {
                         case SDLK_1:
+                            /*Kanske räcker med JOIN om man startar servern separat.
+                            Tanken var att man skulle starta serverprogrammet här, 
+                            men vet inte riktigt hur man ska lösa det*/
                             printf("\nHOST SERVER\n");
-                            SDL_Delay(1000);
                             *done = false;
                             loop = false;
                             break;
                         case SDLK_2:
                             printf("\nJOIN SERVER\n");
+                            //Nån menyfunktion där man skriver in IPadressen för hosten
+                            //just nu hårdkodad.
+                            char ip[] = "127.0.0.1";
+                            strcpy(udpvalues->serverIp, ip);
                             *done = false;
                             loop = false;
                             break;

@@ -36,7 +36,9 @@ struct udpStruct
     UDPsocket sd;
     IPaddress srvadd;
     UDPpacket *p;
-    UDPpacket *p2;   
+    UDPpacket *p2;
+
+    char serverIp[20];
 };
 typedef struct udpStruct UDPStruct;
 
