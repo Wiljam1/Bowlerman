@@ -22,8 +22,8 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 #define LENGTH 100
-bool menu(Game theGame);
-void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues);
+void menu();
+void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *done);
 
 // initializes game-window
 PUBLIC Game createWindow()
@@ -45,12 +45,18 @@ PUBLIC Game createWindow()
 }
 
 // initializes startvalues for game
-void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues)
+void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *done)
 {
+    // Loading textures from file
+    loadAllTextures(theGame);
     //inits SDL-net and loads in correct IP-adresses etc.
     initSDLNet();
-    initUDP(udpValues);
+     //Init GUI
+    initGUI(theGame);
+    //Menu loop
+    menu(theGame, done);
 
+    initUDP(udpValues);
     //TCPstruct tcpValues = createTCPstruct();     //returns a struct for tcp-init-struct.	
 	//initTCP(&tcpValues);            //initiates TCP
 	//manageTCP(&tcpValues);          //starts TCP
@@ -60,8 +66,7 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues)
     initSounds();
     //Init random seed
     srand(time(NULL));
-    // Loading textures from file
-    loadAllTextures(theGame);
+    
 
     // get playerID via UDP and saves it in theGame->playerIDLocal
     getPlayerIDviaUDP(theGame, udpData, udpValues);
@@ -75,8 +80,7 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues)
     //initierar väggar
     initAllWalls(theGame);
 
-    //Init GUI
-    initGUI(theGame);
+   // initGUI(theGame);
 
     //set game-delay to x-miliseconds. You should have lower delay if you have a slower computer
     theGame->delayInMS=10;
@@ -188,19 +192,17 @@ void manageMovementInputs(Game theGame)
 PUBLIC void gameUpdate(Game theGame)
 {
     // Initialize
+    bool done = false;
     Player player[MAXPLAYERS]; // declares x-amounts of players
     UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
     UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
-    initGame(theGame, &udpData, &udpValues);         // initializes startvalues. coordinates etc.
+    initGame(theGame, &udpData, &udpValues, &done);         // initializes startvalues. coordinates etc.
     Sounds sounds = initSoundFiles();
-    playBackroundMusic(&sounds);
     // Game Loop:
-    bool done = false;
-
-    done = menu(theGame);
 
     while (!done)
     {
+        playBackroundMusic(&sounds);
         // Check for events
         
     
@@ -224,8 +226,9 @@ PUBLIC void gameUpdate(Game theGame)
     }
     destroySoundFiles(sounds);
 }
-bool menu(Game theGame)
+void menu(Game theGame, bool *done)
 {
+    bool loop = true;
     SDL_Color black = {0, 0, 0, 0};
     SDL_Rect backRect = {0, 0, WIDTH, HEIGHT};
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, &backRect);
@@ -246,10 +249,8 @@ bool menu(Game theGame)
     SDL_RenderCopy(theGame->renderer, menuT3, NULL, &textRect3);
 
     SDL_RenderPresent(theGame->renderer); // present renderer
-    SDL_DestroyTexture(menuT1);
-    SDL_DestroyTexture(menuT2);
-    SDL_DestroyTexture(menuT3);
-    while (1)
+    
+    while (loop)
     {
         while(SDL_PollEvent(&theGame->window_event))
         {
@@ -257,29 +258,44 @@ bool menu(Game theGame)
             switch(event.type)
             {
                 case SDL_QUIT:
-                    return true;
+                    *done = true;
+                    loop = false;
+                    break;
                 case SDL_WINDOWEVENT_CLOSE:
                     if(theGame->window)
                     {
                         theGame->window = NULL;
-                        return true;
+                        *done = true;
+                        loop = false;
                     }
+                    break;
                 case SDL_KEYDOWN:
                     switch(event.key.keysym.sym)
                     {
                         case SDLK_1:
                             printf("\nHOST SERVER\n");
-                            return false;
+                            SDL_Delay(1000);
+                            *done = false;
+                            loop = false;
+                            break;
                         case SDLK_2:
                             printf("\nJOIN SERVER\n");
-                            return false;
+                            *done = false;
+                            loop = false;
+                            break;
                         case SDLK_3:
                             printf("\nQUIT GAME\n");
-                            return true;
+                            *done = true;
+                            loop = false;
+                            break;
                     }
-            }
+            }  
         }
+        SDL_Delay(1000/60);
     }
+    SDL_DestroyTexture(menuT1);
+    SDL_DestroyTexture(menuT2);
+    SDL_DestroyTexture(menuT3);
 }
 // renders background and players etc.
 PUBLIC void destroyGame(Game theGame)
@@ -305,5 +321,5 @@ PUBLIC void destroyGame(Game theGame)
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();
-    free(theGame);
+    //free(theGame);
 }
