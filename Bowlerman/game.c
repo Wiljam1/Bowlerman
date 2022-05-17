@@ -101,7 +101,6 @@ bool checkEvents(Game theGame)
         case SDL_WINDOWEVENT_CLOSE:
             if (theGame->window)
             {
-                SDL_DestroyWindow(theGame->window);
                 theGame->window = NULL;
                 done = true;
             }
@@ -198,7 +197,7 @@ PUBLIC void gameUpdate(Game theGame)
     // Game Loop:
     bool done = false;
 
-    //done = menu(theGame);
+    done = menu(theGame);
 
     while (!done)
     {
@@ -247,7 +246,9 @@ bool menu(Game theGame)
     SDL_RenderCopy(theGame->renderer, menuT3, NULL, &textRect3);
 
     SDL_RenderPresent(theGame->renderer); // present renderer
-
+    SDL_DestroyTexture(menuT1);
+    SDL_DestroyTexture(menuT2);
+    SDL_DestroyTexture(menuT3);
     while (1)
     {
         while(SDL_PollEvent(&theGame->window_event))
@@ -260,7 +261,6 @@ bool menu(Game theGame)
                 case SDL_WINDOWEVENT_CLOSE:
                     if(theGame->window)
                     {
-                        SDL_DestroyWindow(theGame->window);
                         theGame->window = NULL;
                         return true;
                     }
