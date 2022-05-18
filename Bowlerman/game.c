@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <windows.h>
+#include <ShellApi.h>
 #include "game.h"
 #include "collissionDetection.h"
 #include "bomb.h"
@@ -79,8 +81,6 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *done)
     
     //initierar väggar
     initAllWalls(theGame);
-
-   // initGUI(theGame);
 
     //set game-delay to x-miliseconds. You should have lower delay if you have a slower computer
     theGame->delayInMS=10;
@@ -278,6 +278,10 @@ void menu(Game theGame, bool *done, UDPStruct *udpvalues)
                             Tanken var att man skulle starta serverprogrammet här, 
                             men vet inte riktigt hur man ska lösa det*/
                             printf("\nHOST SERVER\n");
+                            printf("Creating server... ");
+                            ShellExecuteA(GetDesktopWindow(),"open","udpServer.exe",NULL,NULL,SW_SHOW);
+                            SDL_Delay(1000);
+                            printf("Server created!\n");
                             *done = false;
                             loop = false;
                             break;
