@@ -1,5 +1,5 @@
 make clean_windows
-::make udpServer
+make udpServer
 ::make tcpServer
 make windows
 ::start tcpServer.exe

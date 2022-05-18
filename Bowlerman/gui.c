@@ -28,6 +28,14 @@ void updateGUI(Game theGame)
         createLabel(theGame, 2, tmpstr3, theGame->player[theGame->playerIDLocal].amountOfBombs, white); 
         char tmpstr4[LEN] = "Lives: ";
         createLabel(theGame, 3, tmpstr4, theGame->player[theGame->playerIDLocal].noOfLives, white); 
+        char tmpstr5[LEN] = "P1: ";
+        createLabel(theGame, 4, tmpstr5, theGame->player[0].score, white);
+        char tmpstr6[LEN] = "P2: ";
+        createLabel(theGame, 5, tmpstr6, theGame->player[1].score, white); 
+        char tmpstr7[LEN] = "P3: ";
+        createLabel(theGame, 6, tmpstr7, theGame->player[2].score, white); 
+        char tmpstr8[LEN] = "P4: ";
+        createLabel(theGame, 7, tmpstr8, theGame->player[3].score, white); 
         theGame->updateFlag = false;
     }
 
@@ -58,17 +66,20 @@ void drawGUI(Game theGame)         // Kanske ska ändra hur de renderas i framti
 {
     SDL_Renderer *renderer = theGame->renderer;
     //Render top row of labels
-    for(int i = 0; i < LABELAMOUNT; i++){                                 //MANUALLY ADJUST LABELAMOUNT WHEN ADDING MORE LABELS
+    for(int i = 0; i < TOP_ROW_LABELS; i++){                                 //MANUALLY ADJUST X_ROW_LABELS WHEN ADDING MORE LABELS
         SDL_Rect textRect = {i*XVALUE, YVALUE, theGame->labelW, theGame->labelH}; 
         SDL_RenderCopy(renderer, theGame->labels[i], NULL, &textRect);     
     }
     //Render bottom row of labels (could be score for every player in the future)
-
+    for(int i = TOP_ROW_LABELS; i < BOTTOM_ROW_LABELS; i++){
+        SDL_Rect textRect = {(i-4)*XVALUE, YVALUE*10, theGame->labelW, theGame->labelH};
+        SDL_RenderCopy(renderer, theGame->labels[i], NULL, &textRect);
+    }
 }
 
 void destroyGUI(Game theGame)
 {
-    for(int i = 0; i < LABELAMOUNT; i++){
+    for(int i = 0; i < LABEL_AMOUNT; i++){
         SDL_DestroyTexture(theGame->labels[i]);
         theGame->labels[i] = NULL;
     }

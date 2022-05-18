@@ -21,6 +21,7 @@ struct data {
    int status;
    int playerID;
    int noOfLives;
+   int score[4];
    char moveDirection;
     int placeBomb;
     int powerupsX;

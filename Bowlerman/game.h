@@ -17,7 +17,9 @@
 #define PLAYERAMOUNT 4    //how many players are online
 #define WALLAMOUNT 100
 #define POWERUPAMOUNT 100 //How many powerups per map
-#define LABELAMOUNT 4
+#define TOP_ROW_LABELS 4
+#define BOTTOM_ROW_LABELS 8
+#define LABEL_AMOUNT (TOP_ROW_LABELS + BOTTOM_ROW_LABELS-4)
 
 #define WIDTH 800 // Move eventually
 #define HEIGHT (WIDTH / 1.178)
@@ -65,6 +67,7 @@ struct bowling_ball
     int placedBombRestriction;
     int isPlaced;
     int startvaluetimerbomb;
+    int whoPlacedID;
 
     //int frame;
 };
@@ -142,7 +145,7 @@ struct game_type
     SDL_Texture *textureWall[4];
     SDL_Texture *bombExplosion_texture;
     SDL_Texture *texturePowerups[4];
-    SDL_Texture *labels[5];                                        
+    SDL_Texture *labels[LABEL_AMOUNT+1];                                        
     int labelW, labelH;
     bool updateFlag;
 

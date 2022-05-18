@@ -33,6 +33,7 @@ PUBLIC Bowlingball initBomb()
     b.placedBombRestriction = 1; //gör så man inte kan lägga en bomb samtidigt som en är ute             
     b.isPlaced = 1;
     b.startvaluetimerbomb = 0;
+    b.whoPlacedID = 0;
     return b;
 }
 
@@ -69,6 +70,7 @@ void tryToPlaceBomb(Game theGame, int playerID)
             theGame->bombs[playerID+amount].position.y = correctBowlingBallPosy(getPlayerYPosition(theGame->player[playerID]));
             theGame->bombs[playerID+amount].position.x = correctBowlingBallPosx(getPlayerXPosition(theGame->player[playerID]));
             theGame->bombs[playerID+amount].timervalue = initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID+amount);
+            theGame->bombs[playerID+amount].whoPlacedID = playerID;
             theGame->player[playerID].amountOfBombsPlaced++;                //antal bomber som är placerade
             theGame->bombs[playerID+amount].startvaluetimerbomb = SDL_GetTicks();
         }
@@ -99,6 +101,7 @@ void process(Game theGame, Sounds *s)
     }
     //kollar explosionstimern
     int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
+
     for (int i = 0; i < MAXBOMBAMOUNT; i++){
         if (theGame->bombs[i].explosioninit == 0){
             theGame->bombs[i].explosioninit = initbowlingballtimer(0, 1000, i);
@@ -107,7 +110,9 @@ void process(Game theGame, Sounds *s)
                     theGame->wall[j].destroyedWall = testCollisionWithDestroyableWalls(theGame, j, i);
                     if(theGame->wall[j].destroyedWall){ //If wall is destroyed...
                         if(returnarray[i] == theGame->playerIDLocal){
-                            rollForPowerup(theGame, theGame->wall[j].x, theGame->wall[j].y);        //kallar på powerupp
+                            playerAddScore(&theGame->player[theGame->bombs[i].whoPlacedID], 1);
+                            theGame->updateFlag = true;
+                            rollForPowerup(theGame, theGame->wall[j].x, theGame->wall[j].y);       
                         }
                     }
                 }

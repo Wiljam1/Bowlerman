@@ -22,6 +22,7 @@ struct data
     char moveDirection;
     int placeBomb;
     int noOfLives;
+    int score[4];
 
     int powerupsX;
     int powerupsY;
