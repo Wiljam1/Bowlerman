@@ -6,7 +6,7 @@ gcc -Wall `sdl-config --cflags` udps.c -o udps `sdl-config --libs` -lSDL_net
 exit
 #endif
 
-//UDP server for infinite ammount of players.
+//UDP server for infinite amount of players.
 //limitations: 512 bytes of data per package (?)
  
 #include <stdio.h>
@@ -23,7 +23,6 @@ struct data {
    int noOfLives;
    char moveDirection;
     int placeBomb;
-
     int powerupsX;
     int powerupsY;
     int powerupsType;
@@ -63,7 +62,7 @@ int main(int argc, char **argv)
  
 	/* Main loop */
 	quit = 0;
-    int playerAmmount=0;
+    int playerAmount=0;
 	while (!quit)
 	{
 		/* Wait a packet. UDP_Recv returns != 0 if a packet is coming */
@@ -78,7 +77,7 @@ int main(int argc, char **argv)
                 printf("Client 0\n");
                 IPclient[0] = pRecive->address.host;
                 portClient[0] = pRecive->address.port;
-                playerAmmount++;
+                playerAmount++;
 
                 //send players ID:
                 memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data)); //detta behövs egentligen inte
@@ -92,7 +91,7 @@ int main(int argc, char **argv)
             }
 
             //etablera vems IP-adress och port.
-            for (int i=0; i<playerAmmount; i++)
+            for (int i=0; i<playerAmount; i++)
             {
                 if (pRecive->address.port == portClient[i]) break;
                 else if (IPclient[i+1] == 0)
@@ -104,7 +103,7 @@ int main(int argc, char **argv)
 
                     //send playerID to player: skicka via TCP istället
                     memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data)); //detta behövs inte egentligen
-                    udpData.playerID=playerAmmount;
+                    udpData.playerID=playerAmount;
                     memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
                     pSent->len = sizeof(struct data)+1;
                     pSent->address.host = IPclient[i+1];	/* Set the destination host */
@@ -112,7 +111,7 @@ int main(int argc, char **argv)
                     SDLNet_UDP_Send(sd, -1, pSent);
                     printf("initializing client %d\n", i+1);
 
-                    playerAmmount++;
+                    playerAmount++;
 
                     break;
                 }
@@ -120,7 +119,7 @@ int main(int argc, char **argv)
 
 
             //skicka data 
-            for(int i=0; i<playerAmmount; i++)
+            for(int i=0; i<playerAmount; i++)
             {
                 
                 if (pRecive->address.port == portClient[i]){
@@ -148,7 +147,7 @@ int main(int argc, char **argv)
                     }
 
                     //send data:
-                    for (int j=i+1; j<playerAmmount; j++)
+                    for (int j=i+1; j<playerAmount; j++)
                     {
                         if(IPclient[j] != 0){
                             printf("Send to Client %d\n", j);

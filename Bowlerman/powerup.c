@@ -16,7 +16,7 @@ void rollForPowerup(Game theGame, int xPos, int yPos)
     {
         currentPowerup = theGame->playerIDLocal;
     }
-    if((rand() % 100+1) < 33){ // 33% chance to spawn a powerup                                                      
+    if((rand() % 100+1) < 40){ // 40% chance to spawn a powerup                                                      
         theGame->powerups[currentPowerup] = powerupPlace(xPos, yPos, rand()%POWERUPTYPES); //Type = random number between 0 and how many types there are
         theGame->powerups[currentPowerup].id = currentPowerup;
         theGame->powerups[currentPowerup].indestructable = timerForPowerups(SDL_GetTicks(), 1500, currentPowerup);
