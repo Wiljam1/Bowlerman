@@ -139,6 +139,16 @@ bool checkEvents(Game theGame)
             case SDLK_i:
                 playerAddLives(&theGame->player[theGame->playerIDLocal], 1);
                 theGame->updateFlag = true;
+                break;
+            case SDLK_p:                                            /*!!! P = RESET-BUTTON!!! (only works when testing alone I think)*/
+                //Testing
+                done = false;
+                Player player[MAXPLAYERS]; // declares x-amounts of players
+                UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
+                UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
+                initGame(theGame, &udpData, &udpValues, &done);         // initializes startvalues. coordinates etc.
+                Sounds sounds = initSoundFiles();
+                break;
             default:
                 break;
             }
@@ -287,7 +297,7 @@ void menu(Game theGame, bool *done, UDPStruct *udpvalues)
                             men vet inte riktigt hur man ska lösa det*/
                             printf("\nHOST SERVER\n");
                             printf("Creating server... ");
-                            ShellExecuteA(GetDesktopWindow(),"open","udpServer.exe",NULL,NULL,SW_SHOW);
+                            ShellExecuteA(GetDesktopWindow(),"open","udpServer.exe",NULL,NULL,SW_SHOW);  //Start server file
                             SDL_Delay(1000);
                             printf("Server created!\n");
                             *done = false;
