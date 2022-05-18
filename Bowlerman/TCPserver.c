@@ -39,10 +39,11 @@ int threadTCPReceive(void * data)
 	//vet inte varför jag måste konvertera på detta sätt:
 	int *test= (int*) &data;
 	int threadID = *test;
+	int playerID = playerAmmount; //-1 eftersom UDP servern också kommer connect:a
 	SDL_UnlockMutex( gMainLock );	//Unlock
     SDL_CondSignal( gWakeUpMain ); //wake up main thread here. Signal producer. väcker main efter att ha läst av threadID värdet (playerammount)
 	
-
+	//jag måste oxå förstöra trådarna när de är klara. vid "quit"
 
 	printf("threadID: %d woken up\n", threadID);
 
@@ -56,6 +57,7 @@ int threadTCPReceive(void * data)
 		if (SDLNet_TCP_Recv(csd[threadID], buffer, 512) > 0) //Recv och send är blockerande, därför måste man först kolla om socket är redo med socketReady
 		{
 			printf("Client %d says: %s\n", threadID, buffer);  //put playerammounts here
+			int len = strlen(buffer) + 1;
 
 			if(strcmp(buffer, "exit") == 0)	/* Terminate this connection */
 			{
@@ -72,14 +74,15 @@ int threadTCPReceive(void * data)
 			}
 			else if(strcmp(buffer, "playerID") == 0)	/* Send back playerID */
 			{
-				int playerID=playerAmmount-1;
-				memcpy(buffer, &playerID, strlen(&playerID)+1);
-				int len = strlen(buffer) + 1;
-				//sendTCP(threadID, buffer, len);
+				memcpy(buffer, &playerID, sizeof(int)+1);
+				//len = strlen(buffer) + 1;
+				sendTCP(threadID, buffer, len);
 			}
 			else if(strcmp(buffer, "playerAmmount") == 0)	/* Send back playerAmmount */
 			{
-				
+				memcpy(buffer, &playerAmmount, sizeof(int)+1);
+				//len = strlen(buffer) + 1;
+				sendTCP(threadID, buffer, len);
 			}
 			else if(strcmp(buffer, "start") == 0)	/* start game */
 			{
@@ -89,16 +92,8 @@ int threadTCPReceive(void * data)
 			{
 				
 			}
-
-			printf("inside send info back\n");
-			//send info back
-			int len = strlen(buffer) + 1;
-			//sendTCP(threadID, buffer, len);
-			if (SDLNet_TCP_Send(csd[threadID], (void *)buffer, len) < len)
-			{
-				fprintf(stderr, "SDLNet_TCP_Send: %s\n", SDLNet_GetError());
-				exit(EXIT_FAILURE);
-			}
+			else sendTCP(threadID, buffer, len);  //send info back
+			
 		}	
 	}
 	return 0;
@@ -109,6 +104,7 @@ int main(int argc, char **argv)
 
 	TCPsocket sd; 		/* Socket descriptor */
 	IPaddress ip, *remoteIP;
+	Uint32 ipaddr;
 	int quit=0;
 	SDL_Thread* threadID[MAXPLAYERS+2];   //trådar
     gWakeUpMain = SDL_CreateCond();  //Create conditions för att väcka main-loopen.
@@ -149,9 +145,18 @@ int main(int argc, char **argv)
 			if (remoteIP = SDLNet_TCP_GetPeerAddress(csd[playerAmmount]))
 			{
 				/* Print the address, converting in the host format */
-				printf("Host connected: %x %d\n", SDLNet_Read32(&remoteIP->host), SDLNet_Read16(&remoteIP->port));
+				//printf("Host connected: %x %d\n", SDLNet_Read32(&remoteIP->host), SDLNet_Read16(&remoteIP->port));
 				//threadTCPReceive(&playerAmmount);
-				
+				/* print out the clients IP and port number */
+				ipaddr=SDL_SwapBE32(remoteIP->host);
+				printf("Accepted a connection from %d.%d.%d.%d port %hu\n",
+					ipaddr>>24,
+					(ipaddr>>16)&0xff,
+					(ipaddr>>8)&0xff,
+					ipaddr&0xff,
+					remoteIP->port);	
+
+
     			SDL_LockMutex( gMainLock ); //Lock
 				threadID[playerAmmount]= SDL_CreateThread(threadTCPReceive, "threadForServer", (void*) playerAmmount );
 				SDL_CondWait(gWakeUpMain, gMainLock); //make main fall asleep. Detta pga att det annars blir trådosäkert med variabeln playerAmmount.

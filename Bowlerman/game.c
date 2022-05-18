@@ -58,7 +58,9 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *done)
     //Menu loop
     menu(theGame, done, udpValues);
 
+    //inits UDP
     initUDP(udpValues);
+
     //TCPstruct tcpValues = createTCPstruct();     //returns a struct for tcp-init-struct.	
 	//initTCP(&tcpValues);            //initiates TCP
 	//manageTCP(&tcpValues);          //starts TCP

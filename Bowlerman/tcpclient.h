@@ -11,7 +11,7 @@ struct tcp_struct
 typedef struct tcp_struct TCPstruct;
 
 TCPstruct createTCPstruct();           //returns a struct for TCP
-void initTCP(TCPstruct *u);             //initiate TCP. Här bör man kunna skicka in rätt IP att connecta till också
+void initTCP(TCPstruct *u, char serverIP[]);             //initiate TCP. Här bör man kunna skicka in rätt IP att connecta till också
 void manageTCP(TCPstruct *u);     //send and receive TCP
 void closeTCP(TCPstruct *u);       //closes TCP
 
