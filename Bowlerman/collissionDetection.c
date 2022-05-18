@@ -118,7 +118,7 @@ void testCollosionWithBombs(Game theGame)
                 {   
                     if(playerX + playerW > bombX && playerX < bombX + bombW)
                     {
-                        if(playerY + 30 < bombY + bombH && playerY > bombY){
+                        if(playerY + YOFFSET < bombY + bombH && playerY > bombY){
                             //correct y
                             theGame->player[id].yPos = bombY + bombH - YOFFSET;
                             printf("Bumping head on bomb\n");
@@ -238,7 +238,7 @@ void testCollisionWithWalls(Game theGame)
                 {   
                     if(playerX + playerW > wallX && playerX < wallX + wallW)
                     {
-                        if(playerY + 30 < wallY + wallH && playerY > wallY){
+                        if(playerY + YOFFSET < wallY + wallH && playerY > wallY){
                             //correct y
                             theGame->player[i].yPos = wallY + wallH - YOFFSET;
                             printf("Bumping head\n");
