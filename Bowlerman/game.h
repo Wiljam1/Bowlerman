@@ -146,7 +146,7 @@ struct game_type
     SDL_Texture *bombExplosion_texture;
     SDL_Texture *texturePowerups[4];
     SDL_Texture *labels[LABEL_AMOUNT+1];                                        
-    int labelW, labelH;
+    int labelW[LABEL_AMOUNT+1], labelH[LABEL_AMOUNT+1];
     bool updateFlag;
 
     //Fonts

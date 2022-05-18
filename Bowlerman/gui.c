@@ -8,6 +8,12 @@
 #define YVALUE (WIDTH/238)
 #define FONTSIZE (WIDTH/37.1875)
 
+SDL_Color white = {255, 255, 255, 255};
+SDL_Color blue = {142, 237, 255, 255};
+SDL_Color purple = {255, 0, 255, 255};
+SDL_Color red = {255, 51, 51, 255};
+SDL_Color yellow = {255, 255, 51, 255};
+
 void initGUI(Game theGame)
 {
     TTF_Init(); //Init font system
@@ -18,7 +24,7 @@ void initGUI(Game theGame)
 void updateGUI(Game theGame)
 {   
     if(theGame->updateFlag == true){            //TEMPORÄR LÖSNING, FORTFARANDE MEMORY LEAK MEN TEXTEN
-        SDL_Color white = {255, 255, 255, 255}; //UPPDATERAS ENDAST NÄR ETT VÄRDE ÄNDRAS
+        //UPPDATERAS ENDAST NÄR ETT VÄRDE ÄNDRAS
 
         char tmpstr[LEN] = "Speed: ";//!!!!Ska nog göra om speed till int och dela med två någonstans så att labeln inte ändrar storlek!!!
         createLabel(theGame, 0, tmpstr, theGame->player[theGame->playerIDLocal].speedDisplay, white);  // Går att skrivas till bättre så man inte behöver hårdkoda siffror                                     
@@ -28,14 +34,14 @@ void updateGUI(Game theGame)
         createLabel(theGame, 2, tmpstr3, theGame->player[theGame->playerIDLocal].amountOfBombs, white); 
         char tmpstr4[LEN] = "Lives: ";
         createLabel(theGame, 3, tmpstr4, theGame->player[theGame->playerIDLocal].noOfLives, white); 
-        char tmpstr5[LEN] = "P1: ";
-        createLabel(theGame, 4, tmpstr5, theGame->player[0].score, white);
-        char tmpstr6[LEN] = "P2: ";
-        createLabel(theGame, 5, tmpstr6, theGame->player[1].score, white); 
-        char tmpstr7[LEN] = "P3: ";
-        createLabel(theGame, 6, tmpstr7, theGame->player[2].score, white); 
-        char tmpstr8[LEN] = "P4: ";
-        createLabel(theGame, 7, tmpstr8, theGame->player[3].score, white); 
+        char tmpstr5[LEN] = "Player 1: ";
+        createLabel(theGame, 4, tmpstr5, theGame->player[0].score, blue);
+        char tmpstr6[LEN] = "Player 2: ";
+        createLabel(theGame, 5, tmpstr6, theGame->player[1].score, purple); 
+        char tmpstr7[LEN] = "Player 3: ";
+        createLabel(theGame, 6, tmpstr7, theGame->player[2].score, red); 
+        char tmpstr8[LEN] = "Player 4: ";
+        createLabel(theGame, 7, tmpstr8, theGame->player[3].score, yellow); 
         theGame->updateFlag = false;
     }
 
@@ -54,8 +60,8 @@ void createLabel(Game theGame, int labelID, char text[LEN], float value, SDL_Col
     }
 
     SDL_Surface *tmp = TTF_RenderText_Blended(theGame->font, text, color);
-    theGame->labelW = tmp->w;   //Save height and width to struct
-    theGame->labelH = tmp->h;
+    theGame->labelW[labelID] = tmp->w;   //Save height and width to array for display
+    theGame->labelH[labelID] = tmp->h;
     theGame->labels[labelID] = SDL_CreateTextureFromSurface(theGame->renderer, tmp); //Save label for rendering
     SDL_FreeSurface(tmp);
 
@@ -67,12 +73,12 @@ void drawGUI(Game theGame)         // Kanske ska ändra hur de renderas i framti
     SDL_Renderer *renderer = theGame->renderer;
     //Render top row of labels
     for(int i = 0; i < TOP_ROW_LABELS; i++){                                 //MANUALLY ADJUST X_ROW_LABELS WHEN ADDING MORE LABELS
-        SDL_Rect textRect = {i*XVALUE, YVALUE, theGame->labelW, theGame->labelH}; 
+        SDL_Rect textRect = {i*XVALUE+(i)*50, YVALUE, theGame->labelW[i], theGame->labelH[i]}; 
         SDL_RenderCopy(renderer, theGame->labels[i], NULL, &textRect);     
     }
     //Render bottom row of labels (could be score for every player in the future)
     for(int i = TOP_ROW_LABELS; i < BOTTOM_ROW_LABELS; i++){
-        SDL_Rect textRect = {(i-4)*XVALUE, YVALUE*10, theGame->labelW, theGame->labelH};
+        SDL_Rect textRect = {(i-4)*XVALUE+(i-4)*50, YVALUE*10, theGame->labelW[i], theGame->labelH[i]};
         SDL_RenderCopy(renderer, theGame->labels[i], NULL, &textRect);
     }
 }
