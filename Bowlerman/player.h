@@ -30,13 +30,15 @@ float getPlayerXPosition(Player p);
 float getPlayerYPosition(Player p);
 int getPlayerHeight(Player p);
 int getPlayerWidth(Player p);
-int getPlayerSpeed(Player p);
+double getPlayerSpeed(Player p);
 int getPlayerID(Player p);
 void getStartPos(Player *p);
-void playerAddSpeed(Player *p, float speed);
+void playerIncreaseSpeed(Player *p);
+void playerAddSpeedDisplay(Player *p, int speedDisplay);
 void playerAddExplosionPower(Player *p, int explosionPower);
 void playerAddAmountOfBombs(Player *p, int amountOfBombs);
 void playerAddLives(Player *p, int amountOfBombs);
+void playerAddScore(Player *p, int score);
 PUBLIC void getStartPos(Player *p);
 PUBLIC int getLocalID(Game theGame);
 
@@ -44,9 +46,9 @@ PUBLIC int getLocalID(Game theGame);
 PUBLIC void updateMovementDirection(Game theGame, int id, char c);
 
 //Change player x position
-PUBLIC void updatePlayerXPosition(Game theGame, int id, int velX);
+PUBLIC void updatePlayerXPosition(Game theGame, int id, double velX);
 //Change player y position
-PUBLIC void updatePlayerYPosition(Game theGame, int id, int velY);
+PUBLIC void updatePlayerYPosition(Game theGame, int id, double velY);
 
 //ändrar spelarens (clientmässiga) position
 //void playerPositionUpdate(int x, int y);

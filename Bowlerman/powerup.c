@@ -44,7 +44,8 @@ void renderPowerups(Game theGame)
 void powerupGive(Game theGame, int playerID, int i)
 {
     if(theGame->powerups[i].type == 0){ //give speed
-        playerAddSpeed(&theGame->player[playerID], 0.5);
+        playerIncreaseSpeed(&theGame->player[playerID]);
+        printf("Player speed: %d\n", getPlayerSpeed(theGame->player[playerID]));
     }
     else if(theGame->powerups[i].type == 1){ //give more power
         playerAddExplosionPower(&theGame->player[playerID], 1);
