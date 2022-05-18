@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 	}
  
 	/* Open a socket */
-	if (!(sd = SDLNet_UDP_Open(2000)))
+	if (!(sd = SDLNet_UDP_Open(2001)))
 	{
 		fprintf(stderr, "SDLNet_UDP_Open: %s\n", SDLNet_GetError());
 		exit(EXIT_FAILURE);

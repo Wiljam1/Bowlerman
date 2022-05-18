@@ -20,10 +20,10 @@ PUBLIC TCPstruct createTCPstruct()
     return u;
 }
   
-PUBLIC void initTCP(TCPstruct *u)
+PUBLIC void initTCP(TCPstruct *u, char serverIP[])
 {
 	/* Resolve the host we are connecting to */
-	if (SDLNet_ResolveHost(&u->ip, "127.0.0.1", 2000) < 0)
+	if (SDLNet_ResolveHost(&u->ip, serverIP, 2000) < 0)
 	{
 		fprintf(stderr, "SDLNet_ResolveHost: %s\n", SDLNet_GetError());
 		exit(EXIT_FAILURE);
