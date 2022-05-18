@@ -180,6 +180,8 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
                                     playerDeathTimer(theGame);
                                     playDeath(s);
                                     flag = 0;
+
+                                    //checkGameOver();
                                     break;
                                 }
                             }
