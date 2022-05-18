@@ -11,7 +11,7 @@
 #include "bomb.h"
 #include "sounds.h"
 #define BOMBTIMER 3000
-#define TILESIZE (WIDTH / 18)
+#define TILESIZE (WIDTH / 17)
 #define DIFF (WIDTH / 595)
 
 PUBLIC Bowlingball initBomb();
@@ -153,7 +153,7 @@ void sortBombsArray(Game theGame,int i)
 //sätter positionerna för explosionen efter vart bomben legat
 void initExplosionPosition(Game theGame, int playerID)
 {
-    int tilesize = TILESIZE, diff=DIFF; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
+    int tilesize = (TILESIZE - 4), diff=2; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
     int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
     SDL_Rect temp = {0,0,tilesize,tilesize};
     for(int i = 0; i < 1+4*theGame->player[returnarray[playerID]].explosionPower; i++){

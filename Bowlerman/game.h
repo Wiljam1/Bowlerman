@@ -19,7 +19,7 @@
 #define POWERUPAMOUNT 100 //How many powerups per map
 #define LABELAMOUNT 4
 
-#define WIDTH 1190 // Move eventually
+#define WIDTH 800 // Move eventually
 #define HEIGHT (WIDTH / 1.178)
 #define MAXBOMBAMOUNT 20
 //-------------------------------------------------
