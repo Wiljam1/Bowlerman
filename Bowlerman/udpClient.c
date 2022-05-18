@@ -224,7 +224,7 @@ PUBLIC void initUDP(UDPStruct *u)
     /* Resolve server name  */
     if (SDLNet_ResolveHost(&u->srvadd, u->serverIp, 2001) == -1)
     {
-        fprintf(stderr, "SDLNet_ResolveHost(192.0.0.1 2000): %s\n", SDLNet_GetError());
+        fprintf(stderr, "SDLNet_ResolveHost(192.0.0.1 2001): %s\n", SDLNet_GetError());
         exit(EXIT_FAILURE);
     }
     if (!((u->p = SDLNet_AllocPacket(sizeof(UDPData) + 1)) && (u->p2 = SDLNet_AllocPacket(sizeof(UDPData) + 1))))
