@@ -83,18 +83,17 @@ struct playerController
     float yPosOld;
     bool isMoving; //is the player moving or not
 
-    float speed;
-    int amountOfBombs, explosionPower, amountOfBombsPlaced;
+    double speed;
+    int amountOfBombs, explosionPower, amountOfBombsPlaced, speedDisplay;
     bool canRollBombs;
 
     int height;
     int width;
     char name[40];
-    bool isDead;
-    bool isInvulnerable;
+    bool isDead, isInvulnerable;
     SDL_Rect playerRect;   //struct to hold the position and size of the sprite
     char moveDirection;  // Keeps track of player movement direction for sprite rendering
-    int noOfLives;
+    int noOfLives, score;
 };
 typedef struct playerController Player;
 

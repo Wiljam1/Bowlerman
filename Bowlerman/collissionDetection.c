@@ -118,15 +118,13 @@ void testCollosionWithBombs(Game theGame)
                 {   
                     if(playerX + playerW > bombX && playerX < bombX + bombW)
                     {
-                        if(playerY + 30 < bombY + bombH && playerY > bombY){
+                        if(playerY + YOFFSET < bombY + bombH && playerY > bombY){
                             //correct y
                             theGame->player[id].yPos = bombY + bombH - YOFFSET;
-                            printf("Bumping head on bomb\n");
                         }
                         if(playerY + playerH > bombY && playerY < bombY){
                             //correct y
                             theGame->player[id].yPos = bombY - playerH;
-                            printf("Standing on bomb\n");
                         }
                     }
                 }
@@ -137,12 +135,10 @@ void testCollosionWithBombs(Game theGame)
                         if(playerX < bombX + bombW && playerX > bombX){
                             //Correct x
                             theGame->player[id].xPos = bombX + bombW;
-                            printf("Right Edge of bomb\n");
                         }
                         if(playerX + playerW > bombX && playerX < bombX){
                             //Correct x
                             theGame->player[id].xPos = bombX - playerW;
-                            printf("Left Edge of bomb\n");
                         }
                     }
                 }
@@ -238,15 +234,13 @@ void testCollisionWithWalls(Game theGame)
                 {   
                     if(playerX + playerW > wallX && playerX < wallX + wallW)
                     {
-                        if(playerY + 30 < wallY + wallH && playerY > wallY){
+                        if(playerY + YOFFSET < wallY + wallH && playerY > wallY){
                             //correct y
                             theGame->player[i].yPos = wallY + wallH - YOFFSET;
-                            printf("Bumping head\n");
                         }
                         if(playerY + playerH > wallY && playerY < wallY){
                             //correct y
                             theGame->player[i].yPos = wallY - playerH;
-                            printf("Standing on wall\n");
                         }
                     }
                 }
@@ -257,12 +251,10 @@ void testCollisionWithWalls(Game theGame)
                         if(playerX < wallX + wallW && playerX > wallX){
                             //Correct x
                             theGame->player[i].xPos = wallX + wallW;
-                            printf("Right Edge\n");
                         }
                         if(playerX + playerW > wallX && playerX < wallX){
                             //Correct x
                             theGame->player[i].xPos = wallX - playerW;
-                            printf("Left Edge\n");
                         }
                     }
                 } 

@@ -122,22 +122,23 @@ bool checkEvents(Game theGame)
                 break;
             case SDLK_t:
                 //Testing
-                playerAddSpeed(&theGame->player[theGame->playerIDLocal], 0.5);
-                printf("Speed is now: %d\n", getPlayerSpeed(theGame->player[theGame->playerIDLocal]));
+                playerIncreaseSpeed(&theGame->player[theGame->playerIDLocal]);
+                printf("Player speed is now: %lf\n", getPlayerSpeed(theGame->player[theGame->playerIDLocal]));
+                theGame->updateFlag = true;
                 break;
             case SDLK_y:
                 //Testing
                 playerAddExplosionPower(&theGame->player[theGame->playerIDLocal], 1);
-                printf("Power is now: %d\n", theGame->player[theGame->playerIDLocal].explosionPower);
+                theGame->updateFlag = true;
                 break;
             case SDLK_u:
                 //Testing
                 playerAddAmountOfBombs(&theGame->player[theGame->playerIDLocal], 1);
-                printf("Bombs is now: %d\n", theGame->player[theGame->playerIDLocal].amountOfBombs);
+                theGame->updateFlag = true;
                 break;
             case SDLK_i:
                 playerAddLives(&theGame->player[theGame->playerIDLocal], 1);
-                printf("You have now: %d lives\n", theGame->player[theGame->playerIDLocal].noOfLives);
+                theGame->updateFlag = true;
             default:
                 break;
             }
@@ -150,7 +151,7 @@ bool checkEvents(Game theGame)
 
 void manageMovementInputs(Game theGame)
 {
-    int velX = 0, velY = 0;
+    double velX = 0, velY = 0;
     int id = theGame->playerIDLocal;
     char direction;
     Player player = theGame->player[theGame->playerIDLocal];

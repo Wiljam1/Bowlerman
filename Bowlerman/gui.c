@@ -21,7 +21,7 @@ void updateGUI(Game theGame)
         SDL_Color white = {255, 255, 255, 255}; //UPPDATERAS ENDAST NÄR ETT VÄRDE ÄNDRAS
 
         char tmpstr[LEN] = "Speed: ";//!!!!Ska nog göra om speed till int och dela med två någonstans så att labeln inte ändrar storlek!!!
-        createLabel(theGame, 0, tmpstr, theGame->player[theGame->playerIDLocal].speed, white);  // Går att skrivas till bättre så man inte behöver hårdkoda siffror                                     
+        createLabel(theGame, 0, tmpstr, theGame->player[theGame->playerIDLocal].speedDisplay, white);  // Går att skrivas till bättre så man inte behöver hårdkoda siffror                                     
         char tmpstr2[LEN] = "Power: ";                                                         // Vet inte hur man skickar strings direkt i parametrarna (som i printf();) men det här fungerar
         createLabel(theGame, 1, tmpstr2, theGame->player[theGame->playerIDLocal].explosionPower, white);
         char tmpstr3[LEN] = "Bombs: ";
