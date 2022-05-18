@@ -52,7 +52,7 @@ PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
     }
 }
 
-PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *flag)
+PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *flag, int sendPowerupNow)
 {
     int playerID = theGame->playerIDLocal;
     int x_posOld = theGame->player[playerID].xPosOld;
@@ -62,7 +62,7 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
     int noOfLives = theGame->player[playerID].noOfLives;
 
     // send data if movement or bomb-placement
-    if (abs(x_posOld - x_pos)>=UPDATESPEED || abs(y_posOld - y_pos)>=UPDATESPEED || *flag == 1 || udpData->placeBomb==1)
+    if (abs(x_posOld - x_pos)>=UPDATESPEED || abs(y_posOld - y_pos)>=UPDATESPEED || *flag == 1 || udpData->placeBomb==1 || sendPowerupNow == 1)
     {
         //printf("%d %d\n", (int)x_pos, (int)y_pos);
         udpData->playerID = playerID;
@@ -128,6 +128,17 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
     }
 }
 
+int sendPowerup(Game theGame)
+{
+    for(int i=0;i<POWERUPAMOUNT;i++)
+    {
+        if(theGame->powerups[i].sentViaUDP == 0)
+        {
+            return 1;
+        }     
+    }
+    return 0;
+}
 
 PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 {
@@ -140,7 +151,7 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 
     //check to see if we should send bomb with UDP
     sendBomb(theGame, udpData, udpValues);
-
+    int sendPowerupNow = sendPowerup(theGame);
     //flagga för att reset:a movement direction när spelaren står stilla.
     if( udpData->moveDirection != '0'){
        flag2=1;
@@ -151,7 +162,7 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
     }
 
     //send udp data (if e.g. movement has been updated)
-    sendUDP(theGame, udpData, udpValues, &flag);
+    sendUDP(theGame, udpData, udpValues, &flag, sendPowerupNow);
 
     //receive udp data
     receiveUDP(theGame, udpData, udpValues);
