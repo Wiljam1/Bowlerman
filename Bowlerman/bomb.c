@@ -151,9 +151,9 @@ void sortBombsArray(Game theGame,int i)
 {
     Bowlingball tmp;
     int temporarytime=0;
-    //for (int k=0;k<theGame->player[i].amountOfBombsPlaced;k++)
+    for (int k=0;k<theGame->player[i].amountOfBombsPlaced;k++)
     {
-        for (int j = 1;j<theGame->player[i].amountOfBombsPlaced;j++)
+        for (int j = 1;j<theGame->player[i].amountOfBombsPlaced+1;j++)
         {
             if(theGame->bombs[i+j*4].isPlaced == 1)
             {
@@ -165,9 +165,11 @@ void sortBombsArray(Game theGame,int i)
                     theGame->bombs[i+j*4] = tmp;
                     theGame->bombs[i+j*4-4].isPlaced == 1;
                     theGame->bombs[i+j*4].isPlaced == 0;
+                    initExplosionPosition(theGame, i+j*4);
+                    initExplosionPosition(theGame, i+j*4-4);
                 }
             }
-        }  
+        }
     }
 }
 
