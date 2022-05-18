@@ -222,11 +222,11 @@ int correctBowlingBallPosx(int i)
 {
     int size = WIDTH / 17;
     int j=0, k=0;
-    i -= 12;
+    //i -= 12;
     k=i/size;
     j=i%size;
     if(j<35){
-        return (k*size);      //returnerar närmaste tile sen +3 för att få det helt centrerat
+        return (k*size);      
     }
     else{
         return ((k+1)*size);
@@ -242,7 +242,7 @@ int correctBowlingBallPosy(int i)
     k=(i-4)/size;
     j=(i-4)%size;
     if(j<35){
-        return (k*size)+offset;      //returnerar närmaste tile sen +3 för att få det helt centrerat
+        return (k*size)+offset;      
     }
     else{
         return ((k+1)*size)+offset;
