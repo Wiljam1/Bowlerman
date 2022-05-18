@@ -228,6 +228,11 @@ PUBLIC void gameUpdate(Game theGame)
 }
 void menu(Game theGame, bool *done, UDPStruct *udpvalues)
 {
+    int x = WIDTH / 5.85;
+    int width = WIDTH / 3;
+    int height = WIDTH / 11.7;
+    int y1 = x; int y2 = WIDTH / 4; int y3 = width;
+
     bool loop = true;
     int status;
     SDL_Color black = {0, 0, 0, 0};
@@ -242,9 +247,9 @@ void menu(Game theGame, bool *done, UDPStruct *udpvalues)
     SDL_Texture *menuT3 = SDL_CreateTextureFromSurface(theGame->renderer, theGame->window_surface);
     SDL_FreeSurface(theGame->window_surface);
 
-    SDL_Rect textRect1 = {200, 200, 400, 100};
-    SDL_Rect textRect2 = {200, 300, 400, 100};
-    SDL_Rect textRect3 = {200, 400, 400, 100}; 
+    SDL_Rect textRect1 = {x, y1, width, height};
+    SDL_Rect textRect2 = {x, y2, width, height};
+    SDL_Rect textRect3 = {x, y3, width, height}; 
     SDL_RenderCopy(theGame->renderer, menuT1, NULL, &textRect1);
     SDL_RenderCopy(theGame->renderer, menuT2, NULL, &textRect2);
     SDL_RenderCopy(theGame->renderer, menuT3, NULL, &textRect3);

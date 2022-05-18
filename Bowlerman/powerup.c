@@ -59,10 +59,12 @@ void powerupGive(Game theGame, int playerID, int i)
 Powerup powerupPlace(int xPos, int yPos, int type)
 {
     Powerup p;
-    p.w = 50;
-    p.h = 50;
-    p.x = xPos + 10;
-    p.y = yPos + 10;
+    int powSize = WIDTH / 23.8;
+    int powOffset = WIDTH / 119;
+    p.w = powSize;
+    p.h = powSize;
+    p.x = xPos + powOffset;
+    p.y = yPos + powOffset;
     p.type = type;
     p.isPickedUp = false;
     p.sentViaUDP = 0;

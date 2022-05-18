@@ -15,12 +15,18 @@
 #define MAXLIVES 10
 #define INVULNERABILITYTIME 3000
 
+#define LEFT_X (WIDTH/17)
+#define RIGHT_X (WIDTH/1.106)
+#define TOP_Y (WIDTH/8.5)
+#define BOTTOM_Y (WIDTH/1.368)
+
 Uint32 pDeathCallback();
 
 PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
 {
     //malloc(sizeof(struct playerController));
-
+    int height = (WIDTH / 17);
+    int width = (WIDTH / 26.56);
     Player p;
 
     p.id = playerID;
@@ -37,8 +43,8 @@ PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
     p.amountOfBombsPlaced = 0;  //antal bomber placerade, börjar på 0    
     p.explosionPower = 1;       //hur stor explosionen ska vara, börjar på 1
     p.canRollBombs = false;
-    p.playerRect.h = p.height = 100*0.7;
-    p.playerRect.w = p.width = 64*0.7;
+    p.playerRect.h = p.height = height;
+    p.playerRect.w = p.width = width;
     p.moveDirection = '0';
     p.isMoving = false;  //is not enforced by keyboard inputs though.
     p.isDead = false;
@@ -273,20 +279,20 @@ PUBLIC void getStartPos(Player *p)
     switch (p->id)
     {
         case 0:
-            p->xPos = 70;
-            p->yPos = 140;
+            p->xPos = LEFT_X;
+            p->yPos = TOP_Y;
             break;
         case 1:
-            p->xPos = 1076;
-            p->yPos = 140;
+            p->xPos = RIGHT_X;
+            p->yPos = TOP_Y;
             break;
         case 2:
-            p->xPos = 70;
-            p->yPos = 870;
+            p->xPos = LEFT_X;
+            p->yPos = BOTTOM_Y;
             break;
         case 3:
-            p->xPos = 1076;
-            p->yPos = 870;
+            p->xPos = RIGHT_X;
+            p->yPos = BOTTOM_Y;
             break;
     }
 }

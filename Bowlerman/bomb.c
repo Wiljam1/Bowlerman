@@ -11,7 +11,8 @@
 #include "bomb.h"
 #include "sounds.h"
 #define BOMBTIMER 3000
-
+#define TILESIZE (WIDTH / 18)
+#define DIFF (WIDTH / 595)
 
 PUBLIC Bowlingball initBomb();
 void sortBombsArray(Game theGame,int i);
@@ -23,8 +24,8 @@ PUBLIC Bowlingball initBomb()
     Bowlingball b;
     b.position.y = 0;
     b.position.x = 0;
-    b.position.w = 70;
-    b.position.h = 70;
+    b.position.w = (WIDTH / 17);
+    b.position.h = (WIDTH / 17);
     b.speed = 0;
     b.timervalue = 0;           //också en initiering för bomberna
     b.timerinit = 1;            //initierar timer för bomber
@@ -152,7 +153,7 @@ void sortBombsArray(Game theGame,int i)
 //sätter positionerna för explosionen efter vart bomben legat
 void initExplosionPosition(Game theGame, int playerID)
 {
-    int tilesize = 66, diff=2; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
+    int tilesize = TILESIZE, diff=DIFF; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
     int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
     SDL_Rect temp = {0,0,tilesize,tilesize};
     for(int i = 0; i < 1+4*theGame->player[returnarray[playerID]].explosionPower; i++){
@@ -219,29 +220,32 @@ void initExplosionPosition(Game theGame, int playerID)
 //centrerar bombernas position, i för inkommande possition, j och k för tillfälliga variabler 
 int correctBowlingBallPosx(int i)
 {
+    int size = WIDTH / 17;
     int j=0, k=0;
     i -= 12;
-    k=i/70;
-    j=i%70;
+    k=i/size;
+    j=i%size;
     if(j<35){
-        return (k*70);      //returnerar närmaste tile sen +3 för att få det helt centrerat
+        return (k*size);      //returnerar närmaste tile sen +3 för att få det helt centrerat
     }
     else{
-        return ((k+1)*70);
+        return ((k+1)*size);
     }   
 }
 
 
 int correctBowlingBallPosy(int i)
 {
+    int size = WIDTH / 17;
+    int offset = WIDTH / 39;
     int j=0, k=0;
-    k=(i-4)/70;
-    j=(i-4)%70;
+    k=(i-4)/size;
+    j=(i-4)%size;
     if(j<35){
-        return (k*70)+30;      //returnerar närmaste tile sen +3 för att få det helt centrerat
+        return (k*size)+offset;      //returnerar närmaste tile sen +3 för att få det helt centrerat
     }
     else{
-        return ((k+1)*70)+30;
+        return ((k+1)*size)+offset;
     }   
 }
 

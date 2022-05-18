@@ -32,7 +32,7 @@ void renderTextures(Game theGame)
     SDL_RenderClear(renderer);
 
     // updates/renders background
-    SDL_Rect backRect = {0, 100, WIDTH, HEIGHT};
+    SDL_Rect backRect = {0, (WIDTH/11.9), WIDTH, HEIGHT};
     SDL_RenderCopy(renderer, theGame->background, NULL, &backRect);
 
     renderPowerups(theGame);

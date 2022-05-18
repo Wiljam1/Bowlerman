@@ -10,10 +10,6 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 
-#define LEFT_X 70
-#define RIGHT_X 1076
-#define TOP_Y 140
-#define BOTTOM_Y 870
 
 // #define PLAYERHEIGHT = 100;
 // #define PLAYERWIDTH = 50;    //Använder structen för sånt här istället

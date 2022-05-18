@@ -15,7 +15,7 @@ void initAllPlayers(Game theGame);
 void renderWalls(Game theGame);
 void initAllWalls(Game theGame);
 Wall initWalls(int amount, int width, int height);  //How many walls are going to be used
-Wall wallPlace(int xPos, int yPos);  //Place a wall in the window
+Wall wallPlace(float xPos, float yPos);  //Place a wall in the window
 void wallDelete(int id); //Delete a placed wall
 int getWallXPosition(Wall w);
 int getWallYPosition(Wall w);

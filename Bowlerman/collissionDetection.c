@@ -12,6 +12,8 @@
 #include "bomb.h"
 #include "sounds.h"
 
+#define YOFFSET (WIDTH/39.667)
+
 void collisionWithWallsAround(Game theGame);
 void testCollosionWithBombs(Game theGame);
 void testCollisionWithWalls(Game theGame);
@@ -63,9 +65,9 @@ void collisionWithWallsAround(Game theGame)
             {
                 theGame->player[playerID].yPos = wallYPos - playerHeight;
             }
-            else if (playerYPos < wallYPos + 40)
+            else if (playerYPos < wallYPos + YOFFSET)
             {
-                theGame->player[playerID].yPos = wallYPos + 40;
+                theGame->player[playerID].yPos = wallYPos + YOFFSET;
             }
         }     
         if (i >= 20 && i < 40) // Nedre
@@ -118,7 +120,7 @@ void testCollosionWithBombs(Game theGame)
                     {
                         if(playerY + 30 < bombY + bombH && playerY > bombY){
                             //correct y
-                            theGame->player[id].yPos = bombY + bombH - 30;
+                            theGame->player[id].yPos = bombY + bombH - YOFFSET;
                             printf("Bumping head on bomb\n");
                         }
                         if(playerY + playerH > bombY && playerY < bombY){
@@ -130,7 +132,7 @@ void testCollosionWithBombs(Game theGame)
                 }
                 if(moveDirection == 'a' || moveDirection == 'd')        //för vänster och höger
                 {
-                    if(playerY + playerH > bombY && playerY + 30 < bombY + bombH)
+                    if(playerY + playerH > bombY && playerY + YOFFSET < bombY + bombH)
                     {
                         if(playerX < bombX + bombW && playerX > bombX){
                             //Correct x
@@ -171,7 +173,7 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
                             if(theGame->explosionPosition[j][k].x < playerX + playerW &&
                             theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > playerX &&
                             theGame->explosionPosition[j][k].y < playerY + playerH &&
-                            theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y - 30 > playerY)
+                            theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y - YOFFSET > playerY)
                             {
                                 //player dead
                                 if (flag == 1)      // testar med odödlighet
@@ -238,7 +240,7 @@ void testCollisionWithWalls(Game theGame)
                     {
                         if(playerY + 30 < wallY + wallH && playerY > wallY){
                             //correct y
-                            theGame->player[i].yPos = wallY + wallH - 30;
+                            theGame->player[i].yPos = wallY + wallH - YOFFSET;
                             printf("Bumping head\n");
                         }
                         if(playerY + playerH > wallY && playerY < wallY){
@@ -250,7 +252,7 @@ void testCollisionWithWalls(Game theGame)
                 }
                 if(moveDirection == 'a' || moveDirection == 'd') // för vänster och höger
                 {
-                    if(playerY + playerH > wallY && playerY + 30 < wallY + wallH)
+                    if(playerY + playerH > wallY && playerY + YOFFSET < wallY + wallH)
                     {
                         if(playerX < wallX + wallW && playerX > wallX){
                             //Correct x
@@ -396,7 +398,7 @@ void playerCollisionWithPowerup(Game theGame)
                 if(theGame->powerups[i].x < playerX + playerW &&
                     theGame->powerups[i].x + theGame->powerups[i].w > playerX &&
                     theGame->powerups[i].y < playerY + playerH &&
-                    theGame->powerups[i].h + theGame->powerups[i].y - 30 > playerY)
+                    theGame->powerups[i].h + theGame->powerups[i].y - YOFFSET > playerY)
                 {         
                     powerupGive(theGame, playerID, i);
                 }

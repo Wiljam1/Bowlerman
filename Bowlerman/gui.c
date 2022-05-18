@@ -4,11 +4,14 @@
 #include <SDL2/SDL_ttf.h>
 
 #define LEN 20
+#define XVALUE (WIDTH/6.61)
+#define YVALUE (WIDTH/238)
+#define FONTSIZE (WIDTH/37.1875)
 
 void initGUI(Game theGame)
 {
     TTF_Init(); //Init font system
-    theGame->font = TTF_OpenFont("resources/fonts/abduction2002.ttf", 32); //Set font
+    theGame->font = TTF_OpenFont("resources/fonts/abduction2002.ttf", FONTSIZE); //Set font
     theGame->updateFlag = true;
 }
 
@@ -56,7 +59,7 @@ void drawGUI(Game theGame)         // Kanske ska ändra hur de renderas i framti
     SDL_Renderer *renderer = theGame->renderer;
     //Render top row of labels
     for(int i = 0; i < LABELAMOUNT; i++){                                 //MANUALLY ADJUST LABELAMOUNT WHEN ADDING MORE LABELS
-        SDL_Rect textRect = {i*180, 5, theGame->labelW, theGame->labelH}; 
+        SDL_Rect textRect = {i*XVALUE, YVALUE, theGame->labelW, theGame->labelH}; 
         SDL_RenderCopy(renderer, theGame->labels[i], NULL, &textRect);     
     }
     //Render bottom row of labels (could be score for every player in the future)

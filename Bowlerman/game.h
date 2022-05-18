@@ -20,7 +20,7 @@
 #define LABELAMOUNT 4
 
 #define WIDTH 1190 // Move eventually
-#define HEIGHT 910 + 100
+#define HEIGHT (WIDTH / 1.178)
 #define MAXBOMBAMOUNT 20
 //-------------------------------------------------
 struct sounds
@@ -34,7 +34,8 @@ typedef struct sounds Sounds;
 struct wall{
     int id; //UDP?
     int destroyedWall;
-    int x, y, w, h;
+    float x, y; 
+    int w, h;
 };
 typedef struct wall Wall;
 
