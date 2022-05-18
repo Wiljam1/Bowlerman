@@ -66,13 +66,29 @@ void tryToPlaceBomb(Game theGame, int playerID)
     {
         if(theGame->bombs[playerID+amount].isPlaced == 0)
         {
-            theGame->bombs[playerID+amount] = initBomb();
-            theGame->bombs[playerID+amount].position.y = correctBowlingBallPosy(getPlayerYPosition(theGame->player[playerID]));
-            theGame->bombs[playerID+amount].position.x = correctBowlingBallPosx(getPlayerXPosition(theGame->player[playerID]));
-            theGame->bombs[playerID+amount].timervalue = initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID+amount);
-            theGame->bombs[playerID+amount].whoPlacedID = playerID;
-            theGame->player[playerID].amountOfBombsPlaced++;                //antal bomber som är placerade
-            theGame->bombs[playerID+amount].startvaluetimerbomb = SDL_GetTicks();
+            int bombalreadyplaced=0;
+            for(int i=0;i<MAXBOMBAMOUNT;i++)
+            {
+                if (theGame->bombs[i].position.y == correctBowlingBallPosy(getPlayerYPosition(theGame->player[playerID])) &&
+                    theGame->bombs[i].position.x == correctBowlingBallPosx(getPlayerXPosition(theGame->player[playerID])) && theGame->bombs[i].isPlaced == 1){
+                        bombalreadyplaced = 0;
+                        break;
+                }
+                else{
+                    bombalreadyplaced = 1;
+                }
+            }
+            if(bombalreadyplaced == 1)
+            {
+                theGame->bombs[playerID+amount] = initBomb();
+                theGame->bombs[playerID+amount].position.y = correctBowlingBallPosy(getPlayerYPosition(theGame->player[playerID]));
+                theGame->bombs[playerID+amount].position.x = correctBowlingBallPosx(getPlayerXPosition(theGame->player[playerID]));
+                theGame->bombs[playerID+amount].timervalue = initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID+amount);
+                theGame->bombs[playerID+amount].whoPlacedID = playerID;
+                theGame->player[playerID].amountOfBombsPlaced++;                //antal bomber som är placerade
+                theGame->bombs[playerID+amount].startvaluetimerbomb = SDL_GetTicks();
+            }
+            
         }
     }
 }
