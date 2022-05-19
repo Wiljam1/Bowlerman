@@ -396,7 +396,8 @@ void playerCollisionWithPowerup(Game theGame)
                     theGame->powerups[i].y < playerY + playerH &&
                     theGame->powerups[i].h + theGame->powerups[i].y - YOFFSET > playerY)
                 {         
-                    powerupGive(theGame, playerID, i);
+                    powerupGive(&theGame->player[playerID] , &theGame->powerups[i]);
+                    theGame->updateFlag = true;
                 }
             }
         }

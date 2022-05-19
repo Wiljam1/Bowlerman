@@ -41,19 +41,18 @@ void renderPowerups(Game theGame)
     }
 }
 
-void powerupGive(Game theGame, int playerID, int i)
+void powerupGive(Player *pPlayer, Powerup *pPowerup)
 {
-    if(theGame->powerups[i].type == 0){ //give speed
-        playerIncreaseSpeed(&theGame->player[playerID]);
+    if(pPowerup->type == 0){ //give speed
+        playerIncreaseSpeed(pPlayer);
     }
-    else if(theGame->powerups[i].type == 1){ //give more power
-        playerAddExplosionPower(&theGame->player[playerID], 1);
+    else if(pPowerup->type == 1){ //give more power
+        playerAddExplosionPower(pPlayer, 1);
     }
-    else if(theGame->powerups[i].type == 2){ //give more bombs
-        playerAddAmountOfBombs(&theGame->player[playerID], 1);
+    else if(pPowerup->type == 2){ //give more bombs
+        playerAddAmountOfBombs(pPlayer, 1);
     }
-    theGame->powerups[i].isPickedUp = true;
-    theGame->updateFlag = true;
+    PowerUpSetIsPickedUp(pPowerup, true);
 }
 
 Powerup powerupPlace(int xPos, int yPos, int type)
@@ -144,9 +143,9 @@ PUBLIC void PowerUpSetIndestructable(Powerup p, int i)
     p.indestructable = i;
 }
 
-PUBLIC void PowerUpSetIsPickedUp(Powerup p, int i)
+PUBLIC void PowerUpSetIsPickedUp(Powerup *p, bool condition)
 {
-    p.isPickedUp = i;
+    p->isPickedUp = condition;
 }
 
 PUBLIC void PowerUpSetSentViaUDP(Powerup p, int i)
