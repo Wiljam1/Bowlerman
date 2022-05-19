@@ -43,14 +43,15 @@ struct udpStruct
 };
 typedef struct udpStruct UDPStruct;
 
-
+void pingUDPserver(Game theGame, UDPData *udpData, UDPStruct *udpValues); //pings the UDP server, so that the UDP-server gets players-IP at the start of the game.
 void initSDLNet();          //initiates SDLNet
 void initUDP(UDPStruct *u);   //inits SDL-net with correct IP-adresses etc.
 UDPData UDPDataReset();  //creates and resets a UDP-data struct
 UDPStruct createUDPstruct();     //initializes UDP IP-adress struct
-void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues);  //get player ID via UDP
-
-void checkPlayerAmmount(Game theGame);  //checks how many players are online and  stores it in theGame->playerAmmount - currently the value is static and set at 4.
 void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues);  //sends and receives data via UDP
+
+//dessa under används inte:
+void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues);  //get player ID via UDP
+void checkPlayerAmmount(Game theGame);  //checks how many players are online and  stores it in theGame->playerAmmount - currently the value is static and set at 4.
 
 #endif

@@ -65,6 +65,8 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
 	//manageTCP(&tcpValues);          //starts TCP
 	//closeTCP(&tcpValues);           //closes TCP
 
+
+
     // Init sounds
     initSounds();
     //Init random seed
@@ -78,6 +80,9 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
 
     //initierar spelare
     initAllPlayers(theGame);
+
+    //ping UDP server so it gets players IP and port.
+    pingUDPserver(theGame, udpData, udpValues);
     
     //initierar väggar
     initAllWalls(theGame);

@@ -196,6 +196,17 @@ PUBLIC UDPStruct createUDPstruct()
     return u;
 }
 
+PUBLIC void pingUDPserver(Game theGame, UDPData *udpData, UDPStruct *udpValues)
+{
+    memcpy(udpValues->p->data, &(*udpData), sizeof(UDPData) + 1);
+    udpValues->p->len = sizeof(UDPData) + 1;
+    udpValues->p->address.host = udpValues->srvadd.host; /* Set the destination host */
+    udpValues->p->address.port = udpValues->srvadd.port; /* And destination port */
+    SDLNet_UDP_Send(udpValues->sd, -1, udpValues->p);
+}
+
+
+//detta gör  vi via TCP istället
 PUBLIC void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 {
      // 1st: send info to UDP-server
