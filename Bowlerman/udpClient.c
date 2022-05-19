@@ -12,6 +12,7 @@ void UDPSetScore(UDPData *u, int id, int score);
 void UDPSetNoOfLives(UDPData *u, int lives);
 int UDPGetPlayerID(UDPData *u);
 int UDPGetScore(UDPData *u, int i);
+void UDPSetMoveDirection(UDPData *u, char c);
 PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 {
     int playerID = theGame->playerIDLocal;
@@ -72,6 +73,7 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         scoreGUIFlag = 1;
     }
     // send data if movement or bomb-placement
+    UDPSetMoveDirection(udpData, playerGetMoveDirection(theGame->player[playerID]));
     if (abs(x_posOld - x_pos) >= UPDATESPEED || abs(y_posOld - y_pos) >= UPDATESPEED || *flag == 1 || udpData->placeBomb==1 || scoreGUIFlag == 1)
     {
         UDPSetPlayerID(udpData, playerID);
@@ -262,6 +264,10 @@ void UDPSetScore(UDPData *u, int id, int score)
 void UDPSetNoOfLives(UDPData *u, int lives)
 {
     u->noOfLives = lives;
+}
+void UDPSetMoveDirection(UDPData *u, char c)
+{
+    u->moveDirection = c;
 }
 
 int UDPGetPlayerID(UDPData *u)
