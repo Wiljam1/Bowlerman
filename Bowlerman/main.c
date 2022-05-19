@@ -9,5 +9,6 @@ int main(int argc, char *argv[])
     Game bowlerman = createWindow();
     gameUpdate(bowlerman);
     destroyGame(bowlerman);
+    printf("Crash ");
     return 0;
 }

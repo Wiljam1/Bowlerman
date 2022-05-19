@@ -8,7 +8,7 @@ exit
 
 //UDP server for infinite amount of players.
 //limitations: 512 bytes of data per package (?)
- 
+#define SDL_MAIN_HANDELED
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

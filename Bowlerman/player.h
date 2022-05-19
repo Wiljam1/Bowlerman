@@ -24,6 +24,7 @@ typedef struct playerSprites PlayerSprites;
 //initiate player position with x and y coordinates
 PlayerSprites GetPlayerSprite();
 Player initPlayer(int xPos, int yPos, int playerID);
+Player playerGetLocalPlayer(Player p);
 
 void UpdatePlayerTextures(Game theGame);
 float playerGetXPosition(Player p);

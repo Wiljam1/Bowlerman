@@ -23,7 +23,6 @@ Powerup rollForPowerup(int *pCurrentPowerup, int ID, int xPos, int yPos)
         p.id = ID;
         printf("created a powerup off-screen!\n");
     }
-     printf("Crash");
      if(*pCurrentPowerup == POWERUPAMOUNT){
         *pCurrentPowerup = 0;
      }

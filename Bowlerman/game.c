@@ -122,21 +122,21 @@ bool checkEvents(Game theGame)
                 //Testing
                 playerIncreaseSpeed(&theGame->player[theGame->playerIDLocal]);
                 printf("Player speed is now: %lf\n", getPlayerSpeed(theGame->player[theGame->playerIDLocal]));
-                theGame->updateFlag = true;
+                updateScoreFlag(theGame, true);
                 break;
             case SDLK_y:
                 //Testing
                 playerAddExplosionPower(&theGame->player[theGame->playerIDLocal], 1);
-                theGame->updateFlag = true;
+                updateScoreFlag(theGame, true);
                 break;
             case SDLK_u:
                 //Testing
                 playerAddAmountOfBombs(&theGame->player[theGame->playerIDLocal], 1);
-                theGame->updateFlag = true;
+                updateScoreFlag(theGame, true);
                 break;
             case SDLK_i:
                 playerAddLives(&theGame->player[theGame->playerIDLocal], 1);
-                theGame->updateFlag = true;
+                updateScoreFlag(theGame, true);
                 break;
             case SDLK_p:                                            /*!!! P = RESET-BUTTON!!! (only works when testing alone I think)*/
                 //Testing
@@ -161,8 +161,9 @@ void manageMovementInputs(Game theGame)
 {
     double velX = 0, velY = 0;
     int id = getLocalID(theGame);
+    Player player = playerGetLocalPlayer(theGame->player[id]);
     char direction;
-    Player player = theGame->player[theGame->playerIDLocal];
+
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (player.isInvulnerable == false || player.isDead == false)
     {
@@ -454,6 +455,10 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
     ThreadStruct threadStruct;          //creates a struct for threads for TCP
 	threadStruct.startflag=0;
     
+    // SDL_DestroyTexture(menuT1);
+    // SDL_DestroyTexture(menuT2);
+    // SDL_DestroyTexture(menuT3);
+
     int startGame=false;
     bool breakLoop = false;
     while (!breakLoop)
@@ -466,6 +471,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                 case SDL_QUIT:
                     *quitGame = true;
                     breakLoop = true;
+                    //destroyGame(theGame);
                     break;
                 case SDL_WINDOWEVENT_CLOSE:
                     if(theGame->window)
@@ -473,6 +479,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                         theGame->window = NULL;
                         *quitGame = true;
                         breakLoop = true;
+                        //destroyGame(theGame);
                     }
                     break;
                 case SDL_KEYDOWN:
@@ -520,6 +527,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                             printf("\nQUIT GAME\n");
                             *quitGame = true;
                             breakLoop = true;
+                            //destroyGame(theGame);
                             break;
                         //case: OPTIONS (inte så viktigt)
                         //case: CREDITS (inte så viktigt)
@@ -538,9 +546,6 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
 		}
         SDL_Delay(50);
     }
-    SDL_DestroyTexture(menuT1);
-    SDL_DestroyTexture(menuT2);
-    SDL_DestroyTexture(menuT3);
 }
 // renders background and players etc.
 PUBLIC void destroyGame(Game theGame)
@@ -560,15 +565,14 @@ PUBLIC void destroyGame(Game theGame)
     for(int i = 0; i < 3; i++){
         SDL_DestroyTexture(theGame->textureWall[i]);
     }
-    SDL_DestroyTexture(theGame->bombExplosion_texture);
+
     destroyGUI(theGame);
     SDLNet_Quit();
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();
-    //free(theGame);
 }
-void flagSetUpdate(Game theGame, bool cond)
+void updateScoreFlag(Game theGame, bool cond)
 {
     theGame->updateFlag = cond;
 }
