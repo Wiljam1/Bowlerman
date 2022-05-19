@@ -1,9 +1,4 @@
 #include  "udpServerWithTCPclient.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "SDL2/SDL_net.h"
-#include "SDL2/SDL_thread.h"
 #define PUBLIC /* empty */
 #define PRIVATE static
 

@@ -27,8 +27,14 @@ sounds.o:
 clean_windows:
 	del /Q /F main.exe udpServer.exe *.o
 
-udpServer:
-	gcc -o udpServer udpServer.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
+alludpServer: udpServer.o udpServerWithTCPclient.o
+	gcc -o udpserver udpServer.o udpServerWithTCPclient.o -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
+udpServer.o:
+	gcc -c udpServer.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
+udpServerWithTCPclient.o:
+	gcc -c udpServerWithTCPclient.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
+
+
 tcpServer:
 	gcc -o tcpServer tcpServer.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net
 	

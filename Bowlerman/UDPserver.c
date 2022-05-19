@@ -14,6 +14,7 @@ exit
 #include <string.h>
  
 #include "SDL2/SDL_net.h"
+#include  "udpServerWithTCPclient.h"
 
 struct data {
    int x;
@@ -41,13 +42,10 @@ int main(int argc, char **argv)
     int quit, a, b;
     struct data udpData = {0, 0, 0, 0};
  
-	/* Initialize SDL_net */
-	if (SDLNet_Init() < 0)
-	{
-		fprintf(stderr, "SDLNet_Init: %s\n", SDLNet_GetError());
-		exit(EXIT_FAILURE);
-	}
- 
+    initSDLNet(); //inits SDL net
+
+
+
 	/* Open a socket */
 	if (!(sd = SDLNet_UDP_Open(2001)))
 	{

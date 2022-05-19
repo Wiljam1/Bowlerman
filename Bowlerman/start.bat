@@ -1,9 +1,9 @@
 make clean_windows
-make udpServer
+make alludpServer
 ::make tcpServer
 make windows
 ::start tcpServer.exe
-::start udpServer.exe        
+start udpServer.exe        
 :: ^START GÖR ATT DEN GÅR VIDARE TILL NÄSTA "RAD" MEDAN .EXE-FILEN KÖRS
 ::start main.exe    
 main.exe                   
