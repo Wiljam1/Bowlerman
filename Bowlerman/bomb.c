@@ -115,7 +115,7 @@ void sortBombsArray(Game theGame,int i)
                     //initExplosionPosition(theGame, i+j*4-4);
                     int a=0;
                     theGame->explosionPosition[i+j*4-4][a] = theGame->explosionPosition[i+j*4][a];
-                    for(int l=1;l<playerGetExplosionPower(theGame->player[i+j*4])+1;l++)
+                    for(int l=0;l<playerGetExplosionPower(theGame->player[i]);l++)
                     {
                         a++;
                         theGame->explosionPosition[i+j*4-4][a] = theGame->explosionPosition[i+j*4][a];

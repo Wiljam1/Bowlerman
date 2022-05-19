@@ -15,7 +15,7 @@ int correctBowlingBallPosy(int i);                                      //samma 
 void sortBombsArray(Game theGame,int i);                                //sorterar bombernas array
 void initExplosionPosition(Game theGame, int playerID);                 //initierar exposionspositionen
 Bowlingball initBomb();                                                 //skapar bomb
-//void loadBomb();                                                        
+void loadBomb();                                                        
 //int timeleft(int time, int playerID);                                   
 int getBombXPosition(Bowlingball b);                                    //resterande är obvious vad de gör, läs funktionsnamnet
 int getBombYPosition(Bowlingball b);

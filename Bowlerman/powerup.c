@@ -10,6 +10,7 @@
 
 Powerup rollForPowerup(int *pCurrentPowerup, int ID, int xPos, int yPos)
 {
+    printf("Rolling for powerup..\n");
     Powerup p;
     if((rand()%100+1) < 40){ // 40% chance to spawn a powerup                                                    
         p = powerupPlace(xPos, yPos, rand()%POWERUPTYPES); //Type = random number between 0 and how many types there are
@@ -54,8 +55,8 @@ Powerup powerupPlace(int xPos, int yPos, int type)
     p.y = yPos + powOffset;
     p.type = type;
     p.isPickedUp = false;
-    p.sentViaUDP = 0;
-    //p.id = 0;
+    p.sentViaUDP = false;
+    p.id = 0;
     p.indestructable=1;
     return p;
 }
