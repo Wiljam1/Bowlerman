@@ -41,6 +41,11 @@ void playerAddLives(Player *p, int amountOfBombs);
 void playerAddScore(Player *p, int score);
 PUBLIC void getStartPos(Player *p);
 PUBLIC int getLocalID(Game theGame);
+int playerGetAmountOfBombsPlaced(Player p);
+int playerGetAmountOfBombs(Player p);
+int playerGetIsInvulnerable(Player p);
+void playerAddAmountOfBombsPlaced(Player *p, int i);
+int playerGetExplosionPower(Player p);
 
 //Change players movedirection
 PUBLIC void updateMovementDirection(Game theGame, int id, char c);

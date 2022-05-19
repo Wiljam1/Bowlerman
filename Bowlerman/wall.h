@@ -20,5 +20,7 @@ int getWallXPosition(Wall w);                       //Returns X position of wall
 int getWallYPosition(Wall w);                       //Returns Y position of wall.
 int getWallHeight(Wall w);                          //Returns height of wall.
 int getWallWidth(Wall w);                           //Returns width of wall.
+int WallGetDestroyedWall(Wall w);
+void WallSetDestroyedWall(Wall *w, int i);
 
 #endif

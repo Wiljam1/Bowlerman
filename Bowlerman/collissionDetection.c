@@ -101,7 +101,7 @@ void testCollosionWithBombs(Game theGame)
 {
     for (int i=0;i<MAXBOMBAMOUNT;i++)
     {
-        if (theGame->bombs[i].placedBombRestriction == 1)
+        if (BombGetPlacedBombRestriction(theGame->bombs[i]) == 1)
         {
             playerStandingOnBomb(theGame);
         }
@@ -110,7 +110,7 @@ void testCollosionWithBombs(Game theGame)
             int id = getLocalID(theGame);
             float playerW = getPlayerWidth(theGame->player[theGame->playerIDLocal]), playerH = getPlayerHeight(theGame->player[theGame->playerIDLocal]);
             float playerX = getPlayerXPosition(theGame->player[theGame->playerIDLocal]), playerY = getPlayerYPosition(theGame->player[theGame->playerIDLocal]);
-            int moveDirection = theGame->player[id].moveDirection;
+            int moveDirection = getMoveDirection(theGame->player[id]);
             int bombX = getBombXPosition(theGame->bombs[i]), bombY = getBombYPosition(theGame->bombs[i]), bombW = getBombWidth(theGame->bombs[i]), bombH = getBombHeight(theGame->bombs[i]);
             if(theGame->bombs[i].placedBombRestriction == 0)
             {
@@ -121,6 +121,7 @@ void testCollosionWithBombs(Game theGame)
                         if(playerY + YOFFSET < bombY + bombH && playerY > bombY){
                             //correct y
                             theGame->player[id].yPos = bombY + bombH - YOFFSET;
+                            
                         }
                         if(playerY + playerH > bombY && playerY < bombY){
                             //correct y

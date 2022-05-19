@@ -134,22 +134,22 @@ PUBLIC int PowerUpGetIndestructable(Powerup p)
     return p.indestructable;
 }
 
-PUBLIC void PowerUpSetID(Powerup p, int i)
+PUBLIC void PowerUpSetID(Powerup *p, int i)
 {
-    p.id = i;
+    p->id = i;
 }
 
-PUBLIC void PowerUpSetIndestructable(Powerup p, int i)
+PUBLIC void PowerUpSetIndestructable(Powerup *p, int i)
 {
-    p.indestructable = i;
+    p->indestructable = i;
 }
 
-PUBLIC void PowerUpSetIsPickedUp(Powerup p, int i)
+PUBLIC void PowerUpSetIsPickedUp(Powerup *p, int i)
 {
-    p.isPickedUp = i;
+    p->isPickedUp = i;
 }
 
-PUBLIC void PowerUpSetSentViaUDP(Powerup p, int i)
+PUBLIC void PowerUpSetSentViaUDP(Powerup *p, int i)
 {
-    p.sentViaUDP = i;
+    p->sentViaUDP = i;
 }

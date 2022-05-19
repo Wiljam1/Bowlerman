@@ -195,3 +195,13 @@ PUBLIC int getWallYPosition(Wall w)
 {
     return w.y;
 }
+
+PUBLIC int WallGetDestroyedWall(Wall w)
+{
+    return w.destroyedWall;
+}
+
+PUBLIC void WallSetDestroyedWall(Wall *w, int i)
+{
+    w->destroyedWall = i;
+}

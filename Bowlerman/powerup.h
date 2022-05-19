@@ -26,9 +26,10 @@ int PowerUpGetIsPickedUp(Powerup p);
 int PowerUpGetSentViaUDP(Powerup p);
 int PowerUpGetID(Powerup p);
 int PowerUpGetIndestructable(Powerup p);
-void PowerUpSetID(Powerup p, int i);
-void PowerUpSetIndestructable(Powerup p, int i);
-void PowerUpSetIsPickedUp(Powerup p, int i);
-void PowerUpSetSentViaUDP(Powerup p, int i);
+void PowerUpSetID(Powerup *p, int i);
+void PowerUpSetIndestructable(Powerup *p, int i);
+void PowerUpSetIsPickedUp(Powerup *p, int i);
+void PowerUpSetSentViaUDP(Powerup *p, int i);
+char getMoveDirection(Player p);
 
 #endif

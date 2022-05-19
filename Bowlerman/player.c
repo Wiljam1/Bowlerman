@@ -210,6 +210,23 @@ PUBLIC void getStartPos(Player *p)
             break;
     }
 }
+PUBLIC int playerGetAmountOfBombsPlaced(Player p)
+{
+    return p.amountOfBombsPlaced;
+}
+PUBLIC int playerGetAmountOfBombs(Player p)
+{
+    return p.amountOfBombs;
+}
+PUBLIC int playerGetIsInvulnerable(Player p)
+{
+    return p.isInvulnerable;
+}
+PUBLIC int playerGetExplosionPower(Player p)
+{
+    return p.explosionPower;
+}
+
 void playerIncreaseSpeed(Player *p)
 {
     playerAddSpeedDisplay(p, 1);
@@ -237,6 +254,10 @@ void playerAddAmountOfBombs(Player *p, int amountOfBombs)
     p->amountOfBombs += amountOfBombs;
     if(p->amountOfBombs > MAXBOMBS)
         p->amountOfBombs = MAXBOMBS;
+}
+void playerAddAmountOfBombsPlaced(Player *p, int i)
+{
+    p->amountOfBombsPlaced += i;
 }
 void playerAddLives(Player *p, int lives)
 {
