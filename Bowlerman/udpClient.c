@@ -79,13 +79,13 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         //setUDPScore(udpData, playerID, playerGetScore(theGame->player[playerID]));
         for(int i=0;i<POWERUPAMOUNT;i++)
         {
-            if(theGame->powerups[i].sentViaUDP == 0)
+            if(theGame->powerups[i].sentViaUDP == false)
             {
                 udpData->powerupsX = theGame->powerups[i].x;
                 udpData->powerupsY = theGame->powerups[i].y;
                 udpData->powerupsID = theGame->powerups[i].id;
                 udpData->powerupsType = theGame->powerups[i].type;
-                theGame->powerups[i].sentViaUDP = 1;
+                theGame->powerups[i].sentViaUDP = true;
                 break;
             }     
         }
