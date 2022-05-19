@@ -51,11 +51,11 @@ int playerGetExplosionPower(Player p);
 void playerSetMoveDirection(Player *p, char c);
 void playerSetID(Player *p, int id);
 
-void playerSetXPos(Player *p, int x);
-void playerSetYPos(Player *p, int y);
+void playerSetXPos(Player *p, float x);
+void playerSetYPos(Player *p, float y);
 
-void playerSetOldXPos(Player *p, int x);
-void playerSetOldYPos(Player *p, int y);
+void playerSetOldXPos(Player *p, float x);
+void playerSetOldYPos(Player *p, float y);
 int playerGetOldXpos(Player p);
 int playerGetOldYPos(Player p);
 int playerGetScore(Player p);

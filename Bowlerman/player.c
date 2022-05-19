@@ -22,7 +22,7 @@
 
 Uint32 pDeathCallback();
 
-PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
+PUBLIC Player initPlayer(int initX, int initY, int playerID)
 {
     //malloc(sizeof(struct playerController));
     int height = (WIDTH / 17);
@@ -36,8 +36,8 @@ PUBLIC Player initPlayer(int xPos, int yPos, int playerID)
     p.left = 0;
     p.xVel = 0;
     p.yVel = 0;
-    p.playerRect.x = p.xPos = p.xPosOld = xPos; // Startvärden för x och y ges till alla variabler.
-    p.playerRect.y = p.yPos = p.yPosOld = yPos;
+    p.playerRect.x = p.xPos = p.xPosOld = initX; // Startvärden för x och y ges till alla variabler.
+    p.playerRect.y = p.yPos = p.yPosOld = initY;
     p.speed = (double)MAXSPEED/2;
     p.speedDisplay = 1;
     p.amountOfBombs = 1;        //antal bomber, börjar på 1
@@ -154,21 +154,21 @@ PUBLIC void updatePlayerYPosition(Player *p, double velY)
 {
     p->yPos += velY;
 }
-PUBLIC void playerSetXPos(Player *p, int x)
+PUBLIC void playerSetXPos(Player *p, float x)
 {
     p->xPos = x;
 }
-PUBLIC void playerSetYPos(Player *p, int y)
+PUBLIC void playerSetYPos(Player *p, float y)
 {
     p->yPos = y;
 }
 
-PUBLIC void playerSetOldXPos(Player *p, int x)
+PUBLIC void playerSetOldXPos(Player *p, float x)
 {
     p->xPosOld = x;
 }
 
-PUBLIC void playerSetOldYPos(Player *p, int y)
+PUBLIC void playerSetOldYPos(Player *p, float y)
 {
     p->yPosOld = y;
 }

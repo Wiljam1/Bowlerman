@@ -20,14 +20,15 @@ struct data {
    int y;
    int status;
    int playerID;
+   char moveDirection;
+   int placeBomb;
    int noOfLives;
    int score[4];
-   char moveDirection;
-    int placeBomb;
-    int powerupsX;
-    int powerupsY;
-    int powerupsType;
-    int powerupsID;
+   
+   int powerupsX;
+   int powerupsY;
+   int powerupsType;
+   int powerupsID;
 };
 
 int main(int argc, char **argv)

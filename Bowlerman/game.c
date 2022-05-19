@@ -161,7 +161,7 @@ bool checkEvents(Game theGame)
 void manageMovementInputs(Game theGame)
 {
     double velX = 0, velY = 0;
-    int id = theGame->playerIDLocal;
+    int id = getLocalID(theGame);
     char direction;
     Player player = theGame->player[theGame->playerIDLocal];
     const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -439,7 +439,7 @@ void menu(Game theGame, bool *done, UDPStruct *udpvalues)
     SDL_Texture *menuT2 = SDL_CreateTextureFromSurface(theGame->renderer, theGame->window_surface);
     theGame->window_surface = TTF_RenderText_Blended(theGame->font, "3) QUIT GAME", black);
     SDL_Texture *menuT3 = SDL_CreateTextureFromSurface(theGame->renderer, theGame->window_surface);
-    SDL_FreeSurface(theGame->window_surface);
+    //SDL_FreeSurface(theGame->window_surface);
 
     SDL_Rect textRect1 = {x, y1, width, height};
     SDL_Rect textRect2 = {x, y2, width, height};
