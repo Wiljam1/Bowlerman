@@ -49,17 +49,16 @@ PUBLIC Game createWindow()
 // initializes startvalues for game
 void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame)
 {
-    // Loading textures from file
-    loadAllTextures(theGame);
-    //inits SDL-net and loads in correct IP-adresses etc.
-    initSDLNet();
-     //Init GUI
-    initGUI(theGame);
-    //Menu loop
-    initUDP(udpValues);
-    menu(theGame, quitGame, udpValues);
+    
+    loadAllTextures(theGame);  // Loading textures from file
+    
+    initSDLNet();           //inits SDL-net
+     
+    initGUI(theGame);       //Init GUI
+    
+    initUDP(udpValues);     //init UDP
 
-    //inits UDP
+    menu(theGame, quitGame, udpValues);     //Menu loop
 
     //TCPstruct tcpValues = createTCPstruct();     //returns a struct for tcp-init-struct.	
 	//initTCP(&tcpValues);            //initiates TCP
@@ -72,10 +71,10 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
     srand(time(NULL));
     
     // get playerID via UDP and saves it in theGame->playerIDLocal
-    getPlayerIDviaUDP(theGame, udpData, udpValues);
+    //getPlayerIDviaUDP(theGame, udpData, udpValues);
     
     //Kollar player-ammount (hur många spelare som är online). Just nu är den satt till att alltid vara 4.
-    checkPlayerAmmount(theGame);
+    //checkPlayerAmmount(theGame);
 
     //initierar spelare
     initAllPlayers(theGame);
@@ -427,7 +426,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
     int height = WIDTH / 11.7;
     int y1 = x; int y2 = WIDTH / 4; int y3 = width;
 
-    bool loop = true;
+    
     int status;
     SDL_Color black = {0, 0, 0, 0};
     SDL_Rect backRect = {0, 0, WIDTH, HEIGHT};
@@ -449,8 +448,15 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
     SDL_RenderCopy(theGame->renderer, menuT3, NULL, &textRect3);
 
     SDL_RenderPresent(theGame->renderer); // present renderer
+
+    SDL_Thread* thread; //thread used for TCP-waiting (when joining game)
+    TCPstruct tcpValues = createTCPstruct();     //returns a struct for tcp-init-struct.	
+    ThreadStruct threadStruct;          //creates a struct for threads for TCP
+	threadStruct.startflag=0;
     
-    while (loop)
+    int startGame=false;
+    bool breakLoop = false;
+    while (!breakLoop)
     {
         while(SDL_PollEvent(&theGame->window_event))
         {
@@ -459,20 +465,20 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
             {
                 case SDL_QUIT:
                     *quitGame = true;
-                    loop = false;
+                    breakLoop = true;
                     break;
                 case SDL_WINDOWEVENT_CLOSE:
                     if(theGame->window)
                     {
                         theGame->window = NULL;
                         *quitGame = true;
-                        loop = false;
+                        breakLoop = true;
                     }
                     break;
                 case SDL_KEYDOWN:
                     switch(event.key.keysym.sym)
                     {
-                        case SDLK_1:
+                        case SDLK_1: //host server
                             // ip = writeIP(); / fetch user IP
                             // createServer(ip); -Starta eller kompilera om(?) servern med användarens IP
                             // joinLobby(ip);  -Scen där man ser vilka som har joinat lobbyn
@@ -481,31 +487,56 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                             ShellExecuteA(GetDesktopWindow(),"open","udpServer.exe",NULL,NULL,SW_SHOW);  //Start server file
                             SDL_Delay(1000);
                             printf("Server created!\n");
+
+                            char ip1[]={"127.0.0.1"};
+                            strcpy(udpvalues->serverIp, ip1);
+                            initTCP(&tcpValues, ip1);		//connectar till angiven Ip-adress
+                            threadStruct.sd=tcpValues.sd;  //copy socket descriptor into thread-struct
+                            theGame->playerIDLocal = getPlayerIDviaTCP(&tcpValues); 
+                            printf("playerID: %d\n", theGame->playerIDLocal);
+                            startGameViaTCP(&tcpValues, &threadStruct); //starts the game, and sends the info out to all other clients
                             *quitGame = false;
-                            loop = false;
+                            //breakLoop = true;
                             break;
-                        case SDLK_2:
+                        case SDLK_2: //join server
                             printf("\nJOIN SERVER\n");
                             //Nån menyfunktion där man skriver in IPadressen för hosten
                             //just nu hårdkodad.
                             // ip = writeIP(); -Scen där man får skriva IP:n man vill joina
                             // joinLobby(ip);  -Scen där man ser vilka som har joinat lobbyn
-                            char ip[] = "127.0.0.1";
-                            strcpy(udpvalues->serverIp, ip);
+                            char ip2[]={"127.0.0.1"};
+                            strcpy(udpvalues->serverIp, ip2);
+                            
+                            initTCP(&tcpValues, ip2);		//connectar till angiven Ip-adress
+                            threadStruct.sd=tcpValues.sd; //copy socket descriptor into thread-struct
+                            theGame->playerIDLocal = getPlayerIDviaTCP(&tcpValues); 
+                            printf("playerID: %d\n", theGame->playerIDLocal);
+                            thread = SDL_CreateThread(receiveTCP, "test", (void *) &threadStruct); //creates a thread waiting to see if the game is starting or not.
+
                             *quitGame = false;
-                            loop = false;
+                            //breakLoop = true;
                             break;
                         case SDLK_3:
                             printf("\nQUIT GAME\n");
                             *quitGame = true;
-                            loop = false;
+                            breakLoop = true;
                             break;
                         //case: OPTIONS (inte så viktigt)
                         //case: CREDITS (inte så viktigt)
                     }
             }  
         }
-        SDL_Delay(10);
+        if(threadStruct.startflag==1)
+		{
+			printf("playerammount: %d\n", threadStruct.playerAmmount);
+			printf("startflag: %d\n", threadStruct.startflag);
+            theGame->playerAmount=threadStruct.playerAmmount;
+			//get playerammount & start game (exit breakLoop)
+			//thread=NULL;  //closes thread
+            breakLoop=true;
+			break;
+		}
+        SDL_Delay(50);
     }
     SDL_DestroyTexture(menuT1);
     SDL_DestroyTexture(menuT2);
