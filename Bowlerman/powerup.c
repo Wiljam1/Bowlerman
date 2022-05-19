@@ -12,21 +12,19 @@
 Powerup rollForPowerup(int *pCurrentPowerup, int ID, int xPos, int yPos)
 {
     Powerup p;
-    printf("Rolling for powerup...\n");
-    if(true/*(rand() % 100+1) < 40*/){ // 40% chance to spawn a powerup    
-        printf("Creating p..\n");                                                  
+    if((rand()%100+1) < 40){ // 40% chance to spawn a powerup                                                    
         p = powerupPlace(xPos, yPos, rand()%POWERUPTYPES); //Type = random number between 0 and how many types there are
-        printf("Assigning ID to p..\n");
         p.id = ID;
-        printf("Setting timer for p..\n");
         p.indestructable = timerForPowerups(SDL_GetTicks(), 1500, ID);
-        printf("INCREMENTING pCurrentPowerup! it's value is: %d\n", *pCurrentPowerup);
         *pCurrentPowerup += 4; //Go to next place in array for next powerup being made
-        printf("pCurrentPowerup value is now: %d\n", *pCurrentPowerup);
+    }
+    else{ //Create a powerup off-screen (to have something to put in the array and not cause crash)
+        p = powerupPlace(3000+ID*10, 3000+ID*10, 0); //This powerup will eventually be overwritten by something else in the array
+        p.id = ID;
+        printf("created a powerup off-screen!\n");
     }
      
      if(*pCurrentPowerup == POWERUPAMOUNT){
-         printf("RESETTING pCurrentPowerup! since it's value is: %d\n", *pCurrentPowerup);
         *pCurrentPowerup = 0;
      }
     return p;

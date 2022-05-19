@@ -71,7 +71,6 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *done)
     //Init random seed
     srand(time(NULL));
     
-
     // get playerID via UDP and saves it in theGame->playerIDLocal
     getPlayerIDviaUDP(theGame, udpData, udpValues);
     
