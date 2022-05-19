@@ -197,8 +197,8 @@ void manageMovementInputs(Game theGame)
     }
     // Update player positions
     updateMovementDirection(&theGame->player[id], direction);
-    updatePlayerXPosition(&theGame->player[id] velX);
-    updatePlayerYPosition(&theGame->player[id] velY);
+    updatePlayerXPosition(&theGame->player[id], velX);
+    updatePlayerYPosition(&theGame->player[id], velY);
 }
 
 // game loop

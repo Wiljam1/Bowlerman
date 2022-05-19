@@ -61,7 +61,7 @@ int playerGetOldYPos(Player p);
 
 
 //Change players movedirection
-void updateMovementDirection(Player *p, char c)
+void updateMovementDirection(Player *p, char c);
 //Change player x position
 void updatePlayerXPosition(Player *p, double velX);
 //Change player y position
