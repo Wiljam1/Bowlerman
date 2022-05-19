@@ -210,11 +210,11 @@ void playerStandingOnBomb(Game theGame)
                 bombY < playerY + playerH &&
                 bombH + bombY > playerY)
             {         
-                BombSetPlacedBombRestriction(theGame->bombs[playerID+i*4], 1);
+                BombSetPlacedBombRestriction(&theGame->bombs[playerID+i*4], 1);
             }
             else 
             {
-                BombSetPlacedBombRestriction(theGame->bombs[playerID+i*4], 0);
+                BombSetPlacedBombRestriction(&theGame->bombs[playerID+i*4], 0);
             }
         }
     }

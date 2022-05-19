@@ -35,7 +35,7 @@ void BombSetStartvaluetimerbomb(Bowlingball *b, int i);
 void BombSetExplosionInit(Bowlingball *b, int i);
 void BombSetTimerInit(Bowlingball *b, int i);
 void BombSetTimerValue(Bowlingball *b, int i);
-int BombSetPlacedBombRestriction(Bowlingball b, int i);
+int BombSetPlacedBombRestriction(Bowlingball *b, int i);
 
 
 
