@@ -50,7 +50,7 @@ PUBLIC Player initPlayer(int initX, int initY, int playerID)
     p.isMoving = false;  //is not enforced by keyboard inputs though.
     p.isDead = false;
     p.isInvulnerable = false;
-    p.noOfLives = 3;
+    p.noOfLives = 3; // OM du ändrar här måste du ändra till samma i UDPDataReset!!
     p.score = 0;
 
     return p;
@@ -142,7 +142,7 @@ void UpdatePlayerTextures(Game theGame)
     }
 }
 
-PUBLIC void updateMovementDirection(Player *p, char c)
+PUBLIC void playerSetMoveDirection(Player *p, char c)
 {
     p->moveDirection = c;
 }
@@ -174,17 +174,12 @@ PUBLIC void playerSetOldYPos(Player *p, float y)
     p->yPosOld = y;
 }
 
-PUBLIC void playerSetMoveDirection(Player *p, char c)
-{
-    p->moveDirection = c;
-}
-
 PUBLIC void playerSetID(Player *p, int id)
 {
     p->id = id;
 }
 
-PUBLIC char getMoveDirection(Player p)
+PUBLIC char playerGetMoveDirection(Player p)
 {
     return p.moveDirection;
 }
