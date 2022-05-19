@@ -16,8 +16,6 @@
 #define DIFF (WIDTH / 595)
 
 PUBLIC Bowlingball initBomb();
-void sortBombsArray(Game theGame,int i);
-
 
 PUBLIC Bowlingball initBomb()
 {
@@ -90,65 +88,6 @@ void tryToPlaceBomb(Game theGame, int playerID)
                 BombSetStartvaluetimerbomb(&theGame->bombs[playerID+amount], SDL_GetTicks()); 
             }
             
-        }
-    }
-}
-
-//som en game loop för bomber, kollar timer för explosioner samt bomber
-void process(Game theGame, Sounds *s)
-{
-    //kollar bombernas timer, är den klar försvinner bomben och explosionstimer initieras
-    for (int i = 0; i < MAXBOMBAMOUNT; i++){
-        if (BombGetTimerInit(theGame->bombs[i]) == 1){
-                  
-            if (BombGetTimerValue(theGame->bombs[i]) == 1){
-                initExplosionPosition(theGame, i);
-                initbowlingballtimer(SDL_GetTicks(), 1000, i);
-                testPossibilityToExplodeWithBombs(theGame, i);
-                BombSetTimerInit(&theGame->bombs[i], 0);
-                BombSetExplosionInit(&theGame->bombs[i], 0);
-                BombSetStartvaluetimerbomb(&theGame->bombs[i], SDL_GetTicks());
-                playBomb(s);
-            }
-            else {
-                BombSetTimerValue(&theGame->bombs[i], initbowlingballtimer(0, BOMBTIMER, i));
-            }
-             
-        }
-    }
-    //kollar explosionstimern
-    int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
-
-    static int currentPowerup = 0;    //Kanske vill göra på ett annat sätt här
-    if(currentPowerup == 0)
-    {
-        currentPowerup = theGame->playerIDLocal;
-    }
-
-    for (int i = 0; i < MAXBOMBAMOUNT; i++){
-        if (BombGetExplosionInit(theGame->bombs[i]) == 0){
-            BombSetExplosionInit(&theGame->bombs[i], initbowlingballtimer(0, 1000, i));
-            for(int j=139;j<250;j++){
-                if(WallGetDestroyedWall(theGame->wall[j]) == 0){
-                    WallSetDestroyedWall(&theGame->wall[j], testCollisionWithDestroyableWalls(theGame, j, i));
-                    if(WallGetDestroyedWall(theGame->wall[j])){ //If wall is destroyed...
-                        if(returnarray[i] == theGame->playerIDLocal){
-                            playerAddScore(&theGame->player[theGame->bombs[i].whoPlacedID], 1);
-                            theGame->updateFlag = true;
-                            theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, theGame->wall[j].x, theGame->wall[j].y);       
-                        }
-                    }
-                }
-            }
-            if (BombGetExplosionInit(theGame->bombs[i]) == 1){
-                BombSetIsPlaced(&theGame->bombs[i], 0);
-                if(playerGetAmountOfBombsPlaced(theGame->player[returnarray[i]]) > 0)
-                {
-                    playerAddAmountOfBombsPlaced(&theGame->player[returnarray[i]], -1);          
-                }
-                sortBombsArray(theGame, returnarray[i]);
-                
-            }
         }
     }
 }

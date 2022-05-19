@@ -12,6 +12,7 @@ void tryToPlaceBomb(Game theGame, int playerID);
 int initbowlingballtimer(int startTime, int timeAmount, int playerID);
 int correctBowlingBallPosx(int i);
 int correctBowlingBallPosy(int i);
+void sortBombsArray(Game theGame,int i);
 void initExplosionPosition(Game theGame, int playerID);
 Bowlingball initBomb();
 void loadBomb();

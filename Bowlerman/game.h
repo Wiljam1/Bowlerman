@@ -157,8 +157,8 @@ struct game_type
 typedef struct game_type *Game;
 
 Game createWindow();              // Struct for app initialization
-SDL_Texture *loadTextures(Game newGame, char fileLocation[]); // Load any image you want in the resources/ folder!
-void gameUpdate(Game newGame);  // Game loop
+SDL_Texture *loadTextures(Game theGame, char fileLocation[]); // Load any image you want in the resources/ folder!
+void gameUpdate(Game theGame);  // Game loop
 bool checkEvents(Game theGame);
 void manageMovementInputs(Game theGame);
 void updatePlayerPos(Game theGame, int velX, int velY); //Flytta till player.c nångång
