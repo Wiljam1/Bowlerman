@@ -365,6 +365,11 @@ PUBLIC void BombSetTimerValue(Bowlingball *b, int i)
 {
     b->timervalue = i;
 }
+
+PUBLIC int BombSetPlacedBombRestriction(Bowlingball b, int i)
+{
+    b.placedBombRestriction = i;
+}
 //bomb rect possitioner i sprite sheet.
 PUBLIC void loadBomb()
 {

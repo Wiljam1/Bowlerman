@@ -44,13 +44,13 @@ void collisionWithWallsAround(Game theGame)
     
     //Don't move out of window!
     if(playerXPos < 0)                //Left edge
-        theGame->player[playerID].xPos = 0;
+        playerSetXPos(&theGame->player[playerID], 0);
     if(playerXPos+playerWidth > WIDTH)         //Right edge
-         theGame->player[playerID].xPos = WIDTH - playerWidth;
+        playerSetXPos(&theGame->player[playerID], WIDTH - playerWidth);
     if(playerYPos < 0)                //Top edge
-        theGame->player[playerID].yPos = 0;
+        playerSetYPos(&theGame->player[playerID], 0);
     if(playerYPos+playerHeight > HEIGHT)        //Bottom edge
-        theGame->player[playerID].yPos = HEIGHT - playerHeight;
+        playerSetXPos(&theGame->player[playerID], HEIGHT - playerHeight);
 
     //Check for collision with any walls
     
@@ -63,25 +63,25 @@ void collisionWithWallsAround(Game theGame)
         {
             if (playerYPos + playerHeight < wallYPos)
             {
-                theGame->player[playerID].yPos = wallYPos - playerHeight;
+                playerSetYPos(&theGame->player[playerID], wallYPos - playerHeight);
             }
             else if (playerYPos < wallYPos + YOFFSET)
             {
-                theGame->player[playerID].yPos = wallYPos + YOFFSET;
+                playerSetYPos(&theGame->player[playerID], wallYPos + YOFFSET);
             }
         }     
         if (i >= 20 && i < 40) // Nedre
         {
             if (playerYPos + playerHeight > wallYPos)
             {
-                theGame->player[playerID].yPos = wallYPos - playerHeight;
+                playerSetYPos(&theGame->player[playerID], wallYPos - playerHeight);
             }
         }
         if (i >= 40 && i < 60) // Vänster
         {
             if (playerXPos < wallXPos + wallWidth)
             {
-                theGame->player[playerID].xPos = wallXPos + wallWidth;
+                playerSetXPos(&theGame->player[playerID], wallXPos + wallWidth);
             }
 
         }
@@ -89,7 +89,7 @@ void collisionWithWallsAround(Game theGame)
         {
             if (playerXPos + playerWidth > wallXPos)
             {
-                theGame->player[playerID].xPos = wallXPos - playerWidth;
+                playerSetXPos(&theGame->player[playerID], wallXPos - playerWidth);
             }
         }
     }
@@ -105,14 +105,14 @@ void testCollosionWithBombs(Game theGame)
         {
             playerStandingOnBomb(theGame);
         }
-        if (theGame->bombs[i].isPlaced == 1 && theGame->player[i].isInvulnerable == false)
+        if (BombGetIsPlaced(theGame->bombs[i]) == 1 && playerGetIsInvulnerable(theGame->player[i]) == false)
         {
             int id = getLocalID(theGame);
             float playerW = playerGetWidth(theGame->player[theGame->playerIDLocal]), playerH = playerGetHeight(theGame->player[theGame->playerIDLocal]);
             float playerX = playerGetXPosition(theGame->player[theGame->playerIDLocal]), playerY = playerGetYPosition(theGame->player[theGame->playerIDLocal]);
             int moveDirection = getMoveDirection(theGame->player[id]);
             int bombX = getBombXPosition(theGame->bombs[i]), bombY = getBombYPosition(theGame->bombs[i]), bombW = getBombWidth(theGame->bombs[i]), bombH = getBombHeight(theGame->bombs[i]);
-            if(theGame->bombs[i].placedBombRestriction == 0)
+            if(BombGetPlacedBombRestriction(theGame->bombs[i]) == 0)
             {
                 if(moveDirection == 'w' || moveDirection == 's') //för upp och ner
                 {   
@@ -120,12 +120,11 @@ void testCollosionWithBombs(Game theGame)
                     {
                         if(playerY + YOFFSET < bombY + bombH && playerY > bombY){
                             //correct y
-                            theGame->player[id].yPos = bombY + bombH - YOFFSET;
-                            
+                            playerSetYPos(&theGame->player[id], bombY + bombH - YOFFSET);
                         }
                         if(playerY + playerH > bombY && playerY < bombY){
                             //correct y
-                            theGame->player[id].yPos = bombY - playerH;
+                            playerSetYPos(&theGame->player[id], bombY - playerH);
                         }
                     }
                 }
@@ -135,11 +134,11 @@ void testCollosionWithBombs(Game theGame)
                     {
                         if(playerX < bombX + bombW && playerX > bombX){
                             //Correct x
-                            theGame->player[id].xPos = bombX + bombW;
+                            playerSetXPos(&theGame->player[id], bombX + bombW);
                         }
                         if(playerX + playerW > bombX && playerX < bombX){
                             //Correct x
-                            theGame->player[id].xPos = bombX - playerW;
+                            playerSetXPos(&theGame->player[id], bombX - playerW);
                         }
                     }
                 }
@@ -155,17 +154,17 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
     for (int i=0;i<PLAYERAMOUNT;i++)
     {
         int flag = 1; //vad är det för flagga egentligen?
-        if(theGame->player[i].isInvulnerable == false) {
+        if(playerGetIsInvulnerable(theGame->player[i]) == false) {
 
             float playerW = getPlayerWidth(theGame->player[i]), playerH = getPlayerHeight(theGame->player[i]);
             float playerX = playerGetXPosition(theGame->player[i]), playerY = playerGetYPosition(theGame->player[i]);
             for (int j=0;j<MAXBOMBAMOUNT;j++)
             {
-                if(theGame->bombs[j].explosioninit == 0) // J kan användas vid Score sen
+                if(BombGetExplosionInit(theGame->bombs[j]) == 0) // J kan användas vid Score sen
                 {
                     for (int l = 0; l < PLAYERAMOUNT; l++)
                     {
-                        for (int k=0;k<(1+4*theGame->player[l].explosionPower);k++)
+                        for (int k=0;k<(1+4*playerGetExplosionPower(theGame->player[l]));k++)
                         {
                             if(theGame->explosionPosition[j][k].x < playerX + playerW &&
                             theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > playerX &&
@@ -175,7 +174,7 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
                                 //player dead
                                 if (flag == 1)      // testar med odödlighet
                                 {
-                                    if(theGame->player[theGame->bombs[j].whoPlacedID].id != i)
+                                    if(getPlayerID(theGame->player[theGame->bombs[j].whoPlacedID]) != i)
                                         playerAddScore(&theGame->player[theGame->bombs[j].whoPlacedID], 10);
                                     setPlayerDeathFlags(theGame, i);
                                     playerDeathTimer(theGame);
@@ -201,7 +200,7 @@ void playerStandingOnBomb(Game theGame)
     {
         float playerW = getPlayerWidth(theGame->player[playerID]), playerH = getPlayerHeight(theGame->player[playerID]);
         float playerX = playerGetXPosition(theGame->player[playerID]), playerY = playerGetYPosition(theGame->player[playerID]);
-        for (int i = 0;i<theGame->player[playerID].amountOfBombsPlaced;i++)
+        for (int i = 0;i<playerGetAmountOfBombsPlaced(theGame->player[playerID]);i++)
         {
             int bombW = getBombWidth(theGame->bombs[playerID+i*4]), bombH = getBombHeight(theGame->bombs[playerID+i*4]);
             int bombX = getBombXPosition(theGame->bombs[playerID +i*4]), bombY = getBombYPosition(theGame->bombs[playerID+i*4]);
@@ -211,11 +210,11 @@ void playerStandingOnBomb(Game theGame)
                 bombY < playerY + playerH &&
                 bombH + bombY > playerY)
             {         
-                theGame->bombs[playerID+i*4].placedBombRestriction = 1;
+                BombSetPlacedBombRestriction(theGame->bombs[playerID+i*4], 1);
             }
             else 
             {
-                theGame->bombs[playerID+i*4].placedBombRestriction = 0;
+                BombSetPlacedBombRestriction(theGame->bombs[playerID+i*4], 0);
             }
         }
     }
@@ -228,11 +227,11 @@ void testCollisionWithWalls(Game theGame)
     {
         float playerW = getPlayerWidth(theGame->player[i]), playerH = getPlayerHeight(theGame->player[i]);
         float playerX = playerGetXPosition(theGame->player[i]), playerY = playerGetYPosition(theGame->player[i]);
-        int moveDirection = theGame->player[i].moveDirection; 
+        int moveDirection = getMoveDirection(theGame->player[i]); 
         for (int j=100;j<250;j++)
         {
 
-            if(theGame->wall[j].destroyedWall == 0)
+            if(WallGetDestroyedWall(theGame->wall[j]) == 0)
             {
                 int wallX = getWallXPosition(theGame->wall[j]), wallY = getWallYPosition(theGame->wall[j]), wallW = getWallWidth(theGame->wall[j]), wallH = getWallHeight(theGame->wall[j]);
                 if(moveDirection == 'w' || moveDirection == 's')        //för upp och ner
@@ -242,10 +241,12 @@ void testCollisionWithWalls(Game theGame)
                         if(playerY + YOFFSET < wallY + wallH && playerY > wallY){
                             //correct y
                             theGame->player[i].yPos = wallY + wallH - YOFFSET;
+                            playerSetYPos(&theGame->player[i], wallY + wallH - YOFFSET);
                         }
                         if(playerY + playerH > wallY && playerY < wallY){
                             //correct y
                             theGame->player[i].yPos = wallY - playerH;
+                            playerSetYPos(&theGame->player[i], wallY - playerH);
                         }
                     }
                 }
@@ -256,10 +257,12 @@ void testCollisionWithWalls(Game theGame)
                         if(playerX < wallX + wallW && playerX > wallX){
                             //Correct x
                             theGame->player[i].xPos = wallX + wallW;
+                            playerSetXPos(&theGame->player[i], wallX + wallW);
                         }
                         if(playerX + playerW > wallX && playerX < wallX){
                             //Correct x
                             theGame->player[i].xPos = wallX - playerW;
+                            playerSetXPos(&theGame->player[i], wallX - playerW);
                         }
                     }
                 } 
@@ -296,7 +299,7 @@ int testCollisionWithDestroyableWalls(Game theGame, int k, int j)
     float wallXPos = getWallXPosition(theGame->wall[k]), wallYPos = getWallYPosition(theGame->wall[k]),
         wallWidth = getWallWidth(theGame->wall[k]), wallHeight = getWallHeight(theGame->wall[k]);
     int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
-    for (int i=0;i<1+4*theGame->player[returnarray[j]].explosionPower;i++)
+    for (int i=0;i<1+4*playerGetExplosionPower(theGame->player[returnarray[j]]);i++)
     {
         if(wallXPos < theGame->explosionPosition[j][i].x &&
            wallXPos + wallWidth > theGame->explosionPosition[j][i].x + theGame->explosionPosition[j][i].w &&
@@ -387,15 +390,17 @@ void playerCollisionWithPowerup(Game theGame)
     {
         float playerW = getPlayerWidth(theGame->player[playerID]), playerH = getPlayerHeight(theGame->player[playerID]);
         float playerX = playerGetXPosition(theGame->player[playerID]), playerY = playerGetYPosition(theGame->player[playerID]);
-
+        
         for (int i = 0;i<POWERUPAMOUNT;i++)
         {
-            if(theGame->powerups[i].isPickedUp == false)   //ha något här som gör att man inte kollar exkeverade powerups
+            int powerUpX = PowerUpGetXPosition(theGame->powerups[i]), powerUpY = PowerUpGetYPosition(theGame->powerups[i]);
+            int powerUpW = PowerUpGetWidth(theGame->powerups[i]), powerUpH = PowerUpGetHeight(theGame->powerups[i]);
+            if(PowerUpGetIsPickedUp(theGame->powerups[i]) == false)   //ha något här som gör att man inte kollar exkeverade powerups
             {
-                if(theGame->powerups[i].x < playerX + playerW &&
-                    theGame->powerups[i].x + theGame->powerups[i].w > playerX &&
-                    theGame->powerups[i].y < playerY + playerH &&
-                    theGame->powerups[i].h + theGame->powerups[i].y - YOFFSET > playerY)
+                if(powerUpX < playerX + playerW &&
+                    powerUpX + powerUpW > playerX &&
+                    powerUpY < playerY + playerH &&
+                    powerUpH + powerUpY - YOFFSET > playerY)
                 {         
                     powerupGive(&theGame->player[playerID] , &theGame->powerups[i]);
                     theGame->updateFlag = true;
@@ -411,21 +416,23 @@ void explosionCollisionWithPowerup(Game theGame)
 {
     for(int i=0;i<POWERUPAMOUNT;i++) 
     {
+        int powerUpX = PowerUpGetXPosition(theGame->powerups[i]), powerUpY = PowerUpGetYPosition(theGame->powerups[i]);
+        int powerUpW = PowerUpGetWidth(theGame->powerups[i]), powerUpH = PowerUpGetHeight(theGame->powerups[i]);
         for (int k = 0;k<POWERUPAMOUNT;k++)
         {
             for(int j=0;j<MAXBOMBAMOUNT;j++)   
             {
-                if(theGame->powerups[i].isPickedUp == false)
+                if(PowerUpGetIsPickedUp(theGame->powerups[i]) == false)
                 {
-                    if(theGame->explosionPosition[j][k].x < theGame->powerups[i].x &&
-                        theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > theGame->powerups[i].x + theGame->powerups[i].w &&
-                        theGame->explosionPosition[j][k].y < theGame->powerups[i].y &&
-                        theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y > theGame->powerups[i].y + theGame->powerups[i].h)
+                    if(theGame->explosionPosition[j][k].x < powerUpX &&
+                        theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > powerUpX + powerUpW &&
+                        theGame->explosionPosition[j][k].y < powerUpY &&
+                        theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y > powerUpY + powerUpH)
                     {    
                         //theGame->powerups[i].indestructable = timerForPowerups(0, 1500, i);     
-                        if(timerForPowerups(0, 1500, i) == false && theGame->bombs[j].explosioninit == 0)
+                        if(timerForPowerups(0, 1500, i) == false && BombGetExplosionInit(theGame->bombs[j]) == 0)
                         {
-                            theGame->powerups[i].isPickedUp = true;
+                            PowerUpSetIsPickedUp(&theGame->powerups[i], true);
                         }
                         
                     }
