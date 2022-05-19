@@ -118,6 +118,12 @@ void process(Game theGame, Sounds *s)
     //kollar explosionstimern
     int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
 
+    static int currentPowerup = 0;    //Kanske vill göra på ett annat sätt här
+    if(currentPowerup == 0)
+    {
+        currentPowerup = theGame->playerIDLocal;
+    }
+
     for (int i = 0; i < MAXBOMBAMOUNT; i++){
         if (theGame->bombs[i].explosioninit == 0){
             theGame->bombs[i].explosioninit = initbowlingballtimer(0, 1000, i);
@@ -128,7 +134,7 @@ void process(Game theGame, Sounds *s)
                         if(returnarray[i] == theGame->playerIDLocal){
                             playerAddScore(&theGame->player[theGame->bombs[i].whoPlacedID], 1);
                             theGame->updateFlag = true;
-                            rollForPowerup(theGame, theGame->wall[j].x, theGame->wall[j].y);       
+                            theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, theGame->wall[j].x, theGame->wall[j].y);       
                         }
                     }
                 }

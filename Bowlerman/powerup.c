@@ -9,22 +9,27 @@
 #include "player.h"
 #include "game.h"
 
-void rollForPowerup(Game theGame, int xPos, int yPos)
+Powerup rollForPowerup(int *pCurrentPowerup, int ID, int xPos, int yPos)
 {
-    static int currentPowerup = 0;    //Kanske vill göra på ett annat sätt här
-    if(currentPowerup == 0)
-    {
-        currentPowerup = theGame->playerIDLocal;
-    }
-    if((rand() % 100+1) < 40){ // 40% chance to spawn a powerup                                                      
-        theGame->powerups[currentPowerup] = powerupPlace(xPos, yPos, rand()%POWERUPTYPES); //Type = random number between 0 and how many types there are
-        theGame->powerups[currentPowerup].id = currentPowerup;
-        theGame->powerups[currentPowerup].indestructable = timerForPowerups(SDL_GetTicks(), 1500, currentPowerup);
-        currentPowerup += 4; //Go to next place in array for next powerup being made
+    Powerup p;
+    printf("Rolling for powerup...\n");
+    if(true/*(rand() % 100+1) < 40*/){ // 40% chance to spawn a powerup    
+        printf("Creating p..\n");                                                  
+        p = powerupPlace(xPos, yPos, rand()%POWERUPTYPES); //Type = random number between 0 and how many types there are
+        printf("Assigning ID to p..\n");
+        p.id = ID;
+        printf("Setting timer for p..\n");
+        p.indestructable = timerForPowerups(SDL_GetTicks(), 1500, ID);
+        printf("INCREMENTING pCurrentPowerup! it's value is: %d\n", *pCurrentPowerup);
+        *pCurrentPowerup += 4; //Go to next place in array for next powerup being made
+        printf("pCurrentPowerup value is now: %d\n", *pCurrentPowerup);
     }
      
-     if(currentPowerup == POWERUPAMOUNT)
-        currentPowerup = 0;
+     if(*pCurrentPowerup == POWERUPAMOUNT){
+         printf("RESETTING pCurrentPowerup! since it's value is: %d\n", *pCurrentPowerup);
+        *pCurrentPowerup = 0;
+     }
+    return p;
 }
 
 void renderPowerups(Game theGame)
@@ -67,12 +72,12 @@ Powerup powerupPlace(int xPos, int yPos, int type)
     p.type = type;
     p.isPickedUp = false;
     p.sentViaUDP = 0;
-    p.id = 0;
+    //p.id = 0;
     p.indestructable=1;
     return p;
 }
 
-int timerForPowerups(int startTime, int timeAmount, int powerUpID)
+bool timerForPowerups(int startTime, int timeAmount, int powerUpID)
 {
     static int lastTime[POWERUPAMOUNT] = {0}, currentTime[POWERUPAMOUNT] = {0};
     if(startTime != 0)
@@ -82,10 +87,9 @@ int timerForPowerups(int startTime, int timeAmount, int powerUpID)
     currentTime[powerUpID] = SDL_GetTicks();
     if (currentTime[powerUpID] > lastTime[powerUpID] + timeAmount)
     {
-        //lastTime[powerUpID] = currentTime[powerUpID];
-        return 0;               //returnar 1 om tiden är ute
+        return false;               //returnar false om tiden är ute
     }
-    return 1;
+    return true;
 }
 
 PUBLIC int PowerUpGetXPosition(Powerup p)

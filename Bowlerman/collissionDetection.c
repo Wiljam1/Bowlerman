@@ -421,8 +421,8 @@ void explosionCollisionWithPowerup(Game theGame)
                         theGame->explosionPosition[j][k].y < theGame->powerups[i].y &&
                         theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y > theGame->powerups[i].y + theGame->powerups[i].h)
                     {    
-                        theGame->powerups[i].indestructable = timerForPowerups(0, 1500, i);     
-                        if(theGame->powerups[i].indestructable == 0 && theGame->bombs[j].explosioninit == 0)
+                        //theGame->powerups[i].indestructable = timerForPowerups(0, 1500, i);     
+                        if(timerForPowerups(0, 1500, i) == false && theGame->bombs[j].explosioninit == 0)
                         {
                             theGame->powerups[i].isPickedUp = true;
                         }
