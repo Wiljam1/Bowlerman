@@ -12,10 +12,10 @@ typedef struct powerup Powerup;
 
 #define POWERUPTYPES 3
 
-void rollForPowerup(Game theGame, int xPos, int yPos); //Roll for a chance to place a random powerup
-void renderPowerups(Game theGame);                     //Render powerups
-void powerupGive(Game theGame, int playerID, int i);
-Powerup powerupPlace(int xPos, int yPos, int type); //Place a powerup in the window
+void rollForPowerup(Game theGame, int xPos, int yPos); //Rolls for a chance to place a powerup on the X/Y-pos given to the function.
+void renderPowerups(Game theGame);                     //Render all the powerups.
+void powerupGive(Game theGame, int playerID, int i);   //Grant powerup to player who picks it up.
+Powerup powerupPlace(int xPos, int yPos, int type);    //Create and place a powerup on X/Y-pos given to the function.
 int timerForPowerups(int startTime, int timeAmount, int powerUpID);
 
 #endif

@@ -292,9 +292,9 @@ void menu(Game theGame, bool *done, UDPStruct *udpvalues)
                     switch(event.key.keysym.sym)
                     {
                         case SDLK_1:
-                            /*Kanske räcker med JOIN om man startar servern separat.
-                            Tanken var att man skulle starta serverprogrammet här, 
-                            men vet inte riktigt hur man ska lösa det*/
+                            // ip = writeIP(); / fetch user IP
+                            // createServer(ip); -Starta eller kompilera om(?) servern med användarens IP
+                            // joinLobby(ip);  -Scen där man ser vilka som har joinat lobbyn
                             printf("\nHOST SERVER\n");
                             printf("Creating server... ");
                             ShellExecuteA(GetDesktopWindow(),"open","udpServer.exe",NULL,NULL,SW_SHOW);  //Start server file
@@ -307,6 +307,8 @@ void menu(Game theGame, bool *done, UDPStruct *udpvalues)
                             printf("\nJOIN SERVER\n");
                             //Nån menyfunktion där man skriver in IPadressen för hosten
                             //just nu hårdkodad.
+                            // ip = writeIP(); -Scen där man får skriva IP:n man vill joina
+                            // joinLobby(ip);  -Scen där man ser vilka som har joinat lobbyn
                             char ip[] = "127.0.0.1";
                             strcpy(udpvalues->serverIp, ip);
                             *done = false;
@@ -317,6 +319,8 @@ void menu(Game theGame, bool *done, UDPStruct *udpvalues)
                             *done = true;
                             loop = false;
                             break;
+                        //case: OPTIONS (inte så viktigt)
+                        //case: CREDITS (inte så viktigt)
                     }
             }  
         }

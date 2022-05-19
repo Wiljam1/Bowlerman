@@ -7,8 +7,6 @@
 
 //void collisionDetect(Game theGame, Sounds *sounds);
 
-
-
 void playerStandingOnBomb(Game theGame);
 
 int testCollisionExplosionWithWalls(Game theGame, int k);
