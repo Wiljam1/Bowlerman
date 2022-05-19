@@ -154,6 +154,14 @@ PUBLIC void updatePlayerYPosition(Game theGame, int id, double velY)
 {
     theGame->player[id].yPos += velY;
 }
+PUBLIC void playerSetXPos(Player *p, int x)
+{
+    p->xPos = x;
+}
+PUBLIC void playerSetYPos(Player *p, int y)
+{
+    p->yPos = y;
+}
 
 PUBLIC void playerSetOldXPos(Player *p, int x)
 {
@@ -163,6 +171,16 @@ PUBLIC void playerSetOldXPos(Player *p, int x)
 PUBLIC void playerSetOldYPos(Player *p, int y)
 {
     p->yPosOld = y;
+}
+
+PUBLIC void playerSetMoveDirection(Player *p, char c)
+{
+    p->moveDirection = c;
+}
+
+PUBLIC void playerSetID(Player *p, int id)
+{
+    p->id = id;
 }
 
 PUBLIC char getMoveDirection(Player p)

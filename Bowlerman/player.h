@@ -48,6 +48,12 @@ int playerGetIsInvulnerable(Player p);
 void playerAddAmountOfBombsPlaced(Player *p, int i);
 int playerGetExplosionPower(Player p);
 
+void playerSetMoveDirection(Player *p, char c);
+void playerSetID(Player *p, int id);
+
+void playerSetXPos(Player *p, int x);
+void playerSetYPos(Player *p, int y);
+
 void playerSetOldXPos(Player *p, int x);
 void playerSetOldYPos(Player *p, int y);
 int playerGetOldXpos(Player p);
