@@ -67,6 +67,20 @@ void renderTextures(Game theGame)
     SDL_RenderPresent(renderer); // present renderer
 }
 
+void renderPowerups(Game theGame)
+{
+    // //Draw powerups
+    for(int i = 0; i < POWERUPAMOUNT; i++){
+        if(theGame->powerups[i].isPickedUp == false) //Draw until picked up
+        {
+            SDL_Rect powerupRect = {theGame->powerups[i].x, theGame->powerups[i].y, 
+                                    theGame->powerups[i].w, theGame->powerups[i].h};
+        
+            SDL_RenderCopy(theGame->renderer, theGame->texturePowerups[theGame->powerups[i].type], NULL, &powerupRect); 
+        }
+    }
+}
+
 PUBLIC void loadAllTextures(Game theGame)
 {
 

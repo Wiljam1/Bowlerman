@@ -13,6 +13,7 @@
 SDL_Texture *loadTextures(Game theGame, char fileLocation[]); //Load media from given file location
 void loadAllTextures(Game theGame);                           //Load all textures
 void renderTextures(Game theGame);                            //Render textures
+void renderPowerups(Game theGame);                     //Render all the powerups.
 
 
 #endif

@@ -7,7 +7,6 @@
 #include <SDL2/SDL_image.h>
 #include <time.h>
 #include "player.h"
-#include "game.h"
 
 Powerup rollForPowerup(int *pCurrentPowerup, int ID, int xPos, int yPos)
 {
@@ -28,20 +27,6 @@ Powerup rollForPowerup(int *pCurrentPowerup, int ID, int xPos, int yPos)
         *pCurrentPowerup = 0;
      }
     return p;
-}
-
-void renderPowerups(Game theGame)
-{
-    // //Draw powerups
-    for(int i = 0; i < POWERUPAMOUNT; i++){
-        if(theGame->powerups[i].isPickedUp == false) //Draw until picked up
-        {
-            SDL_Rect powerupRect = {theGame->powerups[i].x, theGame->powerups[i].y, 
-                                    theGame->powerups[i].w, theGame->powerups[i].h};
-        
-            SDL_RenderCopy(theGame->renderer, theGame->texturePowerups[theGame->powerups[i].type], NULL, &powerupRect); 
-        }
-    }
 }
 
 void powerupGive(Player *pPlayer, Powerup *pPowerup)
