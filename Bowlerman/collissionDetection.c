@@ -38,7 +38,7 @@ void collisionWithWallsAround(Game theGame)
     //"Easier to read"-variables
     
     float playerWidth = getPlayerWidth(theGame->player[theGame->playerIDLocal]), playerHeight = getPlayerHeight(theGame->player[theGame->playerIDLocal]);
-    float playerXPos = getPlayerXPosition(theGame->player[theGame->playerIDLocal]), playerYPos = getPlayerYPosition(theGame->player[theGame->playerIDLocal]);
+    float playerXPos = playerGetXPosition(theGame->player[theGame->playerIDLocal]), playerYPos = playerGetYPosition(theGame->player[theGame->playerIDLocal]);
     int playerID = getPlayerID(theGame->player[theGame->playerIDLocal]);
     int speed = getPlayerSpeed(theGame->player[playerID]);
     
@@ -109,7 +109,7 @@ void testCollosionWithBombs(Game theGame)
         {
             int id = getLocalID(theGame);
             float playerW = getPlayerWidth(theGame->player[theGame->playerIDLocal]), playerH = getPlayerHeight(theGame->player[theGame->playerIDLocal]);
-            float playerX = getPlayerXPosition(theGame->player[theGame->playerIDLocal]), playerY = getPlayerYPosition(theGame->player[theGame->playerIDLocal]);
+            float playerX = playerGetXPosition(theGame->player[theGame->playerIDLocal]), playerY = playerGetYPosition(theGame->player[theGame->playerIDLocal]);
             int moveDirection = theGame->player[id].moveDirection;
             int bombX = getBombXPosition(theGame->bombs[i]), bombY = getBombYPosition(theGame->bombs[i]), bombW = getBombWidth(theGame->bombs[i]), bombH = getBombHeight(theGame->bombs[i]);
             if(theGame->bombs[i].placedBombRestriction == 0)
@@ -157,7 +157,7 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
         if(theGame->player[i].isInvulnerable == false) {
 
             float playerW = getPlayerWidth(theGame->player[i]), playerH = getPlayerHeight(theGame->player[i]);
-            float playerX = getPlayerXPosition(theGame->player[i]), playerY = getPlayerYPosition(theGame->player[i]);
+            float playerX = playerGetXPosition(theGame->player[i]), playerY = playerGetYPosition(theGame->player[i]);
             for (int j=0;j<MAXBOMBAMOUNT;j++)
             {
                 if(theGame->bombs[j].explosioninit == 0) // J kan användas vid Score sen
@@ -199,7 +199,7 @@ void playerStandingOnBomb(Game theGame)
     for(int playerID=0;playerID<theGame->playerAmount;playerID++) 
     {
         float playerW = getPlayerWidth(theGame->player[playerID]), playerH = getPlayerHeight(theGame->player[playerID]);
-        float playerX = getPlayerXPosition(theGame->player[playerID]), playerY = getPlayerYPosition(theGame->player[playerID]);
+        float playerX = playerGetXPosition(theGame->player[playerID]), playerY = playerGetYPosition(theGame->player[playerID]);
         for (int i = 0;i<theGame->player[playerID].amountOfBombsPlaced;i++)
         {
             int bombW = getBombWidth(theGame->bombs[playerID+i*4]), bombH = getBombHeight(theGame->bombs[playerID+i*4]);
@@ -226,7 +226,7 @@ void testCollisionWithWalls(Game theGame)
     for (int i=0;i<4;i++)
     {
         float playerW = getPlayerWidth(theGame->player[i]), playerH = getPlayerHeight(theGame->player[i]);
-        float playerX = getPlayerXPosition(theGame->player[i]), playerY = getPlayerYPosition(theGame->player[i]);
+        float playerX = playerGetXPosition(theGame->player[i]), playerY = playerGetYPosition(theGame->player[i]);
         int moveDirection = theGame->player[i].moveDirection; 
         for (int j=100;j<250;j++)
         {
@@ -385,7 +385,7 @@ void playerCollisionWithPowerup(Game theGame)
     for(int playerID=0;playerID<theGame->playerAmount;playerID++) 
     {
         float playerW = getPlayerWidth(theGame->player[playerID]), playerH = getPlayerHeight(theGame->player[playerID]);
-        float playerX = getPlayerXPosition(theGame->player[playerID]), playerY = getPlayerYPosition(theGame->player[playerID]);
+        float playerX = playerGetXPosition(theGame->player[playerID]), playerY = playerGetYPosition(theGame->player[playerID]);
 
         for (int i = 0;i<POWERUPAMOUNT;i++)
         {

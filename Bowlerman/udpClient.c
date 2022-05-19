@@ -55,10 +55,10 @@ PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *flag)
 {
     int playerID = getLocalID(theGame);
-    int x_posOld = getPlayerOldXPos(theGame->player[playerID]); //theGame->player[playerID].xPosOld;
-    int y_posOld = getPlayerOldYPos(theGame->player[playerID]); //theGame->player[playerID].yPosOld;
-    int x_pos = getPlayerXPosition(theGame->player[playerID]); // theGame->player[playerID].xPos;
-    int y_pos = getPlayerYPosition(theGame->player[playerID]);  //theGame->player[playerID].yPos;
+    int x_posOld = playerGetOldXpos(theGame->player[playerID]); //theGame->player[playerID].xPosOld;
+    int y_posOld = playerGetOldYPos(theGame->player[playerID]); //theGame->player[playerID].yPosOld;
+    int x_pos = playerGetXPosition(theGame->player[playerID]); // theGame->player[playerID].xPos;
+    int y_pos = playerGetYPosition(theGame->player[playerID]);  //theGame->player[playerID].yPos;
     //int noOfLives = getPlayerNoOfLives(theGame->player[playerID]); //theGame->player[playerID].noOfLives;
     static int oldScore = 0, scoreGUIFlag = 0;
 
@@ -74,7 +74,7 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         udpData->x = x_pos;
         udpData->y = y_pos;
         udpData->powerupsX = 0;
-        udpData->noOfLives = getPlayerNoOfLives(theGame->player[playerID]);
+        udpData->noOfLives = playerGetNoOfLives(theGame->player[playerID]);
         udpData->score[playerID] = theGame->player[playerID].score;
         for(int i=0;i<POWERUPAMOUNT;i++)
         {
