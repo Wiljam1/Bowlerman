@@ -57,8 +57,8 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
     int playerID = getLocalID(theGame);
     int x_posOld = playerGetOldXpos(theGame->player[playerID]); //theGame->player[playerID].xPosOld;
     int y_posOld = playerGetOldYPos(theGame->player[playerID]); //theGame->player[playerID].yPosOld;
-    int x_pos = (int)playerGetXPosition(theGame->player[playerID]); // theGame->player[playerID].xPos;
-    int y_pos = (int)playerGetYPosition(theGame->player[playerID]);  //theGame->player[playerID].yPos;
+    float x_pos = playerGetXPosition(theGame->player[playerID]); // theGame->player[playerID].xPos;
+    float y_pos = playerGetYPosition(theGame->player[playerID]);  //theGame->player[playerID].yPos;
     //int noOfLives = getPlayerNoOfLives(theGame->player[playerID]); //theGame->player[playerID].noOfLives;
     static int oldScore = 0, scoreGUIFlag = 0;
 
@@ -99,8 +99,10 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         udpValues->p->address.port = udpValues->srvadd.port; /* And destination port */
         // p->len = strlen((char *)p->data) + 1;
         SDLNet_UDP_Send(udpValues->sd, -1, udpValues->p);
-        playerSetOldXPos(&theGame->player[playerID], x_pos); //theGame->player[playerID].xPosOld = x_pos; 
-        playerSetOldYPos(&theGame->player[playerID], y_pos); //theGame->player[playerID].yPosOld = y_pos;
+        //playerSetOldXPos(&theGame->player[playerID], x_pos); 
+        //playerSetOldYPos(&theGame->player[playerID], y_pos);
+        theGame->player[playerID].xPosOld = x_pos;
+        theGame->player[playerID].yPosOld = y_pos;
         *flag=0;
         scoreGUIFlag = 0;
         printf("x:%d y:%d dir:%c \n", udpData->x, udpData->y, udpData->moveDirection);
@@ -118,8 +120,10 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
         // sscanf((char * )p2->data, "%d %d\n", &a, &b);
         memcpy(&(*udpData), (char *)udpValues->p2->data, sizeof(struct data));
         int playerID = udpData->playerID;
-        playerSetXPos(&(theGame->player[playerID]), udpData->x);
-        playerSetYPos(&(theGame->player[playerID]), udpData->y);
+        //playerSetXPos(&(theGame->player[playerID]), udpData->x);
+        //playerSetYPos(&(theGame->player[playerID]), udpData->y);
+        theGame->player[playerID].xPos = udpData->x;
+        theGame->player[playerID].yPos = udpData->y;
         printf("x:%d y:%d dir:%c ", udpData->x, udpData->y, udpData->moveDirection);
         if (udpData->placeBomb==1){ 
             tryToPlaceBomb(theGame, playerID);
@@ -132,8 +136,10 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
         }
         
 
-        playerSetMoveDirection(&(theGame->player[playerID]), udpData->moveDirection);//theGame->player[playerID].moveDirection = udpData->moveDirection;
-        playerSetID(&(theGame->player[playerID]), udpData->playerID);
+        //playerSetMoveDirection(&(theGame->player[playerID]), udpData->moveDirection);//theGame->player[playerID].moveDirection = udpData->moveDirection;
+        theGame->player[playerID].moveDirection = udpData->moveDirection;
+        //playerSetID(&(theGame->player[playerID]), udpData->playerID);
+        theGame->player[playerID].id = udpData->playerID;
         theGame->player[playerID].noOfLives = udpData->noOfLives;
         theGame->player[playerID].score = udpData->score[playerID];
         for(int i = 0; i < 4; i++){

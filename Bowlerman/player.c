@@ -50,7 +50,7 @@ PUBLIC Player initPlayer(int initX, int initY, int playerID)
     p.isMoving = false;  //is not enforced by keyboard inputs though.
     p.isDead = false;
     p.isInvulnerable = false;
-    p.noOfLives = 1;
+    p.noOfLives = 5;
     p.score = 0;
 
     return p;
