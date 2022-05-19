@@ -4,12 +4,13 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 #define UPDATESPEED 1
-//void setUDPScore(UDPData *u, int id, int func());
+#define MAXAMMOUNTOFBOMBS 5   //how many bombs are allowed to be placed by one player
+void UDPSetScore(UDPData *u, int id, int score);
+int UDPGetPlayerID(UDPData *u);
 PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 {
     int playerID = theGame->playerIDLocal;
     udpData->placeBomb=0;
-    #define MAXAMMOUNTOFBOMBS 5   //how many bombs are allowed to be placed by one player
     static int doPlaceBomb=0;
     static int flagSendBomb[5]={0};
 
@@ -76,7 +77,7 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         udpData->powerupsX = 0;
         udpData->noOfLives = playerGetNoOfLives(theGame->player[playerID]);
         udpData->score[playerID] = playerGetScore(theGame->player[playerID]);
-        //setUDPScore(udpData, playerID, playerGetScore(theGame->player[playerID]));
+        UDPSetScore(udpData, playerID, playerGetScore(theGame->player[playerID]));
         for(int i=0;i<POWERUPAMOUNT;i++)
         {
             if(theGame->powerups[i].sentViaUDP == false)
@@ -99,13 +100,13 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         udpValues->p->address.port = udpValues->srvadd.port; /* And destination port */
         // p->len = strlen((char *)p->data) + 1;
         SDLNet_UDP_Send(udpValues->sd, -1, udpValues->p);
-        //playerSetOldXPos(&theGame->player[playerID], x_pos); 
-        //playerSetOldYPos(&theGame->player[playerID], y_pos);
-        theGame->player[playerID].xPosOld = x_pos;
-        theGame->player[playerID].yPosOld = y_pos;
+        playerSetOldXPos(&theGame->player[playerID], x_pos); 
+        playerSetOldYPos(&theGame->player[playerID], y_pos);
+        //theGame->player[playerID].xPosOld = x_pos;
+        //theGame->player[playerID].yPosOld = y_pos;
         *flag=0;
         scoreGUIFlag = 0;
-        printf("x:%d y:%d dir:%c \n", udpData->x, udpData->y, udpData->moveDirection);
+       // printf("x:%d y:%d dir:%c \n", udpData->x, udpData->y, udpData->moveDirection);
     }
 }
 
@@ -119,12 +120,12 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
         static int oldScore[4] = {0};
         // sscanf((char * )p2->data, "%d %d\n", &a, &b);
         memcpy(&(*udpData), (char *)udpValues->p2->data, sizeof(struct data));
-        int playerID = udpData->playerID;
-        //playerSetXPos(&(theGame->player[playerID]), udpData->x);
-        //playerSetYPos(&(theGame->player[playerID]), udpData->y);
-        theGame->player[playerID].xPos = udpData->x;
-        theGame->player[playerID].yPos = udpData->y;
-        printf("x:%d y:%d dir:%c ", udpData->x, udpData->y, udpData->moveDirection);
+        int playerID = UDPGetPlayerID(udpData); //int playerID = udpData->playerID;
+        playerSetXPos(&(theGame->player[playerID]), udpData->x);
+        playerSetYPos(&(theGame->player[playerID]), udpData->y);
+        //theGame->player[playerID].xPos = (float)udpData->x;
+        //theGame->player[playerID].yPos = (float)udpData->y;
+        //printf("x:%d y:%d dir:%c ", udpData->x, udpData->y, udpData->moveDirection);
         if (udpData->placeBomb==1){ 
             tryToPlaceBomb(theGame, playerID);
         }
@@ -134,24 +135,21 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
             theGame->powerups[udpData->powerupsID] = powerupPlace(udpData->powerupsX-WIDTH/119, udpData->powerupsY-WIDTH/119, udpData->powerupsType);
             theGame->powerups[udpData->powerupsID].indestructable = timerForPowerups(SDL_GetTicks(), 1500, udpData->powerupsID);
         }
-        
-
-        //playerSetMoveDirection(&(theGame->player[playerID]), udpData->moveDirection);//theGame->player[playerID].moveDirection = udpData->moveDirection;
-        theGame->player[playerID].moveDirection = udpData->moveDirection;
-        //playerSetID(&(theGame->player[playerID]), udpData->playerID);
-        theGame->player[playerID].id = udpData->playerID;
-        theGame->player[playerID].noOfLives = udpData->noOfLives;
-        theGame->player[playerID].score = udpData->score[playerID];
+        playerSetMoveDirection(&(theGame->player[playerID]), udpData->moveDirection);
+        playerSetID(&(theGame->player[playerID]), udpData->playerID);
+        playerSetNoOfLives(&(theGame->player[playerID]), udpData->noOfLives);
+        playerSetScore(&(theGame->player[playerID]), udpData->score[playerID]);
+        //theGame->player[playerID].id = udpData->playerID;
+        //theGame->player[playerID].moveDirection = udpData->moveDirection;
+        //theGame->player[playerID].noOfLives = udpData->noOfLives;
+        //theGame->player[playerID].score = udpData->score[playerID];
         for(int i = 0; i < 4; i++){
             if(udpData->score[i] != oldScore[i]){
-                theGame->updateFlag = true;
+                flagSetUpdate(theGame, true); //theGame->updateFlag = true;
                 oldScore[i] = udpData->score[i];
             }    
         }
-            
-        
-        
-        printf("UDP Packet incoming, x,y-coord: %d %d of player %d, placebomb: %d\n", udpData->x, udpData->y, udpData->playerID, udpData->placeBomb);
+        //printf("UDP Packet incoming, x,y-coord: %d %d of player %d, placebomb: %d\n", udpData->x, udpData->y, udpData->playerID, udpData->placeBomb);
     }
 }
 
@@ -193,7 +191,7 @@ PUBLIC UDPData UDPDataReset()
     u.playerID = 0;
     u.moveDirection = '0';
     u.placeBomb = 0;
-    u.noOfLives = 3;
+    u.noOfLives = 5;
 
     for(int i; i < 4; i++)
         u.score[i] = 0;
@@ -224,8 +222,8 @@ PUBLIC void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPStruct *udpValu
         ; // spin-lock tills received info from UDP-server
     memcpy(udpData, (char *)udpValues->p2->data, sizeof(UDPData));
     theGame->playerIDLocal = udpData->playerID;
-    printf("UDP Packet incoming %d\n", udpData->playerID);
-    printf("%d", theGame->playerIDLocal);
+    //printf("UDP Packet incoming %d\n", udpData->playerID);
+    printf("Player ID: %d\n", theGame->playerIDLocal);
     
 }
 
@@ -265,9 +263,13 @@ PUBLIC void initUDP(UDPStruct *u)
 
 }
 
-void setUDPScore(UDPData *u, int id, int func())
+void UDPSetScore(UDPData *u, int id, int score)
 {
-    u->score[id] = (int)func();
+    u->score[id] = score;
+}
+int UDPGetPlayerID(UDPData *u)
+{
+    return u->playerID;
 }
 
 

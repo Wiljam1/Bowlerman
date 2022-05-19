@@ -56,10 +56,10 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *done)
      //Init GUI
     initGUI(theGame);
     //Menu loop
+    initUDP(udpValues);
     menu(theGame, done, udpValues);
 
     //inits UDP
-    initUDP(udpValues);
 
     //TCPstruct tcpValues = createTCPstruct();     //returns a struct for tcp-init-struct.	
 	//initTCP(&tcpValues);            //initiates TCP
@@ -214,7 +214,7 @@ PUBLIC void gameUpdate(Game theGame)
 
     while (!done)
     {
-        playBackroundMusic(&sounds);
+        //playBackroundMusic(&sounds);
         // Check for events
     
         // Process events (time based stuff)
@@ -536,4 +536,8 @@ PUBLIC void destroyGame(Game theGame)
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();
     //free(theGame);
+}
+void flagSetUpdate(Game theGame, bool cond)
+{
+    theGame->updateFlag = cond;
 }

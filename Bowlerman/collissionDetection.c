@@ -153,7 +153,7 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
 {
     for (int i=0;i<PLAYERAMOUNT;i++)
     {
-        int flag = 1; //vad är det för flagga egentligen?
+        int flag = 1; //vad är det för flagga egentligen? // Så att man inte kollar en spelare fyra gånger om man dör.
         if(playerGetIsInvulnerable(theGame->player[i]) == false) {
 
             float playerW = playerGetWidth(theGame->player[i]), playerH = playerGetHeight(theGame->player[i]);
@@ -174,13 +174,14 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
                                 //player dead
                                 if (flag == 1)      // testar med odödlighet
                                 {
-                                    if(getPlayerID(theGame->player[theGame->bombs[j].whoPlacedID]) != i)
+                                    if(getPlayerID(theGame->player[theGame->bombs[j].whoPlacedID]) != i) {
                                         playerAddScore(&theGame->player[theGame->bombs[j].whoPlacedID], 10);
+                                    }
                                     setPlayerDeathFlags(theGame, i);
                                     playerDeathTimer(theGame);
                                     playDeath(s);
                                     flag = 0;
-
+                                    
                                     checkGameOver(theGame);
                                     break;
                                 }

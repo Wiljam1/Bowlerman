@@ -60,6 +60,7 @@ void initAllPlayers(Game theGame)
 {
     // init x amount of players
     theGame->player[0] = initPlayer(LEFT_X, TOP_Y, 0); // sets x and y coordinates and resets values.
+    printf("Player 0 lives: %d\n", theGame->player[0].noOfLives);
     if (theGame->playerAmount > 1)
     {
         theGame->player[1] = initPlayer(RIGHT_X, TOP_Y, 1); // sets x and y coordinates and resets values.
@@ -131,12 +132,12 @@ void UpdatePlayerTextures(Game theGame)
                 SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], 270, 0, 0);
             else
                 SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], 90, 0, 0);
-            getStartPos(&theGame->player[i]); // If player is dead it respawns at starting pos
+            //getStartPos(&theGame->player[i]); // If player is dead it respawns at starting pos
             theGame->player[i].isDead = false;
         }
         else {
-            theGame->player[i].isDead = true;
-            theGame->player[i].isInvulnerable = true;
+           /*  theGame->player[i].isDead = true;
+            theGame->player[i].isInvulnerable = true; */
         }
     }
 }
@@ -218,6 +219,11 @@ PUBLIC int playerGetNoOfLives(Player p)
     return p.noOfLives;
 }
 
+PUBLIC void playerSetNoOfLives(Player *p, int lives)
+{
+    p->noOfLives = lives;
+}
+
 PUBLIC int playerGetOldXpos(Player p)
 {
     return p.xPosOld;
@@ -236,6 +242,12 @@ PUBLIC int playerGetScore(Player p)
 {
     return p.score;
 }
+
+PUBLIC void playerSetScore(Player *p, int score)
+{
+    p->score = score;
+}
+
 PUBLIC void getStartPos(Player *p)
 {
     switch (p->id)
@@ -354,6 +366,7 @@ Uint32 pDeathCallback(Uint32 interval, Game theGame)
 void setPlayerDeathFlags(Game theGame, int i)
 {
     theGame->updateFlag = true;
+    printf("HEj");
     theGame->player[i].noOfLives--;
     printf("Lives left for player %d: %d\n", i, theGame->player[i].noOfLives);
     theGame->player[i].isDead = true;

@@ -60,6 +60,8 @@ int playerGetOldXpos(Player p);
 int playerGetOldYPos(Player p);
 int playerGetScore(Player p);
 
+void playerSetNoOfLives(Player *p, int lives);
+void playerSetScore(Player *p, int score);
 
 //Change players movedirection
 void updateMovementDirection(Player *p, char c);
