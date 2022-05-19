@@ -53,13 +53,7 @@ typedef struct powerup Powerup;
 
 struct bowling_ball
 {
-    //int id;   
-    //float yVel, xVel, xPos, yPos;
-    //float xPosOld;
-    //float yPosOld;
     SDL_Rect position;
-    //int height;
-    //int width;
     int timervalue;
     int speed;
     int timerinit;
@@ -75,8 +69,6 @@ struct bowling_ball typedef Bowlingball;
 
 SDL_Rect bowlingballAnimation[18];
 
-//när jag har denna struct i player.c funkar koden inte i game.c jättekonstigt! fattar ej varför
-//jag tror det är för att programmet måste veta hur stor struct:en är (?)
 struct playerController
 {
     int id;   //för packets via UDP behöver man kunna veta vem det är som skickar datan.
@@ -164,6 +156,8 @@ void manageMovementInputs(Game theGame);
 void updatePlayerPos(Game theGame, int velX, int velY); //Flytta till player.c nångång
 void process(Game theGame, Sounds *s);
 void collisionDetect(Game theGame, Sounds *s);
+void checkGameOver(Game theGame);
+void showScoreboard(Game theGame);
 void renderTextures(Game theGame);
 void destroyGame(Game theGame); // Function for easily destroying the application.
 

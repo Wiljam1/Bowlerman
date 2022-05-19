@@ -33,9 +33,8 @@ void updateGUI(Game theGame)
     else if(theGame->player[theGame->playerIDLocal].id == 3)
         playerColor = yellow;
     if(theGame->updateFlag == true){            //TEMPORÄR LÖSNING, FORTFARANDE MEMORY LEAK MEN TEXTEN
-        //UPPDATERAS ENDAST NÄR ETT VÄRDE ÄNDRAS
-
-        char tmpstr[LEN] = "Speed: ";//!!!!Ska nog göra om speed till int och dela med två någonstans så att labeln inte ändrar storlek!!!
+                                                //UPPDATERAS ENDAST NÄR ETT VÄRDE ÄNDRAS
+        char tmpstr[LEN] = "Speed: ";
         createLabel(theGame, 0, tmpstr, theGame->player[theGame->playerIDLocal].speedDisplay, playerColor);  // Går att skrivas till bättre så man inte behöver hårdkoda siffror                                     
         char tmpstr2[LEN] = "Power: ";                                                         // Vet inte hur man skickar strings direkt i parametrarna (som i printf();) men det här fungerar
         createLabel(theGame, 1, tmpstr2, theGame->player[theGame->playerIDLocal].explosionPower, playerColor);

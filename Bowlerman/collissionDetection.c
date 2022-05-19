@@ -181,7 +181,7 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
                                     playDeath(s);
                                     flag = 0;
 
-                                    //checkGameOver();
+                                    checkGameOver(theGame);
                                     break;
                                 }
                             }
