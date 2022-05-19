@@ -126,6 +126,8 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
             theGame->powerups[udpData->powerupsID].indestructable = timerForPowerups(SDL_GetTicks(), 1500, udpData->powerupsID);
         }
         playerSetMoveDirection(&(theGame->player[playerID]), udpData->moveDirection);
+        
+        //ska denna vara här?
         playerSetID(&(theGame->player[playerID]), udpData->playerID);
         playerSetNoOfLives(&(theGame->player[playerID]), udpData->noOfLives);
         playerSetScore(&(theGame->player[playerID]), udpData->score[playerID]);

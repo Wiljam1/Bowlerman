@@ -25,7 +25,7 @@ gui.o:
 sounds.o:
 	gcc -c sounds.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer
 clean_windows:
-	del /Q /F main.exe udpServer.exe *.o
+	del /Q /F *.exe *.o
 
 alludpServer: udpServer.o udpServerWithTCPclient.o
 	gcc -o udpServer udpServer.o udpServerWithTCPclient.o -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net

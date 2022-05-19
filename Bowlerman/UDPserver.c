@@ -80,13 +80,13 @@ int main(int argc, char **argv)
                 playerAmount++;
 
                 //send players ID:
-                memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data)); //detta behövs egentligen inte
-                udpData.playerID=0;
-                memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
-                pSent->len = sizeof(struct data)+1;
-                pSent->address.host = IPclient[0];	/* Set the destination host */
-                pSent->address.port = portClient[0];
-                SDLNet_UDP_Send(sd, -1, pSent);
+                //memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data)); //detta behövs egentligen inte
+                //udpData.playerID=0;
+                //memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
+                //pSent->len = sizeof(struct data)+1;
+                //pSent->address.host = IPclient[0];	/* Set the destination host */
+                //pSent->address.port = portClient[0];
+                //SDLNet_UDP_Send(sd, -1, pSent);
                 printf("initializing client 0\n");
             }
 
@@ -102,13 +102,13 @@ int main(int argc, char **argv)
                     
 
                     //send playerID to player: skicka via TCP istället
-                    memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data)); //detta behövs inte egentligen
-                    udpData.playerID=playerAmount;
-                    memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
-                    pSent->len = sizeof(struct data)+1;
-                    pSent->address.host = IPclient[i+1];	/* Set the destination host */
-                    pSent->address.port = portClient[i+1];
-                    SDLNet_UDP_Send(sd, -1, pSent);
+                    //memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data)); //detta behövs inte egentligen
+                    //udpData.playerID=playerAmount;
+                    //memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
+                    //pSent->len = sizeof(struct data)+1;
+                    //pSent->address.host = IPclient[i+1];	/* Set the destination host */
+                    //pSent->address.port = portClient[i+1];
+                    //SDLNet_UDP_Send(sd, -1, pSent);
                     printf("initializing client %d\n", i+1);
 
                     playerAmount++;
