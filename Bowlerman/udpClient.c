@@ -246,7 +246,7 @@ PUBLIC void initSDLNet()
 }
 PUBLIC void initUDP(UDPStruct *u)
 {
-    if (!(u->sd = SDLNet_UDP_Open(2001)))  
+    if (!(u->sd = SDLNet_UDP_Open(0)))  
     {
         fprintf(stderr, "SDLNet_UDP_Open: %s\n", SDLNet_GetError());
         exit(EXIT_FAILURE);
