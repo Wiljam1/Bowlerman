@@ -155,6 +155,16 @@ PUBLIC void updatePlayerYPosition(Game theGame, int id, double velY)
     theGame->player[id].yPos += velY;
 }
 
+PUBLIC void playerSetOldXPos(Player *p, int x)
+{
+    p->xPosOld = x;
+}
+
+PUBLIC void playerSetOldYPos(Player *p, int y)
+{
+    p->yPosOld = y;
+}
+
 PUBLIC char getMoveDirection(Player p)
 {
     return p.moveDirection;
@@ -184,6 +194,22 @@ PUBLIC int getLocalID(Game theGame)
 {
     return theGame->playerIDLocal;
 }
+
+PUBLIC int getPlayerNoOfLives(Player p)
+{
+    return p.noOfLives;
+}
+
+PUBLIC int getPlayerOldXPos(Player p)
+{
+    return p.xPosOld;
+}
+
+PUBLIC int getPlayerOldYPos(Player p)
+{
+    return p.yPosOld;
+}
+
 PUBLIC int getPlayerID(Player p)
 {
     return p.id;

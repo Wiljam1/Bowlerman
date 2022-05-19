@@ -33,14 +33,21 @@ int getPlayerWidth(Player p);
 double getPlayerSpeed(Player p);
 int getPlayerID(Player p);
 void getStartPos(Player *p);
+int getPlayerNoOfLives(Player p);
 void playerIncreaseSpeed(Player *p);
 void playerAddSpeedDisplay(Player *p, int speedDisplay);
 void playerAddExplosionPower(Player *p, int explosionPower);
 void playerAddAmountOfBombs(Player *p, int amountOfBombs);
 void playerAddLives(Player *p, int amountOfBombs);
 void playerAddScore(Player *p, int score);
-PUBLIC void getStartPos(Player *p);
+//PUBLIC void getStartPos(Player *p);
 PUBLIC int getLocalID(Game theGame);
+
+void playerSetOldXPos(Player *p, int x);
+void playerSetOldYPos(Player *p, int y);
+int getPlayerOldXPos(Player p);
+int getPlayerOldYPos(Player p);
+
 
 //Change players movedirection
 PUBLIC void updateMovementDirection(Game theGame, int id, char c);
