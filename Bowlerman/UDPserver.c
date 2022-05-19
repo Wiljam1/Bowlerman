@@ -69,8 +69,8 @@ int main(int argc, char **argv)
 		if (SDLNet_UDP_Recv(sd, pRecive))
 		{
 			printf("UDP Packet incoming\n");
-			printf("\tData:    %s\n", (char *)pRecive->data);
-			printf("\tAddress: %x %x\n", pRecive->address.host, pRecive->address.port);
+			//printf("\tData:    %s\n", (char *)pRecive->data);
+			//printf("\tAddress: %x %x\n", pRecive->address.host, pRecive->address.port);
             
             //etablera client 0's IP-adress och port. Detta bör man nog göra via TCP
             if(IPclient[0] == 0 && portClient[0] == 0){
@@ -123,11 +123,11 @@ int main(int argc, char **argv)
             {
                 
                 if (pRecive->address.port == portClient[i]){
-                    printf("Recived data\n");
+                    //printf("Recived data\n");
 
                     //copy data:
                     memcpy(&udpData, (char * ) pRecive->data, sizeof(struct data));
-                    printf("UDP Packet data %d %d %c\n", udpData.x, udpData.y, udpData.moveDirection);
+                    //printf("UDP Packet data %d %d %c\n", udpData.x, udpData.y, udpData.moveDirection);
                     memcpy((char *)pSent->data, &udpData , sizeof(struct data)+1);
                     pSent->len = sizeof(struct data)+1;
                     //sscanf((char * )pRecive->data, "%d %d\n", &a, &b);

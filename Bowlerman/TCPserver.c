@@ -191,12 +191,12 @@ int main(int argc, char **argv)
 			/* Now we can communicate with the client using csd socket
 			* sd will remain opened waiting other connections */
 
-			printf("inside TCP accept, with client socket: %d \n", csd[playerAmmount]);
+			//printf("inside TCP accept, with client socket: %d \n", csd[playerAmmount]);
 			/* Get the remote address */
 			if (remoteIP = SDLNet_TCP_GetPeerAddress(csd[playerAmmount]))
 			{
 				/* Print the address, converting in the host format */
-				printf("Host connected: %x %d\n", SDLNet_Read32(&remoteIP->host), SDLNet_Read16(&remoteIP->port));
+				//printf("Host connected: %x %d\n", SDLNet_Read32(&remoteIP->host), SDLNet_Read16(&remoteIP->port));
 				/* print out the clients IP and port number */
 				ipaddr=SDL_SwapBE32(remoteIP->host);
 				//printf("ip string: %x port string: %d\n", SDLNet_Read32(&remoteIP->host), SDLNet_Read16(&remoteIP->port));
