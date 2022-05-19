@@ -111,8 +111,21 @@ void sortBombsArray(Game theGame,int i)
                     theGame->bombs[i+j*4] = tmp;
                     theGame->bombs[i+j*4-4].isPlaced == 1;
                     theGame->bombs[i+j*4].isPlaced == 0;
-                    initExplosionPosition(theGame, i+j*4);
-                    initExplosionPosition(theGame, i+j*4-4);
+                    //initExplosionPosition(theGame, i+j*4);
+                    //initExplosionPosition(theGame, i+j*4-4);
+                    int a=0;
+                    theGame->explosionPosition[i+j*4-4][a] = theGame->explosionPosition[i+j*4][a];
+                    for(int l=1;l<playerGetExplosionPower(theGame->player[i+j*4])+1;l++)
+                    {
+                        a++;
+                        theGame->explosionPosition[i+j*4-4][a] = theGame->explosionPosition[i+j*4][a];
+                        a++;
+                        theGame->explosionPosition[i+j*4-4][a] = theGame->explosionPosition[i+j*4][a];
+                        a++;
+                        theGame->explosionPosition[i+j*4-4][a] = theGame->explosionPosition[i+j*4][a];
+                        a++;
+                        theGame->explosionPosition[i+j*4-4][a] = theGame->explosionPosition[i+j*4][a];
+                    }
                 }
             }
         }
@@ -137,7 +150,7 @@ void initExplosionPosition(Game theGame, int playerID)
     theGame->explosionPosition[playerID][j].y = getBombYPosition(theGame->bombs[playerID]) + diff;
     theGame->explosionPosition[playerID][j].x = getBombXPosition(theGame->bombs[playerID]) + diff;
     //för resterande possitioner explosionen hamnar på
-    for(int i=1;i<theGame->player[returnarray[playerID]].explosionPower+1;i++)
+    for(int i=1;i<playerGetExplosionPower(theGame->player[returnarray[playerID]])+1;i++)
     {
         
         j++;
@@ -300,7 +313,7 @@ PUBLIC void BombSetTimerInit(Bowlingball *b, int i)
     b->timerinit = i;
 }
 
-PUBLIC int BombSetPlacedBombRestriction(Bowlingball *b, int i)
+PUBLIC void BombSetPlacedBombRestriction(Bowlingball *b, int i)
 {
     b->placedBombRestriction = i;
 }
