@@ -54,12 +54,12 @@ PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 
 PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *flag)
 {
-    int playerID = theGame->playerIDLocal;
-    int x_posOld = theGame->player[playerID].xPosOld;
-    int y_posOld = theGame->player[playerID].yPosOld;
-    int x_pos = theGame->player[playerID].xPos;
-    int y_pos = theGame->player[playerID].yPos;
-    int noOfLives = theGame->player[playerID].noOfLives;
+    int playerID = getLocalID(theGame);
+    int x_posOld = playerGetOldXpos(theGame->player[playerID]); //theGame->player[playerID].xPosOld;
+    int y_posOld = playerGetOldYPos(theGame->player[playerID]); //theGame->player[playerID].yPosOld;
+    int x_pos = playerGetXPosition(theGame->player[playerID]); // theGame->player[playerID].xPos;
+    int y_pos = playerGetYPosition(theGame->player[playerID]);  //theGame->player[playerID].yPos;
+    //int noOfLives = getPlayerNoOfLives(theGame->player[playerID]); //theGame->player[playerID].noOfLives;
     static int oldScore = 0, scoreGUIFlag = 0;
 
     if(theGame->player[playerID].score != oldScore){
@@ -67,14 +67,14 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         scoreGUIFlag = 1;
     }
     // send data if movement or bomb-placement
-    if (abs(x_posOld - x_pos)>=UPDATESPEED || abs(y_posOld - y_pos)>=UPDATESPEED || *flag == 1 || udpData->placeBomb==1 || scoreGUIFlag == 1)
+    if (abs(x_posOld - x_pos) >= UPDATESPEED || abs(y_posOld - y_pos) >= UPDATESPEED || *flag == 1 || udpData->placeBomb==1 || scoreGUIFlag == 1)
     {
-        //printf("%d %d\n", (int)x_pos, (int)y_pos);
+        printf("%d %d\n", (int)x_pos, (int)y_pos);
         udpData->playerID = playerID;
         udpData->x = x_pos;
         udpData->y = y_pos;
         udpData->powerupsX = 0;
-        udpData->noOfLives = noOfLives;
+        udpData->noOfLives = playerGetNoOfLives(theGame->player[playerID]);
         udpData->score[playerID] = theGame->player[playerID].score;
         for(int i=0;i<POWERUPAMOUNT;i++)
         {
@@ -98,8 +98,8 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         udpValues->p->address.port = udpValues->srvadd.port; /* And destination port */
         // p->len = strlen((char *)p->data) + 1;
         SDLNet_UDP_Send(udpValues->sd, -1, udpValues->p);
-        theGame->player[playerID].xPosOld = x_pos; 
-        theGame->player[playerID].yPosOld = y_pos;
+        playerSetOldXPos(&theGame->player[playerID], x_pos); //theGame->player[playerID].xPosOld = x_pos; 
+        playerSetOldYPos(&theGame->player[playerID], y_pos); //theGame->player[playerID].yPosOld = y_pos;
         *flag=0;
         scoreGUIFlag = 0;
     }

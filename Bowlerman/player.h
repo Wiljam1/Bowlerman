@@ -26,26 +26,33 @@ PlayerSprites GetPlayerSprite();
 Player initPlayer(int xPos, int yPos, int playerID);
 
 void UpdatePlayerTextures(Game theGame);
-float getPlayerXPosition(Player p);
-float getPlayerYPosition(Player p);
+float playerGetXPosition(Player p);
+float playerGetYPosition(Player p);
 int getPlayerHeight(Player p);
 int getPlayerWidth(Player p);
 double getPlayerSpeed(Player p);
 int getPlayerID(Player p);
 void getStartPos(Player *p);
+int playerGetNoOfLives(Player p);
 void playerIncreaseSpeed(Player *p);
 void playerAddSpeedDisplay(Player *p, int speedDisplay);
 void playerAddExplosionPower(Player *p, int explosionPower);
 void playerAddAmountOfBombs(Player *p, int amountOfBombs);
 void playerAddLives(Player *p, int amountOfBombs);
 void playerAddScore(Player *p, int score);
-PUBLIC void getStartPos(Player *p);
+//PUBLIC void getStartPos(Player *p);
 PUBLIC int getLocalID(Game theGame);
 int playerGetAmountOfBombsPlaced(Player p);
 int playerGetAmountOfBombs(Player p);
 int playerGetIsInvulnerable(Player p);
 void playerAddAmountOfBombsPlaced(Player *p, int i);
 int playerGetExplosionPower(Player p);
+
+void playerSetOldXPos(Player *p, int x);
+void playerSetOldYPos(Player *p, int y);
+int playerGetOldXpos(Player p);
+int playerGetOldYPos(Player p);
+
 
 //Change players movedirection
 PUBLIC void updateMovementDirection(Game theGame, int id, char c);

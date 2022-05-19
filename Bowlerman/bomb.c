@@ -70,8 +70,8 @@ void tryToPlaceBomb(Game theGame, int playerID)
             int bombalreadyplaced=0;
             for(int i=0;i<MAXBOMBAMOUNT;i++)
             {
-                if (getBombYPosition(theGame->bombs[i]) == correctBowlingBallPosy(getPlayerYPosition(theGame->player[playerID])) &&
-                    getBombXPosition(theGame->bombs[i]) == correctBowlingBallPosx(getPlayerXPosition(theGame->player[playerID])) && BombGetIsPlaced(theGame->bombs[i]) == 1){
+                if (getBombYPosition(theGame->bombs[i]) == correctBowlingBallPosy(playerGetYPosition(theGame->player[playerID])) &&
+                    getBombXPosition(theGame->bombs[i]) == correctBowlingBallPosx(playerGetXPosition(theGame->player[playerID])) && BombGetIsPlaced(theGame->bombs[i]) == 1){
                         bombalreadyplaced = 0;
                         break;
                 }
@@ -82,8 +82,8 @@ void tryToPlaceBomb(Game theGame, int playerID)
             if(bombalreadyplaced == 1)
             {
                 theGame->bombs[playerID+amount] = initBomb();
-                BombSetYPosition(&theGame->bombs[playerID+amount], correctBowlingBallPosy(getPlayerYPosition(theGame->player[playerID])));
-                BombSetXPosition(&theGame->bombs[playerID+amount], correctBowlingBallPosX(getPlayerXPosition(theGame->player[playerID]))); 
+                BombSetYPosition(&theGame->bombs[playerID+amount], correctBowlingBallPosy(playerGetYPosition(theGame->player[playerID])));
+                BombSetXPosition(&theGame->bombs[playerID+amount], correctBowlingBallPosX(playerGetXPosition(theGame->player[playerID]))); 
                 BombSetTimerValue(&theGame->bombs[playerID+amount], initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID+amount));
                 BombSetWhoPlacedID(&theGame->bombs[playerID+amount], playerID);
                 playerAddAmountOfBombsPlaced(&theGame->player[playerID], 1);                //antal bomber som är placerade
@@ -119,6 +119,12 @@ void process(Game theGame, Sounds *s)
     //kollar explosionstimern
     int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
 
+    static int currentPowerup = 0;    //Kanske vill göra på ett annat sätt här
+    if(currentPowerup == 0)
+    {
+        currentPowerup = theGame->playerIDLocal;
+    }
+
     for (int i = 0; i < MAXBOMBAMOUNT; i++){
         if (BombGetExplosionInit(theGame->bombs[i]) == 0){
             BombSetExplosionInit(&theGame->bombs[i], initbowlingballtimer(0, 1000, i));
@@ -129,7 +135,7 @@ void process(Game theGame, Sounds *s)
                         if(returnarray[i] == theGame->playerIDLocal){
                             playerAddScore(&theGame->player[theGame->bombs[i].whoPlacedID], 1);
                             theGame->updateFlag = true;
-                            rollForPowerup(theGame, theGame->wall[j].x, theGame->wall[j].y);       
+                            theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, theGame->wall[j].x, theGame->wall[j].y);       
                         }
                     }
                 }

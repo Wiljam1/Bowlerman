@@ -87,8 +87,8 @@ void UpdatePlayerTextures(Game theGame)
     SDL_Rect playerRect[4];
     for(int i=0; i<theGame->playerAmount; i++)
     {
-        playerRect[i].x = getPlayerXPosition(theGame->player[i]);
-        playerRect[i].y = getPlayerYPosition(theGame->player[i]);
+        playerRect[i].x = playerGetXPosition(theGame->player[i]);
+        playerRect[i].y = playerGetYPosition(theGame->player[i]);
         playerRect[i].w = getPlayerWidth(theGame->player[i]);
         playerRect[i].h = getPlayerHeight(theGame->player[i]);
     }
@@ -155,6 +155,16 @@ PUBLIC void updatePlayerYPosition(Game theGame, int id, double velY)
     theGame->player[id].yPos += velY;
 }
 
+PUBLIC void playerSetOldXPos(Player *p, int x)
+{
+    p->xPosOld = x;
+}
+
+PUBLIC void playerSetOldYPos(Player *p, int y)
+{
+    p->yPosOld = y;
+}
+
 PUBLIC char getMoveDirection(Player p)
 {
     return p.moveDirection;
@@ -168,11 +178,11 @@ PUBLIC int getPlayerWidth(Player p)
 {
     return p.width;
 }
-PUBLIC float getPlayerXPosition(Player p)
+PUBLIC float playerGetXPosition(Player p)
 {
     return p.xPos;
 }
-PUBLIC float getPlayerYPosition(Player p)
+PUBLIC float playerGetYPosition(Player p)
 {
     return p.yPos;
 }
@@ -184,6 +194,22 @@ PUBLIC int getLocalID(Game theGame)
 {
     return theGame->playerIDLocal;
 }
+
+PUBLIC int playerGetNoOfLives(Player p)
+{
+    return p.noOfLives;
+}
+
+PUBLIC int playerGetOldXpos(Player p)
+{
+    return p.xPosOld;
+}
+
+PUBLIC int playerGetOldYPos(Player p)
+{
+    return p.yPosOld;
+}
+
 PUBLIC int getPlayerID(Player p)
 {
     return p.id;
