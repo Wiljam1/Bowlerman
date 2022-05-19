@@ -141,18 +141,18 @@ void UpdatePlayerTextures(Game theGame)
     }
 }
 
-PUBLIC void updateMovementDirection(Game theGame, int id, char c)
+PUBLIC void updateMovementDirection(Player *p, char c)
 {
-    theGame->player[id].moveDirection = c;
+    p->moveDirection = c;
 }
 
-PUBLIC void updatePlayerXPosition(Game theGame, int id, double velX)
+PUBLIC void updatePlayerXPosition(Player *p, double velX)
 {
-    theGame->player[id].xPos += velX;
+    p->xPos += velX;
 }
-PUBLIC void updatePlayerYPosition(Game theGame, int id, double velY)
+PUBLIC void updatePlayerYPosition(Player *p, double velY)
 {
-    theGame->player[id].yPos += velY;
+    p->yPos += velY;
 }
 
 PUBLIC void playerSetOldXPos(Player *p, int x)

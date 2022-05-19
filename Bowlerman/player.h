@@ -55,12 +55,11 @@ int playerGetOldYPos(Player p);
 
 
 //Change players movedirection
-PUBLIC void updateMovementDirection(Game theGame, int id, char c);
-
+void updateMovementDirection(Player *p, char c)
 //Change player x position
-PUBLIC void updatePlayerXPosition(Game theGame, int id, double velX);
+void updatePlayerXPosition(Player *p, double velX);
 //Change player y position
-PUBLIC void updatePlayerYPosition(Game theGame, int id, double velY);
+void updatePlayerYPosition(Player *p, double velY);
 
 //ändrar spelarens (clientmässiga) position
 //void playerPositionUpdate(int x, int y);
