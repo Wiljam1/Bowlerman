@@ -37,7 +37,7 @@ void collisionWithWallsAround(Game theGame)
 
     //"Easier to read"-variables
     
-    float playerWidth = getPlayerWidth(theGame->player[theGame->playerIDLocal]), playerHeight = getPlayerHeight(theGame->player[theGame->playerIDLocal]);
+    float playerWidth = playerGetWidth(theGame->player[theGame->playerIDLocal]), playerHeight = playerGetHeight(theGame->player[theGame->playerIDLocal]);
     float playerXPos = playerGetXPosition(theGame->player[theGame->playerIDLocal]), playerYPos = playerGetYPosition(theGame->player[theGame->playerIDLocal]);
     int playerID = getPlayerID(theGame->player[theGame->playerIDLocal]);
     int speed = getPlayerSpeed(theGame->player[playerID]);
@@ -157,7 +157,7 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
         int flag = 1; //vad är det för flagga egentligen?
         if(theGame->player[i].isInvulnerable == false) {
 
-            float playerW = getPlayerWidth(theGame->player[i]), playerH = getPlayerHeight(theGame->player[i]);
+            float playerW = playerGetWidth(theGame->player[i]), playerH = playerGetHeight(theGame->player[i]);
             float playerX = playerGetXPosition(theGame->player[i]), playerY = playerGetYPosition(theGame->player[i]);
             for (int j=0;j<MAXBOMBAMOUNT;j++)
             {
@@ -199,7 +199,7 @@ void playerStandingOnBomb(Game theGame)
 {
     for(int playerID=0;playerID<theGame->playerAmount;playerID++) 
     {
-        float playerW = getPlayerWidth(theGame->player[playerID]), playerH = getPlayerHeight(theGame->player[playerID]);
+        float playerW = playerGetWidth(theGame->player[playerID]), playerH = playerGetHeight(theGame->player[playerID]);
         float playerX = playerGetXPosition(theGame->player[playerID]), playerY = playerGetYPosition(theGame->player[playerID]);
         for (int i = 0;i<theGame->player[playerID].amountOfBombsPlaced;i++)
         {
@@ -226,7 +226,7 @@ void testCollisionWithWalls(Game theGame)
 {
     for (int i=0;i<4;i++)
     {
-        float playerW = getPlayerWidth(theGame->player[i]), playerH = getPlayerHeight(theGame->player[i]);
+        float playerW = playerGetWidth(theGame->player[i]), playerH = playerGetHeight(theGame->player[i]);
         float playerX = playerGetXPosition(theGame->player[i]), playerY = playerGetYPosition(theGame->player[i]);
         int moveDirection = theGame->player[i].moveDirection; 
         for (int j=100;j<250;j++)
@@ -385,7 +385,7 @@ void playerCollisionWithPowerup(Game theGame)
 {
     for(int playerID=0;playerID<theGame->playerAmount;playerID++) 
     {
-        float playerW = getPlayerWidth(theGame->player[playerID]), playerH = getPlayerHeight(theGame->player[playerID]);
+        float playerW = playerGetWidth(theGame->player[playerID]), playerH = playerGetHeight(theGame->player[playerID]);
         float playerX = playerGetXPosition(theGame->player[playerID]), playerY = playerGetYPosition(theGame->player[playerID]);
 
         for (int i = 0;i<POWERUPAMOUNT;i++)
