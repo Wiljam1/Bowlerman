@@ -23,17 +23,26 @@ void initGUI(Game theGame)
 
 void updateGUI(Game theGame)
 {   
+    SDL_Color playerColor;
+    if(theGame->player[theGame->playerIDLocal].id == 0)
+        playerColor = blue;
+    else if(theGame->player[theGame->playerIDLocal].id == 1)
+        playerColor = purple;
+    else if(theGame->player[theGame->playerIDLocal].id == 2)
+        playerColor = red;
+    else if(theGame->player[theGame->playerIDLocal].id == 3)
+        playerColor = yellow;
     if(theGame->updateFlag == true){            //TEMPORÄR LÖSNING, FORTFARANDE MEMORY LEAK MEN TEXTEN
         //UPPDATERAS ENDAST NÄR ETT VÄRDE ÄNDRAS
 
         char tmpstr[LEN] = "Speed: ";//!!!!Ska nog göra om speed till int och dela med två någonstans så att labeln inte ändrar storlek!!!
-        createLabel(theGame, 0, tmpstr, theGame->player[theGame->playerIDLocal].speedDisplay, white);  // Går att skrivas till bättre så man inte behöver hårdkoda siffror                                     
+        createLabel(theGame, 0, tmpstr, theGame->player[theGame->playerIDLocal].speedDisplay, playerColor);  // Går att skrivas till bättre så man inte behöver hårdkoda siffror                                     
         char tmpstr2[LEN] = "Power: ";                                                         // Vet inte hur man skickar strings direkt i parametrarna (som i printf();) men det här fungerar
-        createLabel(theGame, 1, tmpstr2, theGame->player[theGame->playerIDLocal].explosionPower, white);
+        createLabel(theGame, 1, tmpstr2, theGame->player[theGame->playerIDLocal].explosionPower, playerColor);
         char tmpstr3[LEN] = "Bombs: ";
-        createLabel(theGame, 2, tmpstr3, theGame->player[theGame->playerIDLocal].amountOfBombs, white); 
+        createLabel(theGame, 2, tmpstr3, theGame->player[theGame->playerIDLocal].amountOfBombs, playerColor); 
         char tmpstr4[LEN] = "Lives: ";
-        createLabel(theGame, 3, tmpstr4, theGame->player[theGame->playerIDLocal].noOfLives, white); 
+        createLabel(theGame, 3, tmpstr4, theGame->player[theGame->playerIDLocal].noOfLives, playerColor); 
         char tmpstr5[LEN] = "Player 1: ";
         createLabel(theGame, 4, tmpstr5, theGame->player[0].score, blue);
         char tmpstr6[LEN] = "Player 2: ";
