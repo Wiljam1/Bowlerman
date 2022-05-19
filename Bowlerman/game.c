@@ -541,3 +541,7 @@ void flagSetUpdate(Game theGame, bool cond)
 {
     theGame->updateFlag = cond;
 }
+void setLocalID(Game theGame, int id)
+{
+    theGame->playerIDLocal = id;
+}
