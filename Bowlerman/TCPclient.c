@@ -10,7 +10,7 @@ exit
 #include <string.h>
 #include "SDL2/SDL_net.h"
 #include "SDL2/SDL_thread.h"
-#include "tcpclient.h"
+#include "tcpClient.h"
 #define PUBLIC /* empty */
 #define PRIVATE static
 
