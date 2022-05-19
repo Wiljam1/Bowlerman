@@ -123,21 +123,21 @@ bool checkEvents(Game theGame)
                 //Testing
                 playerIncreaseSpeed(&theGame->player[theGame->playerIDLocal]);
                 printf("Player speed is now: %lf\n", getPlayerSpeed(theGame->player[theGame->playerIDLocal]));
-                theGame->updateFlag = true;
+                updateScoreFlag(theGame, true);
                 break;
             case SDLK_y:
                 //Testing
                 playerAddExplosionPower(&theGame->player[theGame->playerIDLocal], 1);
-                theGame->updateFlag = true;
+                updateScoreFlag(theGame, true);
                 break;
             case SDLK_u:
                 //Testing
                 playerAddAmountOfBombs(&theGame->player[theGame->playerIDLocal], 1);
-                theGame->updateFlag = true;
+                updateScoreFlag(theGame, true);
                 break;
             case SDLK_i:
                 playerAddLives(&theGame->player[theGame->playerIDLocal], 1);
-                theGame->updateFlag = true;
+                updateScoreFlag(theGame, true);
                 break;
             case SDLK_p:                                            /*!!! P = RESET-BUTTON!!! (only works when testing alone I think)*/
                 //Testing
@@ -162,8 +162,9 @@ void manageMovementInputs(Game theGame)
 {
     double velX = 0, velY = 0;
     int id = getLocalID(theGame);
+    Player player = playerGetLocalPlayer(theGame->player[id]);
     char direction;
-    Player player = theGame->player[theGame->playerIDLocal];
+
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (player.isInvulnerable == false || player.isDead == false)
     {
@@ -449,7 +450,9 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
     SDL_RenderCopy(theGame->renderer, menuT3, NULL, &textRect3);
 
     SDL_RenderPresent(theGame->renderer); // present renderer
-    
+    SDL_DestroyTexture(menuT1);
+    SDL_DestroyTexture(menuT2);
+    SDL_DestroyTexture(menuT3);
     while (loop)
     {
         while(SDL_PollEvent(&theGame->window_event))
@@ -458,15 +461,12 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
             switch(event.type)
             {
                 case SDL_QUIT:
-                    *quitGame = true;
-                    loop = false;
+                    destroyGame(theGame);
                     break;
                 case SDL_WINDOWEVENT_CLOSE:
                     if(theGame->window)
                     {
-                        theGame->window = NULL;
-                        *quitGame = true;
-                        loop = false;
+                        destroyGame(theGame);
                     }
                     break;
                 case SDL_KEYDOWN:
@@ -497,8 +497,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                             break;
                         case SDLK_3:
                             printf("\nQUIT GAME\n");
-                            *quitGame = true;
-                            loop = false;
+                            destroyGame(theGame);
                             break;
                         //case: OPTIONS (inte så viktigt)
                         //case: CREDITS (inte så viktigt)
@@ -507,9 +506,6 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
         }
         SDL_Delay(10);
     }
-    SDL_DestroyTexture(menuT1);
-    SDL_DestroyTexture(menuT2);
-    SDL_DestroyTexture(menuT3);
 }
 // renders background and players etc.
 PUBLIC void destroyGame(Game theGame)
@@ -529,15 +525,14 @@ PUBLIC void destroyGame(Game theGame)
     for(int i = 0; i < 3; i++){
         SDL_DestroyTexture(theGame->textureWall[i]);
     }
-    SDL_DestroyTexture(theGame->bombExplosion_texture);
+
     destroyGUI(theGame);
     SDLNet_Quit();
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();
-    //free(theGame);
 }
-void flagSetUpdate(Game theGame, bool cond)
+void updateScoreFlag(Game theGame, bool cond)
 {
     theGame->updateFlag = cond;
 }

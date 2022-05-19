@@ -142,6 +142,11 @@ void UpdatePlayerTextures(Game theGame)
     }
 }
 
+PUBLIC Player playerGetLocalPlayer(Player p)
+{
+    return p;
+} 
+
 PUBLIC void playerSetMoveDirection(Player *p, char c)
 {
     p->moveDirection = c;
@@ -361,7 +366,6 @@ Uint32 pDeathCallback(Uint32 interval, Game theGame)
 void setPlayerDeathFlags(Game theGame, int i)
 {
     theGame->updateFlag = true;
-    printf("HEj");
     theGame->player[i].noOfLives--;
     printf("Lives left for player %d: %d\n", i, theGame->player[i].noOfLives);
     theGame->player[i].isDead = true;

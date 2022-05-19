@@ -129,7 +129,7 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
         playerSetScore(&(theGame->player[playerID]), udpData->score[playerID]);
         for(int i = 0; i < 4; i++){
             if(udpData->score[i] != oldScore[i]){
-                flagSetUpdate(theGame, true);
+                updateScoreFlag(theGame, true);
                 oldScore[i] = UDPGetScore(udpData, i);
             }    
         }
@@ -243,8 +243,6 @@ PUBLIC void initUDP(UDPStruct *u)
     }
 
 }
-
-
 void UDPSetPlayerID(UDPData *u, int id)
 {
     u->playerID = id;
