@@ -25,7 +25,7 @@
 #define PRIVATE static
 #define LENGTH 100
 void menu();
-void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *done);
+void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame);
 
 // initializes game-window
 PUBLIC Game createWindow()
@@ -47,7 +47,7 @@ PUBLIC Game createWindow()
 }
 
 // initializes startvalues for game
-void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *done)
+void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame)
 {
     // Loading textures from file
     loadAllTextures(theGame);
@@ -57,7 +57,7 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *done)
     initGUI(theGame);
     //Menu loop
     initUDP(udpValues);
-    menu(theGame, done, udpValues);
+    menu(theGame, quitGame, udpValues);
 
     //inits UDP
 
@@ -94,20 +94,20 @@ bool checkEvents(Game theGame)
     manageMovementInputs(theGame);
     
     // Enter game loop (SDL_PollEvent)
-    bool done = false;
+    bool quitGame = false;
     while (SDL_PollEvent(&theGame->window_event))
     {
         SDL_Event event = theGame->window_event;
         switch (event.type)
         {
         case SDL_QUIT:
-            done = true;
+            quitGame = true;
             break;
         case SDL_WINDOWEVENT_CLOSE:
             if (theGame->window)
             {
                 theGame->window = NULL;
-                done = true;
+                quitGame = true;
             }
             break;
         case SDL_KEYDOWN:
@@ -117,7 +117,7 @@ bool checkEvents(Game theGame)
                 tryToPlaceBomb(theGame, theGame->playerIDLocal);
                 break;
             case SDLK_ESCAPE:
-                done = true;
+                quitGame = true;
                 break;
             case SDLK_t:
                 //Testing
@@ -141,11 +141,11 @@ bool checkEvents(Game theGame)
                 break;
             case SDLK_p:                                            /*!!! P = RESET-BUTTON!!! (only works when testing alone I think)*/
                 //Testing
-                done = false;
+                quitGame = false;
                 Player player[MAXPLAYERS]; // declares x-amounts of players
                 UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
                 UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
-                initGame(theGame, &udpData, &udpValues, &done);         // initializes startvalues. coordinates etc.
+                initGame(theGame, &udpData, &udpValues, &quitGame);         // initializes startvalues. coordinates etc.
                 Sounds sounds = initSoundFiles();
                 break;
             default:
@@ -155,7 +155,7 @@ bool checkEvents(Game theGame)
             break;
         }
     }
-    return done;
+    return quitGame;
 }
 
 void manageMovementInputs(Game theGame)
@@ -204,15 +204,15 @@ void manageMovementInputs(Game theGame)
 PUBLIC void gameUpdate(Game theGame)
 {
     // Initialize
-    bool done = false;
+    bool quitGame = false;
     Player player[MAXPLAYERS]; // declares x-amounts of players
     UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
     UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
-    initGame(theGame, &udpData, &udpValues, &done);         // initializes startvalues. coordinates etc.
+    initGame(theGame, &udpData, &udpValues, &quitGame);         // initializes startvalues. coordinates etc.
     Sounds sounds = initSoundFiles();
     // Game Loop:
 
-    while (!done)
+    while (!quitGame)
     {
         //playBackroundMusic(&sounds);
         // Check for events
@@ -220,7 +220,7 @@ PUBLIC void gameUpdate(Game theGame)
         // Process events (time based stuff)
         process(theGame, &sounds);
 
-        done = checkEvents(theGame);
+        quitGame = checkEvents(theGame);
 
         // Collisiondetection
         collisionDetect(theGame, &sounds);
@@ -330,7 +330,7 @@ void showScoreboard(Game theGame) //Måste skriva om den här snyggare
                             ShellExecuteA(GetDesktopWindow(),"open","udpServer.exe",NULL,NULL,SW_SHOW);  //Start server file
                             SDL_Delay(1000);
                             printf("Server created!\n");
-                            //*done = false;
+                            //*quitGame = false;
                             loop = false;
                             break;
                         case SDLK_2:
@@ -341,12 +341,12 @@ void showScoreboard(Game theGame) //Måste skriva om den här snyggare
                             // joinLobby(ip);  -Scen där man ser vilka som har joinat lobbyn
                             char ip[] = "127.0.0.1";
                             //strcpy(udpvalues->serverIp, ip);
-                            //*done = false;
+                            //*quitGame = false;
                             loop = false;
                             break;
                         case SDLK_3:
                             printf("\nQUIT GAME\n");
-                            //*done = true;
+                            //*quitGame = true;
                             loop = false;
                             break;
                         //case: OPTIONS (inte så viktigt)
@@ -420,7 +420,7 @@ void process(Game theGame, Sounds *s)
     }
 }
 
-void menu(Game theGame, bool *done, UDPStruct *udpvalues)
+void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
 {
     int x = WIDTH / 5.85;
     int width = WIDTH / 3;
@@ -458,14 +458,14 @@ void menu(Game theGame, bool *done, UDPStruct *udpvalues)
             switch(event.type)
             {
                 case SDL_QUIT:
-                    *done = true;
+                    *quitGame = true;
                     loop = false;
                     break;
                 case SDL_WINDOWEVENT_CLOSE:
                     if(theGame->window)
                     {
                         theGame->window = NULL;
-                        *done = true;
+                        *quitGame = true;
                         loop = false;
                     }
                     break;
@@ -481,7 +481,7 @@ void menu(Game theGame, bool *done, UDPStruct *udpvalues)
                             ShellExecuteA(GetDesktopWindow(),"open","udpServer.exe",NULL,NULL,SW_SHOW);  //Start server file
                             SDL_Delay(1000);
                             printf("Server created!\n");
-                            *done = false;
+                            *quitGame = false;
                             loop = false;
                             break;
                         case SDLK_2:
@@ -492,12 +492,12 @@ void menu(Game theGame, bool *done, UDPStruct *udpvalues)
                             // joinLobby(ip);  -Scen där man ser vilka som har joinat lobbyn
                             char ip[] = "127.0.0.1";
                             strcpy(udpvalues->serverIp, ip);
-                            *done = false;
+                            *quitGame = false;
                             loop = false;
                             break;
                         case SDLK_3:
                             printf("\nQUIT GAME\n");
-                            *done = true;
+                            *quitGame = true;
                             loop = false;
                             break;
                         //case: OPTIONS (inte så viktigt)

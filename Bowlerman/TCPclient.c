@@ -220,53 +220,53 @@ PUBLIC void manageTCP(TCPstruct *u)
 	}
 } 
 
-PUBLIC void initSDLNet()
-{
-	if (SDLNet_Init() < 0)
-	{
-		fprintf(stderr, "SDLNet_Init: %s\n", SDLNet_GetError());
-		exit(EXIT_FAILURE);
-	}
-}
+// PUBLIC void initSDLNet()
+// {
+// 	if (SDLNet_Init() < 0)
+// 	{
+// 		fprintf(stderr, "SDLNet_Init: %s\n", SDLNet_GetError());
+// 		exit(EXIT_FAILURE);
+// 	}
+// }
 
-int main(int argc, char *argv[])
-{
-	initSDLNet();
+// int main(int argc, char *argv[])
+// {
+// 	initSDLNet();
 	
-	TCPstruct tcpValues = createTCPstruct();     //returns a struct for tcp-init-struct.	
-	initTCP(&tcpValues, "127.0.0.1");		//connectar till angiven Ip-adress
-	int playerID = getPlayerIDviaTCP(&tcpValues);  //detta ger en tråd-läcka. en tråd är lös.
-	printf("playerID in main main %d\n", playerID);
+// 	TCPstruct tcpValues = createTCPstruct();     //returns a struct for tcp-init-struct.	
+// 	initTCP(&tcpValues, "127.0.0.1");		//connectar till angiven Ip-adress
+// 	int playerID = getPlayerIDviaTCP(&tcpValues);  //detta ger en tråd-läcka. en tråd är lös.
+// 	printf("playerID in main main %d\n", playerID);
 
-	ThreadStruct threadStruct;
-	threadStruct.sd=tcpValues.sd;
-	threadStruct.startflag=0;
-	SDL_Thread* thread = SDL_CreateThread(receiveTCP, "test", (void *) &threadStruct);
-	//SDL_WaitThread(thread); //Elr en annan funktion som stänger ned tråden. Men kanske i slutet då.
+// 	ThreadStruct threadStruct;
+// 	threadStruct.sd=tcpValues.sd;
+// 	threadStruct.startflag=0;
+// 	SDL_Thread* thread = SDL_CreateThread(receiveTCP, "test", (void *) &threadStruct);
+// 	//SDL_WaitThread(thread); //Elr en annan funktion som stänger ned tråden. Men kanske i slutet då.
 
-	if(playerID==2)
-	{
-		startGameViaTCP(&tcpValues, &threadStruct);
-		//SDL_terminateThread;
-	}
+// 	if(playerID==2)
+// 	{
+// 		startGameViaTCP(&tcpValues, &threadStruct);
+// 		//SDL_terminateThread;
+// 	}
 	
-	//SDL_Delay(1000); //bara tillfälligt
+// 	//SDL_Delay(1000); //bara tillfälligt
 
 	
-	//manageTCP(&tcpValues);					//skickar och tar emot data via TCP
-	while(1)
-	{
-		if(threadStruct.startflag==1)
-		{
-			printf("playerammount: %d\n", threadStruct.playerAmmount);
-			printf("startflag: %d\n", threadStruct.startflag);
-			//get playerammount & start game (exit loop)
-			thread=NULL;  //closes thread
-			break;
-		}
-	}
+// 	//manageTCP(&tcpValues);					//skickar och tar emot data via TCP
+// 	while(1)
+// 	{
+// 		if(threadStruct.startflag==1)
+// 		{
+// 			printf("playerammount: %d\n", threadStruct.playerAmmount);
+// 			printf("startflag: %d\n", threadStruct.startflag);
+// 			//get playerammount & start game (exit loop)
+// 			thread=NULL;  //closes thread
+// 			break;
+// 		}
+// 	}
 
-	closeTCP(&tcpValues);
+// 	closeTCP(&tcpValues);
 
-	SDLNet_Quit();
-}
+// 	SDLNet_Quit();
+// }

@@ -30,7 +30,7 @@ struct threadStruct
 };
 typedef struct threadStruct ThreadStruct;
 
-void initSDLNet();
+//void initSDLNet();
 int receiveTCP(void * data); //receives info whenever games starts. Sets playerAmount when starting.
 int startGameViaTCP(TCPstruct *u, ThreadStruct * threadStruct); //sends start-request to TCP-server and sets playeramount.
 int getPlayerIDviaTCP(TCPstruct *u); //returns playerID
