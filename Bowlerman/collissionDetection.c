@@ -110,7 +110,7 @@ void testCollosionWithBombs(Game theGame)
             int id = getLocalID(theGame);
             float playerW = playerGetWidth(theGame->player[theGame->playerIDLocal]), playerH = playerGetHeight(theGame->player[theGame->playerIDLocal]);
             float playerX = playerGetXPosition(theGame->player[theGame->playerIDLocal]), playerY = playerGetYPosition(theGame->player[theGame->playerIDLocal]);
-            int moveDirection = getMoveDirection(theGame->player[id]);
+            int moveDirection = playerGetMoveDirection(theGame->player[id]);
             int bombX = getBombXPosition(theGame->bombs[i]), bombY = getBombYPosition(theGame->bombs[i]), bombW = getBombWidth(theGame->bombs[i]), bombH = getBombHeight(theGame->bombs[i]);
             if(BombGetPlacedBombRestriction(theGame->bombs[i]) == 0)
             {
@@ -228,7 +228,7 @@ void testCollisionWithWalls(Game theGame)
     {
         float playerW = playerGetWidth(theGame->player[i]), playerH = playerGetHeight(theGame->player[i]);
         float playerX = playerGetXPosition(theGame->player[i]), playerY = playerGetYPosition(theGame->player[i]);
-        int moveDirection = getMoveDirection(theGame->player[i]); 
+        int moveDirection = playerGetMoveDirection(theGame->player[i]); 
         for (int j=100;j<250;j++)
         {
 

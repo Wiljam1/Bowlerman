@@ -161,4 +161,5 @@ void showScoreboard(Game theGame);
 void renderTextures(Game theGame);
 void destroyGame(Game theGame); // Function for easily destroying the application.
 void flagSetUpdate(Game theGame, bool cond);
+void setLocalID(Game theGame, int id);
 #endif

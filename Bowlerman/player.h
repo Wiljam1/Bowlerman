@@ -47,8 +47,6 @@ int playerGetAmountOfBombs(Player p);
 int playerGetIsInvulnerable(Player p);
 void playerAddAmountOfBombsPlaced(Player *p, int i);
 int playerGetExplosionPower(Player p);
-
-void playerSetMoveDirection(Player *p, char c);
 void playerSetID(Player *p, int id);
 
 void playerSetXPos(Player *p, float x);
@@ -62,9 +60,9 @@ int playerGetScore(Player p);
 
 void playerSetNoOfLives(Player *p, int lives);
 void playerSetScore(Player *p, int score);
-
+char playerGetMoveDirection(Player p);
 //Change players movedirection
-void updateMovementDirection(Player *p, char c);
+void playerSetMoveDirection(Player *p, char c);
 //Change player x position
 void updatePlayerXPosition(Player *p, double velX);
 //Change player y position

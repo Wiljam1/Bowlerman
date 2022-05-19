@@ -195,7 +195,7 @@ void manageMovementInputs(Game theGame)
         direction = '0';
     }
     // Update player positions
-    updateMovementDirection(&theGame->player[id], direction);
+    playerSetMoveDirection(&theGame->player[id], direction);
     updatePlayerXPosition(&theGame->player[id], velX);
     updatePlayerYPosition(&theGame->player[id], velY);
 }
@@ -540,4 +540,8 @@ PUBLIC void destroyGame(Game theGame)
 void flagSetUpdate(Game theGame, bool cond)
 {
     theGame->updateFlag = cond;
+}
+void setLocalID(Game theGame, int id)
+{
+    theGame->playerIDLocal = id;
 }

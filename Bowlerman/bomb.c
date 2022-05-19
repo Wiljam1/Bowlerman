@@ -204,7 +204,7 @@ int correctBowlingBallPosx(int i)
 {
     int size = WIDTH / 17;
     int j=0, k=0;
-    i -= WIDTH/99;
+    //i+= WIDTH/99;
     k=i/size;
     j=i%size;
     if(j<35){
