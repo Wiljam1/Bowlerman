@@ -4,7 +4,7 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 #define UPDATESPEED 1
-
+//void setUDPScore(UDPData *u, int id, int func());
 PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 {
     int playerID = theGame->playerIDLocal;
@@ -63,7 +63,7 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
     static int oldScore = 0, scoreGUIFlag = 0;
 
     if(theGame->player[playerID].score != oldScore){
-        oldScore = theGame->player[playerID].score;
+        oldScore = playerGetScore(theGame->player[playerID]);
         scoreGUIFlag = 1;
     }
     // send data if movement or bomb-placement
@@ -75,7 +75,8 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         udpData->y = y_pos;
         udpData->powerupsX = 0;
         udpData->noOfLives = playerGetNoOfLives(theGame->player[playerID]);
-        udpData->score[playerID] = theGame->player[playerID].score;
+        udpData->score[playerID] = playerGetScore(theGame->player[playerID]);
+        //setUDPScore(udpData, playerID, playerGetScore(theGame->player[playerID]));
         for(int i=0;i<POWERUPAMOUNT;i++)
         {
             if(theGame->powerups[i].sentViaUDP == 0)
@@ -255,6 +256,12 @@ PUBLIC void initUDP(UDPStruct *u)
         fprintf(stderr, "SDLNet_AllocPacket: %s\n", SDLNet_GetError());
         exit(EXIT_FAILURE);
     }
+
+}
+
+void setUDPScore(UDPData *u, int id, int func())
+{
+    u->score[id] = (int)func();
 }
 
 

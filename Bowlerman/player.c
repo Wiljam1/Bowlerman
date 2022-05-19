@@ -232,6 +232,10 @@ PUBLIC int getPlayerID(Player p)
 {
     return p.id;
 }
+PUBLIC int playerGetScore(Player p)
+{
+    return p.score;
+}
 PUBLIC void getStartPos(Player *p)
 {
     switch (p->id)

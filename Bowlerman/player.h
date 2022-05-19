@@ -58,6 +58,7 @@ void playerSetOldXPos(Player *p, int x);
 void playerSetOldYPos(Player *p, int y);
 int playerGetOldXpos(Player p);
 int playerGetOldYPos(Player p);
+int playerGetScore(Player p);
 
 
 //Change players movedirection
