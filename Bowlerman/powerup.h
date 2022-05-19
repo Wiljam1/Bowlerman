@@ -17,5 +17,18 @@ void renderPowerups(Game theGame);                     //Render all the powerups
 void powerupGive(Game theGame, int playerID, int i);   //Grant powerup to player who picks it up.
 Powerup powerupPlace(int xPos, int yPos, int type);    //Create and place a powerup on X/Y-pos given to the function.
 int timerForPowerups(int startTime, int timeAmount, int powerUpID);
+int PowerUpGetXPosition(Powerup p);
+int PowerUpGetYPosition(Powerup p);
+int PowerUpGetWidth(Powerup p);
+int PowerUpGetHeight(Powerup p);
+int PowerUpGetType(Powerup p);
+int PowerUpGetIsPickedUp(Powerup p);
+int PowerUpGetSentViaUDP(Powerup p);
+int PowerUpGetID(Powerup p);
+int PowerUpGetIndestructable(Powerup p);
+void PowerUpSetID(Powerup p, int i);
+void PowerUpSetIndestructable(Powerup p, int i);
+void PowerUpSetIsPickedUp(Powerup p, int i);
+void PowerUpSetSentViaUDP(Powerup p, int i);
 
 #endif

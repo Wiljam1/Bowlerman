@@ -88,3 +88,68 @@ int timerForPowerups(int startTime, int timeAmount, int powerUpID)
     }
     return 1;
 }
+
+PUBLIC int PowerUpGetXPosition(Powerup p)
+{
+    return p.x;
+}
+
+PUBLIC int PowerUpGetYPosition(Powerup p)
+{
+    return p.y;
+}
+
+PUBLIC int PowerUpGetWidth(Powerup p)
+{
+    return p.w;
+}
+
+PUBLIC int PowerUpGetHeight(Powerup p)
+{
+    return p.h;
+}
+
+PUBLIC int PowerUpGetType(Powerup p)
+{
+    return p.type;
+}
+
+PUBLIC int PowerUpGetIsPickedUp(Powerup p)
+{
+    return p.isPickedUp;
+}
+
+PUBLIC int PowerUpGetSentViaUDP(Powerup p)
+{
+    return p.sentViaUDP;
+}
+
+PUBLIC int PowerUpGetID(Powerup p)
+{
+    return p.id;
+}
+
+PUBLIC int PowerUpGetIndestructable(Powerup p)
+{
+    return p.indestructable;
+}
+
+PUBLIC void PowerUpSetID(Powerup p, int i)
+{
+    p.id = i;
+}
+
+PUBLIC void PowerUpSetIndestructable(Powerup p, int i)
+{
+    p.indestructable = i;
+}
+
+PUBLIC void PowerUpSetIsPickedUp(Powerup p, int i)
+{
+    p.isPickedUp = i;
+}
+
+PUBLIC void PowerUpSetSentViaUDP(Powerup p, int i)
+{
+    p.sentViaUDP = i;
+}
