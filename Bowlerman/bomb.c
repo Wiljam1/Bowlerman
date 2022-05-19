@@ -83,7 +83,7 @@ void tryToPlaceBomb(Game theGame, int playerID)
             {
                 theGame->bombs[playerID+amount] = initBomb();
                 BombSetYPosition(&theGame->bombs[playerID+amount], correctBowlingBallPosy(playerGetYPosition(theGame->player[playerID])));
-                BombSetXPosition(&theGame->bombs[playerID+amount], correctBowlingBallPosX(playerGetXPosition(theGame->player[playerID]))); 
+                BombSetXPosition(&theGame->bombs[playerID+amount], correctBowlingBallPosx(playerGetXPosition(theGame->player[playerID]))); 
                 BombSetTimerValue(&theGame->bombs[playerID+amount], initbowlingballtimer(SDL_GetTicks(), BOMBTIMER, playerID+amount));
                 BombSetWhoPlacedID(&theGame->bombs[playerID+amount], playerID);
                 playerAddAmountOfBombsPlaced(&theGame->player[playerID], 1);                //antal bomber som är placerade
@@ -359,11 +359,6 @@ PUBLIC void BombSetExplosionInit(Bowlingball *b, int i)
 PUBLIC void BombSetTimerInit(Bowlingball *b, int i)
 {
     b->timerinit = i;
-}
-
-PUBLIC void BombSetTimerValue(Bowlingball *b, int i)
-{
-    b->timervalue = i;
 }
 
 PUBLIC int BombSetPlacedBombRestriction(Bowlingball b, int i)

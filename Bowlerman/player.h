@@ -28,8 +28,8 @@ Player initPlayer(int xPos, int yPos, int playerID);
 void UpdatePlayerTextures(Game theGame);
 float playerGetXPosition(Player p);
 float playerGetYPosition(Player p);
-int getPlayerHeight(Player p);
-int getPlayerWidth(Player p);
+int playerGetHeight(Player p);
+int playerGetWidth(Player p);
 double getPlayerSpeed(Player p);
 int getPlayerID(Player p);
 void getStartPos(Player *p);
@@ -61,7 +61,7 @@ int playerGetOldYPos(Player p);
 
 
 //Change players movedirection
-void updateMovementDirection(Player *p, char c)
+void updateMovementDirection(Player *p, char c);
 //Change player x position
 void updatePlayerXPosition(Player *p, double velX);
 //Change player y position

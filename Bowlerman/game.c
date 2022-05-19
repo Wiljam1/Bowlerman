@@ -71,7 +71,6 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *done)
     //Init random seed
     srand(time(NULL));
     
-
     // get playerID via UDP and saves it in theGame->playerIDLocal
     getPlayerIDviaUDP(theGame, udpData, udpValues);
     
@@ -197,8 +196,8 @@ void manageMovementInputs(Game theGame)
     }
     // Update player positions
     updateMovementDirection(&theGame->player[id], direction);
-    updatePlayerXPosition(&theGame->player[id] velX);
-    updatePlayerYPosition(&theGame->player[id] velY);
+    updatePlayerXPosition(&theGame->player[id], velX);
+    updatePlayerYPosition(&theGame->player[id], velY);
 }
 
 // game loop

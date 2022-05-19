@@ -89,8 +89,8 @@ void UpdatePlayerTextures(Game theGame)
     {
         playerRect[i].x = playerGetXPosition(theGame->player[i]);
         playerRect[i].y = playerGetYPosition(theGame->player[i]);
-        playerRect[i].w = getPlayerWidth(theGame->player[i]);
-        playerRect[i].h = getPlayerHeight(theGame->player[i]);
+        playerRect[i].w = playerGetWidth(theGame->player[i]);
+        playerRect[i].h = playerGetHeight(theGame->player[i]);
     }
     /*Managing sprite updates*/
     for(int i=0; i < theGame->playerAmount; i++)
@@ -188,11 +188,11 @@ PUBLIC char getMoveDirection(Player p)
     return p.moveDirection;
 }
 
-PUBLIC int getPlayerHeight(Player p)
+PUBLIC int playerGetHeight(Player p)
 {
     return p.height;
 }
-PUBLIC int getPlayerWidth(Player p)
+PUBLIC int playerGetWidth(Player p)
 {
     return p.width;
 }
