@@ -79,7 +79,7 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         UDPSetPlayerID(udpData, playerID);
         UDPSetXPos(udpData, x_pos);
         UDPSetYPos(udpData, y_pos);
-        udpData->powerupsX = 0; // VAD GÖR DENNA?
+        //udpData->powerupsX = 0; // VAD GÖR DENNA?
         UDPSetNoOfLives(udpData, playerGetNoOfLives(theGame->player[playerID]));
         UDPSetScore(udpData, playerID, playerGetScore(theGame->player[playerID]));
         for(int i=0;i<POWERUPAMOUNT;i++)
