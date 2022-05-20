@@ -20,8 +20,6 @@
 // #define PLAYERWIDTH = 50;    //Använder structen för sånt här istället
 // #define PLAYERSPEED = 5;     // speed in pixels/second
 
-//nånting konstigt med player.h elr player.c, tror att de blir inkluderade två gånger
-//Får en massa errors när man flyttar runt saker här "already defined blah blah blah"
 struct playerController
 {
     int id;   //för packets via UDP behöver man kunna veta vem det är som skickar datan.

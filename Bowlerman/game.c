@@ -170,49 +170,6 @@ bool checkEvents(Game theGame, Player player[])
     return quitGame;
 }
 
-/* void manageMovementInputs(Game theGame)
-{
-    double velX = 0, velY = 0;
-    int id = getLocalID(theGame);
-    Player player = playerGetLocalPlayer(theGame->player[id]);
-    char direction;
-
-    const Uint8 *state = SDL_GetKeyboardState(NULL);
-    if (player.isInvulnerable == false || player.isDead == false)
-    {
-        if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
-        {
-            velX = -getPlayerSpeed(player);
-            direction = 'a';
-        }
-        else if (state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
-        {
-            velX = getPlayerSpeed(player);
-            direction = 'd';
-        }
-        if (velX == 0)
-        {
-            if (state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_S])
-            {
-                velY = -getPlayerSpeed(player);
-                direction = 'w';
-            }
-            else if (state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D])
-            {
-                velY = getPlayerSpeed(player);
-                direction = 's';
-            }
-        }
-    }
-    if (!velX && !velY) {
-        direction = '0';
-    }
-    // Update player positions
-    playerSetMoveDirection(&theGame->player[id], direction);
-    updatePlayerXPosition(&theGame->player[id], velX);
-    updatePlayerYPosition(&theGame->player[id], velY);
-} */
-
 // game loop
 PUBLIC void gameUpdate(Game theGame)
 {
@@ -229,7 +186,6 @@ PUBLIC void gameUpdate(Game theGame)
     player[1] = initPlayer(RIGHT_X, TOP_Y, 1);
     player[2] = initPlayer(LEFT_X, BOTTOM_Y, 2);
     player[3] = initPlayer(RIGHT_X, BOTTOM_Y, 3);
-
     // Game Loop:
 
     while (!quitGame)
