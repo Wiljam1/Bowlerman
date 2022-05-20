@@ -113,8 +113,8 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
 {
     if (SDLNet_UDP_Recv(udpValues->sd, udpValues->p2))
     {
-        int a, b;
         static int oldScore[4] = {0};
+        static int oldPowerupID = 0;
         memcpy(&(*udpData), (char *)udpValues->p2->data, sizeof(struct data));
         int playerID = UDPGetPlayerID(udpData);
         playerSetXPos(&(theGame->player[playerID]), udpData->x);
@@ -122,11 +122,16 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
         if (udpData->placeBomb==1){ 
             tryToPlaceBomb(theGame, playerID);
         }
-        
-        if(udpData->powerupsX != 0)
+                                                                        //BUG: First powerup is never sent!
+        printf("Receiving data, oldPowerupID: %d\n", oldPowerupID);     //BUG: Only send/receive more powerups when moving / sending next packet.
+        if(oldPowerupID != udpData->powerupsID) //Only recieve when ID changed
         {
+            printf("Receiving a powerup from UDPclient! Powerup ID:%d\n", udpData->powerupsID);
             theGame->powerups[udpData->powerupsID] = powerupPlace(udpData->powerupsX-WIDTH/119, udpData->powerupsY-WIDTH/119, udpData->powerupsType);
             theGame->powerups[udpData->powerupsID].indestructable = timerForPowerups(SDL_GetTicks(), 1500, udpData->powerupsID);
+
+            printf("Saving oldPowerUp: %d\n", oldPowerupID);
+            oldPowerupID = udpData->powerupsID;
         }
         playerSetMoveDirection(&(theGame->player[playerID]), udpData->moveDirection);
         

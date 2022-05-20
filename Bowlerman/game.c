@@ -89,8 +89,8 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
     
     
     //initierar väggar
-    initAllWalls(wall);
-    
+    initAllWalls(theGame);
+
     //set game-delay to x-miliseconds. You should have lower delay if you have a slower computer
     theGame->delayInMS=10;
 }
@@ -237,10 +237,10 @@ PUBLIC void gameUpdate(Game theGame)
 
         // Update GUI labels (only updates when updateFlag = true)
         updateGUI(theGame); //behövs göras om, mem leak (mem leak löst med flagga temporärt)
-        
+
         // render display
         renderTextures(theGame);
-        
+
         SDL_Delay(theGame->delayInMS); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
     destroySoundFiles(sounds);
@@ -404,13 +404,13 @@ void process(Game theGame, Sounds *s)
         if (BombGetExplosionInit(theGame->bombs[i]) == 0){
             BombSetExplosionInit(&theGame->bombs[i], initbowlingballtimer(0, 1000, i));
             for(int j=139;j<250;j++){
-                if(WallGetDestroyedWall(wall[j]) == 0){
-                    WallSetDestroyedWall(&wall[j], testCollisionWithDestroyableWalls(theGame, j, i));
-                    if(WallGetDestroyedWall(wall[j])){ //If wall is destroyed...
+                if(WallGetDestroyedWall(theGame->wall[j]) == 0){
+                    WallSetDestroyedWall(&theGame->wall[j], testCollisionWithDestroyableWalls(theGame, j, i));
+                    if(WallGetDestroyedWall(theGame->wall[j])){ //If wall is destroyed...
                         if(returnarray[i] == theGame->playerIDLocal){
                             playerAddScore(&theGame->player[theGame->bombs[i].whoPlacedID], 1);
                             theGame->updateFlag = true;
-                            theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, wall[j].x, wall[j].y);       
+                            theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, theGame->wall[j].x, theGame->wall[j].y);       
                         }
                     }
                 }

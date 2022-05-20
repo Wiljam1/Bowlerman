@@ -75,7 +75,7 @@ void renderPowerups(Game theGame)
         {
             SDL_Rect powerupRect = {theGame->powerups[i].x, theGame->powerups[i].y, 
                                     theGame->powerups[i].w, theGame->powerups[i].h};
-            if(theGame->powerups[i].type < 3 && theGame->powerups[i].type >= 0)
+        
             SDL_RenderCopy(theGame->renderer, theGame->texturePowerups[theGame->powerups[i].type], NULL, &powerupRect); 
         }
     }
