@@ -16,7 +16,7 @@ void UDPSetMoveDirection(UDPData *u, char c);
 PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 {
     int playerID = theGame->playerIDLocal;
-    udpData->placeBomb=0;
+    //udpData->placeBomb=0;
     static int doPlaceBomb=0;
     static int flagSendBomb[5]={0};
 
@@ -54,7 +54,7 @@ PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
         {
             doPlaceBomb=0;
             udpData->placeBomb=1;
-
+            printf("Placebomb set to true!\n");
         }
     }
 }
@@ -110,6 +110,7 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         scoreGUIFlag = 0;
         powerupSendflag = 0;
         *flagSendOnStartup=0;
+        udpData->placeBomb = 0;
         if(theGame->powerupsNotSent > 0){
             theGame->powerupsNotSent--;
         }
@@ -128,28 +129,21 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
         if (udpData->placeBomb==1){ 
             tryToPlaceBomb(theGame, playerID);
         }
-        puts("Start of packet----------------\n");
-        static int oldPowerupID = 0;
-        //printf("Udpdata->POWERUPSID: %d rand: %d\n", udpData->powerupsID, rand()%100+1);
+        static int oldPowerupID = 15;
                                                                         //BUG: First powerup is never sent!
         printf("Receiving data, udpdata->powerupsID: %d\n", udpData->powerupsID);
         if(oldPowerupID != udpData->powerupsID) //Only recieve when ID changed
         {
             printf("Receiving a powerup from UDPclient! Powerup ID:%d\n", udpData->powerupsID);
-            if(udpData->powerupsID != -1){
+            if(udpData->powerupsX != 0){
                 theGame->powerups[udpData->powerupsID] = powerupPlace(udpData->powerupsX-WIDTH/119, udpData->powerupsY-WIDTH/119, udpData->powerupsType);
                 theGame->powerups[udpData->powerupsID].indestructable = timerForPowerups(SDL_GetTicks(), 1500, udpData->powerupsID);
             }
 
             oldPowerupID = udpData->powerupsID;
-            printf("Saving oldPowerUp: %d\n", oldPowerupID);
         }
         playerSetMoveDirection(&(theGame->player[playerID]), udpData->moveDirection);
-        
-        puts("End of packet----------------\n");
 
-        //ska denna vara här?
-        //playerSetID(&(theGame->player[playerID]), udpData->playerID);
         playerSetNoOfLives(&(theGame->player[playerID]), udpData->noOfLives);
         playerSetScore(&(theGame->player[playerID]), udpData->score[playerID]);
         for(int i = 0; i < 4; i++){
@@ -209,7 +203,7 @@ PUBLIC UDPData UDPDataReset()
     u.powerupsX = 0;
     u.powerupsY = 0;
     u.powerupsType = 0;
-    u.powerupsID = -1;
+    u.powerupsID = 0;
     return u;
 }
 
