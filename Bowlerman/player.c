@@ -24,29 +24,29 @@ PUBLIC Player initPlayer(int initX, int initY, int playerID)
     int width = (WIDTH / 26.56);
     Player p;
 
-   p.id = playerID;
-   p.up = 0;
-   p.down = 0;
-   p.right = 0;
-   p.left = 0;
-   p.xVel = 0;
-   p.yVel = 0;
-   p.playerRect.x =p.xPos =p.xPosOld = initX; // Startvärden för x och y ges till alla variabler.
-   p.playerRect.y =p.yPos =p.yPosOld = initY;
-   p.speed = (double)MAXSPEED/2;
-   p.speedDisplay = 1;
-   p.amountOfBombs = 1;        //antal bomber, börjar på 1
-   p.amountOfBombsPlaced = 0;  //antal bomber placerade, börjar på 0    
-   p.explosionPower = 1;       //hur stor explosionen ska vara, börjar på 1
-   p.canRollBombs = false;
-   p.playerRect.h =p.height = height;
-   p.playerRect.w =p.width = width;
-   p.moveDirection = '0';
-   p.isMoving = false;  //is not enforced by keyboard inputs though.
-   p.isDead = false;
-   p.isInvulnerable = false;
-   p.noOfLives = 3; // OM du ändrar här måste du ändra till samma i UDPDataReset!!
-   p.score = 0;
+    p.id = playerID;
+    p.up = 0;
+    p.down = 0;
+    p.right = 0;
+    p.left = 0;
+    p.xVel = 0;
+    p.yVel = 0;
+    p.playerRect.x = p.xPos = p.xPosOld = initX; // Startvärden för x och y ges till alla variabler.
+    p.playerRect.y = p.yPos = p.yPosOld = initY;
+    p.speed = (double)MAXSPEED/2;
+    p.speedDisplay = 1;
+    p.amountOfBombs = 1;        //antal bomber, börjar på 1
+    p.amountOfBombsPlaced = 0;  //antal bomber placerade, börjar på 0    
+    p.explosionPower = 1;       //hur stor explosionen ska vara, börjar på 1
+    p.canRollBombs = false;
+    p.playerRect.h = p.height = height;
+    p.playerRect.w = p.width = width;
+    p.moveDirection = '0';
+    p.isMoving = false;  //is not enforced by keyboard inputs though.
+    p.isDead = false;
+    p.isInvulnerable = false;
+    p.noOfLives = 1; // OM du ändrar här måste du ändra till samma i UDPDataReset!!
+    p.score = 0;
 
     return p;
 }

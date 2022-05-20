@@ -122,6 +122,16 @@ PUBLIC void loadAllTextures(Game theGame)
     theGame->texturePowerups[1] = (SDL_Texture *)loadTextures(theGame, "explosionPowerPowerup.png");
     theGame->texturePowerups[2] = (SDL_Texture *)loadTextures(theGame, "moreBombsPowerup.png");
     //theGame->texturePowerups[3] = (SDL_Texture *)loadTextures(theGame, "canRollBombsPowerup.png");
+    /*Menu*/
+    theGame->menuBackground = (SDL_Texture *)loadTextures(theGame, "menu/menuBackground.png");
+    theGame->logo = (SDL_Texture *)loadTextures(theGame, "menu/logo.png");
+    theGame->menuButtons[0] = (SDL_Texture *)loadTextures(theGame, "menu/play.png");
+    theGame->menuButtons[1] = (SDL_Texture *)loadTextures(theGame, "menu/host.png");
+    theGame->menuButtons[2] = (SDL_Texture *)loadTextures(theGame, "menu/join.png");
+    theGame->menuButtons[3] = (SDL_Texture *)loadTextures(theGame, "menu/start.png");
+    theGame->menuButtons[4] = (SDL_Texture *)loadTextures(theGame, "menu/quit.png");
+    theGame->menuButtons[5] = (SDL_Texture *)loadTextures(theGame, "menu/backArrow.png");
+    theGame->menuButtons[6] = (SDL_Texture *)loadTextures(theGame, "menu/textfield.png");
 
     SDL_FreeSurface(theGame->window_surface);
     // Load player sprites

@@ -26,6 +26,7 @@
 #define HEIGHT (WIDTH / 1.178)
 #define MAXBOMBAMOUNT 20
 //-------------------------------------------------
+#define LEN 20
 struct sounds
 {
     Mix_Music *backgroundMusic;
@@ -118,6 +119,7 @@ struct game_type
     
     //Powerups
     Powerup powerups[POWERUPAMOUNT];
+    int powerupsNotSent;
 
     //bombs
     Bowlingball bombs[MAXBOMBAMOUNT];
@@ -137,6 +139,9 @@ struct game_type
     SDL_Texture *textureWall[4];
     SDL_Texture *bombExplosion_texture;
     SDL_Texture *texturePowerups[4];
+    SDL_Texture *menuBackground;
+    SDL_Texture *logo;
+    SDL_Texture *menuButtons[7];
     SDL_Texture *labels[LABEL_AMOUNT+1];                                        
     int labelW[LABEL_AMOUNT+1], labelH[LABEL_AMOUNT+1];
     bool updateFlag;
