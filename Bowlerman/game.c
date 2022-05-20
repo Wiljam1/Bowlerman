@@ -475,8 +475,8 @@ void process(Game theGame, Sounds *s)
                             // joinLobby(ip);  -Scen där man ser vilka som har joinat lobbyn
                             printf("\nHOST SERVER\n");
                             printf("Creating server... ");
-                            ShellExecuteA(GetDesktopWindow(),"open","udpServer.exe",NULL,NULL,SW_SHOW);  //Start server file
-                            SDL_Delay(1000);
+                            //ShellExecuteA(GetDesktopWindow(),"open","udpServer.exe",NULL,NULL,SW_SHOW);  //Start server file
+                            //SDL_Delay(1000);
                             printf("Server created!\n");
 
                             char ip1[]={"127.0.0.1"};
