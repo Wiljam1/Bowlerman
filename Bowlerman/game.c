@@ -210,7 +210,7 @@ PUBLIC void gameUpdate(Game theGame)
 {
     // Initialize
     bool quitGame = false;
-    Player player[MAXPLAYERS]; // declares x-amounts of players
+    //Player player[MAXPLAYERS]; // declares x-amounts of players ----- Vad gör ens denna? Players blir väl definierade när vi skapar theGame genom att de ligger i strukten.
     UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
     UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
     initGame(theGame, &udpData, &udpValues, &quitGame);         // initializes startvalues. coordinates etc.
