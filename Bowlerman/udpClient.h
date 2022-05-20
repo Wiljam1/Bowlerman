@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "game.h"
+#include "player.h"
 
 
 // data sent via UDP
@@ -48,7 +49,7 @@ void initSDLNet();          //initiates SDLNet
 void initUDP(UDPStruct *u);   //inits SDL-net with correct IP-adresses etc.
 UDPData UDPDataReset();  //creates and resets a UDP-data struct
 UDPStruct createUDPstruct();     //initializes UDP IP-adress struct
-void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues);  //sends and receives data via UDP
+void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues, Player p[]);  //sends and receives data via UDP
 
 //dessa under används inte:
 void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues);  //get player ID via UDP

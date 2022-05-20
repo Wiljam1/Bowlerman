@@ -8,13 +8,13 @@
 
 //void allowBombPlacementInit(Game theGame);
 struct bowling_ball typedef Bowlingball;                                //define för structen
-void tryToPlaceBomb(Game theGame, int playerID);                        //testar att lägga ut bomb och gör det om det är tillåtet
 int initbowlingballtimer(int startTime, int timeAmount, int playerID);  //initierar bomb timer
 int correctBowlingBallPosx(int i);                                      // korrigerar bombernas position så de blir centrerade
 int correctBowlingBallPosy(int i);                                      //samma som ovan
-void sortBombsArray(Game theGame,int i);                                //sorterar bombernas array
-void initExplosionPosition(Game theGame, int playerID);                 //initierar exposionspositionen
 Bowlingball initBomb();                                                 //skapar bomb
+void sortBombsArray(Game theGame,int i, Player p[]);                                //sorterar bombernas array
+void tryToPlaceBomb(Game theGame, int playerID, Player p[]);                        //testar att lägga ut bomb och gör det om det är tillåtet
+void initExplosionPosition(Game theGame, int playerID, Player p[]);                 //initierar exposionspositionen
 void loadBomb();                                                        
 //int timeleft(int time, int playerID);                                   
 int getBombXPosition(Bowlingball b);                                    //resterande är obvious vad de gör, läs funktionsnamnet

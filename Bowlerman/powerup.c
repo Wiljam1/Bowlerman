@@ -29,16 +29,16 @@ Powerup rollForPowerup(int *pCurrentPowerup, int ID, int xPos, int yPos)
     return p;
 }
 
-void powerupGive(Player *pPlayer, Powerup *pPowerup)
+void powerupGive(Player pPlayer[], int id, Powerup *pPowerup)
 {
     if(pPowerup->type == 0){ //give speed
-        playerIncreaseSpeed(pPlayer);
+        playerIncreaseSpeed(pPlayer, id);
     }
     else if(pPowerup->type == 1){ //give more power
-        playerAddExplosionPower(pPlayer, 1);
+        playerAddExplosionPower(pPlayer, id, 1);
     }
     else if(pPowerup->type == 2){ //give more bombs
-        playerAddAmountOfBombs(pPlayer, 1);
+        playerAddAmountOfBombs(pPlayer, id, 1);
     }
     PowerUpSetIsPickedUp(pPowerup, true);
 }

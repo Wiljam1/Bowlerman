@@ -9,11 +9,12 @@
 #include <stdlib.h>
 
 #include "game.h"
+#include "player.h"
 
 
 void initGUI(Game theGame);                                                               //Set font and init SDL_ttf
 void createLabel(Game theGame, int labelID, char text[20], float value, SDL_Color color); //Create a label and place it in array
-void updateGUI(Game theGame);                                                             //Update created labels
+void updateGUI(Game theGame, Player p[]);                                                             //Update created labels
 void drawGUI(Game theGame);
 void destroyGUI(Game theGame);
 

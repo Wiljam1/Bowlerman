@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "player.h"
-#include "game.h"
+#include "Game.h"
 #include "collissionDetection.h"
 
 #define MAXSPEED (WIDTH/265)
@@ -15,69 +15,101 @@
 #define MAXLIVES 10
 #define INVULNERABILITYTIME 3000
 
-#define LEFT_X (WIDTH/17)
-#define RIGHT_X (WIDTH/1.106)
-#define TOP_Y (WIDTH/8.5)
-#define BOTTOM_Y (WIDTH/1.368)
 
 Uint32 pDeathCallback();
 
 PUBLIC Player initPlayer(int initX, int initY, int playerID)
 {
-    //malloc(sizeof(struct playerController));
     int height = (WIDTH / 17);
     int width = (WIDTH / 26.56);
     Player p;
 
-    p.id = playerID;
-    p.up = 0;
-    p.down = 0;
-    p.right = 0;
-    p.left = 0;
-    p.xVel = 0;
-    p.yVel = 0;
-    p.playerRect.x = p.xPos = p.xPosOld = initX; // Startvärden för x och y ges till alla variabler.
-    p.playerRect.y = p.yPos = p.yPosOld = initY;
-    p.speed = (double)MAXSPEED/2;
-    p.speedDisplay = 1;
-    p.amountOfBombs = 1;        //antal bomber, börjar på 1
-    p.amountOfBombsPlaced = 0;  //antal bomber placerade, börjar på 0    
-    p.explosionPower = 1;       //hur stor explosionen ska vara, börjar på 1
-    p.canRollBombs = false;
-    p.playerRect.h = p.height = height;
-    p.playerRect.w = p.width = width;
-    p.moveDirection = '0';
-    p.isMoving = false;  //is not enforced by keyboard inputs though.
-    p.isDead = false;
-    p.isInvulnerable = false;
-    p.noOfLives = 3; // OM du ändrar här måste du ändra till samma i UDPDataReset!!
-    p.score = 0;
+   p.id = playerID;
+   p.up = 0;
+   p.down = 0;
+   p.right = 0;
+   p.left = 0;
+   p.xVel = 0;
+   p.yVel = 0;
+   p.playerRect.x =p.xPos =p.xPosOld = initX; // Startvärden för x och y ges till alla variabler.
+   p.playerRect.y =p.yPos =p.yPosOld = initY;
+   p.speed = (double)MAXSPEED/2;
+   p.speedDisplay = 1;
+   p.amountOfBombs = 1;        //antal bomber, börjar på 1
+   p.amountOfBombsPlaced = 0;  //antal bomber placerade, börjar på 0    
+   p.explosionPower = 1;       //hur stor explosionen ska vara, börjar på 1
+   p.canRollBombs = false;
+   p.playerRect.h =p.height = height;
+   p.playerRect.w =p.width = width;
+   p.moveDirection = '0';
+   p.isMoving = false;  //is not enforced by keyboard inputs though.
+   p.isDead = false;
+   p.isInvulnerable = false;
+   p.noOfLives = 3; // OM du ändrar här måste du ändra till samma i UDPDataReset!!
+   p.score = 0;
 
     return p;
 }
 
-void initAllPlayers(Game theGame)
+/* void initAllPlayers(Player players)
 {
-    // init x amount of players
-    theGame->player[0] = initPlayer(LEFT_X, TOP_Y, 0); // sets x and y coordinates and resets values.
-    printf("Player 0 lives: %d\n", theGame->player[0].noOfLives);
-    if (theGame->playerAmount > 1)
+    initPlayer(players[0], LEFT_X, TOP_Y, 0);
+    initPlayer(players[1], RIGHT_X, TOP_Y, 1);
+    initPlayer(players[2], LEFT_X, BOTTOM_Y, 2);
+    initPlayer(players[3], RIGHT_X, BOTTOM_Y, 3);
+}  */
+
+/* Player initAPlayer(int x, int y, int id)
+{
+    Player player = malloc(sizeof(Player));
+    player = initPlayer(x, y, id);
+    return player;
+} */
+
+void manageMovementInputs(Game theGame, Player player[])
+{
+    double velX = 0, velY = 0;
+    int id = getLocalID(theGame);
+    char direction;
+
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    if (player[id].isInvulnerable == false || player[id].isDead == false)
     {
-        theGame->player[1] = initPlayer(RIGHT_X, TOP_Y, 1); // sets x and y coordinates and resets values.
+        if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
+        {
+            velX = -getPlayerSpeed(player, id);
+            direction = 'a';
+        }
+        else if (state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
+        {
+            velX = getPlayerSpeed(player, id);
+            direction = 'd';
+        }
+        if (velX == 0)
+        {
+            if (state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_S])
+            {
+                velY = -getPlayerSpeed(player, id);
+                direction = 'w';
+            }
+            else if (state[SDL_SCANCODE_S] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_D])
+            {
+                velY = getPlayerSpeed(player, id);
+                direction = 's';
+            }
+        }
     }
-    if (theGame->playerAmount > 2)
-    {
-        theGame->player[2] = initPlayer(LEFT_X, BOTTOM_Y, 2); // sets x and y coordinates and resets values.
+    if (!velX && !velY) {
+        direction = '0';
     }
-    if (theGame->playerAmount > 3)
-    {
-        theGame->player[3] = initPlayer(RIGHT_X, BOTTOM_Y, 3); // sets x and y coordinates and resets values.
-    }
-    for (int i = 0; i < theGame->playerAmount; i++)
-        theGame->invulnerabiltyFlag[i] = false;
+    // Update player positions
+    playerSetMoveDirection(player, id, direction);
+    updatePlayerXPosition(player, id, velX);
+    updatePlayerYPosition(player, id, velY);
 }
 
-void UpdatePlayerTextures(Game theGame)
+
+void UpdatePlayerTextures(Game theGame, Player player[])
 {
     /*Keeps track of what sprites to load and at what timing*/
     static Uint8 updateSprite[4] = {0};
@@ -88,19 +120,19 @@ void UpdatePlayerTextures(Game theGame)
     SDL_Rect playerRect[4];
     for(int i=0; i<theGame->playerAmount; i++)
     {
-        playerRect[i].x = playerGetXPosition(theGame->player[i]);
-        playerRect[i].y = playerGetYPosition(theGame->player[i]);
-        playerRect[i].w = playerGetWidth(theGame->player[i]);
-        playerRect[i].h = playerGetHeight(theGame->player[i]);
+        playerRect[i].x = playerGetXPosition(player, i);
+        playerRect[i].y = playerGetYPosition(player, i);
+        playerRect[i].w = playerGetWidth(player, i);
+        playerRect[i].h = playerGetHeight(player, i);
     }
     /*Managing sprite updates*/
     for(int i=0; i < theGame->playerAmount; i++)
     {
-        if (theGame->player[i].isInvulnerable == false && theGame->player[i].noOfLives > 0){
+        if (playerGetIsInvulnerable(player, i) == false && playerGetNoOfLives(player, i) > 0){
             if (spriteTimer[i] > 10){ //Slowing down sprite updates
                 spriteTimer[i] = 0; 
             }
-                switch (theGame->player[i].moveDirection)
+                switch (playerGetMoveDirection(player, i))
                 {
                     case 'w': 
                         spriteChoice[i] = 1;
@@ -120,20 +152,20 @@ void UpdatePlayerTextures(Game theGame)
                         SDL_RenderCopy(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i]);
                         break;
                 }
-                if (spriteTimer[i]++ % 5 == 0 && theGame->player[i].moveDirection != '0'){ // Slowing down sprite updates
+                if (spriteTimer[i]++ % 5 == 0 && playerGetMoveDirection(player, i) != '0'){ // Slowing down sprite updates
                         updateSprite[i]++;
                 }
                 if (updateSprite[i] > 7){
                         updateSprite[i] = 0;
                 }
         }
-        else if (theGame->player[i].noOfLives > 0 && theGame->player[i].isInvulnerable == true) {
+        else if (playerGetNoOfLives(player, i) > 0 && playerGetIsInvulnerable(player, i) == true) {
             if (i % 2 == 0)
                 SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], 270, 0, 0);
             else
                 SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], 90, 0, 0);
             //getStartPos(&theGame->player[i]); // If player is dead it respawns at starting pos
-            theGame->player[i].isDead = false;
+            playerSetDead(player, i);
         }
         else {
            /*  theGame->player[i].isDead = true;
@@ -142,202 +174,228 @@ void UpdatePlayerTextures(Game theGame)
     }
 }
 
-PUBLIC Player playerGetLocalPlayer(Player p)
+/* PUBLIC Player playerGetLocalPlayer(Player p[], int id)
 {
     return p;
-} 
+} */
 
-PUBLIC void playerSetMoveDirection(Player *p, char c)
+PUBLIC void playerSetDead(Player p[], int id)
 {
-    p->moveDirection = c;
-}
-
-PUBLIC void updatePlayerXPosition(Player *p, double velX)
-{
-    p->xPos += velX;
-}
-PUBLIC void updatePlayerYPosition(Player *p, double velY)
-{
-    p->yPos += velY;
-}
-PUBLIC void playerSetXPos(Player *p, float x)
-{
-    p->xPos = x;
-}
-PUBLIC void playerSetYPos(Player *p, float y)
-{
-    p->yPos = y;
+    p[id].isDead = true;
 }
 
-PUBLIC void playerSetOldXPos(Player *p, float x)
+PUBLIC void playerSetAlive(Player p[], int id)
 {
-    p->xPosOld = x;
+    p[id].isDead = false;
 }
 
-PUBLIC void playerSetOldYPos(Player *p, float y)
+PUBLIC bool playerGetDeadorAlive(Player p[], int id)
 {
-    p->yPosOld = y;
+    return p[id].isDead;
 }
 
-PUBLIC void playerSetID(Player *p, int id)
+PUBLIC void playerSetMoveDirection(Player p[], int id, char c)
 {
-    p->id = id;
+    p[id].moveDirection = c;
 }
 
-PUBLIC char playerGetMoveDirection(Player p)
+PUBLIC void updatePlayerXPosition(Player p[], int id, double velX)
 {
-    return p.moveDirection;
+    p[id].xPos += velX;
+}
+PUBLIC void updatePlayerYPosition(Player p[], int id, double velY)
+{
+    p[id].yPos += velY;
+}
+PUBLIC void playerSetXPos(Player p[], int id, float x)
+{
+    p[id].xPos = x;
+}
+PUBLIC void playerSetYPos(Player p[], int id, float y)
+{
+    p[id].yPos = y;
 }
 
-PUBLIC int playerGetHeight(Player p)
+PUBLIC void playerSetOldXPos(Player p[], int id, float x)
 {
-    return p.height;
+    p[id].xPosOld = x;
 }
-PUBLIC int playerGetWidth(Player p)
+
+PUBLIC void playerSetOldYPos(Player p[], int id, float y)
 {
-    return p.width;
+    p[id].yPosOld = y;
 }
-PUBLIC float playerGetXPosition(Player p)
+
+PUBLIC void playerSetID(Player p[], int id)
 {
-    return p.xPos;
+    p[id].id = id;
 }
-PUBLIC float playerGetYPosition(Player p)
+
+PUBLIC char playerGetMoveDirection(Player p[], int id)
 {
-    return p.yPos;
+    return p[id].moveDirection;
 }
-PUBLIC double getPlayerSpeed(Player p)
+
+PUBLIC int playerGetHeight(Player p[], int id)
 {
-    return p.speed;
+    return p[id].height;
+}
+PUBLIC int playerGetWidth(Player p[], int id)
+{
+    return p[id].width;
+}
+PUBLIC float playerGetXPosition(Player p[], int id)
+{
+    return p[id].xPos;
+}
+PUBLIC float playerGetYPosition(Player p[], int id)
+{
+    return p[id].yPos;
+}
+PUBLIC double getPlayerSpeed(Player p[], int id)
+{
+    return p[id].speed;
 }
 PUBLIC int getLocalID(Game theGame)
 {
     return theGame->playerIDLocal;
 }
 
-PUBLIC int playerGetNoOfLives(Player p)
+PUBLIC int playerGetNoOfLives(Player p[], int id)
 {
-    return p.noOfLives;
+    return p[id].noOfLives;
 }
 
-PUBLIC void playerSetNoOfLives(Player *p, int lives)
+PUBLIC void playerSetNoOfLives(Player p[], int id, int lives)
 {
-    p->noOfLives = lives;
+    p[id].noOfLives = lives;
 }
 
-PUBLIC int playerGetOldXpos(Player p)
+PUBLIC int playerGetOldXpos(Player p[], int id)
 {
-    return p.xPosOld;
+    return p[id].xPosOld;
 }
 
-PUBLIC int playerGetOldYPos(Player p)
+PUBLIC int playerGetOldYPos(Player p[], int id)
 {
-    return p.yPosOld;
+    return p[id].yPosOld;
 }
 
-PUBLIC int getPlayerID(Player p)
+PUBLIC int getPlayerID(Player p[], int id)
 {
-    return p.id;
+    return p[id].id;
 }
-PUBLIC int playerGetScore(Player p)
+PUBLIC int playerGetScore(Player p[], int id)
 {
-    return p.score;
-}
-
-PUBLIC void playerSetScore(Player *p, int score)
-{
-    p->score = score;
+    return p[id].score;
 }
 
-PUBLIC void getStartPos(Player *p)
+PUBLIC void playerSetScore(Player p[], int id, int score)
 {
-    switch (p->id)
+    p[id].score = score;
+}
+
+PUBLIC int playerGetSpeedDisplay(Player p[], int id)
+{
+    return p[id].speedDisplay;
+}
+
+PUBLIC void getStartPos(Player p[], int id)
+{
+    switch (p[id].id)
     {
         case 0:
-            p->xPos = LEFT_X;
-            p->yPos = TOP_Y;
+            p[id].xPos = LEFT_X;
+            p[id].yPos = TOP_Y;
             break;
         case 1:
-            p->xPos = RIGHT_X;
-            p->yPos = TOP_Y;
+            p[id].xPos = RIGHT_X;
+            p[id].yPos = TOP_Y;
             break;
         case 2:
-            p->xPos = LEFT_X;
-            p->yPos = BOTTOM_Y;
+            p[id].xPos = LEFT_X;
+            p[id].yPos = BOTTOM_Y;
             break;
         case 3:
-            p->xPos = RIGHT_X;
-            p->yPos = BOTTOM_Y;
+            p[id].xPos = RIGHT_X;
+            p[id].yPos = BOTTOM_Y;
             break;
     }
 }
-PUBLIC int playerGetAmountOfBombsPlaced(Player p)
+PUBLIC int playerGetAmountOfBombsPlaced(Player p[], int id)
 {
-    return p.amountOfBombsPlaced;
+    return p[id].amountOfBombsPlaced;
 }
-PUBLIC int playerGetAmountOfBombs(Player p)
+PUBLIC int playerGetAmountOfBombs(Player p[], int id)
 {
-    return p.amountOfBombs;
+    return p[id].amountOfBombs;
 }
-PUBLIC int playerGetIsInvulnerable(Player p)
+PUBLIC int playerGetIsInvulnerable(Player p[], int id)
 {
-    return p.isInvulnerable;
-}
-PUBLIC int playerGetExplosionPower(Player p)
-{
-    return p.explosionPower;
+    return p[id].isInvulnerable;
 }
 
-void playerIncreaseSpeed(Player *p)
+PUBLIC void playerSetInvulnerability(Player p[], int id, bool b)
 {
-    playerAddSpeedDisplay(p, 1);
+    p[id].isInvulnerable = b;
+}
+
+PUBLIC int playerGetExplosionPower(Player p[], int id)
+{
+    return p[id].explosionPower;
+}
+
+void playerIncreaseSpeed(Player p[], int id)
+{
+    playerAddSpeedDisplay(p, 1, id);
     printf("Adding speed: %lf\n", (double)MAXSPEED/10);
-    p->speed += (double)MAXSPEED/8;
-    if(p->speed > (double)MAXSPEED)
-        p->speed = (double)MAXSPEED;
-    if(p->speed < (double)MINSPEED)
-        p->speed = (double)MINSPEED;
+    p[id].speed += (double)MAXSPEED/8;
+    if(p[id].speed > (double)MAXSPEED)
+        p[id].speed = (double)MAXSPEED;
+    if(p[id].speed < (double)MINSPEED)
+        p[id].speed = (double)MINSPEED;
 }
-void playerAddSpeedDisplay(Player *p, int speedDisplay)
+void playerAddSpeedDisplay(Player p[], int speedDisplay, int id)
 {
-    p->speedDisplay += speedDisplay;
-    if(p->speedDisplay > 5) 
-        p->speedDisplay = 5;
+    p[id].speedDisplay += speedDisplay;
+    if(p[id].speedDisplay > 5) 
+        p[id].speedDisplay = 5;
 }
-void playerAddExplosionPower(Player *p, int explosionPower)
+void playerAddExplosionPower(Player p[], int id, int explosionPower)
 {
-    p->explosionPower += explosionPower;
-    if(p->explosionPower > MAXPOWER)
-        p->explosionPower = MAXPOWER;
+    p[id].explosionPower += explosionPower;
+    if(p[id].explosionPower > MAXPOWER)
+        p[id].explosionPower = MAXPOWER;
 }
-void playerAddAmountOfBombs(Player *p, int amountOfBombs)
+void playerAddAmountOfBombs(Player p[], int id, int amountOfBombs)
 {
-    p->amountOfBombs += amountOfBombs;
-    if(p->amountOfBombs > MAXBOMBS)
-        p->amountOfBombs = MAXBOMBS;
+    p[id].amountOfBombs += amountOfBombs;
+    if(p[id].amountOfBombs > MAXBOMBS)
+        p[id].amountOfBombs = MAXBOMBS;
 }
-void playerAddAmountOfBombsPlaced(Player *p, int i)
+void playerAddAmountOfBombsPlaced(Player p[], int id, int i)
 {
-    p->amountOfBombsPlaced += i;
+    p[id].amountOfBombsPlaced += i;
 }
-void playerAddLives(Player *p, int lives)
+void playerAddLives(Player p[], int id, int lives)
 {
-    p->noOfLives += lives;
-    if(p->noOfLives > MAXLIVES)
-        p->noOfLives = MAXLIVES;
+    p[id].noOfLives += lives;
+    if(p[id].noOfLives > MAXLIVES)
+        p[id].noOfLives = MAXLIVES;
 }
-void playerAddScore(Player *p, int score)
+void playerAddScore(Player p[], int id, int score)
 {
-    p->score += score;
+    p[id].score += score;
 }
 
-void playerDeathTimer(Game theGame)
+void playerDeathTimer(Game theGame, Player player[])
 {
         for (int i = 0; i < PLAYERAMOUNT; i++)
         {
             if (theGame->invulnerabiltyFlag[i] == true)
             {
-                printf("Player %d invulnerability is: %s\n", i, theGame->player[i].isInvulnerable ? "On" : "Off");
-                SDL_TimerID timerID = SDL_AddTimer(INVULNERABILITYTIME, pDeathCallback, (Game)theGame); // Funktionen körs efter antal ms som INVULTIME är satt till (ny tråd)
+                printf("Player %d invulnerability is: %s\n", i, playerGetIsInvulnerable(player, i) ? "On" : "Off");
+                SDL_TimerID timerID = SDL_AddTimer(INVULNERABILITYTIME, pDeathCallback, (Player*)player); // Funktionen körs efter antal ms som INVULTIME är satt till (ny tråd)
                 if (!timerID) {
                     SDL_RemoveTimer(timerID);
                     printf("Timer failed\n");
@@ -350,26 +408,28 @@ void playerDeathTimer(Game theGame)
         }
 }
 
-Uint32 pDeathCallback(Uint32 interval, Game theGame)
+Uint32 pDeathCallback(Uint32 interval, Player player[])
 {
     for (int i = 0; i < PLAYERAMOUNT; i++)
     {
-        if(theGame->player[i].isInvulnerable == true)
+        if(playerGetIsInvulnerable(player, i) == true)
         {
-            theGame->player[i].isInvulnerable = false;
-            printf("Player %d invulnerability is: %s\n", i, theGame->player[i].isInvulnerable ? "On" : "Off");
+            playerSetInvulnerability(player, i, false);
+            printf("Player %d invulnerability is: %s\n", i, playerGetIsInvulnerable(player, i) ? "On" : "Off");
         }
     }
     return 0;
 }
 
-void setPlayerDeathFlags(Game theGame, int i)
+void setPlayerDeathFlags(Game theGame, Player player[], int i)
 {
     theGame->updateFlag = true;
-    theGame->player[i].noOfLives--;
-    printf("Lives left for player %d: %d\n", i, theGame->player[i].noOfLives);
-    theGame->player[i].isDead = true;
-    theGame->player[i].isInvulnerable = true;
+    int lives = playerGetNoOfLives(player, i);
+    lives--;
+    playerSetNoOfLives(player, i, lives);
+    printf("Lives left for player %d: %d\n", i, playerGetNoOfLives(player, i));
+    playerSetDead(player, i);
+    playerSetInvulnerability(player, i , true);
     theGame->invulnerabiltyFlag[i] = true; /*Flagga för att inte komma in i timern mer en än gång*/
 }
 
@@ -455,7 +515,6 @@ PlayerSprites GetPlayerSprite()
     p.BowlerManHori[7].w = 57;
     p.BowlerManHori[7].x = 401;
     p.BowlerManHori[7].y = 0;
-    
     return p;
 }
 
@@ -463,17 +522,17 @@ PlayerSprites GetPlayerSprite()
 
 // PUBLIC void determinePlayerVelocity(Player p)
 // {
-//     p->xVel=0;
-//     p->yVel=0;
-//     if(p->up && !p->down) p->yVel = -p->speed;
-//     if(p->down && !p->up) p->yVel = p->speed;
-//     if(p->left && !p->right) p->xVel = -p->speed;
-//     if(p->right && !p->left) p->xVel = p->speed;
+//     p[id].xVel=0;
+//     p[id].yVel=0;
+//     if(p[id].up && !p[id].down) p[id].yVel = -p[id].speed;
+//     if(p[id].down && !p[id].up) p[id].yVel = p[id].speed;
+//     if(p[id].left && !p[id].right) p[id].xVel = -p[id].speed;
+//     if(p[id].right && !p[id].left) p[id].xVel = p[id].speed;
 // }
 // PUBLIC void updatePlayerClientPosition(Player p)
 // {
-//     p->xPos += p->xVel;
-//     p->yPos += p->yVel;
+//     p[id].xPos += p[id].xVel;
+//     p[id].yPos += p[id].yVel;
 // }
 
 // PUBLIC void destroyPlayer(Player player)

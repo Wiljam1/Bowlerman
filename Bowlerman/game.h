@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
+//#include "player.h"
 
 //denna .h-fil får INTE include:a några andra .h-filer. För då blir det "circular inclusion".
 //pga alla andra .h-filer är beroende av game.h
@@ -69,7 +70,7 @@ struct bowling_ball typedef Bowlingball;
 
 SDL_Rect bowlingballAnimation[18];
 
-struct playerController
+/* struct playerController
 {
     int id;   //för packets via UDP behöver man kunna veta vem det är som skickar datan.
     bool up, down, left, right;
@@ -89,8 +90,7 @@ struct playerController
     SDL_Rect playerRect;   //struct to hold the position and size of the sprite
     char moveDirection;  // Keeps track of player movement direction for sprite rendering
     int noOfLives, score;
-};
-typedef struct playerController Player;
+}; */
 
 struct playerSprites
 {
@@ -106,7 +106,7 @@ struct game_type
     SDL_Surface *window_surface;
 
     //Player
-    Player player[MAXPLAYERS];
+    //Player player[MAXPLAYERS];
     int playerIDLocal;        //the local players ID (only on this computer). 
     int playerAmount;  //amount of players online
     bool invulnerabiltyFlag[4];
@@ -151,14 +151,8 @@ typedef struct game_type *Game;
 Game createWindow();              // Struct for app initialization
 SDL_Texture *loadTextures(Game theGame, char fileLocation[]); // Load any image you want in the resources/ folder!
 void gameUpdate(Game theGame);  // Game loop
-bool checkEvents(Game theGame);
-void manageMovementInputs(Game theGame);
+//void manageMovementInputs(Game theGame);
 void updatePlayerPos(Game theGame, int velX, int velY); //Flytta till player.c nångång
-void process(Game theGame, Sounds *s);
-void collisionDetect(Game theGame, Sounds *s);
-void checkGameOver(Game theGame);
-void showScoreboard(Game theGame);
-void renderTextures(Game theGame);
 void destroyGame(Game theGame); // Function for easily destroying the application.
 void updateScoreFlag(Game theGame, bool cond);
 void setLocalID(Game theGame, int id);

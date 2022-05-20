@@ -14,10 +14,9 @@ Sounds initSoundFiles()
     s.backgroundMusic = Mix_LoadMUS("resources/sounds/song.wav");
     s.explosion = Mix_LoadWAV("resources/sounds/explosion.wav");
     s.death = Mix_LoadWAV("resources/sounds/strike.wav");
-
-    Mix_VolumeMusic(MUSICVOLUME);
-    Mix_VolumeChunk(s.death, STRIKEVOLUME);
-    Mix_VolumeChunk(s.explosion, BOMBVOLUME);
+    Mix_Volume(-1, 10);
+   // Mix_VolumeMusic(MUSICVOLUME);
+    printf("Hej");
     
     return s;
 }
@@ -41,6 +40,7 @@ void playBackroundMusic(Sounds *s)
 void playDeath(Sounds *s)
 {
     Mix_PlayChannel(-1, (s->death), 0);
+    printf("Ljud");
 }
 
 void playBomb(Sounds *s)

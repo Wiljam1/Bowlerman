@@ -22,7 +22,7 @@ PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[]) // loadmedia
     return SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
 }
 
-void renderTextures(Game theGame)
+void renderTextures(Game theGame, Player player[])
 {
     // Define stuff to make function easier to read
     SDL_Renderer *renderer = theGame->renderer;
@@ -49,7 +49,7 @@ void renderTextures(Game theGame)
         }
         if (theGame->bombs[i].explosioninit == 0)
         {
-            for (int j = 0; j < 1+4*theGame->player[returnarray[i]].explosionPower; j++)
+            for (int j = 0; j < 1+4*playerGetExplosionPower(player, returnarray[i]); j++)
             {
                 if(testCollisionExplosionWithWalls(theGame, j) == 0)
                 {
@@ -59,7 +59,7 @@ void renderTextures(Game theGame)
         }
     }
 
-    UpdatePlayerTextures(theGame);
+    UpdatePlayerTextures(theGame, player);
     
     // Draw GUI last (top of screenlayers)
     drawGUI(theGame);

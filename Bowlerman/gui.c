@@ -1,5 +1,6 @@
 #include "gui.h"
 #include "game.h"
+#include "player.h"
 
 #include <SDL2/SDL_ttf.h>
 
@@ -21,35 +22,36 @@ void initGUI(Game theGame)
     theGame->updateFlag = true;
 }
 
-void updateGUI(Game theGame)
+void updateGUI(Game theGame, Player player[])
 {   
     SDL_Color playerColor;
-    if(theGame->player[theGame->playerIDLocal].id == 0)
+    int id = getLocalID(theGame);
+    if(id == 0)
         playerColor = blue;
-    else if(theGame->player[theGame->playerIDLocal].id == 1)
+    else if(id == 1)
         playerColor = purple;
-    else if(theGame->player[theGame->playerIDLocal].id == 2)
+    else if(id == 2)
         playerColor = red;
-    else if(theGame->player[theGame->playerIDLocal].id == 3)
+    else if(id == 3)
         playerColor = yellow;
     if(theGame->updateFlag == true){            //TEMPORÄR LÖSNING, FORTFARANDE MEMORY LEAK MEN TEXTEN
                                                 //UPPDATERAS ENDAST NÄR ETT VÄRDE ÄNDRAS
         char tmpstr[LEN] = "Speed: ";
-        createLabel(theGame, 0, tmpstr, theGame->player[theGame->playerIDLocal].speedDisplay, playerColor);  // Går att skrivas till bättre så man inte behöver hårdkoda siffror                                     
+        createLabel(theGame, 0, tmpstr, playerGetSpeedDisplay(player, id), playerColor);  // Går att skrivas till bättre så man inte behöver hårdkoda siffror                                     
         char tmpstr2[LEN] = "Power: ";                                                         // Vet inte hur man skickar strings direkt i parametrarna (som i printf();) men det här fungerar
-        createLabel(theGame, 1, tmpstr2, theGame->player[theGame->playerIDLocal].explosionPower, playerColor);
+        createLabel(theGame, 1, tmpstr2, playerGetExplosionPower(player, id), playerColor);
         char tmpstr3[LEN] = "Bombs: ";
-        createLabel(theGame, 2, tmpstr3, theGame->player[theGame->playerIDLocal].amountOfBombs, playerColor); 
+        createLabel(theGame, 2, tmpstr3, playerGetAmountOfBombs(player, id), playerColor); 
         char tmpstr4[LEN] = "Lives: ";
-        createLabel(theGame, 3, tmpstr4, theGame->player[theGame->playerIDLocal].noOfLives, playerColor); 
+        createLabel(theGame, 3, tmpstr4, playerGetNoOfLives(player, id), playerColor); 
         char tmpstr5[LEN] = "Player 1: ";
-        createLabel(theGame, 4, tmpstr5, theGame->player[0].score, blue);
+        createLabel(theGame, 4, tmpstr5, playerGetScore(player, 0), blue);
         char tmpstr6[LEN] = "Player 2: ";
-        createLabel(theGame, 5, tmpstr6, theGame->player[1].score, purple); 
+        createLabel(theGame, 5, tmpstr6, playerGetScore(player, 1), purple); 
         char tmpstr7[LEN] = "Player 3: ";
-        createLabel(theGame, 6, tmpstr7, theGame->player[2].score, red); 
+        createLabel(theGame, 6, tmpstr7, playerGetScore(player, 2), red); 
         char tmpstr8[LEN] = "Player 4: ";
-        createLabel(theGame, 7, tmpstr8, theGame->player[3].score, yellow); 
+        createLabel(theGame, 7, tmpstr8, playerGetScore(player, 3), yellow); 
         theGame->updateFlag = false;
     }
 

@@ -14,43 +14,44 @@
 
 #define YOFFSET (WIDTH/39.667)
 
-void collisionWithWallsAround(Game theGame);
-void testCollosionWithBombs(Game theGame);
-void testCollisionWithWalls(Game theGame);
-void testCollosionWithExplosion(Game theGame, Sounds *s);
-void playerCollisionWithPowerup(Game theGame);
+void collisionWithWallsAround(Game theGame, Player p[]);
+void testCollosionWithBombs(Game theGame, Player p[]);
+void testCollisionWithWalls(Game theGame, Player p[]);
+void testCollosionWithExplosion(Game theGame, Sounds *s, Player p[]);
+void playerCollisionWithPowerup(Game theGame, Player p[]);
 void explosionCollisionWithPowerup(Game theGame);
+//void playerStandingOnBomb(Game theGame, Player p[]);                                            //kollar om spelare står på en bomb
+int testCollisionWithDestroyableWalls(Game theGame, Player p[], int k, int j);                  //testar om explosioner träffar förstörbar vägg och förstör den
 
-PUBLIC void collisionDetect(Game theGame, Sounds *sounds)
+PUBLIC void collisionDetect(Game theGame, Sounds *sounds, Player players[])
 {
-    collisionWithWallsAround(theGame);
-    testCollosionWithBombs(theGame);     
-    testCollisionWithWalls(theGame);
-    testCollosionWithExplosion(theGame, sounds);
-    playerCollisionWithPowerup(theGame);
+    collisionWithWallsAround(theGame, players);
+    testCollosionWithBombs(theGame, players);     
+    testCollisionWithWalls(theGame, players);
+    testCollosionWithExplosion(theGame, sounds, players);
+    playerCollisionWithPowerup(theGame, players);
     explosionCollisionWithPowerup(theGame);       //för att förstöra powerups med explosioner
 }
 
 //collision with outer walls and the screen size
-void collisionWithWallsAround(Game theGame)
+void collisionWithWallsAround(Game theGame, Player player[])
 {
-
+    int id = theGame->playerIDLocal;
     //"Easier to read"-variables
     
-    float playerWidth = playerGetWidth(theGame->player[theGame->playerIDLocal]), playerHeight = playerGetHeight(theGame->player[theGame->playerIDLocal]);
-    float playerXPos = playerGetXPosition(theGame->player[theGame->playerIDLocal]), playerYPos = playerGetYPosition(theGame->player[theGame->playerIDLocal]);
-    int playerID = getPlayerID(theGame->player[theGame->playerIDLocal]);
-    int speed = getPlayerSpeed(theGame->player[playerID]);
+    float playerWidth = playerGetWidth(player, id), playerHeight = playerGetHeight(player, id);
+    float playerXPos = playerGetXPosition(player, id), playerYPos = playerGetYPosition(player, id);
+    int speed = getPlayerSpeed(player, id);
     
     //Don't move out of window!
     if(playerXPos < 0)                //Left edge
-        playerSetXPos(&theGame->player[playerID], 0);
+        playerSetXPos(player, id, 0);
     if(playerXPos+playerWidth > WIDTH)         //Right edge
-        playerSetXPos(&theGame->player[playerID], WIDTH - playerWidth);
+        playerSetXPos(player, id, WIDTH - playerWidth);
     if(playerYPos < 0)                //Top edge
-        playerSetYPos(&theGame->player[playerID], 0);
+        playerSetYPos(player, id, 0);
     if(playerYPos+playerHeight > HEIGHT)        //Bottom edge
-        playerSetXPos(&theGame->player[playerID], HEIGHT - playerHeight);
+        playerSetXPos(player, id, HEIGHT - playerHeight);
 
     //Check for collision with any walls
     
@@ -63,25 +64,25 @@ void collisionWithWallsAround(Game theGame)
         {
             if (playerYPos + playerHeight < wallYPos)
             {
-                playerSetYPos(&theGame->player[playerID], wallYPos - playerHeight);
+                playerSetYPos(player, id, wallYPos - playerHeight);
             }
             else if (playerYPos < wallYPos + YOFFSET)
             {
-                playerSetYPos(&theGame->player[playerID], wallYPos + YOFFSET);
+                playerSetYPos(player, id, wallYPos + YOFFSET);
             }
         }     
         if (i >= 20 && i < 40) // Nedre
         {
             if (playerYPos + playerHeight > wallYPos)
             {
-                playerSetYPos(&theGame->player[playerID], wallYPos - playerHeight);
+                playerSetYPos(player, id, wallYPos - playerHeight);
             }
         }
         if (i >= 40 && i < 60) // Vänster
         {
             if (playerXPos < wallXPos + wallWidth)
             {
-                playerSetXPos(&theGame->player[playerID], wallXPos + wallWidth);
+                playerSetXPos(player, id, wallXPos + wallWidth);
             }
 
         }
@@ -89,7 +90,7 @@ void collisionWithWallsAround(Game theGame)
         {
             if (playerXPos + playerWidth > wallXPos)
             {
-                playerSetXPos(&theGame->player[playerID], wallXPos - playerWidth);
+                playerSetXPos(player, id, wallXPos - playerWidth);
             }
         }
     }
@@ -97,20 +98,20 @@ void collisionWithWallsAround(Game theGame)
 
 // collison detection mellan bomber och spelare
 // i är för antal spelare, j för antal bomber
-void testCollosionWithBombs(Game theGame)
+void testCollosionWithBombs(Game theGame, Player player[])
 {
     for (int i=0;i<MAXBOMBAMOUNT;i++)
     {
         if (BombGetPlacedBombRestriction(theGame->bombs[i]) == 1)
         {
-            playerStandingOnBomb(theGame);
+            playerStandingOnBomb(theGame, player);
         }
-        if (BombGetIsPlaced(theGame->bombs[i]) == 1 && playerGetIsInvulnerable(theGame->player[i]) == false)
+        if (BombGetIsPlaced(theGame->bombs[i]) == 1 && playerGetIsInvulnerable(player, i) == false)
         {
             int id = getLocalID(theGame);
-            float playerW = playerGetWidth(theGame->player[theGame->playerIDLocal]), playerH = playerGetHeight(theGame->player[theGame->playerIDLocal]);
-            float playerX = playerGetXPosition(theGame->player[theGame->playerIDLocal]), playerY = playerGetYPosition(theGame->player[theGame->playerIDLocal]);
-            int moveDirection = playerGetMoveDirection(theGame->player[id]);
+            float playerW = playerGetWidth(player, id), playerH = playerGetHeight(player, id);
+            float playerX = playerGetXPosition(player, id), playerY = playerGetYPosition(player, id);
+            char moveDirection = playerGetMoveDirection(player, id);
             int bombX = getBombXPosition(theGame->bombs[i]), bombY = getBombYPosition(theGame->bombs[i]), bombW = getBombWidth(theGame->bombs[i]), bombH = getBombHeight(theGame->bombs[i]);
             if(BombGetPlacedBombRestriction(theGame->bombs[i]) == 0)
             {
@@ -120,11 +121,11 @@ void testCollosionWithBombs(Game theGame)
                     {
                         if(playerY + YOFFSET < bombY + bombH && playerY > bombY){
                             //correct y
-                            playerSetYPos(&theGame->player[id], bombY + bombH - YOFFSET);
+                            playerSetYPos(player, id, bombY + bombH - YOFFSET);
                         }
                         if(playerY + playerH > bombY && playerY < bombY){
                             //correct y
-                            playerSetYPos(&theGame->player[id], bombY - playerH);
+                            playerSetYPos(player, id, bombY - playerH);
                         }
                     }
                 }
@@ -134,11 +135,11 @@ void testCollosionWithBombs(Game theGame)
                     {
                         if(playerX < bombX + bombW && playerX > bombX){
                             //Correct x
-                            playerSetXPos(&theGame->player[id], bombX + bombW);
+                            playerSetXPos(player, id, bombX + bombW);
                         }
                         if(playerX + playerW > bombX && playerX < bombX){
                             //Correct x
-                            playerSetXPos(&theGame->player[id], bombX - playerW);
+                            playerSetXPos(player, id, bombX - playerW);
                         }
                     }
                 }
@@ -149,22 +150,22 @@ void testCollosionWithBombs(Game theGame)
 
 // collison detection mellan spelare och explosioner
 // i är för antal spelare, j för antal bomber och k för de olika rectanglar som explosionerna finns på
-void testCollosionWithExplosion(Game theGame, Sounds *s)
+void testCollosionWithExplosion(Game theGame, Sounds *s, Player player[])
 {
     for (int i=0;i<PLAYERAMOUNT;i++)
     {
         int flag = 1; //vad är det för flagga egentligen? // Så att man inte kollar en spelare fyra gånger om man dör.
-        if(playerGetIsInvulnerable(theGame->player[i]) == false) {
+        if(playerGetIsInvulnerable(player, i) == false) {
 
-            float playerW = playerGetWidth(theGame->player[i]), playerH = playerGetHeight(theGame->player[i]);
-            float playerX = playerGetXPosition(theGame->player[i]), playerY = playerGetYPosition(theGame->player[i]);
+            float playerW = playerGetWidth(player, i), playerH = playerGetHeight(player, i);
+            float playerX = playerGetXPosition(player, i), playerY = playerGetYPosition(player, i);
             for (int j=0;j<MAXBOMBAMOUNT;j++)
             {
                 if(BombGetExplosionInit(theGame->bombs[j]) == 0) // J kan användas vid Score sen
                 {
                     for (int l = 0; l < PLAYERAMOUNT; l++)
                     {
-                        for (int k=0;k<(1+4*playerGetExplosionPower(theGame->player[l]));k++)
+                        for (int k=0;k<(1+4*playerGetExplosionPower(player, l));k++)
                         {
                             if(theGame->explosionPosition[j][k].x < playerX + playerW &&
                             theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > playerX &&
@@ -174,15 +175,13 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
                                 //player dead
                                 if (flag == 1)      // testar med odödlighet
                                 {
-                                    if(getPlayerID(theGame->player[theGame->bombs[j].whoPlacedID]) != i) {
-                                        playerAddScore(&theGame->player[theGame->bombs[j].whoPlacedID], 10);
+                                    if(getPlayerID(player, theGame->bombs[j].whoPlacedID) != i) {
+                                        playerAddScore(player, theGame->bombs[j].whoPlacedID, 10);
                                     }
-                                    setPlayerDeathFlags(theGame, i);
-                                    playerDeathTimer(theGame);
+                                    setPlayerDeathFlags(theGame, player, i);
+                                    playerDeathTimer(theGame, player);
                                     playDeath(s);
                                     flag = 0;
-                                    
-                                    checkGameOver(theGame);
                                     break;
                                 }
                             }
@@ -195,13 +194,13 @@ void testCollosionWithExplosion(Game theGame, Sounds *s)
 }
 
 // om spelare släpper bomb så är kollision avstängt mellan spelaren och bomben tills man kliver av bomben
-void playerStandingOnBomb(Game theGame)
+void playerStandingOnBomb(Game theGame, Player player[])
 {
     for(int playerID=0;playerID<theGame->playerAmount;playerID++) 
     {
-        float playerW = playerGetWidth(theGame->player[playerID]), playerH = playerGetHeight(theGame->player[playerID]);
-        float playerX = playerGetXPosition(theGame->player[playerID]), playerY = playerGetYPosition(theGame->player[playerID]);
-        for (int i = 0;i<playerGetAmountOfBombsPlaced(theGame->player[playerID]);i++)
+        float playerW = playerGetWidth(player, playerID), playerH = playerGetHeight(player, playerID);
+        float playerX = playerGetXPosition(player, playerID), playerY = playerGetYPosition(player, playerID);
+        for (int i = 0;i<playerGetAmountOfBombsPlaced(player, playerID);i++)
         {
             int bombW = getBombWidth(theGame->bombs[playerID+i*4]), bombH = getBombHeight(theGame->bombs[playerID+i*4]);
             int bombX = getBombXPosition(theGame->bombs[playerID +i*4]), bombY = getBombYPosition(theGame->bombs[playerID+i*4]);
@@ -222,13 +221,13 @@ void playerStandingOnBomb(Game theGame)
 }
 
 //kollar så att en spelare inte går in i väggar i mitten av spelplanen
-void testCollisionWithWalls(Game theGame)
+void testCollisionWithWalls(Game theGame, Player player[])
 {
     for (int i=0;i<4;i++)
     {
-        float playerW = playerGetWidth(theGame->player[i]), playerH = playerGetHeight(theGame->player[i]);
-        float playerX = playerGetXPosition(theGame->player[i]), playerY = playerGetYPosition(theGame->player[i]);
-        int moveDirection = playerGetMoveDirection(theGame->player[i]); 
+        float playerW = playerGetWidth(player, i), playerH = playerGetHeight(player, i);
+        float playerX = playerGetXPosition(player, i), playerY = playerGetYPosition(player, i);
+        char moveDirection = playerGetMoveDirection(player, i); 
         for (int j=100;j<250;j++)
         {
 
@@ -241,13 +240,13 @@ void testCollisionWithWalls(Game theGame)
                     {
                         if(playerY + YOFFSET < wallY + wallH && playerY > wallY){
                             //correct y
-                            theGame->player[i].yPos = wallY + wallH - YOFFSET;
-                            playerSetYPos(&theGame->player[i], wallY + wallH - YOFFSET);
+                            //theGame->player[i].yPos = wallY + wallH - YOFFSET;
+                            playerSetYPos(player, i, wallY + wallH - YOFFSET);
                         }
                         if(playerY + playerH > wallY && playerY < wallY){
                             //correct y
-                            theGame->player[i].yPos = wallY - playerH;
-                            playerSetYPos(&theGame->player[i], wallY - playerH);
+                            //theGame->player[i].yPos = wallY - playerH;
+                            playerSetYPos(player, i, wallY - playerH);
                         }
                     }
                 }
@@ -257,13 +256,13 @@ void testCollisionWithWalls(Game theGame)
                     {
                         if(playerX < wallX + wallW && playerX > wallX){
                             //Correct x
-                            theGame->player[i].xPos = wallX + wallW;
-                            playerSetXPos(&theGame->player[i], wallX + wallW);
+                            //theGame->player[i].xPos = wallX + wallW;
+                            playerSetXPos(player, i, wallX + wallW);
                         }
                         if(playerX + playerW > wallX && playerX < wallX){
                             //Correct x
-                            theGame->player[i].xPos = wallX - playerW;
-                            playerSetXPos(&theGame->player[i], wallX - playerW);
+                            //theGame->player[i].xPos = wallX - playerW;
+                            playerSetXPos(player, i, wallX - playerW);
                         }
                     }
                 } 
@@ -295,12 +294,12 @@ int testCollisionExplosionWithWalls(Game theGame, int k)
 }
 
 //testar om väggen explosionen träffar kan förstöras och förstör den isåfall
-int testCollisionWithDestroyableWalls(Game theGame, int k, int j)
+int testCollisionWithDestroyableWalls(Game theGame, Player player[], int k, int j)
 {
     float wallXPos = getWallXPosition(theGame->wall[k]), wallYPos = getWallYPosition(theGame->wall[k]),
         wallWidth = getWallWidth(theGame->wall[k]), wallHeight = getWallHeight(theGame->wall[k]);
     int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
-    for (int i=0;i<1+4*playerGetExplosionPower(theGame->player[returnarray[j]]);i++)
+    for (int i=0;i<1+4*playerGetExplosionPower(player, returnarray[j]);i++)
     {
         if(wallXPos < theGame->explosionPosition[j][i].x &&
            wallXPos + wallWidth > theGame->explosionPosition[j][i].x + theGame->explosionPosition[j][i].w &&
@@ -385,12 +384,12 @@ void testPossibilityToExplodeWithBombs(Game theGame, int j)
 
 
 //test collision with powerup
-void playerCollisionWithPowerup(Game theGame)
+void playerCollisionWithPowerup(Game theGame, Player player[])
 {
     for(int playerID=0;playerID<theGame->playerAmount;playerID++) 
     {
-        float playerW = playerGetWidth(theGame->player[playerID]), playerH = playerGetHeight(theGame->player[playerID]);
-        float playerX = playerGetXPosition(theGame->player[playerID]), playerY = playerGetYPosition(theGame->player[playerID]);
+        float playerW = playerGetWidth(player, playerID), playerH = playerGetHeight(player, playerID);
+        float playerX = playerGetXPosition(player, playerID), playerY = playerGetYPosition(player, playerID);
         
         for (int i = 0;i<POWERUPAMOUNT;i++)
         {
@@ -403,8 +402,9 @@ void playerCollisionWithPowerup(Game theGame)
                     powerUpY < playerY + playerH &&
                     powerUpH + powerUpY - YOFFSET > playerY)
                 {         
-                    powerupGive(&theGame->player[playerID] , &theGame->powerups[i]);
+                    powerupGive(player, playerID, &theGame->powerups[i]);
                     theGame->updateFlag = true;
+                    
                 }
             }
         }
