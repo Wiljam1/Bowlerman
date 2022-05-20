@@ -20,6 +20,7 @@
 #include "powerup.h"
 #include "sounds.h"
 #include "gui.h"
+#include "menu.h"
 
 #define PUBLIC /* empty */
 #define PRIVATE static
@@ -403,7 +404,7 @@ void process(Game theGame, Sounds *s)
     }
 }
 
-void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
+/* void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
 {
     int x = WIDTH / 5.85;
     int width = WIDTH / 3;
@@ -530,7 +531,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
 		}
         SDL_Delay(50);
     }
-}
+} */
 // renders background and players etc.
 PUBLIC void destroyGame(Game theGame)
 {
