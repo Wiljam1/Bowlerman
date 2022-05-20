@@ -33,13 +33,8 @@ struct sounds
 };
 typedef struct sounds Sounds;
 
-struct wall{
-    int id; //UDP?
-    int destroyedWall;
-    float x, y; 
-    int w, h;
-};
-typedef struct wall Wall;
+
+
 
 struct powerup{
     int id; //UDP?
@@ -114,7 +109,7 @@ struct game_type
     PlayerSprites pSprites;
 
     //Walls
-    Wall wall[WALLAMOUNT*3];
+    
     
     //Powerups
     Powerup powerups[POWERUPAMOUNT];

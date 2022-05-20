@@ -85,8 +85,8 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
     pingUDPserver(theGame, udpData, udpValues);
     
     //initierar väggar
-    initAllWalls(theGame);
-
+    initAllWalls(wall);
+    
     //set game-delay to x-miliseconds. You should have lower delay if you have a slower computer
     theGame->delayInMS=10;
 }
@@ -105,13 +105,12 @@ bool checkEvents(Game theGame)
         switch (event.type)
         {
         case SDL_QUIT:
-            quitGame = true;
+            destroyGame(theGame);
             break;
         case SDL_WINDOWEVENT_CLOSE:
             if (theGame->window)
             {
-                theGame->window = NULL;
-                quitGame = true;
+                destroyGame(theGame);
             }
             break;
         case SDL_KEYDOWN:
@@ -146,7 +145,7 @@ bool checkEvents(Game theGame)
             case SDLK_p:                                            /*!!! P = RESET-BUTTON!!! (only works when testing alone I think)*/
                 //Testing
                 quitGame = false;
-                Player player[MAXPLAYERS]; // declares x-amounts of players
+                //Player player[MAXPLAYERS]; // declares x-amounts of players
                 UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
                 UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
                 initGame(theGame, &udpData, &udpValues, &quitGame);         // initializes startvalues. coordinates etc.
@@ -210,7 +209,7 @@ PUBLIC void gameUpdate(Game theGame)
 {
     // Initialize
     bool quitGame = false;
-    Player player[MAXPLAYERS]; // declares x-amounts of players
+    //Player player[MAXPLAYERS]; // declares x-amounts of players ----- Vad gör ens denna? Players blir väl definierade när vi skapar theGame genom att de ligger i strukten.
     UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
     UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
     initGame(theGame, &udpData, &udpValues, &quitGame);         // initializes startvalues. coordinates etc.
@@ -234,10 +233,10 @@ PUBLIC void gameUpdate(Game theGame)
 
         // Update GUI labels (only updates when updateFlag = true)
         updateGUI(theGame); //behövs göras om, mem leak (mem leak löst med flagga temporärt)
-
+        
         // render display
         renderTextures(theGame);
-
+        
         SDL_Delay(theGame->delayInMS); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
     destroySoundFiles(sounds);
@@ -401,13 +400,13 @@ void process(Game theGame, Sounds *s)
         if (BombGetExplosionInit(theGame->bombs[i]) == 0){
             BombSetExplosionInit(&theGame->bombs[i], initbowlingballtimer(0, 1000, i));
             for(int j=139;j<250;j++){
-                if(WallGetDestroyedWall(theGame->wall[j]) == 0){
-                    WallSetDestroyedWall(&theGame->wall[j], testCollisionWithDestroyableWalls(theGame, j, i));
-                    if(WallGetDestroyedWall(theGame->wall[j])){ //If wall is destroyed...
+                if(WallGetDestroyedWall(wall[j]) == 0){
+                    WallSetDestroyedWall(&wall[j], testCollisionWithDestroyableWalls(theGame, j, i));
+                    if(WallGetDestroyedWall(wall[j])){ //If wall is destroyed...
                         if(returnarray[i] == theGame->playerIDLocal){
                             playerAddScore(&theGame->player[theGame->bombs[i].whoPlacedID], 1);
                             theGame->updateFlag = true;
-                            theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, theGame->wall[j].x, theGame->wall[j].y);       
+                            theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, wall[j].x, wall[j].y);       
                         }
                     }
                 }
@@ -476,7 +475,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                 case SDL_QUIT:
                     *quitGame = true;
                     breakLoop = true;
-                    //destroyGame(theGame);
+                    destroyGame(theGame);
                     break;
                 case SDL_WINDOWEVENT_CLOSE:
                     if(theGame->window)
@@ -484,7 +483,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                         theGame->window = NULL;
                         *quitGame = true;
                         breakLoop = true;
-                        //destroyGame(theGame);
+                        destroyGame(theGame);
                     }
                     break;
                 case SDL_KEYDOWN:
@@ -532,7 +531,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                             printf("\nQUIT GAME\n");
                             *quitGame = true;
                             breakLoop = true;
-                            //destroyGame(theGame);
+                            destroyGame(theGame);
                             break;
                         //case: OPTIONS (inte så viktigt)
                         //case: CREDITS (inte så viktigt)
