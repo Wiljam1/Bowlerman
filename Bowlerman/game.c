@@ -49,7 +49,6 @@ PUBLIC Game createWindow()
 // initializes startvalues for game
 void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame)
 {
-<<<<<<< HEAD
     
     loadAllTextures(theGame);  // Loading textures from file
     
@@ -60,19 +59,6 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
     initUDP(udpValues);     //init UDP
 
     menu(theGame, quitGame, udpValues);     //Menu loop
-=======
-    // Loading textures from file
-    loadAllTextures(theGame);
-    //inits SDL-net and loads in correct IP-adresses etc.
-    initSDLNet();
-     //Init GUI
-    initGUI(theGame);
-    //Menu loop
-    initUDP(udpValues);
-    menu(theGame, quitGame, udpValues);
-
-    //inits UDP
->>>>>>> parent of 63bf898 (flyttade wall structen till wall.h)
 
     //TCPstruct tcpValues = createTCPstruct();     //returns a struct for tcp-init-struct.	
 	//initTCP(&tcpValues);            //initiates TCP
@@ -90,11 +76,7 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
     //getPlayerIDviaUDP(theGame, udpData, udpValues);
     
     //Kollar player-ammount (hur många spelare som är online). Just nu är den satt till att alltid vara 4.
-<<<<<<< HEAD
     //checkPlayerAmmount(theGame);
-=======
-    checkPlayerAmmount(theGame);
->>>>>>> parent of 63bf898 (flyttade wall structen till wall.h)
 
     //initierar spelare
     initAllPlayers(theGame);
