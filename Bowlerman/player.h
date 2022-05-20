@@ -70,6 +70,7 @@ PUBLIC int getLocalID(Game theGame);
 int playerGetAmountOfBombsPlaced(Player p[], int id);
 int playerGetAmountOfBombs(Player p[], int id);
 int playerGetIsInvulnerable(Player p[], int id);
+int playerGetIsDead(Player p[], int id);
 void playerAddAmountOfBombsPlaced(Player p[], int id, int i); //
 int playerGetExplosionPower(Player p[], int id);
 void playerSetID(Player p[], int id);

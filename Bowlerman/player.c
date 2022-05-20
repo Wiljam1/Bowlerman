@@ -45,7 +45,7 @@ PUBLIC Player initPlayer(int initX, int initY, int playerID)
     p.isMoving = false;  //is not enforced by keyboard inputs though.
     p.isDead = false;
     p.isInvulnerable = false;
-    p.noOfLives = 1; // OM du ändrar här måste du ändra till samma i UDPDataReset!!
+    p.noOfLives = 3; // OM du ändrar här måste du ändra till samma i UDPDataReset!!
     p.score = 0;
 
     return p;
@@ -345,6 +345,11 @@ PUBLIC int playerGetExplosionPower(Player p[], int id)
     return p[id].explosionPower;
 }
 
+int playerGetIsDead(Player p[], int id)
+{
+    return p[id].isDead;
+}
+
 void playerIncreaseSpeed(Player p[], int id)
 {
     playerAddSpeedDisplay(p, 1, id);
@@ -425,10 +430,12 @@ void setPlayerDeathFlags(Game theGame, Player player[], int i)
 {
     theGame->updateFlag = true;
     int lives = playerGetNoOfLives(player, i);
-    lives--;
+    if(lives > 0)
+        lives--;
     playerSetNoOfLives(player, i, lives);
     printf("Lives left for player %d: %d\n", i, playerGetNoOfLives(player, i));
-    playerSetDead(player, i);
+    if(lives == 0)
+        playerSetDead(player, i);
     playerSetInvulnerability(player, i , true);
     theGame->invulnerabiltyFlag[i] = true; /*Flagga för att inte komma in i timern mer en än gång*/
 }
