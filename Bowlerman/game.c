@@ -505,7 +505,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                             initTCP(&tcpValues, ip1);		//connectar till angiven Ip-adress
                             threadStruct.sd=tcpValues.sd;  //copy socket descriptor into thread-struct
                             theGame->playerIDLocal = getPlayerIDviaTCP(&tcpValues); 
-                            printf("playerID: %d\n", theGame->playerIDLocal);
+                            
                             startGameViaTCP(&tcpValues, &threadStruct); //starts the game, and sends the info out to all other clients
                             *quitGame = false;
                             //breakLoop = true;
@@ -522,7 +522,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                             initTCP(&tcpValues, ip2);		//connectar till angiven Ip-adress
                             threadStruct.sd=tcpValues.sd; //copy socket descriptor into thread-struct
                             theGame->playerIDLocal = getPlayerIDviaTCP(&tcpValues); 
-                            printf("playerID: %d\n", theGame->playerIDLocal);
+            
                             thread = SDL_CreateThread(receiveTCP, "test", (void *) &threadStruct); //creates a thread waiting to see if the game is starting or not.
 
                             *quitGame = false;
@@ -539,8 +539,9 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                     }
             }  
         }
-        if(threadStruct.startflag==1)
+        if(threadStruct.startflag==1) //if game should start
 		{
+            printf("playerID: %d\n", theGame->playerIDLocal);
 			printf("playerammount: %d\n", threadStruct.playerAmmount);
 			printf("startflag: %d\n", threadStruct.startflag);
             theGame->playerAmount=threadStruct.playerAmmount;

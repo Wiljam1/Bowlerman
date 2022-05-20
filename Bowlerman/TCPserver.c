@@ -24,9 +24,9 @@ SDL_Thread* thread[MAXPLAYERS+2];   //trådar
 //send to regular client players
 struct buffer2
 {
-	int playerAmmount;
+	int playerAmmount;  //how many clients are connected
 	int playerID;
-	int startflag;
+	int startflag;   //startflag is used to indicate whether game should start or not
 };
 typedef struct buffer2 Buffer2;
 
@@ -207,6 +207,7 @@ int main(int argc, char **argv)
 					ipaddr&0xff,
 					remoteIP->port);
 				
+				//buffer3 is used to send data about  clients to UDP-server
 				buffer3.playerAmmount=playerAmmount;
 				buffer3.IPclient[playerAmmount]=remoteIP->host;  //save IP adress of connected client in struct
 				buffer3.portClient[playerAmmount]=remoteIP->port; //save IP port of connected client in struct
