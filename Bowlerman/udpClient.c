@@ -119,7 +119,7 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
         if (udpData->placeBomb==1){ 
             tryToPlaceBomb(theGame, playerID);
         }
-        
+                                                                        //BUG: First powerup is never sent!
         printf("Receiving data, oldPowerupID: %d\n", oldPowerupID);     //BUG: Only send/receive more powerups when moving / sending next packet.
         if(oldPowerupID != udpData->powerupsID) //Only recieve when ID changed
         {
