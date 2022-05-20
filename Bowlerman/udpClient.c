@@ -61,7 +61,7 @@ PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 
 
 //Send Data
-PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *flag, Player player[])
+PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *flag, int *flagSendOnStartup, Player player[])
 {
     int playerID = getLocalID(theGame);
     int x_posOld = playerGetOldXpos(player, playerID);

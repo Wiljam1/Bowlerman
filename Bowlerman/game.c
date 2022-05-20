@@ -256,7 +256,7 @@ PUBLIC void gameUpdate(Game theGame)
 
         SDL_Delay(theGame->delayInMS); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
         
-        checkGameOver(theGame); //Behöver ligga här för att score ska uppdateras innan man dör, NACKDEL att den kollar en extra sak hela tiden.
+        checkGameOver(theGame, player); //Behöver ligga här för att score ska uppdateras innan man dör, NACKDEL att den kollar en extra sak hela tiden.
     }
     destroySoundFiles(sounds);
 }
@@ -265,9 +265,9 @@ void checkGameOver(Game theGame, Player player[])
 {
     static int totallyDeadPlayers = 0;
     for(int i = 0; i < theGame->playerAmount; i++){
-        if(playerGetNoOfLives(theGame->player[i]) == 0){
+        if(playerGetNoOfLives(player, i) == 0){
             if(++totallyDeadPlayers == theGame->playerAmount-1){    //If every player except one is dead, show the scoreboard
-                showScoreboard(theGame);
+                showScoreboard(theGame, player);
             }
         }
     }
@@ -279,7 +279,7 @@ void showScoreboard(Game theGame, Player player[]) //Måste skriva om den här s
     int width = WIDTH / 3;
     int height = WIDTH / 11.7;
     int y1 = HEIGHT/7, y2 = HEIGHT / 6, y3 = HEIGHT / 5, y4 = HEIGHT / 4, y5 = HEIGHT / 3, y6 = HEIGHT / 2, y7 = HEIGHT;
-
+    int id = getLocalID(theGame);
     bool loop = true;
     int status;
     SDL_Color black = {0, 0, 0, 0};
@@ -289,10 +289,10 @@ void showScoreboard(Game theGame, Player player[]) //Måste skriva om den här s
     
     //Determine player with most score
     static int highestScore = 0, highestScoreID = 0;
-    highestScore = theGame->player[theGame->playerIDLocal].id;
+    highestScore = playerGetScore(player, id);
     for(int i = 0; i < theGame->playerAmount; i++){
-        if(theGame->player[i].score > highestScore){    //Basic max-value sorting
-            highestScore = theGame->player[i].score;
+        if(playerGetScore(player, i) > highestScore){    //Basic max-value sorting
+            highestScore = playerGetScore(player, i);
             highestScoreID = i;
         }
     }
@@ -308,13 +308,13 @@ void showScoreboard(Game theGame, Player player[]) //Måste skriva om den här s
     char tmpstr3[LEN] = "-------------------"; 
     createLabel(theGame, 2, tmpstr3, -1, black);
     char tmpstr4[LEN] = "Player 1: "; 
-    createLabel(theGame, 3, tmpstr4, theGame->player[0].score, black);
+    createLabel(theGame, 3, tmpstr4, playerGetScore(player, 0), black);
     char tmpstr5[LEN] = "Player 2: "; 
-    createLabel(theGame, 4, tmpstr5, theGame->player[1].score, black);
+    createLabel(theGame, 4, tmpstr5, playerGetScore(player, 1), black);
     char tmpstr6[LEN] = "Player 3: "; 
-    createLabel(theGame, 5, tmpstr6, theGame->player[2].score, black);
+    createLabel(theGame, 5, tmpstr6, playerGetScore(player, 2), black);
     char tmpstr7[LEN] = "Player 4: "; 
-    createLabel(theGame, 6, tmpstr7, theGame->player[3].score, black);
+    createLabel(theGame, 6, tmpstr7, playerGetScore(player, 3), black);
 
     for(int i = 0; i < 7; i++){
         SDL_Rect textRect = {WIDTH/3, i*100, width, height};

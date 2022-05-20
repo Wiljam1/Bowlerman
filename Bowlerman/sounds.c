@@ -14,8 +14,8 @@ Sounds initSoundFiles()
     s.backgroundMusic = Mix_LoadMUS("resources/sounds/song.wav");
     s.explosion = Mix_LoadWAV("resources/sounds/explosion.wav");
     s.death = Mix_LoadWAV("resources/sounds/strike.wav");
-    Mix_Volume(-1, 10);
-   // Mix_VolumeMusic(MUSICVOLUME);
+    Mix_Volume(-1, 1);
+    Mix_VolumeMusic(MUSICVOLUME);
     printf("Hej");
     
     return s;
