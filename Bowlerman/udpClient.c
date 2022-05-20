@@ -61,7 +61,7 @@ PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 
 
 //Send Data
-PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *flag, int *flagSendOnStartup, Player player[])
+PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *flagPlayerNowStandingStill, int *flagSendOnStartup, Player player[])
 {
     int playerID = getLocalID(theGame);
     int x_posOld = playerGetOldXpos(player, playerID);
@@ -77,9 +77,10 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
     if(theGame->powerupsNotSent > 0){
         powerupSendflag = 1;
     }
-    // send data if movement or bomb-placement
+
+    // send data if movement or bomb-placement etc
     UDPSetMoveDirection(udpData, playerGetMoveDirection(player, playerID));
-    if (abs(x_posOld - x_pos) >= UPDATESPEED || abs(y_posOld - y_pos) >= UPDATESPEED || *flag == 1 || udpData->placeBomb==1 || scoreGUIFlag == 1 || powerupSendflag == 1 || *flagSendOnStartup==1)
+    if (abs(x_posOld - x_pos) >= UPDATESPEED || abs(y_posOld - y_pos) >= UPDATESPEED || *flagPlayerNowStandingStill == 1 || udpData->placeBomb==1 || scoreGUIFlag == 1 || powerupSendflag == 1 || *flagSendOnStartup==1)
     {
         UDPSetPlayerID(udpData, playerID);
         UDPSetXPos(udpData, x_pos);
@@ -106,7 +107,7 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         SDLNet_UDP_Send(udpValues->sd, -1, udpValues->p);
         playerSetOldXPos(player, playerID, x_pos);
         playerSetOldYPos(player, playerID, y_pos);
-        *flag=0;
+        *flagPlayerNowStandingStill=0;
         scoreGUIFlag = 0;
         powerupSendflag = 0;
         *flagSendOnStartup=0;
@@ -157,28 +158,34 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, Pla
 
 PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues, Player player[])
 {
-    static int flag=0;
-    static int flag2=0;
+    static int flagPlayerNowStandingStill=0;
+    static int flagPlayerHasWalked=0;
     
     int playerID = getLocalID(theGame);
     //udpData->moveDirection = theGame->player[playerID].moveDirection;
     playerSetMoveDirection(player, playerID, playerGetMoveDirection(player, playerID));
+    //player[id].movedirection = playermoveDirection();
 
+    static char moveDirectionLocal = '0';
+    moveDirectionLocal= playerGetMoveDirection(player, playerID);
     //check to see if we should send bomb with UDP
     sendBomb(theGame, udpData, udpValues);
     //flagga för att reset:a movement direction när spelaren står stilla.
-    if( udpData->moveDirection != '0'){
-       flag2=1;
+
+    //if(playerGetMoveDirection(player,))
+
+    if( moveDirectionLocal != '0'){
+       flagPlayerHasWalked=1;
     }
-    if( (udpData->moveDirection == '0') && flag2){
-       flag=1;
-       flag2=0;
+    if( (moveDirectionLocal == '0') && flagPlayerHasWalked){
+       flagPlayerNowStandingStill=1;
+       flagPlayerHasWalked=0;
     }
 
     static int flagSendOnStartup=1;
 
     //send udp data (if e.g. movement has been updated)
-    sendUDP(theGame, udpData, udpValues, &flag, &flagSendOnStartup, player);
+    sendUDP(theGame, udpData, udpValues, &flagPlayerNowStandingStill, &flagSendOnStartup, player);
 
     //receive udp data
     receiveUDP(theGame, udpData, udpValues, player);
