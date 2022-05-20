@@ -126,6 +126,8 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
             theGame->powerups[udpData->powerupsID].indestructable = timerForPowerups(SDL_GetTicks(), 1500, udpData->powerupsID);
         }
         playerSetMoveDirection(&(theGame->player[playerID]), udpData->moveDirection);
+        
+        //ska denna vara här?
         playerSetID(&(theGame->player[playerID]), udpData->playerID);
         playerSetNoOfLives(&(theGame->player[playerID]), udpData->noOfLives);
         playerSetScore(&(theGame->player[playerID]), udpData->score[playerID]);
@@ -191,9 +193,21 @@ PUBLIC UDPData UDPDataReset()
 PUBLIC UDPStruct createUDPstruct()
 {
     UDPStruct u;
+    strcpy(u.serverIp, "127.0.0.1");
     return u;
 }
 
+PUBLIC void pingUDPserver(Game theGame, UDPData *udpData, UDPStruct *udpValues)
+{
+    memcpy(udpValues->p->data, &(*udpData), sizeof(UDPData) + 1);
+    udpValues->p->len = sizeof(UDPData) + 1;
+    udpValues->p->address.host = udpValues->srvadd.host; /* Set the destination host */
+    udpValues->p->address.port = udpValues->srvadd.port; /* And destination port */
+    SDLNet_UDP_Send(udpValues->sd, -1, udpValues->p);
+}
+
+
+//detta gör  vi via TCP istället
 PUBLIC void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
 {
      // 1st: send info to UDP-server
