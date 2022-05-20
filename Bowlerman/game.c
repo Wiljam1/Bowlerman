@@ -105,13 +105,12 @@ bool checkEvents(Game theGame)
         switch (event.type)
         {
         case SDL_QUIT:
-            quitGame = true;
+            destroyGame(theGame);
             break;
         case SDL_WINDOWEVENT_CLOSE:
             if (theGame->window)
             {
-                theGame->window = NULL;
-                quitGame = true;
+                destroyGame(theGame);
             }
             break;
         case SDL_KEYDOWN:
@@ -146,7 +145,7 @@ bool checkEvents(Game theGame)
             case SDLK_p:                                            /*!!! P = RESET-BUTTON!!! (only works when testing alone I think)*/
                 //Testing
                 quitGame = false;
-                Player player[MAXPLAYERS]; // declares x-amounts of players
+                //Player player[MAXPLAYERS]; // declares x-amounts of players
                 UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
                 UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
                 initGame(theGame, &udpData, &udpValues, &quitGame);         // initializes startvalues. coordinates etc.
@@ -476,7 +475,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                 case SDL_QUIT:
                     *quitGame = true;
                     breakLoop = true;
-                    //destroyGame(theGame);
+                    destroyGame(theGame);
                     break;
                 case SDL_WINDOWEVENT_CLOSE:
                     if(theGame->window)
@@ -484,7 +483,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                         theGame->window = NULL;
                         *quitGame = true;
                         breakLoop = true;
-                        //destroyGame(theGame);
+                        destroyGame(theGame);
                     }
                     break;
                 case SDL_KEYDOWN:
@@ -505,7 +504,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                             initTCP(&tcpValues, ip1);		//connectar till angiven Ip-adress
                             threadStruct.sd=tcpValues.sd;  //copy socket descriptor into thread-struct
                             theGame->playerIDLocal = getPlayerIDviaTCP(&tcpValues); 
-                            printf("playerID: %d\n", theGame->playerIDLocal);
+                            
                             startGameViaTCP(&tcpValues, &threadStruct); //starts the game, and sends the info out to all other clients
                             *quitGame = false;
                             //breakLoop = true;
@@ -522,7 +521,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                             initTCP(&tcpValues, ip2);		//connectar till angiven Ip-adress
                             threadStruct.sd=tcpValues.sd; //copy socket descriptor into thread-struct
                             theGame->playerIDLocal = getPlayerIDviaTCP(&tcpValues); 
-                            printf("playerID: %d\n", theGame->playerIDLocal);
+            
                             thread = SDL_CreateThread(receiveTCP, "test", (void *) &threadStruct); //creates a thread waiting to see if the game is starting or not.
 
                             *quitGame = false;
@@ -532,15 +531,16 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                             printf("\nQUIT GAME\n");
                             *quitGame = true;
                             breakLoop = true;
-                            //destroyGame(theGame);
+                            destroyGame(theGame);
                             break;
                         //case: OPTIONS (inte så viktigt)
                         //case: CREDITS (inte så viktigt)
                     }
             }  
         }
-        if(threadStruct.startflag==1)
+        if(threadStruct.startflag==1) //if game should start
 		{
+            printf("playerID: %d\n", theGame->playerIDLocal);
 			printf("playerammount: %d\n", threadStruct.playerAmmount);
 			printf("startflag: %d\n", threadStruct.startflag);
             theGame->playerAmount=threadStruct.playerAmmount;
