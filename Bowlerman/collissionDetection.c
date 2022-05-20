@@ -56,8 +56,8 @@ void collisionWithWallsAround(Game theGame)
     
     for(int i = 0; i < WALLAMOUNT; i++)
     {
-        float wallXPos = getWallXPosition(wall[i]), wallYPos = getWallYPosition(wall[i]),
-              wallWidth = getWallWidth(wall[i]), wallHeight = getWallHeight(wall[i]);
+        float wallXPos = getWallXPosition(theGame->wall[i]), wallYPos = getWallYPosition(theGame->wall[i]),
+              wallWidth = getWallWidth(theGame->wall[i]), wallHeight = getWallHeight(theGame->wall[i]);
 
         if (i < 20)
         {
@@ -232,9 +232,9 @@ void testCollisionWithWalls(Game theGame)
         for (int j=100;j<250;j++)
         {
 
-            if(WallGetDestroyedWall(wall[j]) == 0)
+            if(WallGetDestroyedWall(theGame->wall[j]) == 0)
             {
-                int wallX = getWallXPosition(wall[j]), wallY = getWallYPosition(wall[j]), wallW = getWallWidth(wall[j]), wallH = getWallHeight(wall[j]);
+                int wallX = getWallXPosition(theGame->wall[j]), wallY = getWallYPosition(theGame->wall[j]), wallW = getWallWidth(theGame->wall[j]), wallH = getWallHeight(theGame->wall[j]);
                 if(moveDirection == 'w' || moveDirection == 's')        //för upp och ner
                 {   
                     if(playerX + playerW > wallX && playerX < wallX + wallW)
@@ -279,8 +279,8 @@ int testCollisionExplosionWithWalls(Game theGame, int k)
     {
         for (int i=0;i<136;i++)
         {
-            float wallXPos = getWallXPosition(wall[i]), wallYPos = getWallYPosition(wall[i]),
-                wallWidth = getWallWidth(wall[i]), wallHeight = getWallHeight(wall[i]);
+            float wallXPos = getWallXPosition(theGame->wall[i]), wallYPos = getWallYPosition(theGame->wall[i]),
+                wallWidth = getWallWidth(theGame->wall[i]), wallHeight = getWallHeight(theGame->wall[i]);
 
             if(wallXPos < theGame->explosionPosition[j][k].x &&
                wallXPos + wallWidth > theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w &&
@@ -297,8 +297,8 @@ int testCollisionExplosionWithWalls(Game theGame, int k)
 //testar om väggen explosionen träffar kan förstöras och förstör den isåfall
 int testCollisionWithDestroyableWalls(Game theGame, int k, int j)
 {
-    float wallXPos = getWallXPosition(wall[k]), wallYPos = getWallYPosition(wall[k]),
-        wallWidth = getWallWidth(wall[k]), wallHeight = getWallHeight(wall[k]);
+    float wallXPos = getWallXPosition(theGame->wall[k]), wallYPos = getWallYPosition(theGame->wall[k]),
+        wallWidth = getWallWidth(theGame->wall[k]), wallHeight = getWallHeight(theGame->wall[k]);
     int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
     for (int i=0;i<1+4*playerGetExplosionPower(theGame->player[returnarray[j]]);i++)
     {
@@ -318,8 +318,8 @@ int testPossibilityToExplode(Game theGame, int playerID, int i)
 {
     for(int k=0;k<136;k++)
     {
-        float wallXPos = getWallXPosition(wall[k]), wallYPos = getWallYPosition(wall[k]),
-            wallWidth = getWallWidth(wall[k]), wallHeight = getWallHeight(wall[k]);
+        float wallXPos = getWallXPosition(theGame->wall[k]), wallYPos = getWallYPosition(theGame->wall[k]),
+            wallWidth = getWallWidth(theGame->wall[k]), wallHeight = getWallHeight(theGame->wall[k]);
 
         if(wallXPos < theGame->explosionPosition[playerID][i].x &&
             wallXPos + wallWidth > theGame->explosionPosition[playerID][i].x + theGame->explosionPosition[playerID][i].w &&
@@ -337,10 +337,10 @@ int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i)
 {
     for(int k=139;k<250;k++)
     {
-        float wallXPos = getWallXPosition(wall[k]), wallYPos = getWallYPosition(wall[k]),
-            wallWidth = getWallWidth(wall[k]), wallHeight = getWallHeight(wall[k]);
+        float wallXPos = getWallXPosition(theGame->wall[k]), wallYPos = getWallYPosition(theGame->wall[k]),
+            wallWidth = getWallWidth(theGame->wall[k]), wallHeight = getWallHeight(theGame->wall[k]);
         
-        if(wall[k].destroyedWall==0)
+        if(theGame->wall[k].destroyedWall==0)
             {
             if(wallXPos < theGame->explosionPosition[playerID][i].x &&
                 wallXPos + wallWidth > theGame->explosionPosition[playerID][i].x + theGame->explosionPosition[playerID][i].w &&

@@ -49,6 +49,7 @@ PUBLIC Game createWindow()
 // initializes startvalues for game
 void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame)
 {
+<<<<<<< HEAD
     
     loadAllTextures(theGame);  // Loading textures from file
     
@@ -59,6 +60,19 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
     initUDP(udpValues);     //init UDP
 
     menu(theGame, quitGame, udpValues);     //Menu loop
+=======
+    // Loading textures from file
+    loadAllTextures(theGame);
+    //inits SDL-net and loads in correct IP-adresses etc.
+    initSDLNet();
+     //Init GUI
+    initGUI(theGame);
+    //Menu loop
+    initUDP(udpValues);
+    menu(theGame, quitGame, udpValues);
+
+    //inits UDP
+>>>>>>> parent of 63bf898 (flyttade wall structen till wall.h)
 
     //TCPstruct tcpValues = createTCPstruct();     //returns a struct for tcp-init-struct.	
 	//initTCP(&tcpValues);            //initiates TCP
@@ -76,7 +90,11 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
     //getPlayerIDviaUDP(theGame, udpData, udpValues);
     
     //Kollar player-ammount (hur många spelare som är online). Just nu är den satt till att alltid vara 4.
+<<<<<<< HEAD
     //checkPlayerAmmount(theGame);
+=======
+    checkPlayerAmmount(theGame);
+>>>>>>> parent of 63bf898 (flyttade wall structen till wall.h)
 
     //initierar spelare
     initAllPlayers(theGame);
@@ -85,8 +103,8 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
     pingUDPserver(theGame, udpData, udpValues);
     
     //initierar väggar
-    initAllWalls(wall);
-    
+    initAllWalls(theGame);
+
     //set game-delay to x-miliseconds. You should have lower delay if you have a slower computer
     theGame->delayInMS=10;
 }
@@ -233,10 +251,10 @@ PUBLIC void gameUpdate(Game theGame)
 
         // Update GUI labels (only updates when updateFlag = true)
         updateGUI(theGame); //behövs göras om, mem leak (mem leak löst med flagga temporärt)
-        
+
         // render display
         renderTextures(theGame);
-        
+
         SDL_Delay(theGame->delayInMS); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
     }
     destroySoundFiles(sounds);
@@ -400,13 +418,13 @@ void process(Game theGame, Sounds *s)
         if (BombGetExplosionInit(theGame->bombs[i]) == 0){
             BombSetExplosionInit(&theGame->bombs[i], initbowlingballtimer(0, 1000, i));
             for(int j=139;j<250;j++){
-                if(WallGetDestroyedWall(wall[j]) == 0){
-                    WallSetDestroyedWall(&wall[j], testCollisionWithDestroyableWalls(theGame, j, i));
-                    if(WallGetDestroyedWall(wall[j])){ //If wall is destroyed...
+                if(WallGetDestroyedWall(theGame->wall[j]) == 0){
+                    WallSetDestroyedWall(&theGame->wall[j], testCollisionWithDestroyableWalls(theGame, j, i));
+                    if(WallGetDestroyedWall(theGame->wall[j])){ //If wall is destroyed...
                         if(returnarray[i] == theGame->playerIDLocal){
                             playerAddScore(&theGame->player[theGame->bombs[i].whoPlacedID], 1);
                             theGame->updateFlag = true;
-                            theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, wall[j].x, wall[j].y);       
+                            theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, theGame->wall[j].x, theGame->wall[j].y);       
                         }
                     }
                 }
