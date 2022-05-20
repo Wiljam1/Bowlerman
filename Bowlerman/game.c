@@ -83,6 +83,10 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
 
     //ping UDP server so it gets players IP and port.
     pingUDPserver(theGame, udpData, udpValues);
+
+    SDL_Delay(50); //wait  for UDP server to catch up
+
+    
     
     //initierar väggar
     initAllWalls(wall);
