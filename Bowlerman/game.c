@@ -123,6 +123,8 @@ bool checkEvents(Game theGame, Player player[])
             }
             break;
         case SDL_KEYDOWN:
+            //if(playerGetIsDead(player, id) == true)                 //NOT ALLOWED TO DO ANY INPUTS IF DEAD
+                //break;
             switch (event.key.keysym.sym)
             {
             case SDLK_SPACE:

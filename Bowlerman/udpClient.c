@@ -202,7 +202,7 @@ PUBLIC UDPData UDPDataReset()
     u.playerID = 0;
     u.moveDirection = '0';
     u.placeBomb = 0;
-    u.noOfLives = 1;
+    u.noOfLives = 3;
 
     for(int i; i < 4; i++)
         u.score[i] = 0;
