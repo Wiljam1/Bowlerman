@@ -17,7 +17,6 @@ Powerup rollForPowerup(int *pCurrentPowerup, int ID, int xPos, int yPos)
         p.id = ID;
         p.indestructable = timerForPowerups(SDL_GetTicks(), 1500, ID);
         *pCurrentPowerup += 4; //Go to next place in array for next powerup being made
-        printf("Created a powerup! (locally)\n");
     }
     else{ //Create a powerup off-screen (to have something to put in the array and not cause crash)
         p = powerupPlace(3000+ID*10, 3000+ID*10, 0); //This powerup will eventually be overwritten by something else in the array

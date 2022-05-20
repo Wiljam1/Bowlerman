@@ -384,7 +384,8 @@ void process(Game theGame, Sounds *s)
                         if(returnarray[i] == theGame->playerIDLocal){
                             playerAddScore(&theGame->player[theGame->bombs[i].whoPlacedID], 1);
                             theGame->updateFlag = true;
-                            theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, theGame->wall[j].x, theGame->wall[j].y);       
+                            theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, theGame->wall[j].x, theGame->wall[j].y);
+                            theGame->powerupsNotSent++;       
                         }
                     }
                 }

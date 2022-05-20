@@ -68,15 +68,18 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
     int y_posOld = playerGetOldYPos(theGame->player[playerID]);
     float x_pos = playerGetXPosition(theGame->player[playerID]);
     float y_pos = playerGetYPosition(theGame->player[playerID]);
-    static int oldScore = 0, scoreGUIFlag = 0;
+    static int oldScore = 0, scoreGUIFlag = 0, powerupSendflag = 0;
 
     if(theGame->player[playerID].score != oldScore){
         oldScore = playerGetScore(theGame->player[playerID]);
         scoreGUIFlag = 1;
     }
+    if(theGame->powerupsNotSent > 0){
+        powerupSendflag = 1;
+    }
     // send data if movement or bomb-placement
     UDPSetMoveDirection(udpData, playerGetMoveDirection(theGame->player[playerID]));
-    if (abs(x_posOld - x_pos) >= UPDATESPEED || abs(y_posOld - y_pos) >= UPDATESPEED || *flag == 1 || udpData->placeBomb==1 || scoreGUIFlag == 1 || *flagSendOnStartup==1)
+    if (abs(x_posOld - x_pos) >= UPDATESPEED || abs(y_posOld - y_pos) >= UPDATESPEED || *flag == 1 || udpData->placeBomb==1 || scoreGUIFlag == 1 || powerupSendflag == 1 || *flagSendOnStartup==1)
     {
         UDPSetPlayerID(udpData, playerID);
         UDPSetXPos(udpData, x_pos);
@@ -105,7 +108,11 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         playerSetOldYPos(&theGame->player[playerID], y_pos);
         *flag=0;
         scoreGUIFlag = 0;
+        powerupSendflag = 0;
         *flagSendOnStartup=0;
+        if(theGame->powerupsNotSent > 0){
+            theGame->powerupsNotSent--;
+        }
     }
 }
 //Recieve Data
@@ -114,7 +121,6 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
     if (SDLNet_UDP_Recv(udpValues->sd, udpValues->p2))
     {
         static int oldScore[4] = {0};
-        static int oldPowerupID = 0;
         memcpy(&(*udpData), (char *)udpValues->p2->data, sizeof(struct data));
         int playerID = UDPGetPlayerID(udpData);
         playerSetXPos(&(theGame->player[playerID]), udpData->x);
@@ -122,19 +128,26 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
         if (udpData->placeBomb==1){ 
             tryToPlaceBomb(theGame, playerID);
         }
+        puts("Start of packet----------------\n");
+        static int oldPowerupID = 0;
+        //printf("Udpdata->POWERUPSID: %d rand: %d\n", udpData->powerupsID, rand()%100+1);
                                                                         //BUG: First powerup is never sent!
-        printf("Receiving data, oldPowerupID: %d\n", oldPowerupID);     //BUG: Only send/receive more powerups when moving / sending next packet.
+        printf("Receiving data, udpdata->powerupsID: %d\n", udpData->powerupsID);
         if(oldPowerupID != udpData->powerupsID) //Only recieve when ID changed
         {
             printf("Receiving a powerup from UDPclient! Powerup ID:%d\n", udpData->powerupsID);
-            theGame->powerups[udpData->powerupsID] = powerupPlace(udpData->powerupsX-WIDTH/119, udpData->powerupsY-WIDTH/119, udpData->powerupsType);
-            theGame->powerups[udpData->powerupsID].indestructable = timerForPowerups(SDL_GetTicks(), 1500, udpData->powerupsID);
+            if(udpData->powerupsID != -1){
+                theGame->powerups[udpData->powerupsID] = powerupPlace(udpData->powerupsX-WIDTH/119, udpData->powerupsY-WIDTH/119, udpData->powerupsType);
+                theGame->powerups[udpData->powerupsID].indestructable = timerForPowerups(SDL_GetTicks(), 1500, udpData->powerupsID);
+            }
 
-            printf("Saving oldPowerUp: %d\n", oldPowerupID);
             oldPowerupID = udpData->powerupsID;
+            printf("Saving oldPowerUp: %d\n", oldPowerupID);
         }
         playerSetMoveDirection(&(theGame->player[playerID]), udpData->moveDirection);
         
+        puts("End of packet----------------\n");
+
         //ska denna vara här?
         //playerSetID(&(theGame->player[playerID]), udpData->playerID);
         playerSetNoOfLives(&(theGame->player[playerID]), udpData->noOfLives);
@@ -196,7 +209,7 @@ PUBLIC UDPData UDPDataReset()
     u.powerupsX = 0;
     u.powerupsY = 0;
     u.powerupsType = 0;
-    u.powerupsID = 0;
+    u.powerupsID = -1;
     return u;
 }
 

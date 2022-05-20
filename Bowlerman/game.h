@@ -119,6 +119,7 @@ struct game_type
     
     //Powerups
     Powerup powerups[POWERUPAMOUNT];
+    int powerupsNotSent;
 
     //bombs
     Bowlingball bombs[MAXBOMBAMOUNT];
