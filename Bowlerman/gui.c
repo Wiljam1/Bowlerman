@@ -84,8 +84,8 @@ void drawGUI(Game theGame)         // Kanske ska ändra hur de renderas i framti
         SDL_Rect textRect = {i*XVALUE+(i)*50, YVALUE, theGame->labelW[i], theGame->labelH[i]}; 
         SDL_RenderCopy(renderer, theGame->labels[i], NULL, &textRect);     
     }
-    //Render bottom row of labels (could be score for every player in the future)
-    for(int i = TOP_ROW_LABELS; i < BOTTOM_ROW_LABELS; i++){
+    //Render scores (Only renders based on amount of players joined)
+    for(int i = TOP_ROW_LABELS; i < TOP_ROW_LABELS+theGame->playerAmount; i++){
         SDL_Rect textRect = {(i-4)*XVALUE+(i-4)*50, YVALUE*10, theGame->labelW[i], theGame->labelH[i]};
         SDL_RenderCopy(renderer, theGame->labels[i], NULL, &textRect);
     }
