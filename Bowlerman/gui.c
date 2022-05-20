@@ -3,7 +3,6 @@
 
 #include <SDL2/SDL_ttf.h>
 
-#define LEN 20
 #define XVALUE (WIDTH/6.61)
 #define YVALUE (WIDTH/238)
 #define FONTSIZE (WIDTH/37.1875)
@@ -57,7 +56,7 @@ void updateGUI(Game theGame)
     // createLabel(theGame, 3,tmpstr4, theGame->player[theGame->playerIDLocal].lives, white);
 }
 
-void createLabel(Game theGame, int labelID, char text[LEN], float value, SDL_Color color)
+void createLabel(Game theGame, int labelID, char text[], float value, SDL_Color color)
 {
     char num[LEN];
 

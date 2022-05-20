@@ -25,6 +25,7 @@
 #define HEIGHT (WIDTH / 1.178)
 #define MAXBOMBAMOUNT 20
 //-------------------------------------------------
+#define LEN 20
 struct sounds
 {
     Mix_Music *backgroundMusic;

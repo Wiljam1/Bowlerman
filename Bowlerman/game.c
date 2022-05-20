@@ -242,6 +242,8 @@ PUBLIC void gameUpdate(Game theGame)
         renderTextures(theGame);
 
         SDL_Delay(theGame->delayInMS); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
+        
+        checkGameOver(theGame); //Behöver ligga här för att score ska uppdateras innan man dör, NACKDEL att den kollar en extra sak hela tiden.
     }
     destroySoundFiles(sounds);
 }
@@ -249,9 +251,9 @@ PUBLIC void gameUpdate(Game theGame)
 void checkGameOver(Game theGame)
 {
     static int totallyDeadPlayers = 0;
-    for(int i = 0; i < PLAYERAMOUNT; i++){
+    for(int i = 0; i < theGame->playerAmount; i++){
         if(playerGetNoOfLives(theGame->player[i]) == 0){
-            if(++totallyDeadPlayers == 1){
+            if(++totallyDeadPlayers == theGame->playerAmount-1){    //If every player except one is dead, show the scoreboard
                 showScoreboard(theGame);
             }
         }
@@ -270,42 +272,40 @@ void showScoreboard(Game theGame) //Måste skriva om den här snyggare
     SDL_Color black = {0, 0, 0, 0};
     SDL_Rect backRect = {0, 0, WIDTH, HEIGHT};
     SDL_RenderCopy(theGame->renderer, theGame->background, NULL, &backRect);
-    
     SDL_Texture *scoreLabels[7];
-    char buf[1024];
+    
+    //Determine player with most score
+    static int highestScore = 0, highestScoreID = 0;
+    highestScore = theGame->player[theGame->playerIDLocal].id;
+    for(int i = 0; i < theGame->playerAmount; i++){
+        if(theGame->player[i].score > highestScore){    //Basic max-value sorting
+            highestScore = theGame->player[i].score;
+            highestScoreID = i;
+        }
+    }
+    printf("Highest score is from player %d\n", highestScoreID+1);
+    char buf1[1024];
+    char tmpstr1[LEN] = "Player ";
+    sprintf(buf1, "%d", highestScoreID+1);
+    strcat(tmpstr1, strcat(buf1, " wins!"));
 
-    theGame->window_surface = TTF_RenderText_Blended(theGame->font, "GAME OVER!", black);
-    scoreLabels[0] = SDL_CreateTextureFromSurface(theGame->renderer, theGame->window_surface);
-    theGame->window_surface = TTF_RenderText_Blended(theGame->font, "SCOREBOARD", black);
-    scoreLabels[1] = SDL_CreateTextureFromSurface(theGame->renderer, theGame->window_surface);
-    theGame->window_surface = TTF_RenderText_Blended(theGame->font, "-----------", black);
-    scoreLabels[2] = SDL_CreateTextureFromSurface(theGame->renderer, theGame->window_surface);
-    strcpy(buf, "Player 1: ");
-    char num[30];
-        sprintf(num, "%d", theGame->player[0].score);  //Convert float to string
-        strcat(buf, num);          //Add float to end of string
-    theGame->window_surface = TTF_RenderText_Blended(theGame->font, buf, black);
-    scoreLabels[3] = SDL_CreateTextureFromSurface(theGame->renderer, theGame->window_surface);
-    strcpy(buf, "Player 2: ");
-        sprintf(num, "%d", theGame->player[1].score);  //Convert float to string
-        strcat(buf, num);          //Add float to end of string
-    theGame->window_surface = TTF_RenderText_Blended(theGame->font, buf, black);
-    scoreLabels[4] = SDL_CreateTextureFromSurface(theGame->renderer, theGame->window_surface);
-    strcpy(buf, "Player 3: ");
-        sprintf(num, "%d", theGame->player[2].score);  //Convert float to string
-        strcat(buf, num);          //Add float to end of string
-    theGame->window_surface = TTF_RenderText_Blended(theGame->font, buf, black);
-    scoreLabels[5] = SDL_CreateTextureFromSurface(theGame->renderer, theGame->window_surface);
-    strcpy(buf, "Player 4: ");
-        sprintf(num, "%d", theGame->player[3].score);  //Convert float to string
-        strcat(buf, num);          //Add float to end of string
-    theGame->window_surface = TTF_RenderText_Blended(theGame->font, buf, black);
-    scoreLabels[6] = SDL_CreateTextureFromSurface(theGame->renderer, theGame->window_surface);
-    free(num);
-    SDL_FreeSurface(theGame->window_surface);
+    createLabel(theGame, 0, tmpstr1, -1, black);
+    char tmpstr2[LEN] = "SCOREBOARD"; 
+    createLabel(theGame, 1, tmpstr2, -1, black);
+    char tmpstr3[LEN] = "-------------------"; 
+    createLabel(theGame, 2, tmpstr3, -1, black);
+    char tmpstr4[LEN] = "Player 1: "; 
+    createLabel(theGame, 3, tmpstr4, theGame->player[0].score, black);
+    char tmpstr5[LEN] = "Player 2: "; 
+    createLabel(theGame, 4, tmpstr5, theGame->player[1].score, black);
+    char tmpstr6[LEN] = "Player 3: "; 
+    createLabel(theGame, 5, tmpstr6, theGame->player[2].score, black);
+    char tmpstr7[LEN] = "Player 4: "; 
+    createLabel(theGame, 6, tmpstr7, theGame->player[3].score, black);
+
     for(int i = 0; i < 7; i++){
         SDL_Rect textRect = {WIDTH/3, i*100, width, height};
-        SDL_RenderCopy(theGame->renderer, scoreLabels[i], NULL, &textRect);
+        SDL_RenderCopy(theGame->renderer, theGame->labels[i], NULL, &textRect);
     }
     SDL_RenderPresent(theGame->renderer); // present renderer
     
@@ -329,43 +329,17 @@ void showScoreboard(Game theGame) //Måste skriva om den här snyggare
                 case SDL_KEYDOWN:
                     switch(event.key.keysym.sym)
                     {
-                        case SDLK_1:
-                            // ip = writeIP(); / fetch user IP
-                            // createServer(ip); -Starta eller kompilera om(?) servern med användarens IP
-                            // joinLobby(ip);  -Scen där man ser vilka som har joinat lobbyn
-                            printf("\nHOST SERVER\n");
-                            printf("Creating server... ");
-                            ShellExecuteA(GetDesktopWindow(),"open","udpServer.exe",NULL,NULL,SW_SHOW);  //Start server file
-                            SDL_Delay(1000);
-                            printf("Server created!\n");
-                            //*quitGame = false;
-                            loop = false;
-                            break;
-                        case SDLK_2:
-                            printf("\nJOIN SERVER\n");
-                            //Nån menyfunktion där man skriver in IPadressen för hosten
-                            //just nu hårdkodad.
-                            // ip = writeIP(); -Scen där man får skriva IP:n man vill joina
-                            // joinLobby(ip);  -Scen där man ser vilka som har joinat lobbyn
-                            char ip[] = "127.0.0.1";
-                            //strcpy(udpvalues->serverIp, ip);
-                            //*quitGame = false;
-                            loop = false;
-                            break;
                         case SDLK_3:
-                            printf("\nQUIT GAME\n");
-                            //*quitGame = true;
+                            printf("\nQUIT SCOREBOARD\n");      //QUIT TO MENU AND RESET GAME VARIABLES IN THE FUTURE?
                             loop = false;
                             break;
-                        //case: OPTIONS (inte så viktigt)
-                        //case: CREDITS (inte så viktigt)
                     }
             }  
         }
         SDL_Delay(10);
     }
     for(int i = 0; i < 7; i++){
-        SDL_DestroyTexture(scoreLabels[i]);
+        SDL_DestroyTexture(theGame->labels[i]);
     }
 }
 

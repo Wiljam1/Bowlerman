@@ -52,7 +52,7 @@ PUBLIC Player initPlayer(int initX, int initY, int playerID)
     p.isMoving = false;  //is not enforced by keyboard inputs though.
     p.isDead = false;
     p.isInvulnerable = false;
-    p.noOfLives = 3; // OM du ändrar här måste du ändra till samma i UDPDataReset!!
+    p.noOfLives = 1; // OM du ändrar här måste du ändra till samma i UDPDataReset!!
     p.score = 0;
 
     return p;
