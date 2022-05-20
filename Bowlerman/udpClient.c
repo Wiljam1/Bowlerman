@@ -3,7 +3,7 @@
 #include "powerup.h"
 #define PUBLIC /* empty */
 #define PRIVATE static
-#define UPDATESPEED 1
+#define UPDATESPEED 5
 #define MAXAMMOUNTOFBOMBS 5   //how many bombs are allowed to be placed by one player
 void UDPSetPlayerID(UDPData *u, int id);
 void UDPSetXPos(UDPData *u, int x);
@@ -58,8 +58,10 @@ PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
         }
     }
 }
+
+
 //Send Data
-PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *flag)
+PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *flag, int *flagSendOnStartup)
 {
     int playerID = getLocalID(theGame);
     int x_posOld = playerGetOldXpos(theGame->player[playerID]);
@@ -74,7 +76,7 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
     }
     // send data if movement or bomb-placement
     UDPSetMoveDirection(udpData, playerGetMoveDirection(theGame->player[playerID]));
-    if (abs(x_posOld - x_pos) >= UPDATESPEED || abs(y_posOld - y_pos) >= UPDATESPEED || *flag == 1 || udpData->placeBomb==1 || scoreGUIFlag == 1)
+    if (abs(x_posOld - x_pos) >= UPDATESPEED || abs(y_posOld - y_pos) >= UPDATESPEED || *flag == 1 || udpData->placeBomb==1 || scoreGUIFlag == 1 || *flagSendOnStartup==1)
     {
         UDPSetPlayerID(udpData, playerID);
         UDPSetXPos(udpData, x_pos);
@@ -103,6 +105,7 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         playerSetOldYPos(&theGame->player[playerID], y_pos);
         *flag=0;
         scoreGUIFlag = 0;
+        *flagSendOnStartup=0;
     }
 }
 //Recieve Data
@@ -165,8 +168,10 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues)
        flag2=0;
     }
 
+    static int flagSendOnStartup=1;
+
     //send udp data (if e.g. movement has been updated)
-    sendUDP(theGame, udpData, udpValues, &flag);
+    sendUDP(theGame, udpData, udpValues, &flag, &flagSendOnStartup);
 
     //receive udp data
     receiveUDP(theGame, udpData, udpValues);
@@ -229,6 +234,7 @@ PUBLIC void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPStruct *udpValu
     printf("Player ID: %d\n", theGame->playerIDLocal);
 }
 
+//detta gör vi via TCP istället
 PUBLIC void checkPlayerAmmount(Game theGame)
 {
     // detta ska ändras via servern sen.

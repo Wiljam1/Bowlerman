@@ -15,6 +15,8 @@
 #define MAXLIVES 10
 #define INVULNERABILITYTIME 3000
 
+
+//startpositions of players
 #define LEFT_X (WIDTH/17)
 #define RIGHT_X (WIDTH/1.106)
 #define TOP_Y (WIDTH/8.5)
