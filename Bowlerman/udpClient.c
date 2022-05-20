@@ -128,7 +128,7 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues)
         playerSetMoveDirection(&(theGame->player[playerID]), udpData->moveDirection);
         
         //ska denna vara här?
-        playerSetID(&(theGame->player[playerID]), udpData->playerID);
+        //playerSetID(&(theGame->player[playerID]), udpData->playerID);
         playerSetNoOfLives(&(theGame->player[playerID]), udpData->noOfLives);
         playerSetScore(&(theGame->player[playerID]), udpData->score[playerID]);
         for(int i = 0; i < 4; i++){
@@ -249,7 +249,7 @@ PUBLIC void initUDP(UDPStruct *u)
     /* Resolve server name  */
     if (SDLNet_ResolveHost(&u->srvadd, u->serverIp, 2001) == -1)
     {
-        fprintf(stderr, "SDLNet_ResolveHost(192.0.0.1 2001): %s\n", SDLNet_GetError());
+        fprintf(stderr, "SDLNet_ResolveHost(%s : 2001): %s\n", u->serverIp, SDLNet_GetError());
         exit(EXIT_FAILURE);
     }
     if (!((u->p = SDLNet_AllocPacket(sizeof(UDPData) + 1)) && (u->p2 = SDLNet_AllocPacket(sizeof(UDPData) + 1))))

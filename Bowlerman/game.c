@@ -105,13 +105,12 @@ bool checkEvents(Game theGame)
         switch (event.type)
         {
         case SDL_QUIT:
-            quitGame = true;
+            destroyGame(theGame);
             break;
         case SDL_WINDOWEVENT_CLOSE:
             if (theGame->window)
             {
-                theGame->window = NULL;
-                quitGame = true;
+                destroyGame(theGame);
             }
             break;
         case SDL_KEYDOWN:
@@ -146,7 +145,7 @@ bool checkEvents(Game theGame)
             case SDLK_p:                                            /*!!! P = RESET-BUTTON!!! (only works when testing alone I think)*/
                 //Testing
                 quitGame = false;
-                Player player[MAXPLAYERS]; // declares x-amounts of players
+                //Player player[MAXPLAYERS]; // declares x-amounts of players
                 UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
                 UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
                 initGame(theGame, &udpData, &udpValues, &quitGame);         // initializes startvalues. coordinates etc.
@@ -476,7 +475,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                 case SDL_QUIT:
                     *quitGame = true;
                     breakLoop = true;
-                    //destroyGame(theGame);
+                    destroyGame(theGame);
                     break;
                 case SDL_WINDOWEVENT_CLOSE:
                     if(theGame->window)
@@ -484,7 +483,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                         theGame->window = NULL;
                         *quitGame = true;
                         breakLoop = true;
-                        //destroyGame(theGame);
+                        destroyGame(theGame);
                     }
                     break;
                 case SDL_KEYDOWN:
@@ -532,7 +531,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues)
                             printf("\nQUIT GAME\n");
                             *quitGame = true;
                             breakLoop = true;
-                            //destroyGame(theGame);
+                            destroyGame(theGame);
                             break;
                         //case: OPTIONS (inte så viktigt)
                         //case: CREDITS (inte så viktigt)
