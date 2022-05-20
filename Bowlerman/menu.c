@@ -114,8 +114,8 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues){
                                 printf("host : %d", currentMenu);
                                 if(i == 0) listenForIp = 1;
                                 if(i == 1){ // host server
-                                ShellExecuteA(GetDesktopWindow(),"open","udpServer.exe",NULL,NULL,SW_SHOW);  //Start server file
-                                SDL_Delay(1000);
+                                //ShellExecuteA(GetDesktopWindow(),"open","udpServer.exe",NULL,NULL,SW_SHOW);  //Start server file
+                                //SDL_Delay(1000);
 
                                 if(textIndex > 0){
                                     strcpy(udpvalues->serverIp, inputIp);
@@ -183,7 +183,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues){
             printf("playerID: %d\n", theGame->playerIDLocal);
 			printf("playerammount: %d\n", threadStruct.playerAmmount);
 			printf("startflag: %d\n", threadStruct.startflag);
-            theGame->playerAmount=threadStruct.playerAmmount;
+            theGame->playerAmount=threadStruct.playerAmmount; //set playerAmount in theGamestruct to the value returned from the thread listening to TCP
 			//get playerammount & start game (exit breakLoop)
 			//thread=NULL;  //closes thread
             running = false;
