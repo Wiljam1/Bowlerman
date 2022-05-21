@@ -51,21 +51,6 @@ PUBLIC Player initPlayer(int initX, int initY, int playerID)
     return p;
 }
 
-/* void initAllPlayers(Player players)
-{
-    initPlayer(players[0], LEFT_X, TOP_Y, 0);
-    initPlayer(players[1], RIGHT_X, TOP_Y, 1);
-    initPlayer(players[2], LEFT_X, BOTTOM_Y, 2);
-    initPlayer(players[3], RIGHT_X, BOTTOM_Y, 3);
-}  */
-
-/* Player initAPlayer(int x, int y, int id)
-{
-    Player player = malloc(sizeof(Player));
-    player = initPlayer(x, y, id);
-    return player;
-} */
-
 void manageMovementInputs(Game theGame, Player player[])
 {
     double velX = 0, velY = 0;
@@ -73,7 +58,7 @@ void manageMovementInputs(Game theGame, Player player[])
     char direction;
 
     const Uint8 *state = SDL_GetKeyboardState(NULL);
-    if (player[id].isInvulnerable == false || player[id].isDead == false)
+    if (!playerGetIsDead(player, id))
     {
         if (state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_W] && !state[SDL_SCANCODE_S])
         {
@@ -164,12 +149,12 @@ void UpdatePlayerTextures(Game theGame, Player player[])
                 SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], 270, 0, 0);
             else
                 SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], 90, 0, 0);
-            //getStartPos(&theGame->player[i]); // If player is dead it respawns at starting pos
-            playerSetDead(player, i);
+            //playerSetDead(player, i);
         }
-        else {
-           /*  theGame->player[i].isDead = true;
-            theGame->player[i].isInvulnerable = true; */
+        else if (playerGetNoOfLives(player, i) <= 0)
+        {
+            playerSetDead(player, i);
+            playerSetInvulnerability(player, i, true);
         }
     }
 }

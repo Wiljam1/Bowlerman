@@ -85,6 +85,7 @@ int playerGetOldYPos(Player p[], int id);
 int playerGetScore(Player p[], int id);
 
 void playerSetDead(Player p[], int id);
+void playerSetAlive(Player p[], int id);
 
 void playerSetNoOfLives(Player p[], int id, int lives);
 void playerSetScore(Player p[], int id, int score);

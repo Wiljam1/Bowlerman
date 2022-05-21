@@ -151,6 +151,8 @@ bool checkEvents(Game theGame, Player player[])
                 break;
             case SDLK_i:
                 playerAddLives(player, id, 1);
+                playerSetAlive(player, id);
+                playerSetInvulnerability(player, id, false);
                 updateScoreFlag(theGame, true);
                 break;
             case SDLK_p:                                            /*!!! P = RESET-BUTTON!!! (only works when testing alone I think)*/
