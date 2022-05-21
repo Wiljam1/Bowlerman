@@ -16,7 +16,6 @@ Sounds initSoundFiles()
     s.death = Mix_LoadWAV("resources/sounds/strike.wav");
     Mix_Volume(-1, 1);
     Mix_VolumeMusic(MUSICVOLUME);
-    printf("Hej");
     
     return s;
 }
@@ -40,7 +39,6 @@ void playBackroundMusic(Sounds *s)
 void playDeath(Sounds *s)
 {
     Mix_PlayChannel(-1, (s->death), 0);
-    printf("Ljud");
 }
 
 void playBomb(Sounds *s)

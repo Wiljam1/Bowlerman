@@ -395,7 +395,6 @@ PUBLIC void destroyGame(Game theGame)
     for(int i = 0; i < 3; i++){
         SDL_DestroyTexture(theGame->textureWall[i]);
     }
-
     destroyGUI(theGame);
     SDLNet_Quit();
     SDL_DestroyRenderer(theGame->renderer);
