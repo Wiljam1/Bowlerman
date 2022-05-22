@@ -51,6 +51,18 @@ PUBLIC Player initPlayer(int initX, int initY, int playerID)
     return p;
 }
 
+void initAllPlayers(Game theGame, Player player[])
+{
+    player[0] = initPlayer(LEFT_X, TOP_Y, 0); // Denna ska snyggas till
+    player[1] = initPlayer(RIGHT_X, TOP_Y, 1);
+    player[2] = initPlayer(LEFT_X, BOTTOM_Y, 2);
+    player[3] = initPlayer(RIGHT_X, BOTTOM_Y, 3);
+    
+    for(int i = 0; i < PLAYERAMOUNT; i++) {
+        theGame->invulnerabiltyFlag[i] = false;
+    }
+}
+
 void manageMovementInputs(Game theGame, Player player[])
 {
     double velX = 0, velY = 0;

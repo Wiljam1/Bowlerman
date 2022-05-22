@@ -154,7 +154,7 @@ void testCollosionWithExplosion(Game theGame, Sounds *s, Player player[])
 {
     for (int i=0;i<PLAYERAMOUNT;i++)
     {
-        int flag = 1; //vad är det för flagga egentligen? // Så att man inte kollar en spelare fyra gånger om man dör.
+        int flag = 1; // Flagga som gör att om en spelare dör startas inte fyra timers för den spelare som dog.
         if(playerGetIsInvulnerable(player, i) == false) {
 
             float playerW = playerGetWidth(player, i), playerH = playerGetHeight(player, i);

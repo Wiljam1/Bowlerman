@@ -101,7 +101,7 @@ void updatePlayerYPosition(Player p[], int id, double velY);
 //void playerPositionUpdate(int x, int y);
 
 //inits a player_rect with the x-and-y-position of player
-void initAllPlayers(Player *p);
+void initAllPlayers(Game theGame, Player p[]);
 void initPlayerRect(SDL_Rect *playerRect, Player player); 
 void playerDeathTimer(Game theGame, Player p[]);
 void setPlayerDeathFlags(Game theGame, Player p[], int i);

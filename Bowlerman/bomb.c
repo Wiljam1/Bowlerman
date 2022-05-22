@@ -222,7 +222,7 @@ int correctBowlingBallPosy(int i)
     int offset = WIDTH / 39;
     int j=0, k=0;
     k=(i-WIDTH/297)/size;
-    j=(i-WIDTH/297)%size;
+    j=(int)(i-WIDTH/297)%size;
     if(j<35){
         return (k*size)+offset;      
     }

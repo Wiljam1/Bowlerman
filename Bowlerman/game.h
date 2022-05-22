@@ -22,7 +22,7 @@
 #define BOTTOM_ROW_LABELS 8
 #define LABEL_AMOUNT (TOP_ROW_LABELS + BOTTOM_ROW_LABELS-4)
 
-#define WIDTH 800 // Move eventually
+#define WIDTH 800.0 // Move eventually
 #define HEIGHT (WIDTH / 1.178)
 #define MAXBOMBAMOUNT 20
 //-------------------------------------------------

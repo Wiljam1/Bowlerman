@@ -184,12 +184,9 @@ PUBLIC void gameUpdate(Game theGame)
     UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
     initGame(theGame, &udpData, &udpValues, &quitGame);         // initializes startvalues. coordinates etc.
     Sounds sounds = initSoundFiles();
-   
     Player player[MAXPLAYERS];
-    player[0] = initPlayer(LEFT_X, TOP_Y, 0); // Denna ska snyggas till
-    player[1] = initPlayer(RIGHT_X, TOP_Y, 1);
-    player[2] = initPlayer(LEFT_X, BOTTOM_Y, 2);
-    player[3] = initPlayer(RIGHT_X, BOTTOM_Y, 3);
+    initAllPlayers(theGame, player);
+
     // Game Loop:
 
     while (!quitGame)
