@@ -60,12 +60,13 @@ void tryToPlaceBomb(Game theGame, int playerID, Player player[])
 {
     int amount = 0;
     amount = playerGetAmountOfBombsPlaced(player, playerID)*4;
-    
     if (playerGetAmountOfBombsPlaced(player, playerID) < playerGetAmountOfBombs(player, playerID) && playerGetIsInvulnerable(player, playerID) == false) // man måste veta vilken player här
     {
         if(BombGetIsPlaced(theGame->bombs[playerID+amount]) == 0)
         {
+
             int bombalreadyplaced=0;
+            
             for(int i=0;i<MAXBOMBAMOUNT;i++)
             {
                 if (getBombYPosition(theGame->bombs[i]) == correctBowlingBallPosy(playerGetYPosition(player, playerID)) &&
@@ -87,7 +88,6 @@ void tryToPlaceBomb(Game theGame, int playerID, Player player[])
                 playerAddAmountOfBombsPlaced(player, playerID, 1);                //antal bomber som är placerade
                 BombSetStartvaluetimerbomb(&theGame->bombs[playerID+amount], SDL_GetTicks()); 
             }
-            
         }
     }
 }
@@ -204,10 +204,10 @@ int correctBowlingBallPosx(int i)
 {
     int size = WIDTH / 17;
     int j=0, k=0;
-    //i+= WIDTH/99;
+    i-= WIDTH/99;
     k=i/size;
     j=i%size;
-    if(j<35){
+    if(j<24){
         return (k*size);      
     }
     else{
@@ -221,9 +221,9 @@ int correctBowlingBallPosy(int i)
     int size = WIDTH / 17;
     int offset = WIDTH / 39;
     int j=0, k=0;
-    k=(i-WIDTH/297)/size;
-    j=(int)(i-WIDTH/297)%size;
-    if(j<35){
+    k=(i)/size;
+    j=(int)(i)%size;
+    if(j<24){
         return (k*size)+offset;      
     }
     else{
