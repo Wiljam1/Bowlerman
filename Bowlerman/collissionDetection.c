@@ -12,7 +12,7 @@
 #include "bomb.h"
 #include "sounds.h"
 
-#define YOFFSET (WIDTH/39.667)
+#define YOFFSET (WIDTH/39.666)
 
 void collisionWithWallsAround(Game theGame, Player p[]);
 void testCollosionWithBombs(Game theGame, Player p[]);
@@ -223,52 +223,53 @@ void playerStandingOnBomb(Game theGame, Player player[])
 //kollar så att en spelare inte går in i väggar i mitten av spelplanen
 void testCollisionWithWalls(Game theGame, Player player[])
 {
-    for (int i=0;i<4;i++)
-    {
-        float playerW = playerGetWidth(player, i), playerH = playerGetHeight(player, i);
-        float playerX = playerGetXPosition(player, i), playerY = playerGetYPosition(player, i);
-        char moveDirection = playerGetMoveDirection(player, i); 
-        for (int j=100;j<250;j++)
-        {
 
-            if(WallGetDestroyedWall(theGame->wall[j]) == 0)
-            {
-                int wallX = getWallXPosition(theGame->wall[j]), wallY = getWallYPosition(theGame->wall[j]), wallW = getWallWidth(theGame->wall[j]), wallH = getWallHeight(theGame->wall[j]);
-                if(moveDirection == 'w' || moveDirection == 's')        //för upp och ner
-                {   
-                    if(playerX + playerW > wallX && playerX < wallX + wallW)
-                    {
-                        if(playerY + YOFFSET < wallY + wallH && playerY > wallY){
-                            //correct y
-                            //theGame->player[i].yPos = wallY + wallH - YOFFSET;
-                            playerSetYPos(player, i, wallY + wallH - YOFFSET);
-                        }
-                        if(playerY + playerH > wallY && playerY < wallY){
-                            //correct y
-                            //theGame->player[i].yPos = wallY - playerH;
-                            playerSetYPos(player, i, wallY - playerH);
-                        }
+    int i= theGame->playerIDLocal; //borde kanske skrivas med en funktion här
+
+    float playerW = playerGetWidth(player, i), playerH = playerGetHeight(player, i);
+    float playerX = playerGetXPosition(player, i), playerY = playerGetYPosition(player, i);
+    char moveDirection = playerGetMoveDirection(player, i); 
+    for (int j=100;j<250;j++)
+    {
+
+        if(WallGetDestroyedWall(theGame->wall[j]) == 0)
+        {
+            float wallX = getWallXPosition(theGame->wall[j]), wallY = getWallYPosition(theGame->wall[j]), wallW = getWallWidth(theGame->wall[j]), wallH = getWallHeight(theGame->wall[j]);
+            if(moveDirection == 'w' || moveDirection == 's')        //för upp och ner
+            {   
+                if(playerX + playerW > wallX && playerX < wallX + wallW)
+                {
+                    if(playerY + YOFFSET < wallY + wallH && playerY > wallY){
+                        //correct y
+                        //theGame->player[i].yPos = wallY + wallH - YOFFSET;
+                        playerSetYPos(player, i, wallY + wallH - YOFFSET);
+                    }
+                    if(playerY + playerH > wallY && playerY < wallY){
+                        //correct y
+                        //theGame->player[i].yPos = wallY - playerH;
+                        playerSetYPos(player, i, wallY - playerH);
                     }
                 }
-                if(moveDirection == 'a' || moveDirection == 'd') // för vänster och höger
-                {
-                    if(playerY + playerH > wallY && playerY + YOFFSET < wallY + wallH)
-                    {
-                        if(playerX < wallX + wallW && playerX > wallX){
-                            //Correct x
-                            //theGame->player[i].xPos = wallX + wallW;
-                            playerSetXPos(player, i, wallX + wallW);
-                        }
-                        if(playerX + playerW > wallX && playerX < wallX){
-                            //Correct x
-                            //theGame->player[i].xPos = wallX - playerW;
-                            playerSetXPos(player, i, wallX - playerW);
-                        }
-                    }
-                } 
             }
+            if(moveDirection == 'a' || moveDirection == 'd') // för vänster och höger
+            {
+                if(playerY + playerH > wallY && playerY + YOFFSET < wallY + wallH)
+                {
+                    if(playerX < wallX + wallW && playerX > wallX){
+                        //Correct x
+                        //theGame->player[i].xPos = wallX + wallW;
+                        playerSetXPos(player, i, wallX + wallW);
+                    }
+                    if(playerX + playerW > wallX && playerX < wallX){
+                        //Correct x
+                        //theGame->player[i].xPos = wallX - playerW;
+                        playerSetXPos(player, i, wallX - playerW);
+                    }
+                }
+            } 
         }
     }
+
 }
 
 //gör så att explosioner inte går in i väggar

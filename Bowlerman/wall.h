@@ -16,10 +16,10 @@ void initAllWalls(Game theGame);                    //Create all wall objects us
 Wall initWalls(int amount, int width, int height);  //How many walls are going to be used
 Wall wallPlace(float xPos, float yPos);             //Place a wall in the window on X/Y-pos given in the function.
 void wallDelete(int id);                            //Delete a placed wall (not implemented)
-int getWallXPosition(Wall w);                       //Returns X position of wall.
-int getWallYPosition(Wall w);                       //Returns Y position of wall.
-int getWallHeight(Wall w);                          //Returns height of wall.
-int getWallWidth(Wall w);                           //Returns width of wall.
+float getWallXPosition(Wall w);                       //Returns X position of wall.
+float getWallYPosition(Wall w);                       //Returns Y position of wall.
+float getWallHeight(Wall w);                          //Returns height of wall.
+float getWallWidth(Wall w);                           //Returns width of wall.
 int WallGetDestroyedWall(Wall w);
 void WallSetDestroyedWall(Wall *w, int i);
 
