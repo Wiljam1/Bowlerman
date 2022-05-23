@@ -221,7 +221,7 @@ PUBLIC UDPData UDPDataReset()
 PUBLIC UDPStruct createUDPstruct()
 {
     UDPStruct u;
-    strcpy(u.serverIp, "130.229.169.68");
+    strcpy(u.serverIp, "127.0.0.1");
     return u;
 }
 
