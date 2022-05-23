@@ -90,7 +90,7 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
     //ping UDP server so it gets players IP and port.
     pingUDPserver(theGame, udpData, udpValues);
 
-    SDL_Delay(50); //wait  for UDP server to catch up
+    SDL_Delay(20); //wait  for UDP server to catch up
 
     
     
@@ -227,7 +227,7 @@ void checkGameOver(Game theGame, Player player[])
     static int totallyDeadPlayers = 0;
     for(int i = 0; i < theGame->playerAmount; i++){
         if(playerGetNoOfLives(player, i) == 0){
-            if(++totallyDeadPlayers == theGame->playerAmount-1){    //If every player except one is dead, show the scoreboard
+            if(++totallyDeadPlayers == 3){    //If every player except one is dead, show the scoreboard
                 showScoreboard(theGame, player);
             }
         }
