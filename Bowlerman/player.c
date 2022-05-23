@@ -54,7 +54,7 @@ PUBLIC Player initPlayer(int initX, int initY, int playerID)
 void initAllPlayers(Game theGame, Player player[])
 {
     int i;
-    player[0] = initPlayer(LEFT_X, TOP_Y, 0); // Denna ska snyggas till
+    player[0] = initPlayer(LEFT_X, TOP_Y, 0); // Initierar spelares positioner och sätter deras id.
     player[1] = initPlayer(RIGHT_X, TOP_Y, 1);
     player[2] = initPlayer(LEFT_X, BOTTOM_Y, 2);
     player[3] = initPlayer(RIGHT_X, BOTTOM_Y, 3);
@@ -66,7 +66,7 @@ void initAllPlayers(Game theGame, Player player[])
         playerSetDead(player, i);
     }
     
-    for (i = 0; i < theGame->playerAmount; i++) {   // initerare de faktist antalet spelare till vid liv
+    for (i = 0; i < theGame->playerAmount; i++) {   // initerare de faktiskt antalet spelare till vid liv
         theGame->invulnerabiltyFlag[i] = false;
         playerSetInvulnerability(player, i, false);
         playerSetAlive(player, i);
