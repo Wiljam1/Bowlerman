@@ -20,27 +20,7 @@
 // #define PLAYERWIDTH = 50;    //Använder structen för sånt här istället
 // #define PLAYERSPEED = 5;     // speed in pixels/second
 
-struct playerController
-{
-    int id;   //för packets via UDP behöver man kunna veta vem det är som skickar datan.
-    bool up, down, left, right;
-    float yVel, xVel, xPos, yPos;
-    float xPosOld;
-    float yPosOld;
-    bool isMoving; //is the player moving or not
-
-    double speed;
-    int amountOfBombs, explosionPower, amountOfBombsPlaced, speedDisplay;
-    bool canRollBombs;
-
-    int height;
-    int width;
-    char name[40];
-    bool isDead, isInvulnerable;
-    SDL_Rect playerRect;   //struct to hold the position and size of the sprite
-    char moveDirection;  // Keeps track of player movement direction for sprite rendering
-    int noOfLives, score;
-}; typedef struct playerController Player;
+typedef struct playerController *Player;
 
 typedef struct playerSprites PlayerSprites;
 

@@ -158,7 +158,7 @@ SDL_Texture *loadTextures(Game theGame, char fileLocation[]); // Load any image 
 void gameUpdate(Game theGame);  // Game loop
 //void manageMovementInputs(Game theGame);
 void updatePlayerPos(Game theGame, int velX, int velY); //Flytta till player.c nångång
-void destroyGame(Game theGame); // Function for easily destroying the application.
+int destroyGame(Game theGame); // Function for easily destroying the application.
 void updateScoreFlag(Game theGame, bool cond);
 void setLocalID(Game theGame, int id);
 #endif

@@ -9,7 +9,8 @@
 #include <stdlib.h>
 
 #include "game.h"
-#include "player.h"
+
+typedef struct playerController *Player;
 
 
 void initGUI(Game theGame);                                                               //Set font and init SDL_ttf

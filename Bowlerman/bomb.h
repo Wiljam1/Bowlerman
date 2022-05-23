@@ -1,9 +1,9 @@
 #ifndef bomb_h
 #define bomb_h
 #include <SDL2/SDL.h>
-#include "player.h"
 #include "game.h"
 
+typedef struct playerController *Player;
 #define PLAYERAMOUNT 4
 
 //void allowBombPlacementInit(Game theGame);

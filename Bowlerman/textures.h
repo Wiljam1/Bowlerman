@@ -6,10 +6,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "game.h"
-#include "player.h"
 #define PUBLIC /* empty */
 #define PRIVATE static
-
+typedef struct playerController *Player;
 SDL_Texture *loadTextures(Game theGame, char fileLocation[]); //Load media from given file location
 void loadAllTextures(Game theGame);                           //Load all textures
 void renderTextures(Game theGame, Player p[]);                            //Render textures

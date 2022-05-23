@@ -7,10 +7,9 @@
 #include <stdbool.h>
 
 #include "game.h"
-#include "player.h"
 
 typedef struct powerup Powerup;
-
+typedef struct playerController *Player;
 #define POWERUPTYPES 3
 
 Powerup rollForPowerup(int *pCurrentPowerup, int ID, int xPos, int yPos); //Rolls for a chance to place a powerup on the X/Y-pos given to the function.

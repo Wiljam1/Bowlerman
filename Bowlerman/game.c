@@ -184,9 +184,7 @@ PUBLIC void gameUpdate(Game theGame)
     /*Init all players*/
     Player player[MAXPLAYERS];                  
     initAllPlayers(theGame, player);
-
     theGame->powerupsNotSent = 0;   // Vad gör denna?
-    
     // Game Loop:
 
     while (!quitGame)
@@ -376,7 +374,7 @@ void process(Game theGame, Sounds *s, Player *player)
 
 
 // renders background and players etc.
-PUBLIC void destroyGame(Game theGame)
+PUBLIC int destroyGame(Game theGame)
 {
     SDL_DestroyTexture(theGame->background);
     for (int i = 0; i < 4; i++)
@@ -398,6 +396,7 @@ PUBLIC void destroyGame(Game theGame)
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
     SDL_Quit();
+    return 0;
 }
 void updateScoreFlag(Game theGame, bool cond)
 {
