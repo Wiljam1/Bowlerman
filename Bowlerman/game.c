@@ -186,7 +186,7 @@ PUBLIC void gameUpdate(Game theGame)
     Sounds sounds = initSoundFiles();
     Player player[MAXPLAYERS];
     initAllPlayers(theGame, player);
-
+    printf("%lf\n", HEIGHT);
     // Game Loop:
 
     while (!quitGame)

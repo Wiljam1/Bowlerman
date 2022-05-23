@@ -39,7 +39,7 @@ struct wall{
     int id; //UDP?
     int destroyedWall;
     float x, y; 
-    int w, h;
+    float w, h;
 };
 typedef struct wall Wall;
 
