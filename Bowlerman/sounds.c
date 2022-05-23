@@ -10,6 +10,7 @@
 
 Sounds initSoundFiles()
 {
+    initSounds();
     Sounds s;
     s.backgroundMusic = Mix_LoadMUS("resources/sounds/song.wav");
     s.explosion = Mix_LoadWAV("resources/sounds/explosion.wav");

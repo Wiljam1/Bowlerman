@@ -49,7 +49,7 @@ PUBLIC Game createWindow()
 
     theGame->renderer = SDL_CreateRenderer(theGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     theGame->window_surface = SDL_GetWindowSurface(theGame->window);
-    theGame->playerAmount = 1;
+    theGame->playerAmount = 1; // Sets players to minumum amount
     return theGame;
 }
 
@@ -71,10 +71,8 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
 	//manageTCP(&tcpValues);          //starts TCP
 	//closeTCP(&tcpValues);           //closes TCP
 
-
-
     // Init sounds
-    initSounds();
+    //initSounds();
     //Init random seed
     srand(time(NULL));
     
@@ -83,9 +81,6 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
     
     //Kollar player-ammount (hur många spelare som är online). Just nu är den satt till att alltid vara 4.
     //checkPlayerAmmount(theGame);
-
-    //initierar spelare
-    //initAllPlayers(player);
 
     //ping UDP server so it gets players IP and port.
     pingUDPserver(theGame, udpData, udpValues);
@@ -181,30 +176,28 @@ PUBLIC void gameUpdate(Game theGame)
 {
     // Initialize
     bool quitGame = false;
-    //Player player[MAXPLAYERS]; // declares x-amounts of players ----- Vad gör ens denna? Players blir väl definierade när vi skapar theGame genom att de ligger i strukten.
     UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
     UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
     initGame(theGame, &udpData, &udpValues, &quitGame);         // initializes startvalues. coordinates etc.
     Sounds sounds = initSoundFiles();
-    Player player[MAXPLAYERS];
+    
+    /*Init all players*/
+    Player player[MAXPLAYERS];                  
     initAllPlayers(theGame, player);
-    // for(int i = 0; i < POWERUPAMOUNT; i++){
-    //     theGame->powerups[i] = powerupPlace(3000, 3000, 0);
-    // }
-    theGame->powerupsNotSent = 0;
+
+    theGame->powerupsNotSent = 0;   // Vad gör denna?
     
     // Game Loop:
 
     while (!quitGame)
     {
-        
         // start background music
         playBackroundMusic(&sounds);
-        // Check for events
     
         // Process events (time based stuff)
         process(theGame, &sounds, player);
 
+        // Check for events
         quitGame = checkEvents(theGame, player);
 
         // Collisiondetection
