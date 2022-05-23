@@ -71,28 +71,6 @@ struct bowling_ball typedef Bowlingball;
 
 SDL_Rect bowlingballAnimation[18];
 
-/* struct playerController
-{
-    int id;   //för packets via UDP behöver man kunna veta vem det är som skickar datan.
-    bool up, down, left, right;
-    float yVel, xVel, xPos, yPos;
-    float xPosOld;
-    float yPosOld;
-    bool isMoving; //is the player moving or not
-
-    double speed;
-    int amountOfBombs, explosionPower, amountOfBombsPlaced, speedDisplay;
-    bool canRollBombs;
-
-    int height;
-    int width;
-    char name[40];
-    bool isDead, isInvulnerable;
-    SDL_Rect playerRect;   //struct to hold the position and size of the sprite
-    char moveDirection;  // Keeps track of player movement direction for sprite rendering
-    int noOfLives, score;
-}; */
-
 struct playerSprites
 {
     SDL_Rect BowlerManVert[8];
@@ -107,7 +85,6 @@ struct game_type
     SDL_Surface *window_surface;
 
     //Player
-    //Player player[MAXPLAYERS];
     int playerIDLocal;        //the local players ID (only on this computer). 
     int playerAmount;  //amount of players online
     bool invulnerabiltyFlag[4];
@@ -156,7 +133,6 @@ typedef struct game_type *Game;
 Game createWindow();              // Struct for app initialization
 SDL_Texture *loadTextures(Game theGame, char fileLocation[]); // Load any image you want in the resources/ folder!
 void gameUpdate(Game theGame);  // Game loop
-//void manageMovementInputs(Game theGame);
 void updatePlayerPos(Game theGame, int velX, int velY); //Flytta till player.c nångång
 int destroyGame(Game theGame); // Function for easily destroying the application.
 void updateScoreFlag(Game theGame, bool cond);
