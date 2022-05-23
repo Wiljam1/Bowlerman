@@ -219,13 +219,14 @@ PUBLIC void gameUpdate(Game theGame)
 
 void checkGameOver(Game theGame, Player player[])
 {
-    static int totallyDeadPlayers = 0;
-    for(int i = 0; i < theGame->playerAmount; i++){
-        if(playerGetNoOfLives(player, i) == 0){
-            if(++totallyDeadPlayers == 3){    //If every player except one is dead, show the scoreboard
-                showScoreboard(theGame, player);
-            }
+    int totallyDeadPlayers = 0;
+    for(int i = 0; i < PLAYERAMOUNT; i++){  //USING CONSTANT BECAUSE OF BUG
+        if(playerGetNoOfLives(player, i) <= 0){ 
+            totallyDeadPlayers++;
         }
+    }
+    if(totallyDeadPlayers == PLAYERAMOUNT-1){ //USING CONSTANT BECAUSE OF BUG
+        showScoreboard(theGame, player);
     }
 }
 
@@ -246,7 +247,7 @@ void showScoreboard(Game theGame, Player player[]) //Måste skriva om den här s
     //Determine player with most score
     static int highestScore = 0, highestScoreID = 0;
     highestScore = playerGetScore(player, id);
-    for(int i = 0; i < theGame->playerAmount; i++){
+    for(int i = 0; i < PLAYERAMOUNT; i++){           //Constant since theGame->playeramount is not working properly
         if(playerGetScore(player, i) > highestScore){    //Basic max-value sorting
             highestScore = playerGetScore(player, i);
             highestScoreID = i;

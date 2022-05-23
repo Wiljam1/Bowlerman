@@ -189,10 +189,14 @@ void UpdatePlayerTextures(Game theGame, Player player[])
                 }
         }
         else if (playerGetNoOfLives(player, i) > 0 && playerGetIsInvulnerable(player, i) == true) {
+            static int rotate = 90;
+            rotate += 10;
+            if(rotate > 360)
+                rotate = 0;
             if (i % 2 == 0)
-                SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], 270, 0, 0);
+                SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], rotate, 0, 0);
             else
-                SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], 90, 0, 0);
+                SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], rotate, 0, 0);
             //playerSetDead(player, i);
         }
         else if (playerGetNoOfLives(player, i) <= 0)

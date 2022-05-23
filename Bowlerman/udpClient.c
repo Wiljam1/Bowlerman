@@ -94,7 +94,6 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
                 udpData->powerupsID = theGame->powerups[i].id;
                 udpData->powerupsType = theGame->powerups[i].type;
                 theGame->powerups[i].sentViaUDP = true;
-                //printf("Sent powerup! X-value: %d\n", udpData->powerupsX);
                 break;
             }     
         }
@@ -128,24 +127,12 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, Pla
         if (udpData->placeBomb==1){ 
             tryToPlaceBomb(theGame, playerID, player);
         }
-        static int oldPowerupID = -1;
-                                                                        //BUG: First powerup is never sent!
-        //printf("Receiving data, udpdata->powerupsID: %d\n", udpData->powerupsID);
-        if(oldPowerupID != udpData->powerupsID) //Only recieve when ID changed
+        if(udpData->powerupsID != -1) //Only recieve when ID changed
         {
-            //printf("Receiving a powerup from UDPclient! Powerup ID:%d\n", udpData->powerupsID);
             if(udpData->powerupsX != 0){
-                printf("Bar\n");
                 theGame->powerups[udpData->powerupsID] = powerupPlace(udpData->powerupsX-WIDTH/119, udpData->powerupsY-WIDTH/119, udpData->powerupsType);
                 theGame->powerups[udpData->powerupsID].indestructable = timerForPowerups(SDL_GetTicks(), 1500, udpData->powerupsID);
             }
-            // else if(udpData->powerupsX == 0){
-            //     printf("Foo\n");
-            //     theGame->powerups[udpData->powerupsID] = powerupPlace(udpData->powerupsX-WIDTH/119, udpData->powerupsY-WIDTH/119, udpData->powerupsType);
-            //     theGame->powerups[udpData->powerupsID].indestructable = timerForPowerups(SDL_GetTicks(), 1500, udpData->powerupsID);
-            // }
-            printf("change %d\n", udpData->powerupsID);
-            oldPowerupID = -1;
         }
         playerSetMoveDirection(player, playerID, udpData->moveDirection);
 
@@ -166,17 +153,12 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues, Play
     static int flagPlayerHasWalked=0;
     
     int playerID = getLocalID(theGame);
-    //udpData->moveDirection = theGame->player[playerID].moveDirection;
     playerSetMoveDirection(player, playerID, playerGetMoveDirection(player, playerID));
-    //player[id].movedirection = playermoveDirection();
 
     static char moveDirectionLocal = '0';
     moveDirectionLocal= playerGetMoveDirection(player, playerID);
     //check to see if we should send bomb with UDP
     sendBomb(theGame, udpData, udpValues);
-    //flagga för att reset:a movement direction när spelaren står stilla.
-
-    //if(playerGetMoveDirection(player,))
 
     if( moveDirectionLocal != '0'){
        flagPlayerHasWalked=1;

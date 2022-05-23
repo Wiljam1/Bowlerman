@@ -12,7 +12,7 @@ Powerup rollForPowerup(int *pCurrentPowerup, int ID, int xPos, int yPos)
 {
     //printf("Rolling for powerup..\n");
     Powerup p;
-    if((rand()%100+1) < 200){ // 40% chance to spawn a powerup                                                    
+    if((rand()%100+1) < 40){ // 40% chance to spawn a powerup                                                    
         p = powerupPlace(xPos, yPos, rand()%POWERUPTYPES); //Type = random number between 0 and how many types there are
         p.id = ID;
         p.sentViaUDP = false;
@@ -22,7 +22,6 @@ Powerup rollForPowerup(int *pCurrentPowerup, int ID, int xPos, int yPos)
     else{ //Create a powerup off-screen (to have something to put in the array and not cause crash)
         p = powerupPlace(3000+ID*10, 3000+ID*10, 0); //This powerup will eventually be overwritten by something else in the array
         p.id = ID;
-        printf("created a powerup off-screen!\n");
     }
      if(*pCurrentPowerup == POWERUPAMOUNT){  //There will never be more than 100 powerups on the screen and the array starts over when reaching 100.
         *pCurrentPowerup = 0;
