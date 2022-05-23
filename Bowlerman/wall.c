@@ -9,7 +9,7 @@
 #include "game.h"
 #include "collissionDetection.h"
 
-Wall initWalls(int amount, int width, int height)
+Wall initWalls(int amount, float width, float height)
 {
     //Wall w = malloc(sizeof(struct wall)); //Fixa nångång när vi vet mer om minnesallokering
     Wall w;
@@ -41,8 +41,8 @@ void initAllWalls(Game theGame)
 {
       // Init walls / map
     float yOffset = WIDTH / 11.9;
-    float wallwidth = WIDTH/17; // Vet inte hur vi ska bestämma dehär variablerna riktigt,
-    float wallheight = WIDTH/17;  // Om de ens kommer användas, väggarna kommer ju alltid vara den här storleken?
+    float wallwidth = WIDTH/17.0; // Vet inte hur vi ska bestämma dehär variablerna riktigt,
+    float wallheight = WIDTH/17.0;  // Om de ens kommer användas, väggarna kommer ju alltid vara den här storleken?
     for (int i = 0; i < WALLAMOUNT; i++)
     {
         theGame->wall[i] = initWalls(WALLAMOUNT, wallwidth, wallheight);
