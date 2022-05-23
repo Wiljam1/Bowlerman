@@ -84,7 +84,7 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         UDPSetPlayerID(udpData, playerID);
         UDPSetXPos(udpData, x_pos);
         UDPSetYPos(udpData, y_pos);
-        //udpData->powerupsX = 0; // VAD GÖR DENNA?
+        udpData->powerupsID = -1;
         UDPSetNoOfLives(udpData, playerGetNoOfLives(player, playerID));
         UDPSetScore(udpData, playerID, playerGetScore(player, playerID));
         for(int i=0;i<POWERUPAMOUNT;i++){
@@ -128,7 +128,7 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, Pla
         if (udpData->placeBomb==1){ 
             tryToPlaceBomb(theGame, playerID, player);
         }
-        static int oldPowerupID = 15;
+        static int oldPowerupID = -1;
                                                                         //BUG: First powerup is never sent!
         //printf("Receiving data, udpdata->powerupsID: %d\n", udpData->powerupsID);
         if(oldPowerupID != udpData->powerupsID) //Only recieve when ID changed
@@ -144,8 +144,8 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, Pla
             //     theGame->powerups[udpData->powerupsID] = powerupPlace(udpData->powerupsX-WIDTH/119, udpData->powerupsY-WIDTH/119, udpData->powerupsType);
             //     theGame->powerups[udpData->powerupsID].indestructable = timerForPowerups(SDL_GetTicks(), 1500, udpData->powerupsID);
             // }
-
-            oldPowerupID = udpData->powerupsID;
+            printf("change %d\n", udpData->powerupsID);
+            oldPowerupID = -1;
         }
         playerSetMoveDirection(player, playerID, udpData->moveDirection);
 
