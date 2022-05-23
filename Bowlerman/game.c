@@ -49,6 +49,7 @@ PUBLIC Game createWindow()
 
     theGame->renderer = SDL_CreateRenderer(theGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     theGame->window_surface = SDL_GetWindowSurface(theGame->window);
+    theGame->playerAmount = 1;
     return theGame;
 }
 
