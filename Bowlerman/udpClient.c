@@ -132,10 +132,10 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, Pla
         }
         static int oldPowerupID = 15;
                                                                         //BUG: First powerup is never sent!
-        printf("Receiving data, udpdata->powerupsID: %d\n", udpData->powerupsID);
+        //printf("Receiving data, udpdata->powerupsID: %d\n", udpData->powerupsID);
         if(oldPowerupID != udpData->powerupsID) //Only recieve when ID changed
         {
-            printf("Receiving a powerup from UDPclient! Powerup ID:%d\n", udpData->powerupsID);
+            //printf("Receiving a powerup from UDPclient! Powerup ID:%d\n", udpData->powerupsID);
             if(udpData->powerupsX != 0){
                 theGame->powerups[udpData->powerupsID] = powerupPlace(udpData->powerupsX-WIDTH/119, udpData->powerupsY-WIDTH/119, udpData->powerupsType);
                 theGame->powerups[udpData->powerupsID].indestructable = timerForPowerups(SDL_GetTicks(), 1500, udpData->powerupsID);
