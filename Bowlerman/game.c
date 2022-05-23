@@ -29,9 +29,8 @@
 void menu();
 void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame);
 bool checkEvents(Game theGame, Player p[]);
-void collisionDetect(Game theGame, Sounds *s, Player p[]);
 void showScoreboard(Game theGame, Player p[]);
-void process(Game theGame, Sounds *s, Player p[]);
+void process(Game theGame, Sounds *s, Player p[], Wall *wall);
 void checkGameOver(Game theGame, Player p[]);
 // initializes game-window
 PUBLIC Game createWindow()
@@ -90,7 +89,7 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
     
     
     //initierar väggar
-    initAllWalls(theGame);
+    //initAllWalls(theGame);
 
     //set game-delay to x-miliseconds. You should have lower delay if you have a slower computer
     theGame->delayInMS=10;
@@ -184,6 +183,9 @@ PUBLIC void gameUpdate(Game theGame)
     /*Init all players*/
     Player player[MAXPLAYERS];                  
     initAllPlayers(theGame, player);
+
+    Wall wall[WALLAMOUNT*3];
+    initAllWalls(wall);
     theGame->powerupsNotSent = 0;   // Vad gör denna?
     // Game Loop:
 
@@ -193,28 +195,32 @@ PUBLIC void gameUpdate(Game theGame)
         playBackroundMusic(&sounds);
     
         // Process events (time based stuff)
-        process(theGame, &sounds, player);
 
+        process(theGame, &sounds, player, wall);
+        //printf("Efter process\n");
         // Check for events
         quitGame = checkEvents(theGame, player);
 
         // Collisiondetection
-        collisionDetect(theGame, &sounds, player);
+        collisionDetect(theGame, &sounds, player, wall);
+        //printf("Efter coll detect\n");
         checkGameOver(theGame, player);
         // Send/receive data to server
         manageUDP(theGame, &udpData, &udpValues, player);
-
         // Update GUI labels (only updates when updateFlag = true)
         updateGUI(theGame, player); //behövs göras om, mem leak (mem leak löst med flagga temporärt)
 
         // render display
-        renderTextures(theGame, player);
+       // printf("Innan render textures");
+        renderTextures(theGame, player, wall);
+       // printf("Efter render textures");
 
         SDL_Delay(theGame->delayInMS); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
         
         checkGameOver(theGame, player); //Behöver ligga här för att score ska uppdateras innan man dör, NACKDEL att den kollar en extra sak hela tiden.
     }
     destroySoundFiles(sounds);
+    free(player);
 }
 
 void checkGameOver(Game theGame, Player player[])
@@ -313,14 +319,14 @@ void showScoreboard(Game theGame, Player player[]) //Måste skriva om den här s
 }
 
 //som en game loop för bomber, kollar timer för explosioner samt bomber
-void process(Game theGame, Sounds *s, Player *player)
+void process(Game theGame, Sounds *s, Player *player, Wall *wall)
 {
     //kollar bombernas timer, är den klar försvinner bomben och explosionstimer initieras
     for (int i = 0; i < MAXBOMBAMOUNT; i++){
         if (BombGetTimerInit(theGame->bombs[i]) == 1){
                   
             if (BombGetTimerValue(theGame->bombs[i]) == 1){
-                initExplosionPosition(theGame, i, player);
+                initExplosionPosition(theGame, i, player, wall);
                 initbowlingballtimer(SDL_GetTicks(), 1000, i);
                 testPossibilityToExplodeWithBombs(theGame, i);
                 BombSetTimerInit(&theGame->bombs[i], 0);
@@ -342,18 +348,18 @@ void process(Game theGame, Sounds *s, Player *player)
     {
         currentPowerup = theGame->playerIDLocal;
     }
-
+    static int c = 0;
     for (int i = 0; i < MAXBOMBAMOUNT; i++){
         if (BombGetExplosionInit(theGame->bombs[i]) == 0){
             BombSetExplosionInit(&theGame->bombs[i], initbowlingballtimer(0, 1000, i));
             for(int j=139;j<250;j++){
-                if(WallGetDestroyedWall(theGame->wall[j]) == 0){
-                    WallSetDestroyedWall(&theGame->wall[j], testCollisionWithDestroyableWalls(theGame, player, j, i));
-                    if(WallGetDestroyedWall(theGame->wall[j])){ //If wall is destroyed...
+                if(WallGetDestroyedWall(wall, j) == 0){
+                    WallSetDestroyedWall(wall, j, testCollisionWithDestroyableWalls(theGame, player, j, i, wall));
+                    if(WallGetDestroyedWall(wall, j)){ //If wall is destroyed...
                         if(returnarray[i] == theGame->playerIDLocal){
                             playerAddScore(player, theGame->bombs[i].whoPlacedID, 1);
                             theGame->updateFlag = true;
-                            theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, theGame->wall[j].x, theGame->wall[j].y);
+                            theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, getWallXPosition(wall, j), getWallYPosition(wall, j));
                             theGame->powerupsNotSent++;       
                         }
                     }
@@ -395,6 +401,7 @@ PUBLIC int destroyGame(Game theGame)
     SDLNet_Quit();
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
+    free(theGame);
     SDL_Quit();
     return 0;
 }

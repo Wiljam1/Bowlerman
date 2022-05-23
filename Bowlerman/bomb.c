@@ -133,7 +133,7 @@ void sortBombsArray(Game theGame,int i, Player player[])
 }
 
 //sätter positionerna för explosionen efter vart bomben legat
-void initExplosionPosition(Game theGame, int playerID, Player *player)
+void initExplosionPosition(Game theGame, int playerID, Player *player, Wall *wall)
 {
     int tilesize = (TILESIZE - 4), diff=2; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
     int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
@@ -174,7 +174,7 @@ void initExplosionPosition(Game theGame, int playerID, Player *player)
     
     for (int i=1;i<1+4*playerGetExplosionPower(player, returnarray[playerID]);i++)
     {
-        if (testPossibilityToExplode(theGame, playerID, i) == 0)        //för oförstörbara väggar
+        if (testPossibilityToExplode(theGame, playerID, i, wall) == 0)        //för oförstörbara väggar
         {
             for(int j=0;j<playerGetExplosionPower(player, returnarray[playerID]);j++)
             {
@@ -184,7 +184,7 @@ void initExplosionPosition(Game theGame, int playerID, Player *player)
                 theGame->explosionPosition[playerID][i+4*j].x = 2000;
             }
         }
-        if (testPossibilityToExplodeDestroyableWalls(theGame, playerID, i) == 0)    //för förstörbara väggar
+        if (testPossibilityToExplodeDestroyableWalls(theGame, playerID, i, wall) == 0)    //för förstörbara väggar
         {
             for(int j=1;j<playerGetExplosionPower(player, returnarray[playerID]);j++)
             {

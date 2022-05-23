@@ -9,27 +9,32 @@
 #include "game.h"
 #include "collissionDetection.h"
 
+struct wall{
+    int id; //UDP?
+    int destroyedWall;
+    float x, y; 
+    float w, h;
+};
+
 Wall initWalls(int amount, float width, float height)
 {
-    //Wall w = malloc(sizeof(struct wall)); //Fixa nångång när vi vet mer om minnesallokering
-    Wall w;
+    Wall w = malloc(sizeof(struct wall)); //Fixa nångång när vi vet mer om minnesallokering
+    //Wall w;
 
-    w.id = amount;
-    w.w = width;
-    w.h = height;
-    w.destroyedWall = 0;
+    w->id = amount;
+    w->w = width;
+    w->h = height;
+    w->destroyedWall = 0;
+    w->x = 0;
+    w->y = 0;
 
     return w;
 }
 
-Wall wallPlace(float xPos, float yPos)
+void wallPlace(Wall w, float xPos, float yPos)
 {
-    Wall w;
-
-    w.x = xPos;
-    w.y = yPos;
-
-    return w;
+    w->x = xPos;
+    w->y = yPos;
 }  //Place a wall
 
 void wallDelete(int id)
@@ -37,33 +42,35 @@ void wallDelete(int id)
     printf("wallDelete(); not implemented\n");
 } //Delete a placed wall
 
-void initAllWalls(Game theGame)
+void initAllWalls(Wall *wall)
 {
       // Init walls / map
+
+    for (int i = 0; i < WALLAMOUNT*3; i++)  {
+        wall[i] = initWalls(0, 0, 0);
+    }
+    
     float yOffset = WIDTH / 11.9;
     float wallwidth = WIDTH/17.0; // Vet inte hur vi ska bestämma dehär variablerna riktigt,
     float wallheight = WIDTH/17.0;  // Om de ens kommer användas, väggarna kommer ju alltid vara den här storleken?
     for (int i = 0; i < WALLAMOUNT; i++)
     {
-        theGame->wall[i] = initWalls(WALLAMOUNT, wallwidth, wallheight);
+        wall[i] = initWalls(WALLAMOUNT, wallwidth, wallheight);
         if (i < 20)
         {
-            theGame->wall[i] = wallPlace(i * wallwidth, yOffset);
+            wallPlace(wall[i], i * wallwidth, yOffset);
         }
         else if (i < 40)
         {
-            theGame->wall[i] = wallPlace(wallwidth * (i - 20), HEIGHT - wallheight);
+            wallPlace(wall[i], wallwidth * (i - 20), HEIGHT - wallheight);
         }
         else if (i < 60)
         {
-            theGame->wall[i] = wallPlace(0, (i - 40) * wallheight + yOffset);
+            wallPlace(wall[i], 0, (i - 40) * wallheight + yOffset);
         }
         else if (i < 80)
         {
-            theGame->wall[i] = wallPlace(WIDTH - wallwidth, (i - 60) * wallheight + yOffset);
-        }
-        else
-        {
+            wallPlace(wall[i], WIDTH - wallwidth, (i - 60) * wallheight + yOffset);
         }
     }
     //initiering av oförstörbara väggar i mitten av planen.
@@ -73,8 +80,8 @@ void initAllWalls(Game theGame)
         for(int j=0;j<7;j++)
         {
             count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*wallwidth*2+wallwidth*2, i*wallwidth*2+wallwidth*2 + yOffset);
+            wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
+            wallPlace(wall[count+WALLAMOUNT], j*wallwidth*2+wallwidth*2, i*wallwidth*2+wallwidth*2 + yOffset);
         }
     }
     //initiering av förstörbara väggar i planen. 
@@ -84,8 +91,8 @@ void initAllWalls(Game theGame)
         for(int j=0;j<9;j++)
         {
             count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*wallwidth+wallwidth*4, i*wallwidth+yOffset);
+            wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
+            wallPlace(wall[count+WALLAMOUNT], j*wallwidth+wallwidth*4, i*wallwidth+yOffset);
         }
         i+=9;
     }
@@ -94,8 +101,8 @@ void initAllWalls(Game theGame)
         for(int j=0;j<6;j++)
         {
             count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*wallwidth*2+wallwidth*3, i*wallwidth+yOffset);
+            wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
+            wallPlace(wall[count+WALLAMOUNT], j*wallwidth*2+wallwidth*3, i*wallwidth+yOffset);
         }
         i+=7;
     }
@@ -104,8 +111,8 @@ void initAllWalls(Game theGame)
         for(int j=0;j<13;j++)
         {
             count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*wallwidth+wallwidth*2, i*wallwidth+yOffset);
+            wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
+            wallPlace(wall[count+WALLAMOUNT], j*wallwidth+wallwidth*2, i*wallwidth+yOffset);
         }
         i+=5;
     }
@@ -114,8 +121,8 @@ void initAllWalls(Game theGame)
         for(int j=0;j<8;j++)
         {
             count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*wallwidth*2+wallwidth, i*wallwidth+yOffset);
+            wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
+            wallPlace(wall[count+WALLAMOUNT], j*wallwidth*2+wallwidth, i*wallwidth+yOffset);
         }
         i++;
     }
@@ -124,19 +131,19 @@ void initAllWalls(Game theGame)
         for(int j=0;j<15;j++)
         {
             count ++;
-            theGame->wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
-            theGame->wall[count+WALLAMOUNT] = wallPlace(j*wallwidth+wallwidth, i*wallwidth+yOffset);
+            wall[count+WALLAMOUNT] = initWalls(WALLAMOUNT*3, wallwidth, wallheight);
+            wallPlace(wall[count+WALLAMOUNT], j*wallwidth+wallwidth, i*wallwidth+yOffset);
         }
         i++;
     }
 }
 
-void renderWalls(Game theGame)
+void renderWalls(Game theGame, Wall *wall)
 {
     // Draw walls
     for (int i = 77; i >= 0; i--)
     {
-        SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
+        SDL_Rect wallRect = {getWallXPosition(wall, i), getWallYPosition(wall, i), getWallWidth(wall, i), getWallHeight(wall, i)};
         /* LONG WALLS*/
         if (i < 36)
         {
@@ -166,42 +173,43 @@ void renderWalls(Game theGame)
     }
     for (int i=0;i<36;i++)
     {   
-        SDL_Rect wallRect = {theGame->wall[i+WALLAMOUNT].x, theGame->wall[i+WALLAMOUNT].y, theGame->wall[i+WALLAMOUNT].w, theGame->wall[i+WALLAMOUNT].h};
+        SDL_Rect wallRect = {getWallXPosition(wall, i+WALLAMOUNT), getWallYPosition(wall, i+WALLAMOUNT), getWallWidth(wall, i+WALLAMOUNT), getWallHeight(wall, i+WALLAMOUNT)};
+        
         SDL_RenderCopy(theGame->renderer, theGame->textureWall[2], NULL, &wallRect);        
     }
     for (int i=139;i<250;i++)
     {   
-        if (theGame->wall[i].destroyedWall == 0)
+        if (wall[i]->destroyedWall == 0)
         {
-            SDL_Rect wallRect = {theGame->wall[i].x, theGame->wall[i].y, theGame->wall[i].w, theGame->wall[i].h};
+            SDL_Rect wallRect = {getWallXPosition(wall, i), getWallYPosition(wall, i), getWallWidth(wall, i), getWallHeight(wall, i)};
             SDL_RenderCopy(theGame->renderer, theGame->textureWall[3], NULL, &wallRect);   
         }     
     }
 }
 
-PUBLIC float getWallHeight(Wall w)
+PUBLIC float getWallHeight(Wall *w, int id)
 {
-    return w.h;
+    return w[id]->h;
 }
-PUBLIC float getWallWidth(Wall w)
+PUBLIC float getWallWidth(Wall *w, int id)
 {
-    return w.w;
+    return w[id]->w;
 }
-PUBLIC float getWallXPosition(Wall w)
+PUBLIC float getWallXPosition(Wall *w, int id)
 {
-    return w.x;
+    return w[id]->x;
 }
-PUBLIC float getWallYPosition(Wall w)
+PUBLIC float getWallYPosition(Wall *w, int id)
 {
-    return w.y;
-}
-
-PUBLIC int WallGetDestroyedWall(Wall w)
-{
-    return w.destroyedWall;
+    return w[id]->y;
 }
 
-PUBLIC void WallSetDestroyedWall(Wall *w, int i)
+PUBLIC int WallGetDestroyedWall(Wall *w, int id)
 {
-    w->destroyedWall = i;
+    return w[id]->destroyedWall;
+}
+
+PUBLIC void WallSetDestroyedWall(Wall *w, int id, int i)
+{
+    w[id]->destroyedWall = i;
 }

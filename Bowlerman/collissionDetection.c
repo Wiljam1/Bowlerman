@@ -14,27 +14,27 @@
 
 #define YOFFSET (WIDTH/39.666)
 
-void collisionWithWallsAround(Game theGame, Player p[]);
+void collisionWithWallsAround(Game theGame, Player p[], Wall *wall);
 void testCollosionWithBombs(Game theGame, Player p[]);
-void testCollisionWithWalls(Game theGame, Player p[]);
+void testCollisionWithWalls(Game theGame, Player p[], Wall *wall);
 void testCollosionWithExplosion(Game theGame, Sounds *s, Player p[]);
 void playerCollisionWithPowerup(Game theGame, Player p[]);
 void explosionCollisionWithPowerup(Game theGame);
 //void playerStandingOnBomb(Game theGame, Player p[]);                                            //kollar om spelare står på en bomb
-int testCollisionWithDestroyableWalls(Game theGame, Player p[], int k, int j);                  //testar om explosioner träffar förstörbar vägg och förstör den
+//int testCollisionWithDestroyableWalls(Game theGame, Player p[], int k, int j, Wall *wall);                  //testar om explosioner träffar förstörbar vägg och förstör den
 
-PUBLIC void collisionDetect(Game theGame, Sounds *sounds, Player players[])
+PUBLIC void collisionDetect(Game theGame, Sounds *sounds, Player players[], Wall *wall)
 {
-    collisionWithWallsAround(theGame, players);
+    collisionWithWallsAround(theGame, players, wall);
     testCollosionWithBombs(theGame, players);     
-    testCollisionWithWalls(theGame, players);
+    testCollisionWithWalls(theGame, players, wall);
     testCollosionWithExplosion(theGame, sounds, players);
     playerCollisionWithPowerup(theGame, players);
     explosionCollisionWithPowerup(theGame);       //för att förstöra powerups med explosioner
 }
 
 //collision with outer walls and the screen size
-void collisionWithWallsAround(Game theGame, Player player[])
+void collisionWithWallsAround(Game theGame, Player player[], Wall *wall)
 {
     int id = theGame->playerIDLocal;
     //"Easier to read"-variables
@@ -57,8 +57,8 @@ void collisionWithWallsAround(Game theGame, Player player[])
     
     for(int i = 0; i < WALLAMOUNT; i++)
     {
-        float wallXPos = getWallXPosition(theGame->wall[i]), wallYPos = getWallYPosition(theGame->wall[i]),
-              wallWidth = getWallWidth(theGame->wall[i]), wallHeight = getWallHeight(theGame->wall[i]);
+        float wallXPos = getWallXPosition(wall, i), wallYPos = getWallYPosition(wall, i),
+              wallWidth = getWallWidth(wall, i), wallHeight = getWallHeight(wall, i);
 
         if (i < 20)
         {
@@ -221,7 +221,7 @@ void playerStandingOnBomb(Game theGame, Player player[])
 }
 
 //kollar så att en spelare inte går in i väggar i mitten av spelplanen
-void testCollisionWithWalls(Game theGame, Player player[])
+void testCollisionWithWalls(Game theGame, Player player[], Wall *wall)
 {
 
     int i= theGame->playerIDLocal; //borde kanske skrivas med en funktion här
@@ -232,9 +232,9 @@ void testCollisionWithWalls(Game theGame, Player player[])
     for (int j=100;j<250;j++)
     {
 
-        if(WallGetDestroyedWall(theGame->wall[j]) == 0)
+        if(WallGetDestroyedWall(wall, j) == 0)
         {
-            float wallX = getWallXPosition(theGame->wall[j]), wallY = getWallYPosition(theGame->wall[j]), wallW = getWallWidth(theGame->wall[j]), wallH = getWallHeight(theGame->wall[j]);
+            float wallX = getWallXPosition(wall, j), wallY = getWallYPosition(wall, j), wallW = getWallWidth(wall, j), wallH = getWallHeight(wall, j);
             if(moveDirection == 'w' || moveDirection == 's')        //för upp och ner
             {   
                 if(playerX + playerW > wallX && playerX < wallX + wallW)
@@ -273,14 +273,14 @@ void testCollisionWithWalls(Game theGame, Player player[])
 }
 
 //gör så att explosioner inte går in i väggar
-int testCollisionExplosionWithWalls(Game theGame, int k)
+int testCollisionExplosionWithWalls(Game theGame, int k, Wall *wall)
 {
     for(int j=0;j<MAXBOMBAMOUNT;j++)
     {
         for (int i=0;i<136;i++)
         {
-            float wallXPos = getWallXPosition(theGame->wall[i]), wallYPos = getWallYPosition(theGame->wall[i]),
-                wallWidth = getWallWidth(theGame->wall[i]), wallHeight = getWallHeight(theGame->wall[i]);
+            float wallXPos = getWallXPosition(wall, i), wallYPos = getWallYPosition(wall, i),
+                wallWidth = getWallWidth(wall, i), wallHeight = getWallHeight(wall, i);
 
             if(wallXPos < theGame->explosionPosition[j][k].x &&
                wallXPos + wallWidth > theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w &&
@@ -295,10 +295,10 @@ int testCollisionExplosionWithWalls(Game theGame, int k)
 }
 
 //testar om väggen explosionen träffar kan förstöras och förstör den isåfall
-int testCollisionWithDestroyableWalls(Game theGame, Player player[], int k, int j)
+int testCollisionWithDestroyableWalls(Game theGame, Player player[], int k, int j, Wall *wall)
 {
-    float wallXPos = getWallXPosition(theGame->wall[k]), wallYPos = getWallYPosition(theGame->wall[k]),
-        wallWidth = getWallWidth(theGame->wall[k]), wallHeight = getWallHeight(theGame->wall[k]);
+    float wallXPos = getWallXPosition(wall, k), wallYPos = getWallYPosition(wall, k),
+        wallWidth = getWallWidth(wall, k), wallHeight = getWallHeight(wall, k);
     int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
     for (int i=0;i<1+4*playerGetExplosionPower(player, returnarray[j]);i++)
     {
@@ -314,12 +314,12 @@ int testCollisionWithDestroyableWalls(Game theGame, Player player[], int k, int 
 }
 
 //testar om det går att explodera åt sidorna samt upp o ner med oförstörbara väggar
-int testPossibilityToExplode(Game theGame, int playerID, int i)
+int testPossibilityToExplode(Game theGame, int playerID, int i, Wall *wall)
 {
     for(int k=0;k<136;k++)
     {
-        float wallXPos = getWallXPosition(theGame->wall[k]), wallYPos = getWallYPosition(theGame->wall[k]),
-            wallWidth = getWallWidth(theGame->wall[k]), wallHeight = getWallHeight(theGame->wall[k]);
+        float wallXPos = getWallXPosition(wall, k), wallYPos = getWallYPosition(wall, k),
+            wallWidth = getWallWidth(wall, k), wallHeight = getWallHeight(wall, k);
 
         if(wallXPos < theGame->explosionPosition[playerID][i].x &&
             wallXPos + wallWidth > theGame->explosionPosition[playerID][i].x + theGame->explosionPosition[playerID][i].w &&
@@ -333,14 +333,14 @@ int testPossibilityToExplode(Game theGame, int playerID, int i)
 }
 
 //testar om det går att explodera åt sidorna samt upp o ner med förstörbara väggar
-int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i)
+int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i, Wall *wall)
 {
     for(int k=139;k<250;k++)
     {
-        float wallXPos = getWallXPosition(theGame->wall[k]), wallYPos = getWallYPosition(theGame->wall[k]),
-            wallWidth = getWallWidth(theGame->wall[k]), wallHeight = getWallHeight(theGame->wall[k]);
+        float wallXPos = getWallXPosition(wall, k), wallYPos = getWallYPosition(wall, k),
+            wallWidth = getWallWidth(wall, k), wallHeight = getWallHeight(wall, k);
         
-        if(theGame->wall[k].destroyedWall==0)
+        if(!WallGetDestroyedWall(wall, k))
             {
             if(wallXPos < theGame->explosionPosition[playerID][i].x &&
                 wallXPos + wallWidth > theGame->explosionPosition[playerID][i].x + theGame->explosionPosition[playerID][i].w &&

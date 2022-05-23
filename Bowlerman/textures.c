@@ -22,12 +22,11 @@ PUBLIC SDL_Texture *loadTextures(Game newGame, char fileLocation[]) // loadmedia
     return SDL_CreateTextureFromSurface(newGame->renderer, newGame->window_surface);
 }
 
-void renderTextures(Game theGame, Player player[])
+void renderTextures(Game theGame, Player player[], Wall *wall)
 {
     // Define stuff to make function easier to read
     SDL_Renderer *renderer = theGame->renderer;
     int id = theGame->playerIDLocal;
-
     // clear renderer
     SDL_RenderClear(renderer);
 
@@ -36,9 +35,9 @@ void renderTextures(Game theGame, Player player[])
     SDL_RenderCopy(renderer, theGame->background, NULL, &backRect);
 
     renderPowerups(theGame);
-
-    renderWalls(theGame);
-
+    //printf("innan render walls");
+    renderWalls(theGame, wall);
+    //printf("Efter renderWalls\n");
     // render bombs and explosion
     int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
     for (int i = 0; i < MAXBOMBAMOUNT; i++)
@@ -51,7 +50,7 @@ void renderTextures(Game theGame, Player player[])
         {
             for (int j = 0; j < 1+4*playerGetExplosionPower(player, returnarray[i]); j++)
             {
-                if(testCollisionExplosionWithWalls(theGame, j) == 0)
+                if(testCollisionExplosionWithWalls(theGame, j, wall) == 0)
                 {
                     SDL_RenderCopy(theGame->renderer, theGame->bombExplosion_texture, &bowlingballAnimation[0], &theGame->explosionPosition[i][j]);
                 }

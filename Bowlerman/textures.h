@@ -9,9 +9,10 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 typedef struct playerController *Player;
+typedef struct wall *Wall;
 SDL_Texture *loadTextures(Game theGame, char fileLocation[]); //Load media from given file location
 void loadAllTextures(Game theGame);                           //Load all textures
-void renderTextures(Game theGame, Player p[]);                            //Render textures
+void renderTextures(Game theGame, Player p[], Wall *wall);                            //Render textures
 void renderPowerups(Game theGame);                     //Render all the powerups.
 
 
