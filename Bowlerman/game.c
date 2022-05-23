@@ -104,8 +104,8 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
 // handles processes, like keyboard-inputs etc
 bool checkEvents(Game theGame, Player player[])
 {
-    // Manag. movement inputs 
-    int id = theGame->playerIDLocal;
+    // Manag. movement inputs
+    int id = getLocalID(theGame);
     manageMovementInputs(theGame, player);
     // Enter game loop (SDL_PollEvent)
     bool quitGame = false;
@@ -164,6 +164,8 @@ bool checkEvents(Game theGame, Player player[])
                 initGame(theGame, &udpData, &udpValues, &quitGame);         // initializes startvalues. coordinates etc.
                 Sounds sounds = initSoundFiles();
                 break;
+            case SDLK_m:
+                muteOrStartMusic();
             default:
                 break;
             }
@@ -195,6 +197,8 @@ PUBLIC void gameUpdate(Game theGame)
 
     while (!quitGame)
     {
+        
+        // start background music
         playBackroundMusic(&sounds);
         // Check for events
     

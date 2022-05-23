@@ -20,6 +20,19 @@ Sounds initSoundFiles()
     return s;
 }
 
+void muteOrStartMusic()
+{
+    static int play = 1;
+
+    if (!play) {
+        Mix_VolumeMusic(MUSICVOLUME);
+        play = 1;
+    } else {
+        Mix_VolumeMusic(0);
+        play = 0;
+    }
+}
+
 void initSounds()
 {
     if (Mix_OpenAudio(24100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
