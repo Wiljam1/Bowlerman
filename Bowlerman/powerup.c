@@ -10,11 +10,12 @@
 
 Powerup rollForPowerup(int *pCurrentPowerup, int ID, int xPos, int yPos)
 {
-    printf("Rolling for powerup..\n");
+    //printf("Rolling for powerup..\n");
     Powerup p;
     if((rand()%100+1) < 200){ // 40% chance to spawn a powerup                                                    
         p = powerupPlace(xPos, yPos, rand()%POWERUPTYPES); //Type = random number between 0 and how many types there are
         p.id = ID;
+        p.sentViaUDP = false;
         p.indestructable = timerForPowerups(SDL_GetTicks(), 1500, ID);
         *pCurrentPowerup += 4; //Go to next place in array for next powerup being made
     }
@@ -54,7 +55,7 @@ Powerup powerupPlace(int xPos, int yPos, int type)
     p.y = yPos + powOffset;
     p.type = type;
     p.isPickedUp = false;
-    p.sentViaUDP = false;
+    p.sentViaUDP = true;
     p.id = 0;
     p.indestructable=1;
     return p;

@@ -362,7 +362,6 @@ int playerGetIsDead(Player p[], int id)
 void playerIncreaseSpeed(Player p[], int id)
 {
     playerAddSpeedDisplay(p, 1, id);
-    printf("Adding speed: %lf\n", (double)MAXSPEED/10);
     p[id].speed += (double)MAXSPEED/8;
     if(p[id].speed > (double)MAXSPEED)
         p[id].speed = (double)MAXSPEED;

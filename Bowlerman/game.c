@@ -137,7 +137,6 @@ bool checkEvents(Game theGame, Player player[])
             case SDLK_t:
                 //Testing
                 playerIncreaseSpeed(player, id);
-                printf("Player speed is now: %lf\n", getPlayerSpeed(player, id));
                 updateScoreFlag(theGame, true);
                 break;
             case SDLK_y:
@@ -187,6 +186,11 @@ PUBLIC void gameUpdate(Game theGame)
     Sounds sounds = initSoundFiles();
     Player player[MAXPLAYERS];
     initAllPlayers(theGame, player);
+    // for(int i = 0; i < POWERUPAMOUNT; i++){
+    //     theGame->powerups[i] = powerupPlace(3000, 3000, 0);
+    // }
+    theGame->powerupsNotSent = 0;
+    
     // Game Loop:
 
     while (!quitGame)
