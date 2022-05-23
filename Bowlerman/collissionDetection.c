@@ -106,7 +106,7 @@ void testCollosionWithBombs(Game theGame, Player player[])
         {
             playerStandingOnBomb(theGame, player);
         }
-        if (BombGetIsPlaced(theGame->bombs[i]) == 1 && playerGetIsInvulnerable(player, i) == false)
+        if (BombGetIsPlaced(theGame->bombs[i]) == 1 /*&& playerGetIsInvulnerable(player, i) == false*/)         //bugg om denna är med
         {
             int id = getLocalID(theGame);
             float playerW = playerGetWidth(player, id), playerH = playerGetHeight(player, id);
