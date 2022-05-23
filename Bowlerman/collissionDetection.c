@@ -173,7 +173,7 @@ void testCollosionWithExplosion(Game theGame, Sounds *s, Player player[])
                             theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y - YOFFSET > playerY)
                             {
                                 //player dead
-                                if (flag == 1)      // testar med odödlighet
+                                if (flag == 1 && !playerGetIsDead(player, i))      // testar med odödlighet
                                 {
                                     if(getPlayerID(player, theGame->bombs[j].whoPlacedID) != i) {
                                         playerAddScore(player, theGame->bombs[j].whoPlacedID, 10);

@@ -34,6 +34,8 @@ struct playerController
     SDL_Rect playerRect;   //struct to hold the position and size of the sprite
     char moveDirection;  // Keeps track of player movement direction for sprite rendering
     int noOfLives, score;
+
+    int noOfPlayers;
 }; 
 
 Uint32 pDeathCallback();
@@ -68,6 +70,8 @@ PUBLIC Player initPlayer(int initX, int initY, int playerID)
     p->noOfLives = 3; // OM du ändrar här måste du ändra till samma i UDPDataReset!!
     p->score = 0;
 
+    p->noOfPlayers;
+
     return p;
 }
 
@@ -90,9 +94,8 @@ void initAllPlayers(Game theGame, Player player[])
         theGame->invulnerabiltyFlag[i] = false;
         playerSetInvulnerability(player, i, false);
         playerSetAlive(player, i);
-
+        playerSetCountForTimer(player, theGame->playerAmount, getLocalID(theGame));
     }
-
 }
 
 void manageMovementInputs(Game theGame, Player player[])
@@ -257,6 +260,15 @@ PUBLIC void playerSetOldXPos(Player p[], int id, float x)
 PUBLIC void playerSetOldYPos(Player p[], int id, float y)
 {
     p[id]->yPosOld = y;
+}
+PUBLIC void playerSetCountForTimer(Player *p, int n, int id)
+{
+    p[id]->noOfPlayers = n;
+}
+
+PUBLIC int playerGetCountForTimer(Player *p, int id)
+{
+    return p[id]->noOfPlayers;
 }
 
 PUBLIC void playerSetID(Player p[], int id)
@@ -427,9 +439,9 @@ void playerAddScore(Player p[], int id, int score)
 
 void playerDeathTimer(Game theGame, Player player[])
 {
-        for (int i = 0; i < PLAYERAMOUNT; i++)
+        for (int i = 0; i < theGame->playerAmount; i++)
         {
-            if (theGame->invulnerabiltyFlag[i] == true)
+            if (theGame->invulnerabiltyFlag[i] == true && i <= playerGetCountForTimer(player, i))
             {
                 printf("Player %d invulnerability is: %s\n", i, playerGetIsInvulnerable(player, i) ? "On" : "Off");
                 SDL_TimerID timerID = SDL_AddTimer(INVULNERABILITYTIME, pDeathCallback, (Player*)player); // Funktionen körs efter antal ms som INVULTIME är satt till (ny tråd)
@@ -447,7 +459,7 @@ void playerDeathTimer(Game theGame, Player player[])
 
 Uint32 pDeathCallback(Uint32 interval, Player player[])
 {
-    for (int i = 0; i < PLAYERAMOUNT; i++)
+    for (int i = 0; i < playerGetCountForTimer(player, i); i++)
     {
         if(playerGetIsInvulnerable(player, i) == true)
         {
