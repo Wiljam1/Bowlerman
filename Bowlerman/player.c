@@ -443,7 +443,7 @@ void playerDeathTimer(Game theGame, Player player[])
             if (theGame->invulnerabiltyFlag[i] == true && i <= playerGetCountForTimer(player, i))
             {
                 printf("Player %d invulnerability is: %s\n", i, playerGetIsInvulnerable(player, i) ? "On" : "Off");
-                SDL_TimerID timerID = SDL_AddTimer(INVULNERABILITYTIME, pDeathCallback, (Player*)player); // Funktionen körs efter antal ms som INVULTIME är satt till (ny tråd)
+                SDL_TimerID timerID = SDL_AddTimer(INVULNERABILITYTIME, pDeathCallback, (Player)player); // Funktionen körs efter antal ms som INVULTIME är satt till (ny tråd)
                 if (!timerID) {
                     SDL_RemoveTimer(timerID);
                     printf("Timer failed\n");
@@ -458,7 +458,7 @@ void playerDeathTimer(Game theGame, Player player[])
 
 Uint32 pDeathCallback(Uint32 interval, Player player[])
 {
-    for (int i = 0; i < playerGetCountForTimer(player, i); i++)
+    for (int i = 0; i <= playerGetCountForTimer(player, 0); i++)
     {
         if(playerGetIsInvulnerable(player, i) == true)
         {
