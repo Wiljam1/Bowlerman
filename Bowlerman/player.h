@@ -78,7 +78,7 @@ void updatePlayerXPosition(Player p[], int id, double velX);
 void updatePlayerYPosition(Player p[], int id, double velY);
 
 void playerSetCountForTimer(Player *p, int n, int id);
-
+int playerGetCountForTimer(Player *p, int id);
 //ändrar spelarens (clientmässiga) position
 //void playerPositionUpdate(int x, int y);
 

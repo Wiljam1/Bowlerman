@@ -70,7 +70,7 @@ PUBLIC Player initPlayer(int initX, int initY, int playerID)
     p->noOfLives = 3; // OM du ändrar här måste du ändra till samma i UDPDataReset!!
     p->score = 0;
 
-    p->noOfPlayers;
+    p->noOfPlayers = 4;
 
     return p;
 }
@@ -88,12 +88,12 @@ void initAllPlayers(Game theGame, Player player[])
         theGame->invulnerabiltyFlag[i] = true;
         playerSetInvulnerability(player, i, true);
         playerSetDead(player, i);
+        playerSetCountForTimer(player, theGame->playerAmount, i);
     }
     for (i = 0; i < theGame->playerAmount; i++) {   // initerare de faktiskt antalet spelare till vid liv
         theGame->invulnerabiltyFlag[i] = false;
         playerSetInvulnerability(player, i, false);
         playerSetAlive(player, i);
-        playerSetCountForTimer(player, theGame->playerAmount, getLocalID(theGame));
     }
 }
 
@@ -438,12 +438,12 @@ void playerAddScore(Player p[], int id, int score)
 
 void playerDeathTimer(Game theGame, Player player[])
 {
-        for (int i = 0; i < theGame->playerAmount; i++)
+        for (int i = 0; i < playerGetCountForTimer(player, i); i++)
         {
-            if (theGame->invulnerabiltyFlag[i] == true && i <= playerGetCountForTimer(player, i))
+            if (theGame->invulnerabiltyFlag[i] == true)
             {
                 printf("Player %d invulnerability is: %s\n", i, playerGetIsInvulnerable(player, i) ? "On" : "Off");
-                SDL_TimerID timerID = SDL_AddTimer(INVULNERABILITYTIME, pDeathCallback, (Player)player); // Funktionen körs efter antal ms som INVULTIME är satt till (ny tråd)
+                SDL_TimerID timerID = SDL_AddTimer(INVULNERABILITYTIME, pDeathCallback, player); // Funktionen körs efter antal ms som INVULTIME är satt till (ny tråd)
                 if (!timerID) {
                     SDL_RemoveTimer(timerID);
                     printf("Timer failed\n");
@@ -458,7 +458,7 @@ void playerDeathTimer(Game theGame, Player player[])
 
 Uint32 pDeathCallback(Uint32 interval, Player player[])
 {
-    for (int i = 0; i <= playerGetCountForTimer(player, 0); i++)
+    for (int i = 0; i < playerGetCountForTimer(player, i); i++)
     {
         if(playerGetIsInvulnerable(player, i) == true)
         {
