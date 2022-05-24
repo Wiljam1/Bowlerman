@@ -27,13 +27,8 @@
 #define MAXBOMBAMOUNT 20
 //-------------------------------------------------
 #define LEN 20
-struct sounds
-{
-    Mix_Music *backgroundMusic;
-    Mix_Chunk *explosion;
-    Mix_Chunk *death;
-};
-typedef struct sounds Sounds;
+
+typedef struct sounds *Sounds;
 
 struct wall{
     int id; //UDP?

@@ -17,13 +17,13 @@
 void collisionWithWallsAround(Game theGame, Player p[]);
 void testCollisionWithBombs(Game theGame, Player p[]);
 void testCollisionWithWalls(Game theGame, Player p[]);
-void testCollisionWithExplosion(Game theGame, Sounds *s, Player p[]);
+void testCollisionWithExplosion(Game theGame, Sounds s, Player p[]);
 void playerCollisionWithPowerup(Game theGame, Player p[]);
 void explosionCollisionWithPowerup(Game theGame);
 //void playerStandingOnBomb(Game theGame, Player p[]);                                            //kollar om spelare står på en bomb
 int testCollisionWithDestroyableWalls(Game theGame, Player p[], int k, int j);                  //testar om explosioner träffar förstörbar vägg och förstör den
 
-PUBLIC void collisionDetect(Game theGame, Sounds *sounds, Player players[])
+PUBLIC void collisionDetect(Game theGame, Sounds sounds, Player players[])
 {
     collisionWithWallsAround(theGame, players);
     testCollisionWithBombs(theGame, players);     
@@ -150,7 +150,7 @@ void testCollisionWithBombs(Game theGame, Player player[])
 
 // collison detection mellan spelare och explosioner
 // i är för antal spelare, j för antal bomber och k för de olika rectanglar som explosionerna finns på
-void testCollisionWithExplosion(Game theGame, Sounds *s, Player player[])
+void testCollisionWithExplosion(Game theGame, Sounds s, Player player[])
 {
     for (int i=0;i<PLAYERAMOUNT;i++)
     {
@@ -176,7 +176,10 @@ void testCollisionWithExplosion(Game theGame, Sounds *s, Player player[])
                                 if (flag == 1 && !playerGetIsDead(player, i))      // testar med odödlighet
                                 {
                                     if(getPlayerID(player, theGame->bombs[j].whoPlacedID) != i) {
-                                        playerAddScore(player, theGame->bombs[j].whoPlacedID, 10);
+                                        playerAddScore(player, theGame->bombs[j].whoPlacedID, 10);      //Increase score by 10 for each player killed
+                                    }
+                                    else if(getPlayerID(player, theGame->bombs[j].whoPlacedID == i)){
+                                        playerAddScore(player, theGame->bombs[j].whoPlacedID, -5);       //Reduce score by 5 if killed by own bomb
                                     }
                                     setPlayerDeathFlags(theGame, player, i);
                                     playerDeathTimer(theGame, player);

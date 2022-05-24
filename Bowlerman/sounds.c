@@ -7,14 +7,20 @@
 #define MUSICVOLUME 1
 #define BOMBVOLUME 1
 #define STRIKEVOLUME 1
+struct sounds
+{
+    Mix_Music *backgroundMusic;
+    Mix_Chunk *explosion;
+    Mix_Chunk *death;
+};
 
 Sounds initSoundFiles()
 {
     initSounds();
-    Sounds s;
-    s.backgroundMusic = Mix_LoadMUS("resources/sounds/song.wav");
-    s.explosion = Mix_LoadWAV("resources/sounds/explosion.wav");
-    s.death = Mix_LoadWAV("resources/sounds/strike.wav");
+    Sounds s = malloc(sizeof(struct sounds));
+    s->backgroundMusic = Mix_LoadMUS("resources/sounds/song.wav");
+    s->explosion = Mix_LoadWAV("resources/sounds/explosion.wav");
+    s->death = Mix_LoadWAV("resources/sounds/strike.wav");
     Mix_Volume(-1, 1);
     Mix_VolumeMusic(MUSICVOLUME);
     
@@ -42,7 +48,7 @@ void initSounds()
     }
 }
 
-void playBackroundMusic(Sounds *s)
+void playBackroundMusic(Sounds s)
 {   
     if(!Mix_PlayingMusic())
     {
@@ -50,19 +56,20 @@ void playBackroundMusic(Sounds *s)
     }
 }
 
-void playDeath(Sounds *s)
+void playDeath(Sounds s)
 {
     Mix_PlayChannel(-1, (s->death), 0);
 }
 
-void playBomb(Sounds *s)
+void playBomb(Sounds s)
 {
     Mix_PlayChannel(-1, (s->explosion), 0);
 }
 
-void destroySoundFiles(Sounds *s)
+void destroySoundFiles(Sounds s)
 {
     Mix_FreeMusic(s->backgroundMusic);
     Mix_FreeChunk(s->explosion);
     Mix_FreeChunk(s->death);
+    free(s);
 }
