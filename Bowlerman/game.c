@@ -29,9 +29,9 @@
 void menu();
 void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame, Player *player);
 bool checkEvents(Game theGame, Player p[]);
-void collisionDetect(Game theGame, Sounds *s, Player p[]);
+void collisionDetect(Game theGame, Sounds s, Player p[]);
 void showScoreboard(Game theGame, Player p[]);
-void process(Game theGame, Sounds *s, Player p[]);
+void process(Game theGame, Sounds s, Player p[]);
 void checkGameOver(Game theGame, Player p[]);
 // initializes game-window
 PUBLIC Game createWindow()
@@ -50,6 +50,7 @@ PUBLIC Game createWindow()
     theGame->renderer = SDL_CreateRenderer(theGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     theGame->window_surface = SDL_GetWindowSurface(theGame->window);
     theGame->playerAmount = 1; // Sets players to minumum amount
+    theGame->powerupsNotSent = 0;   // Initierar antal powerups att skicka
     return theGame;
 }
 
@@ -179,27 +180,27 @@ PUBLIC void gameUpdate(Game theGame)
     bool quitGame = false;
     UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
     UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
+    /*Init all players*/
     Player player[MAXPLAYERS];                  
     initGame(theGame, &udpData, &udpValues, &quitGame, player);         // initializes startvalues. coordinates etc.
     Sounds sounds = initSoundFiles();
     
-    /*Init all players*/
-    theGame->powerupsNotSent = 0;   // Vad gör denna?
+    
     // Game Loop:
 
     while (!quitGame)
     {
         // start background music
-        playBackroundMusic(&sounds);
+        playBackroundMusic(sounds);
     
         // Process events (time based stuff)
-        process(theGame, &sounds, player);
+        process(theGame, sounds, player);
 
         // Check for events
         quitGame = checkEvents(theGame, player);
 
         // Collisiondetection
-        collisionDetect(theGame, &sounds, player);
+        collisionDetect(theGame, sounds, player);
         checkGameOver(theGame, player);
         // Send/receive data to server
         manageUDP(theGame, &udpData, &udpValues, player);
@@ -314,7 +315,7 @@ void showScoreboard(Game theGame, Player player[]) //Måste skriva om den här s
 }
 
 //som en game loop för bomber, kollar timer för explosioner samt bomber
-void process(Game theGame, Sounds *s, Player *player)
+void process(Game theGame, Sounds s, Player *player)
 {
     //kollar bombernas timer, är den klar försvinner bomben och explosionstimer initieras
     for (int i = 0; i < MAXBOMBAMOUNT; i++){

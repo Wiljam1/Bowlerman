@@ -4,18 +4,18 @@
 #include "game.h"
 
 // Struct för ljudfiler
-typedef struct sounds Sounds;
+typedef struct sounds *Sounds;
 
 //getting sound files
 Sounds initSoundFiles();
 //initialize sounds
 void initSounds();
 //Starting background music
-void playBackroundMusic();
+void playBackroundMusic(Sounds s);
 //Sound to play when dying
-void playDeath(Sounds *s);
+void playDeath(Sounds s);
 // Sound to play when bomb explodes
-void playBomb(Sounds *s);
+void playBomb(Sounds s);
 // Remove sounds from memory
 void destroySoundFiles();
 void muteOrStartMusic();
