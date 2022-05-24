@@ -27,7 +27,7 @@
 #define PRIVATE static
 #define LENGTH 100
 void menu();
-void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame);
+void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame, Player *player);
 bool checkEvents(Game theGame, Player p[]);
 void collisionDetect(Game theGame, Sounds *s, Player p[]);
 void showScoreboard(Game theGame, Player p[]);
@@ -54,23 +54,24 @@ PUBLIC Game createWindow()
 }
 
 // initializes startvalues for game
-void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame)
+void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame, Player *player)
 {
     
     loadAllTextures(theGame);  // Loading textures from file
     
     initSDLNet();           //inits SDL-net
+    
      
     initGUI(theGame);       //Init GUI
     
     initUDP(udpValues);     //init UDP
-
     menu(theGame, quitGame, udpValues);     //Menu loop
     //TCPstruct tcpValues = createTCPstruct();     //returns a struct for tcp-init-struct.	
 	//initTCP(&tcpValues);            //initiates TCP
 	//manageTCP(&tcpValues);          //starts TCP
 	//closeTCP(&tcpValues);           //closes TCP
 
+    initAllPlayers(theGame, player);
     // Init sounds
     //initSounds();
     //Init random seed
@@ -156,7 +157,7 @@ bool checkEvents(Game theGame, Player player[])
                 //Player player[MAXPLAYERS]; // declares x-amounts of players
                 UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
                 UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
-                initGame(theGame, &udpData, &udpValues, &quitGame);         // initializes startvalues. coordinates etc.
+                initGame(theGame, &udpData, &udpValues, &quitGame, player);         // initializes startvalues. coordinates etc.
                 Sounds sounds = initSoundFiles();
                 break;
             case SDLK_m:
@@ -178,12 +179,11 @@ PUBLIC void gameUpdate(Game theGame)
     bool quitGame = false;
     UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
     UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
-    initGame(theGame, &udpData, &udpValues, &quitGame);         // initializes startvalues. coordinates etc.
+    Player player[MAXPLAYERS];                  
+    initGame(theGame, &udpData, &udpValues, &quitGame, player);         // initializes startvalues. coordinates etc.
     Sounds sounds = initSoundFiles();
     
     /*Init all players*/
-    Player player[MAXPLAYERS];                  
-    initAllPlayers(theGame, player);
     theGame->powerupsNotSent = 0;   // Vad gör denna?
     // Game Loop:
 

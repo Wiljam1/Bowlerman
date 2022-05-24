@@ -83,13 +83,12 @@ void initAllPlayers(Game theGame, Player player[])
     player[2] = initPlayer(LEFT_X, BOTTOM_Y, 2);
     player[3] = initPlayer(RIGHT_X, BOTTOM_Y, 3);
     printf("Player Amount is: %d\n", theGame->playerAmount);
-    
+
     for (i = 0; i < PLAYERAMOUNT; i++) {        // initierar alla möjliga spelare till döda då man inte kan döda något spöke ifall man spelar färre än 4
         theGame->invulnerabiltyFlag[i] = true;
         playerSetInvulnerability(player, i, true);
         playerSetDead(player, i);
     }
-    
     for (i = 0; i < theGame->playerAmount; i++) {   // initerare de faktiskt antalet spelare till vid liv
         theGame->invulnerabiltyFlag[i] = false;
         playerSetInvulnerability(player, i, false);
