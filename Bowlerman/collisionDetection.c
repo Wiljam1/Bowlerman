@@ -12,7 +12,7 @@
 #include "bomb.h"
 #include "sounds.h"
 
-#define YOFFSET (WIDTH/39.666)
+#define YOFFSET (WIDTH/39.5)
 
 void collisionWithWallsAround(Game theGame, Player p[]);
 void testCollisionWithBombs(Game theGame, Player p[]);
