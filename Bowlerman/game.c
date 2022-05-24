@@ -11,7 +11,7 @@
 #include <windows.h>
 #include <ShellApi.h>
 #include "game.h"
-#include "collissionDetection.h"
+#include "collisionDetection.h"
 #include "bomb.h"
 #include "textures.h"
 #include "wall.h"

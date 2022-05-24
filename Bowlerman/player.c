@@ -6,7 +6,7 @@
 #include <SDL2/SDL_image.h>
 #include "player.h"
 #include "Game.h"
-#include "collissionDetection.h"
+#include "collisionDetection.h"
 
 #define MAXSPEED (WIDTH/265)
 #define MINSPEED 1

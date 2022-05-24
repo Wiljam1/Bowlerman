@@ -1,5 +1,5 @@
-windows: main.o game.o player.o bomb.o wall.o collissionDetection.o textures.o udpClient.o powerup.o gui.o sounds.o tcpClient.o menu.o
-	gcc -o main main.o game.o player.o bomb.o wall.o collissionDetection.o textures.o udpClient.o powerup.o gui.o sounds.o tcpClient.o menu.o -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_mixer -lSDL2_ttf
+windows: main.o game.o player.o bomb.o wall.o collisionDetection.o textures.o udpClient.o powerup.o gui.o sounds.o tcpClient.o menu.o
+	gcc -o main main.o game.o player.o bomb.o wall.o collisionDetection.o textures.o udpClient.o powerup.o gui.o sounds.o tcpClient.o menu.o -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_mixer -lSDL2_ttf
 main.o:
 	gcc -c main.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL_ttf
 game.o:
@@ -8,8 +8,8 @@ player.o:
 	gcc -c player.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 bomb.o:
 	gcc -c bomb.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
-collissionDetection.o:
-	gcc -c collissionDetection.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+collisionDetection.o:
+	gcc -c collisionDetection.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 wall.o:
 	gcc -c wall.c -IC:\MinGW\include\SDL2 -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 textures.o:

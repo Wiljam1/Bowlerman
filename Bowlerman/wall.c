@@ -7,7 +7,7 @@
 #include "wall.h"
 #include "player.h"
 #include "game.h"
-#include "collissionDetection.h"
+#include "collisionDetection.h"
 
 Wall initWalls(int amount, float width, float height)
 {

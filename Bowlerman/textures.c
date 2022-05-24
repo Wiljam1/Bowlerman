@@ -2,7 +2,7 @@
 #include "game.h"
 #include "player.h"
 #include "bomb.h"
-#include "collissionDetection.h"
+#include "collisionDetection.h"
 #include "wall.h"
 #include "powerup.h"
 #include "gui.h"

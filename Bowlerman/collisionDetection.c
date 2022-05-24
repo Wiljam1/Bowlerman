@@ -7,7 +7,7 @@
 #include "game.h"
 #include "player.h"
 #include "wall.h"
-#include "collissionDetection.h"
+#include "collisionDetection.h"
 #include "powerup.h"
 #include "bomb.h"
 #include "sounds.h"
@@ -15,9 +15,9 @@
 #define YOFFSET (WIDTH/39.666)
 
 void collisionWithWallsAround(Game theGame, Player p[]);
-void testCollosionWithBombs(Game theGame, Player p[]);
+void testCollisionWithBombs(Game theGame, Player p[]);
 void testCollisionWithWalls(Game theGame, Player p[]);
-void testCollosionWithExplosion(Game theGame, Sounds *s, Player p[]);
+void testCollisionWithExplosion(Game theGame, Sounds *s, Player p[]);
 void playerCollisionWithPowerup(Game theGame, Player p[]);
 void explosionCollisionWithPowerup(Game theGame);
 //void playerStandingOnBomb(Game theGame, Player p[]);                                            //kollar om spelare står på en bomb
@@ -26,9 +26,9 @@ int testCollisionWithDestroyableWalls(Game theGame, Player p[], int k, int j);  
 PUBLIC void collisionDetect(Game theGame, Sounds *sounds, Player players[])
 {
     collisionWithWallsAround(theGame, players);
-    testCollosionWithBombs(theGame, players);     
+    testCollisionWithBombs(theGame, players);     
     testCollisionWithWalls(theGame, players);
-    testCollosionWithExplosion(theGame, sounds, players);
+    testCollisionWithExplosion(theGame, sounds, players);
     playerCollisionWithPowerup(theGame, players);
     explosionCollisionWithPowerup(theGame);       //för att förstöra powerups med explosioner
 }
@@ -98,7 +98,7 @@ void collisionWithWallsAround(Game theGame, Player player[])
 
 // collison detection mellan bomber och spelare
 // i är för antal spelare, j för antal bomber
-void testCollosionWithBombs(Game theGame, Player player[])
+void testCollisionWithBombs(Game theGame, Player player[])
 {
     for (int i=0;i<MAXBOMBAMOUNT;i++)
     {
@@ -150,7 +150,7 @@ void testCollosionWithBombs(Game theGame, Player player[])
 
 // collison detection mellan spelare och explosioner
 // i är för antal spelare, j för antal bomber och k för de olika rectanglar som explosionerna finns på
-void testCollosionWithExplosion(Game theGame, Sounds *s, Player player[])
+void testCollisionWithExplosion(Game theGame, Sounds *s, Player player[])
 {
     for (int i=0;i<PLAYERAMOUNT;i++)
     {

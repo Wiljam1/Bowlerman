@@ -6,7 +6,7 @@
 #include <string.h>
 #include "game.h"
 #include "player.h"
-#include "collissionDetection.h"
+#include "collisionDetection.h"
 #include "powerup.h"
 #include "bomb.h"
 #include "sounds.h"
