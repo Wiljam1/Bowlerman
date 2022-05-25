@@ -30,9 +30,9 @@ void menu();
 void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame, Player *player);
 void checkEvents(Game theGame, Player p[], bool *quitGame);
 void collisionDetect(Game theGame, Sounds s, Player p[]);
-void showScoreboard(Game theGame, Player p[]);
+void showScoreboard(Game theGame, Player p[], bool *quitGame);
 void process(Game theGame, Sounds s, Player p[]);
-void checkGameOver(Game theGame, Player p[]);
+void checkGameOver(Game theGame, Player p[], bool *quitGame);
 // initializes game-window
 PUBLIC Game createWindow()
 {
@@ -201,7 +201,7 @@ PUBLIC void gameUpdate(Game theGame)
 
         // Collisiondetection
         collisionDetect(theGame, sounds, player);
-        checkGameOver(theGame, player);
+        //checkGameOver(theGame, player, );
         // Send/receive data to server
         manageUDP(theGame, &udpData, &udpValues, player);
 
@@ -213,27 +213,28 @@ PUBLIC void gameUpdate(Game theGame)
 
         SDL_Delay(theGame->delayInMS); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
         
-        checkGameOver(theGame, player); //Behöver ligga här för att score ska uppdateras innan man dör, NACKDEL att den kollar en extra sak hela tiden.
+        checkGameOver(theGame, player, &quitGame); //Behöver ligga här för att score ska uppdateras innan man dör, NACKDEL att den kollar en extra sak hela tiden.
     }
     destroySoundFiles(sounds);
     free(player);
 }
 
-void checkGameOver(Game theGame, Player player[])
+void checkGameOver(Game theGame, Player player[], bool *quitGame)
 {
     int totallyDeadPlayers = 0;
-    for(int i = 0; i < PLAYERAMOUNT; i++){  //USING CONSTANT BECAUSE OF BUG
+    for(int i = 0; i < playerGetCountForTimer(player, i); i++){  //USING CONSTANT BECAUSE OF BUG
         if(playerGetNoOfLives(player, i) <= 0){ 
             totallyDeadPlayers++;
         }
     }
-    if(totallyDeadPlayers == PLAYERAMOUNT-1){ //USING CONSTANT BECAUSE OF BUG
-        showScoreboard(theGame, player);
+    if(totallyDeadPlayers == playerGetCountForTimer(player, 0) -1){ //USING CONSTANT BECAUSE OF BUG
+        showScoreboard(theGame, player, quitGame);
     }
 }
 
-void showScoreboard(Game theGame, Player player[]) //Måste skriva om den här snyggare
+void showScoreboard(Game theGame, Player player[], bool *quitGame) //Måste skriva om den här snyggare
 {
+    muteOrStartMusic();
     int x = WIDTH / 2;
     int width = WIDTH / 3;
     int height = WIDTH / 11.7;
@@ -264,7 +265,7 @@ void showScoreboard(Game theGame, Player player[]) //Måste skriva om den här s
     createLabel(theGame, 0, tmpstr1, -1, black);
     char tmpstr2[LEN] = "SCOREBOARD"; 
     createLabel(theGame, 1, tmpstr2, -1, black);
-    char tmpstr3[LEN] = "-------------------"; 
+    char tmpstr3[LEN] = "[3] to restart!"; 
     createLabel(theGame, 2, tmpstr3, -1, black);
     char tmpstr4[LEN] = "Player 1: "; 
     createLabel(theGame, 3, tmpstr4, playerGetScore(player, 0), black);
@@ -289,12 +290,14 @@ void showScoreboard(Game theGame, Player player[]) //Måste skriva om den här s
             switch(event.type)
             {
                 case SDL_QUIT:
+                    *quitGame = true;
                     loop = false;
                     break;
                 case SDL_WINDOWEVENT_CLOSE:
                     if(theGame->window)
                     {
                         loop = false;
+                        *quitGame = true;
                         theGame->window = NULL;
                     }
                     break;
@@ -303,6 +306,8 @@ void showScoreboard(Game theGame, Player player[]) //Måste skriva om den här s
                     {
                         case SDLK_3:
                             printf("\nQUIT SCOREBOARD\n");      //QUIT TO MENU AND RESET GAME VARIABLES IN THE FUTURE?
+                            initAllPlayers(theGame, player);
+                            muteOrStartMusic();
                             loop = false;
                             break;
                     }
