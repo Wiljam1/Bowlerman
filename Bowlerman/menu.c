@@ -55,15 +55,15 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues){
                 case SDL_QUIT:
                     *quitGame = true;
                     running = false;
-                    destroyGame(theGame);
+                    //destroyGame(theGame);
                     break;
                 case SDL_WINDOWEVENT_CLOSE:
                     if(theGame->window)
                     {
-                        theGame->window = NULL;
                         *quitGame = true;
                         running = false;
-                        destroyGame(theGame);
+                        theGame->window = NULL;
+                        //destroyGame(theGame);
                     }
                     break;
                 case SDL_MOUSEBUTTONDOWN:
@@ -74,7 +74,7 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues){
                         if (i == 2){
                         *quitGame = true;
                         running = false;
-                        destroyGame(theGame);
+                        //destroyGame(theGame);
                         }
                         switch(currentMenu){
                             case 0:

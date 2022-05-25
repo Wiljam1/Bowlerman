@@ -28,7 +28,7 @@
 #define LENGTH 100
 void menu();
 void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame, Player *player);
-bool checkEvents(Game theGame, Player p[]);
+void checkEvents(Game theGame, Player p[], bool *quitGame);
 void collisionDetect(Game theGame, Sounds s, Player p[]);
 void showScoreboard(Game theGame, Player p[]);
 void process(Game theGame, Sounds s, Player p[]);
@@ -96,25 +96,26 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
 }
 
 // handles processes, like keyboard-inputs etc
-bool checkEvents(Game theGame, Player player[])
+void checkEvents(Game theGame, Player player[], bool *quitGame)
 {
     // Manag. movement inputs
     int id = getLocalID(theGame);
     manageMovementInputs(theGame, player);
     // Enter game loop (SDL_PollEvent)
-    bool quitGame = false;
+    //bool quitGame = false;
     while (SDL_PollEvent(&theGame->window_event))
     {
         SDL_Event event = theGame->window_event;
         switch (event.type)
         {
         case SDL_QUIT:
-            destroyGame(theGame);
+            *quitGame = true;
             break;
         case SDL_WINDOWEVENT_CLOSE:
             if (theGame->window)
             {
-                destroyGame(theGame);
+                //destroyGame(theGame);
+                *quitGame = true;
             }
             break;
         case SDL_KEYDOWN:
@@ -126,7 +127,7 @@ bool checkEvents(Game theGame, Player player[])
                 tryToPlaceBomb(theGame, theGame->playerIDLocal, player);
                 break;
             case SDLK_ESCAPE:
-                quitGame = true;
+                *quitGame = true;
                 break;
             case SDLK_t:
                 //Testing
@@ -155,7 +156,7 @@ bool checkEvents(Game theGame, Player player[])
                 //Player player[MAXPLAYERS]; // declares x-amounts of players
                 UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
                 UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
-                initGame(theGame, &udpData, &udpValues, &quitGame, player);         // initializes startvalues. coordinates etc.
+                initGame(theGame, &udpData, &udpValues, quitGame, player);         // initializes startvalues. coordinates etc.
                 Sounds sounds = initSoundFiles();
                 break;
             case SDLK_m:
@@ -167,7 +168,7 @@ bool checkEvents(Game theGame, Player player[])
             break;
         }
     }
-    return quitGame;
+    //return quitGame;
 }
 
 // game loop
@@ -194,7 +195,7 @@ PUBLIC void gameUpdate(Game theGame)
         process(theGame, sounds, player);
 
         // Check for events
-        quitGame = checkEvents(theGame, player);
+        checkEvents(theGame, player, &quitGame);
 
         // Collisiondetection
         collisionDetect(theGame, sounds, player);
@@ -213,6 +214,7 @@ PUBLIC void gameUpdate(Game theGame)
         checkGameOver(theGame, player); //Behöver ligga här för att score ska uppdateras innan man dör, NACKDEL att den kollar en extra sak hela tiden.
     }
     destroySoundFiles(sounds);
+    free(player);
 }
 
 void checkGameOver(Game theGame, Player player[])
@@ -290,8 +292,8 @@ void showScoreboard(Game theGame, Player player[]) //Måste skriva om den här s
                 case SDL_WINDOWEVENT_CLOSE:
                     if(theGame->window)
                     {
-                        theGame->window = NULL;
                         loop = false;
+                        theGame->window = NULL;
                     }
                     break;
                 case SDL_KEYDOWN:
@@ -394,6 +396,7 @@ PUBLIC int destroyGame(Game theGame)
     SDLNet_Quit();
     SDL_DestroyRenderer(theGame->renderer);
     SDL_DestroyWindow(theGame->window);
+    free(theGame);
     SDL_Quit();
     return 0;
 }
