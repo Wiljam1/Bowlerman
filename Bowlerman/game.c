@@ -234,7 +234,6 @@ void checkGameOver(Game theGame, Player player[], bool *quitGame)
 
 void showScoreboard(Game theGame, Player player[], bool *quitGame) //Måste skriva om den här snyggare
 {
-    muteOrStartMusic();
     int x = WIDTH / 2;
     int width = WIDTH / 3;
     int height = WIDTH / 11.7;
@@ -307,9 +306,11 @@ void showScoreboard(Game theGame, Player player[], bool *quitGame) //Måste skri
                         case SDLK_3:
                             printf("\nQUIT SCOREBOARD\n");      //QUIT TO MENU AND RESET GAME VARIABLES IN THE FUTURE?
                             initAllPlayers(theGame, player);
-                            muteOrStartMusic();
                             loop = false;
                             break;
+                        case SDLK_m:
+                            muteOrStartMusic();
+                        break;
                     }
             }  
         }
