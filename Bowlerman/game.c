@@ -67,6 +67,8 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
     
     
     menu(theGame, quitGame, udpValues);     //Menu loop
+    if (*quitGame == true) return;
+
     initUDP(udpValues);     //init UDP
 
     initAllPlayers(theGame, player);
