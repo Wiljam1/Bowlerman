@@ -30,7 +30,26 @@ struct data {
    int powerupsY;
    int powerupsType;
    int powerupsID;
-};
+}; typedef struct data Data;
+
+Data resetUDPData()
+{
+    Data d;
+    d.x = 0;
+    d.y = 0;
+    d.status = 0;
+    d.playerID = 0;
+    d.moveDirection = '0';
+    d.placeBomb = 0;
+    d.noOfLives = 3;
+    for (int i; i < 4; i++)
+        d.score[i] = 0;
+    
+    d.powerupsX = 0;
+    d.powerupsY = 0;
+    d.powerupsType = 0;
+    d.powerupsID = 0;
+}
 
 int main(int argc, char **argv)
 {
@@ -40,7 +59,7 @@ int main(int argc, char **argv)
     Uint32 IPclient[4]={0}; 
     Uint32 portClient[4]={0}; 
     int quit, a, b;
-    struct data udpData = {0, 0, 0, 0};
+    Data udpData = resetUDPData();
  
     initSDLNet(); //inits SDL net
 

@@ -190,8 +190,9 @@ PUBLIC UDPData UDPDataReset()
     u.placeBomb = 0;
     u.noOfLives = 3;
 
-    for(int i; i < 4; i++)
+    for(int i = 0; i < 4; i++) {
         u.score[i] = 0;
+    }
 
     u.powerupsX = 0;
     u.powerupsY = 0;

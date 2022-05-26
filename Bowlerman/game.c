@@ -195,7 +195,6 @@ PUBLIC void gameUpdate(Game theGame)
     
         // Process events (time based stuff)
         process(theGame, sounds, player);
-
         // Check for events
         checkEvents(theGame, player, &quitGame);
 
@@ -203,17 +202,18 @@ PUBLIC void gameUpdate(Game theGame)
         collisionDetect(theGame, sounds, player);
         //checkGameOver(theGame, player, );
         // Send/receive data to server
-        manageUDP(theGame, &udpData, &udpValues, player);
 
         // Update GUI labels (only updates when updateFlag = true)
         updateGUI(theGame, player); //behövs göras om, mem leak (mem leak löst med flagga temporärt)
 
         // render display
         renderTextures(theGame, player);
+        manageUDP(theGame, &udpData, &udpValues, player);
 
         SDL_Delay(theGame->delayInMS); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
         
         checkGameOver(theGame, player, &quitGame); //Behöver ligga här för att score ska uppdateras innan man dör, NACKDEL att den kollar en extra sak hela tiden.
+
     }
     destroySoundFiles(sounds);
     free(player);
@@ -222,7 +222,7 @@ PUBLIC void gameUpdate(Game theGame)
 void checkGameOver(Game theGame, Player player[], bool *quitGame)
 {
     int totallyDeadPlayers = 0;
-    for(int i = 0; i < playerGetCountForTimer(player, i); i++){  //USING CONSTANT BECAUSE OF BUG
+    for(int i = 0; i < playerGetCountForTimer(player, 0); i++){  //USING CONSTANT BECAUSE OF BUG
         if(playerGetNoOfLives(player, i) <= 0){ 
             totallyDeadPlayers++;
         }
