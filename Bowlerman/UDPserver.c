@@ -49,6 +49,8 @@ Data resetUDPData()
     d.powerupsY = 0;
     d.powerupsType = 0;
     d.powerupsID = 0;
+
+    return d;
 }
 
 int main(int argc, char **argv)
