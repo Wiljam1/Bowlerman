@@ -42,7 +42,7 @@ Data resetUDPData()
     d.moveDirection = '0';
     d.placeBomb = 0;
     d.noOfLives = 3;
-    for (int i; i < 4; i++)
+    for (int i = 0; i < 4; i++)
         d.score[i] = 0;
     
     d.powerupsX = 0;

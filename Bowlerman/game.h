@@ -5,6 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
+
 //denna .h-fil får INTE include:a några andra .h-filer. För då blir det "circular inclusion".
 //pga alla andra .h-filer är beroende av game.h
 
@@ -30,6 +31,7 @@
 #define LEN 20
 
 typedef struct sounds *Sounds;
+typedef struct playerController *Player;
 
 //Struct for object: Walls
 struct wall{

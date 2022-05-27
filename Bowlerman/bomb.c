@@ -135,43 +135,40 @@ void sortBombsArray(Game theGame,int i, Player player[])
 //sätter positionerna för explosionen efter vart bomben legat
 void initExplosionPosition(Game theGame, int playerID, Player *player)
 {
-    int tilesize = (TILESIZE - 4), diff=2; //Borde sparas i en struct för att komma åt värdet vid collisiondetection?
+    int tilesize = (TILESIZE - 4), diff=2;
     int returnarray[20]={0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
     SDL_Rect temp = {0,0,tilesize,tilesize};
-    for(int i = 0; i < 1+4*playerGetExplosionPower(player, returnarray[playerID]); i++){
+    // Increase explosion radius depending on explosion power from player
+    for(int i = 0; i < 1 + 4*playerGetExplosionPower(player, returnarray[playerID]); i++){
         theGame->explosionPosition[playerID][i].h = tilesize;
         theGame->explosionPosition[playerID][i].w = tilesize;
     }
 
-    // I framtiden ska man väl kunna ha större explosionsradius än det vanliga?
-    // Man kanske får initiera flera positioner från början men endast rendera/ha collision med de som ska visas
-    //possitionen bomben är på
-    int j = 0;
-    theGame->explosionPosition[playerID][j].y = getBombYPosition(theGame->bombs[playerID]) + diff;
-    theGame->explosionPosition[playerID][j].x = getBombXPosition(theGame->bombs[playerID]) + diff;
-    //för resterande possitioner explosionen hamnar på
+    int explosionID = 0;
+    theGame->explosionPosition[playerID][explosionID].y = getBombYPosition(theGame->bombs[playerID]) + diff;
+    theGame->explosionPosition[playerID][explosionID].x = getBombXPosition(theGame->bombs[playerID]) + diff;
+
+    //Don't extend explosion too far beyond first wall hit
     for(int i=1;i<playerGetExplosionPower(player, returnarray[playerID])+1;i++)
     {
+        explosionID++;
+        theGame->explosionPosition[playerID][explosionID].y = getBombYPosition(theGame->bombs[playerID]) + tilesize*i + diff*2*i + diff; // Neråt
+        theGame->explosionPosition[playerID][explosionID].x = getBombXPosition(theGame->bombs[playerID]) + diff;
         
-        j++;
-        theGame->explosionPosition[playerID][j].y = getBombYPosition(theGame->bombs[playerID]) + tilesize*i + diff*2*i + diff; // Neråt
-        theGame->explosionPosition[playerID][j].x = getBombXPosition(theGame->bombs[playerID]) + diff;
+        explosionID++;
+        theGame->explosionPosition[playerID][explosionID].y = getBombYPosition(theGame->bombs[playerID]) - tilesize*i - diff*2*i + diff;    // UPP
+        theGame->explosionPosition[playerID][explosionID].x = getBombXPosition(theGame->bombs[playerID]) + diff;
         
-        j++;
-        theGame->explosionPosition[playerID][j].y = getBombYPosition(theGame->bombs[playerID]) - tilesize*i - diff*2*i + diff;    // UPP
-        theGame->explosionPosition[playerID][j].x = getBombXPosition(theGame->bombs[playerID]) + diff;
+        explosionID++;
+        theGame->explosionPosition[playerID][explosionID].y = getBombYPosition(theGame->bombs[playerID]) + diff;             //Höger
+        theGame->explosionPosition[playerID][explosionID].x = getBombXPosition(theGame->bombs[playerID]) + tilesize*i + diff*2*i + diff;
         
-        j++;
-        theGame->explosionPosition[playerID][j].y = getBombYPosition(theGame->bombs[playerID]) + diff;             //Höger
-        theGame->explosionPosition[playerID][j].x = getBombXPosition(theGame->bombs[playerID]) + tilesize*i + diff*2*i + diff;
-        
-        j++;
-        theGame->explosionPosition[playerID][j].y = getBombYPosition(theGame->bombs[playerID]) + diff;             //Vänster
-        theGame->explosionPosition[playerID][j].x = getBombXPosition(theGame->bombs[playerID]) - tilesize*i - diff*2*i + diff;
-        
+        explosionID++;
+        theGame->explosionPosition[playerID][explosionID].y = getBombYPosition(theGame->bombs[playerID]) + diff;             //Vänster
+        theGame->explosionPosition[playerID][explosionID].x = getBombXPosition(theGame->bombs[playerID]) - tilesize*i - diff*2*i + diff;
     }
-    //tar bort rect som träffar en vägg
-    
+
+    //"Remove" wall that is hit
     for (int i=1;i<1+4*playerGetExplosionPower(player, returnarray[playerID]);i++)
     {
         if (testPossibilityToExplode(theGame, playerID, i) == 0)        //för oförstörbara väggar
@@ -193,10 +190,8 @@ void initExplosionPosition(Game theGame, int playerID, Player *player)
                 theGame->explosionPosition[playerID][i+4*j].y = 2000;
                 theGame->explosionPosition[playerID][i+4*j].x = 2000;
             }
-        }
-        
+        }  
     }
-    
 }
 
 //centrerar bombernas position, i för inkommande possition, j och k för tillfälliga variabler 
@@ -207,14 +202,13 @@ int correctBowlingBallPosx(int i)
     i-= WIDTH/99;
     k=i/size;
     j=i%size;
-    if(j<24){
+    if(j < WIDTH/34){
         return (k*size);      
     }
     else{
         return ((k+1)*size);
     }   
 }
-
 
 int correctBowlingBallPosy(int i)
 {
@@ -223,7 +217,7 @@ int correctBowlingBallPosy(int i)
     int j=0, k=0;
     k=(i)/size;
     j=(int)(i)%size;
-    if(j<24){
+    if(j < WIDTH/34){
         return (k*size)+offset;      
     }
     else{
@@ -317,7 +311,7 @@ PUBLIC void BombSetPlacedBombRestriction(Bowlingball *b, int i)
 {
     b->placedBombRestriction = i;
 }
-//bomb rect possitioner i sprite sheet.
+//bomb rect possitioner i sprite sheet-filen.
 PUBLIC void loadBomb()
 {
     for(int i = 0; i < 18; i++){

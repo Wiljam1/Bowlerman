@@ -8,8 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <windows.h>
-#include <ShellApi.h>
 #include "game.h"
 #include "collisionDetection.h"
 #include "bomb.h"
@@ -22,15 +20,22 @@
 #include "gui.h"
 #include "player.h"
 #include "menu.h"
+// #include <windows.h>
+// #include <ShellApi.h> libraries used for ShellExecute();
 
 #define LENGTH 100
 
-//Prototypes in .c file to avoid circular inclusion
-PRIVATE void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame, Player *player); //Initialise game values
-PRIVATE void process(Game theGame, Sounds s, Player p[]);                                                    //Process time-based events
-PRIVATE void checkEvents(Game theGame, Player p[], bool *quitGame);                                          //Check if something happened (collisiondetection etc)
-PRIVATE void checkGameOver(Game theGame, Player p[], bool *quitGame);                                        //Check if every player except one is dead.
-PRIVATE void showScoreboard(Game theGame, Player p[], bool *quitGame);                                       //Used for displaying the scoreboard.
+/*--- Prototypes in .c file to avoid circular inclusion ---*/
+//Initialise game values
+PRIVATE void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame, Player *player);
+//Process time-based events 
+PRIVATE void process(Game theGame, Sounds s, Player p[]);                                                   
+//Check if something happened (input etc) 
+PRIVATE void checkEvents(Game theGame, Player p[], bool *quitGame);                                         
+//Check if every player except one is dead.
+PRIVATE void checkGameOver(Game theGame, Player p[], bool *quitGame);                                        
+//Check if every player except one is dead.
+PRIVATE void showScoreboard(Game theGame, Player p[], bool *quitGame);                                       
 
 // initialises game-window
 PUBLIC Game createWindow()
@@ -48,51 +53,42 @@ PUBLIC Game createWindow()
 
     theGame->renderer = SDL_CreateRenderer(theGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     theGame->window_surface = SDL_GetWindowSurface(theGame->window);
-    theGame->playerAmount = 1; // Sets players to minumum amount
-    theGame->powerupsNotSent = 0;   // Initierar antal powerups att skicka
+    theGame->playerAmount = 1;                                          // Sets players to minumum amount
+    theGame->powerupsNotSent = 0;                                       // Initierar antal powerups att skicka
     return theGame;
 }
 
 PRIVATE void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame, Player *player)
-{
+{   
+     // Loading textures from file
+    loadAllTextures(theGame); 
+
+    initSDLNet();          
     
-    loadAllTextures(theGame);  // Loading textures from file
+    initGUI(theGame);   
     
-    initSDLNet();           //inits SDL-net
-    
-     
-    initGUI(theGame);       //Init GUI
-    
-    
-    menu(theGame, quitGame, udpValues);     //Menu loop
+    //Menu loop
+    menu(theGame, quitGame, udpValues);     
     if (*quitGame == true) return;
 
-    initUDP(udpValues);     //init UDP
+    initUDP(udpValues);    
 
     initAllPlayers(theGame, player);
-    // Init sounds
-    //initSounds();
+
     //Init random seed
     srand(time(NULL));
-    
-    // get playerID via UDP and saves it in theGame->playerIDLocal
-    //getPlayerIDviaUDP(theGame, udpData, udpValues);
-    
-    //Kollar player-ammount (hur många spelare som är online). Just nu är den satt till att alltid vara 4.
-    //checkPlayerAmmount(theGame);
 
-    //ping UDP server so it gets players IP and port.
+    //ping UDP server to update player positions at the start of the game
     pingUDPserver(theGame, udpData, udpValues);
 
     SDL_Delay(20); //wait  for UDP server to catch up
-
-    
     
     //initierar väggar
     initAllWalls(theGame);
 
     //set game-delay to x-miliseconds. You should have lower delay if you have a slower computer
     theGame->delayInMS=10;
+    //^^^^^^^^^^^^^^skriv om till funktion
 }
 
 PRIVATE void checkEvents(Game theGame, Player player[], bool *quitGame)
@@ -174,42 +170,43 @@ void gameUpdate(Game theGame)
 {
     // Initialize
     bool quitGame = false;
-    UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
-    UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
+    UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct.
+    UDPData udpData = UDPDataReset();            //Resets data struct, Like player x,y -positions etc.
+
     /*Init all players*/
     Player player[MAXPLAYERS];                  
-    initGame(theGame, &udpData, &udpValues, &quitGame, player);         // initializes startvalues. coordinates etc.
+    initGame(theGame, &udpData, &udpValues, &quitGame, player);         // initialises startvalues. coordinates etc.
+
     Sounds sounds = initSoundFiles();
     
-    
     // Game Loop:
-
     while (!quitGame)
     {
         // start background music
         playBackroundMusic(sounds);
     
-        // Process events (time based stuff)
+        // Process events (time based events)
         process(theGame, sounds, player);
-        // Check for events
+
+        // Check for events (input from player)
         checkEvents(theGame, player, &quitGame);
 
         // Collisiondetection
         collisionDetect(theGame, sounds, player);
-        //checkGameOver(theGame, player, );
-        // Send/receive data to server
 
         // Update GUI labels (only updates when updateFlag = true)
-        updateGUI(theGame, player); //behövs göras om, mem leak (mem leak löst med flagga temporärt)
+        updateGUI(theGame, player);
 
-        // render display
-        renderTextures(theGame, player);
+        // Send/receive data to server
         manageUDP(theGame, &udpData, &udpValues, player);
 
-        SDL_Delay(theGame->delayInMS); // man behöver ta minus här för att räkna in hur lång tid spelet tar att exekvera
-        
-        checkGameOver(theGame, player, &quitGame); //Behöver ligga här för att score ska uppdateras innan man dör, NACKDEL att den kollar en extra sak hela tiden.
+        // Render display
+        renderTextures(theGame, player);
 
+        checkGameOver(theGame, player, &quitGame);
+
+        // Delay, use SDL_GetTicks in the future
+        SDL_Delay(theGame->delayInMS);
     }
     destroySoundFiles(sounds);
     free(player);
@@ -320,21 +317,21 @@ PRIVATE void showScoreboard(Game theGame, Player player[], bool *quitGame)
 
 PRIVATE void process(Game theGame, Sounds s, Player *player)
 {
-    //kollar bombernas timer, är den klar försvinner bomben och explosionstimer initieras
+    //Check bomb timer for every bomb
     for (int i = 0; i < MAXBOMBAMOUNT; i++){
-        if (BombGetTimerInit(theGame->bombs[i]) == 1){
-                  
-            if (BombGetTimerValue(theGame->bombs[i]) == 1){
-                initExplosionPosition(theGame, i, player);
-                initbowlingballtimer(SDL_GetTicks(), 1000, i);
-                testPossibilityToExplodeWithBombs(theGame, i);
-                BombSetTimerInit(&theGame->bombs[i], 0);
-                BombSetExplosionInit(&theGame->bombs[i], 0);
-                BombSetStartvaluetimerbomb(&theGame->bombs[i], SDL_GetTicks());
-                playBomb(s);
+        if (BombGetTimerInit(theGame->bombs[i]) == 1){       //Check if bomb is on the field
+            if (BombGetTimerValue(theGame->bombs[i]) == 1){  //Check if bomb is supposed to explode
+                //Bomb explosion is created
+                initExplosionPosition(theGame, i, player);   //SDL_Rect for explosion position
+                initbowlingballtimer(SDL_GetTicks(), 1000, i); //How long explosion should be displayed
+                testPossibilityToExplodeWithBombs(theGame, i); // Check if explosion is exploding other bombs
+                BombSetTimerInit(&theGame->bombs[i], 0);       // Reset timer value
+                BombSetExplosionInit(&theGame->bombs[i], 0);   // Init explosion-checking
+                BombSetStartvaluetimerbomb(&theGame->bombs[i], SDL_GetTicks()); //Set timer start value
+                playBomb(s);                                   // Play bomb sound
             }
             else {
-                BombSetTimerValue(&theGame->bombs[i], initbowlingballtimer(0, 3000, i));
+                BombSetTimerValue(&theGame->bombs[i], initbowlingballtimer(0, 3000, i)); // Check if timer is done, then change it
             }
              
         }

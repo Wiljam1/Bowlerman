@@ -14,7 +14,8 @@ int correctBowlingBallPosy(int i);                                      //samma 
 Bowlingball initBomb();                                                 //skapar bomb
 void sortBombsArray(Game theGame,int i, Player p[]);                                //sorterar bombernas array
 void tryToPlaceBomb(Game theGame, int playerID, Player p[]);                        //testar att lägga ut bomb och gör det om det är tillåtet
-void initExplosionPosition(Game theGame, int playerID, Player p[]);                 //initierar exposionspositionen
+//SDL_Rect for explosion position
+void initExplosionPosition(Game theGame, int playerID, Player p[]);                 
 void loadBomb();                                                        
 //int timeleft(int time, int playerID);                                   
 int getBombXPosition(Bowlingball b);                                    //resterande är obvious vad de gör, läs funktionsnamnet
