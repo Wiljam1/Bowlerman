@@ -15,84 +15,111 @@
 #define TOP_Y (WIDTH/8.5)
 #define BOTTOM_Y (WIDTH/1.368)
 
-
-// #define PLAYERHEIGHT = 100;
-// #define PLAYERWIDTH = 50;    //Använder structen för sånt här istället
-// #define PLAYERSPEED = 5;     // speed in pixels/second
-
 typedef struct playerController *Player;
-
 typedef struct playerSprites PlayerSprites;
 
-//initiate Player p[]osition with x and y coordinates
+/*Gets the positions of the images in the sprites*/
 PlayerSprites GetPlayerSprite();
-//Player initPlayer(int xPos, int yPos, int playerID);
+/*Sets start values for a player*/
 Player initPlayer(int initX, int initY, int playerID);
-//Player playerGetLocalPlayer(Player p[]);
-
+/*Initializes max player amount*/
+void initAllPlayers(Game theGame, Player p[]);
+/*Update a players images depending on movement direction, status etc*/
 void UpdatePlayerTextures(Game theGame, Player p[]);
+/*Get a players x-pos*/
 float playerGetXPosition(Player p[], int id);
+/*Get a players y-pos*/
 float playerGetYPosition(Player p[], int id);
-int playerGetHeight(Player p[], int id); //
-int playerGetWidth(Player p[], int id); //
-double getPlayerSpeed(Player p[], int id); //
+/*Set a players x-pos*/
+void playerSetXPos(Player p[], int id, float x);
+/*Sets a players y-pos*/
+void playerSetYPos(Player p[], int id, float y);
+/*Get a players height*/
+int playerGetHeight(Player p[], int id);
+/*Get a players width*/
+int playerGetWidth(Player p[], int id);
+/*Get a players speed*/
+double getPlayerSpeed(Player p[], int id);
+/*Get a players ID*/
 int getPlayerID(Player p[], int id);
-void getStartPos(Player p[], int id);
-int playerGetNoOfLives(Player p[], int id);
-void playerIncreaseSpeed(Player p[], int id); //
-void playerAddSpeedDisplay(Player p[], int speedDisplay, int id); //
-void playerAddExplosionPower(Player p[], int id, int explosionPower); //
-void playerAddAmountOfBombs(Player p[], int id, int amountOfBombs); //
-void playerAddLives(Player p[], int id, int amountOfBombs); //
-void playerAddScore(Player p[], int id, int score); //
-//PUBLIC void getStartPos(Player p[]);
-PUBLIC int getLocalID(Game theGame);
-int playerGetAmountOfBombsPlaced(Player p[], int id);
-int playerGetAmountOfBombs(Player p[], int id);
-int playerGetIsInvulnerable(Player p[], int id);
-int playerGetIsDead(Player p[], int id);
-void playerAddAmountOfBombsPlaced(Player p[], int id, int i); //
-int playerGetExplosionPower(Player p[], int id);
+/*Set a players ID*/
 void playerSetID(Player p[], int id);
 
-void playerSetXPos(Player p[], int id, float x);
-void playerSetYPos(Player p[], int id, float y);
+/*Get a players start pos*/ // Vet inte om denna används
+void getStartPos(Player p[], int id);
 
-void playerSetOldXPos(Player p[], int id, float x);
-void playerSetOldYPos(Player p[], int id, float y);
-int playerGetOldXpos(Player p[], int id);
-int playerGetOldYPos(Player p[], int id);
-int playerGetScore(Player p[], int id);
-
-void playerSetDead(Player p[], int id);
-void playerSetAlive(Player p[], int id);
-
-void playerSetNoOfLives(Player p[], int id, int lives);
-void playerSetScore(Player p[], int id, int score);
-char playerGetMoveDirection(Player p[], int id);
-//Change players movedirection
-void playerSetMoveDirection(Player p[], int id, char c);
-//Change player x position
-void updatePlayerXPosition(Player p[], int id, double velX);
-//Change player y position
-void updatePlayerYPosition(Player p[], int id, double velY);
-
-void playerSetCountForTimer(Player *p, int n, int id);
-int playerGetCountForTimer(Player *p, int id);
-//ändrar spelarens (clientmässiga) position
-//void playerPositionUpdate(int x, int y);
-
-//inits a player_rect with the x-and-y-position of player
-void initAllPlayers(Game theGame, Player p[]);
-void initPlayerRect(SDL_Rect *playerRect, Player player); 
-void playerDeathTimer(Game theGame, Player p[]);
-void setPlayerDeathFlags(Game theGame, Player p[], int i);
-void playerSetInvulnerability(Player p[], int id, bool b);
-//void destroyPlayer();
-
+/*Get remaining lives of a player*/
+int playerGetNoOfLives(Player p[], int id);
+/*Increases the speed of a player*/
+void playerIncreaseSpeed(Player p[], int id);
+/*Add a players speed to GUI*/
+void playerAddSpeedDisplay(Player p[], int speedDisplay, int id);
+/*Get the speed display number of a player*/
 int playerGetSpeedDisplay(Player p[], int id);
+/*Add explosion power to a player*/
+void playerAddExplosionPower(Player p[], int id, int explosionPower);
+/*Get the players explosion power*/
+int playerGetExplosionPower(Player p[], int id);
+/*Add bumber of bombs to a player*/
+void playerAddAmountOfBombs(Player p[], int id, int amountOfBombs);
+/*Add a life to a player*/
+void playerAddLives(Player p[], int id, int lives);
+/*Add score to a player*/
+void playerAddScore(Player p[], int id, int score);
+/*Get how many bombs a player has placed*/
+int playerGetAmountOfBombsPlaced(Player p[], int id);
+/*Get how many bombs a playet can place*/
+int playerGetAmountOfBombs(Player p[], int id);
+/*Get if a player is invulnerable*/
+int playerGetIsInvulnerable(Player p[], int id);
+/*Sets a players invulnerability, true or false*/
+void playerSetInvulnerability(Player p[], int id, bool b);
+/*Get if a player is dead*/
+int playerGetIsDead(Player p[], int id);
+/*Add how many bombs a player has placed*/
+void playerAddAmountOfBombsPlaced(Player p[], int id, int i); //
 
-Player initAPlayer(int x, int y, int id);
+
+// Set a players old x-pos
+void playerSetOldXPos(Player p[], int id, float x);
+
+// Set a players old y-pos
+void playerSetOldYPos(Player p[], int id, float y);
+/* Get a players old x-pos*/
+int playerGetOldXpos(Player p[], int id);
+/* Get a players old y-ps*/
+int playerGetOldYPos(Player p[], int id);
+/* Get a players score*/
+int playerGetScore(Player p[], int id);
+/* Set a player to dead*/
+void playerSetDead(Player p[], int id);
+/* Set a player to alive*/
+void playerSetAlive(Player p[], int id);
+/* Set number of lives for a player*/
+void playerSetNoOfLives(Player p[], int id, int lives);
+/* Set score for a player*/
+void playerSetScore(Player p[], int id, int score);
+/* Get movement direction for a player*/
+char playerGetMoveDirection(Player p[], int id);
+/*Change a players movedirection*/
+void playerSetMoveDirection(Player p[], int id, char c);
+/*Change a player x position*/
+void updatePlayerXPosition(Player p[], int id, double velX);
+/*Change a player y position*/
+void updatePlayerYPosition(Player p[], int id, double velY);
+/*Set amount of players from the player amount variable*/
+void playerSetPlayerCount(Player *p, int n, int id);
+/*Get amount of players from the player amount variable*/
+int playerGetPlayerCount(Player *p, int id);
+
+// Vet inte om denna används
+void initPlayerRect(SDL_Rect *playerRect, Player player); 
+
+/*Start the timer after a player has died*/
+void playerDeathTimer(Game theGame, Player p[]);
+/*Set neccesary flags after a players death*/
+void setPlayerDeathFlags(Game theGame, Player p[], int i);
+/*Manages movements of a player*/
 void manageMovementInputs(Game theGame, Player p[]);
 
 #endif

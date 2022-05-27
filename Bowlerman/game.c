@@ -222,12 +222,12 @@ PUBLIC void gameUpdate(Game theGame)
 void checkGameOver(Game theGame, Player player[], bool *quitGame)
 {
     int totallyDeadPlayers = 0;
-    for(int i = 0; i < playerGetCountForTimer(player, 0); i++){  //USING CONSTANT BECAUSE OF BUG
+    for(int i = 0; i < playerGetPlayerCount(player, 0); i++){  //USING CONSTANT BECAUSE OF BUG
         if(playerGetNoOfLives(player, i) <= 0){ 
             totallyDeadPlayers++;
         }
     }
-    if(totallyDeadPlayers == playerGetCountForTimer(player, 0) -1){ //USING CONSTANT BECAUSE OF BUG
+    if(totallyDeadPlayers == playerGetPlayerCount(player, 0) -1){ //USING CONSTANT BECAUSE OF BUG
         showScoreboard(theGame, player, quitGame);
     }
 }

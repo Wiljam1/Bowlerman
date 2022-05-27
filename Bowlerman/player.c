@@ -88,7 +88,7 @@ void initAllPlayers(Game theGame, Player player[])
         theGame->invulnerabiltyFlag[i] = true;
         playerSetInvulnerability(player, i, true);
         playerSetDead(player, i);
-        playerSetCountForTimer(player, theGame->playerAmount, i);
+        playerSetPlayerCount(player, theGame->playerAmount, i);
     }
     for (i = 0; i < theGame->playerAmount; i++) {   // initerare de faktiskt antalet spelare till vid liv
         theGame->invulnerabiltyFlag[i] = false;
@@ -260,12 +260,12 @@ PUBLIC void playerSetOldYPos(Player p[], int id, float y)
 {
     p[id]->yPosOld = y;
 }
-PUBLIC void playerSetCountForTimer(Player *p, int n, int id)
+PUBLIC void playerSetPlayerCount(Player *p, int n, int id)
 {
     p[id]->noOfPlayers = n;
 }
 
-PUBLIC int playerGetCountForTimer(Player *p, int id)
+PUBLIC int playerGetPlayerCount(Player *p, int id)
 {
     return p[id]->noOfPlayers;
 }
@@ -438,7 +438,7 @@ void playerAddScore(Player p[], int id, int score)
 
 void playerDeathTimer(Game theGame, Player player[])
 {
-        for (int i = 0; i < playerGetCountForTimer(player, i); i++)
+        for (int i = 0; i < playerGetPlayerCount(player, i); i++)
         {
             if (theGame->invulnerabiltyFlag[i] == true)
             {
@@ -458,7 +458,7 @@ void playerDeathTimer(Game theGame, Player player[])
 
 Uint32 pDeathCallback(Uint32 interval, Player player[])
 {
-    for (int i = 0; i < playerGetCountForTimer(player, i); i++)
+    for (int i = 0; i < playerGetPlayerCount(player, i); i++)
     {
         if(playerGetIsInvulnerable(player, i) == true)
         {

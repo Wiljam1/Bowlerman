@@ -132,4 +132,5 @@ void updatePlayerPos(Game theGame, int velX, int velY); //Flytta till player.c n
 int destroyGame(Game theGame); // Function for easily destroying the application.
 void updateScoreFlag(Game theGame, bool cond);
 void setLocalID(Game theGame, int id);
+int getLocalID(Game theGame);
 #endif
