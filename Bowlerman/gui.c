@@ -81,7 +81,7 @@ void drawGUI(Game theGame)         // Kanske ska ändra hur de renderas i framti
 {
     SDL_Renderer *renderer = theGame->renderer;
     //Render top row of labels
-    for(int i = 0; i < TOP_ROW_LABELS; i++){                                 //MANUALLY ADJUST X_ROW_LABELS WHEN ADDING MORE LABELS
+    for(int i = 0; i < TOP_ROW_LABELS; i++){                                 //MANUALLY ADJUST XXX_ROW_LABELS WHEN ADDING MORE LABELS
         SDL_Rect textRect = {i*XVALUE+(i)*50, YVALUE, theGame->labelW[i], theGame->labelH[i]}; 
         SDL_RenderCopy(renderer, theGame->labels[i], NULL, &textRect);     
     }

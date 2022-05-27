@@ -27,7 +27,7 @@ Sounds initSoundFiles()
     return s;
 }
 
-void muteOrStartMusic()
+void toggleMusic()
 {
     static int play = 1;
 

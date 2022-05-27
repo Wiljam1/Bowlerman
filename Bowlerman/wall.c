@@ -9,12 +9,12 @@
 #include "game.h"
 #include "collisionDetection.h"
 
-Wall initWalls(int amount, float width, float height)
+//Initialise a wall
+Wall initWalls(int id, float width, float height)
 {
-    //Wall w = malloc(sizeof(struct wall)); //Fixa nångång när vi vet mer om minnesallokering
     Wall w;
 
-    w.id = amount;
+    w.id = id;
     w.w = width;
     w.h = height;
     w.destroyedWall = 0;
@@ -22,6 +22,7 @@ Wall initWalls(int amount, float width, float height)
     return w;
 }
 
+//Place a wall
 Wall wallPlace(float xPos, float yPos)
 {
     Wall w;
@@ -30,16 +31,16 @@ Wall wallPlace(float xPos, float yPos)
     w.y = yPos;
 
     return w;
-}  //Place a wall
+} 
 
 void wallDelete(int id)
 {
     printf("wallDelete(); not implemented\n");
-} //Delete a placed wall
+}
 
 void initAllWalls(Game theGame)
 {
-      // Init walls / map
+    // Init walls / map
     float yOffset = WIDTH / 11.9;
     float wallwidth = WIDTH/17.0; // Vet inte hur vi ska bestämma dehär variablerna riktigt,
     float wallheight = WIDTH/17.0;  // Om de ens kommer användas, väggarna kommer ju alltid vara den här storleken?
@@ -61,9 +62,6 @@ void initAllWalls(Game theGame)
         else if (i < 80)
         {
             theGame->wall[i] = wallPlace(WIDTH - wallwidth, (i - 60) * wallheight + yOffset);
-        }
-        else
-        {
         }
     }
     //initiering av oförstörbara väggar i mitten av planen.

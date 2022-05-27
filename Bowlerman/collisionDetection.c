@@ -179,8 +179,12 @@ void testCollisionWithExplosion(Game theGame, Sounds s, Player player[])
                                         playerAddScore(player, theGame->bombs[j].whoPlacedID, 10);      //Increase score by 10 for each player killed
                                     }
                                     else if(getPlayerID(player, theGame->bombs[j].whoPlacedID == i)){
-                                        playerAddScore(player, theGame->bombs[j].whoPlacedID, -5);       //Reduce score by 5 if killed by own bomb
+                                        playerAddScore(player, theGame->bombs[j].whoPlacedID, -3);       //Give every other player 3 score if killed by own bomb
+                                        for(int count = 0; count < theGame->playerAmount; count++){
+                                            playerAddScore(player, count, 3);
+                                        }
                                     }
+                                    updateScoreFlag(theGame, true);
                                     setPlayerDeathFlags(theGame, player, i);
                                     playerDeathTimer(theGame, player);
                                     playDeath(s);

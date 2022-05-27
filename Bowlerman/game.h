@@ -4,11 +4,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-//#include "player.h"
 
 //denna .h-fil får INTE include:a några andra .h-filer. För då blir det "circular inclusion".
 //pga alla andra .h-filer är beroende av game.h
 
+#define PUBLIC /* empty */
+#define PRIVATE static
 
 //values to be set by menu in the future
 //----------------------------------------------
@@ -17,37 +18,39 @@
 
 #define PLAYERAMOUNT 4    //how many players are online
 #define WALLAMOUNT 100
-#define POWERUPAMOUNT 100 //How many powerups per map
-#define TOP_ROW_LABELS 4
-#define BOTTOM_ROW_LABELS 8
-#define LABEL_AMOUNT (TOP_ROW_LABELS + BOTTOM_ROW_LABELS-4)
+#define POWERUPAMOUNT 100   //How many powerups can be spawned at once
+#define TOP_ROW_LABELS 4    //Amount of labels in the top row of the GUI.
+#define BOTTOM_ROW_LABELS 8 
+#define LABEL_AMOUNT (TOP_ROW_LABELS + BOTTOM_ROW_LABELS - TOP_ROW_LABELS)
 
 #define WIDTH 800.0 // Move eventually
-#define HEIGHT (WIDTH / 1.178)
+#define HEIGHT (WIDTH / 1.178)        
 #define MAXBOMBAMOUNT 20
 //-------------------------------------------------
 #define LEN 20
 
 typedef struct sounds *Sounds;
 
+//Struct for object: Walls
 struct wall{
-    int id; //UDP?
-    int destroyedWall;
-    float x, y; 
-    float w, h;
+    int id; 
+    bool destroyedWall;
+    float x, y, w, h;      //Rectangle-values for logic and rendering purposes.
 };
 typedef struct wall Wall;
 
+//Struct for object: Powerups
 struct powerup{
-    int id; //UDP?
-    int x, y, w, h;
-    int type; // 0 = speed, 1 = power, 2 = morebombs, 3 = turtle
+    int id;               //For keeping track of which powerup that is sent via UDP.
+    int x, y, w, h;      
+    int type;             // 0 = speed, 1 = power, 2 = more bombs
     bool isPickedUp;
-    int sentViaUDP;
-    int indestructable;
+    bool sentViaUDP;
+    bool indestructable;  //Not able to be destroyed by bombs
 };
 typedef struct powerup Powerup;
 
+//Struct for object: Bombs
 struct bowling_ball
 {
     SDL_Rect position;
@@ -59,8 +62,6 @@ struct bowling_ball
     int isPlaced;
     int startvaluetimerbomb;
     int whoPlacedID;
-
-    //int frame;
 };
 struct bowling_ball typedef Bowlingball;
 
@@ -73,25 +74,25 @@ struct playerSprites
 };
 typedef struct playerSprites PlayerSprites;
 
-
+// Master-struct for most data in the game (not a good practice)
 struct game_type
 {
     SDL_Window  *window;
     SDL_Surface *window_surface;
 
     //Player
-    int playerIDLocal;        //the local players ID (only on this computer). 
-    int playerAmount;  //amount of players online
-    bool invulnerabiltyFlag[4];
-    SDL_Rect playerRect[4][3];
+    int playerIDLocal;          //the local players ID (only on this client). 
+    int playerAmount;           //amount of players online
+    bool invulnerabiltyFlag[4]; 
+    SDL_Rect playerRect[4][3];  // *förklaring till varför det är en matris*
     PlayerSprites pSprites;
 
     //Walls
-    Wall wall[WALLAMOUNT*3];
+    Wall wall[WALLAMOUNT*3];    //How many walls that can be used at once. Stored in the array.
     
     //Powerups
     Powerup powerups[POWERUPAMOUNT];
-    int powerupsNotSent;
+    bool powerupsNotSent;       //A type of semaphore for the amount of powerups to send to other clients.
 
     //bombs
     Bowlingball bombs[MAXBOMBAMOUNT];
@@ -101,7 +102,7 @@ struct game_type
     //Renderer
     SDL_Renderer *renderer;
 
-    //Hur snabbt spelet ska uppdateras. i millisekunder
+    //Delay between each game-loop iteration.
     int delayInMS;
 
     //Images
@@ -119,18 +120,17 @@ struct game_type
     bool updateFlag;
 
     //Fonts
-    TTF_Font *font; //Gör till en array om vi ska ha mer fonts
+    TTF_Font *font;
 
     SDL_Event    window_event;
 };
 typedef struct game_type *Game;
 
-Game createWindow();              // Struct for app initialization
-SDL_Texture *loadTextures(Game theGame, char fileLocation[]); // Load any image you want in the resources/ folder!
-void gameUpdate(Game theGame);  // Game loop
-void updatePlayerPos(Game theGame, int velX, int velY); //Flytta till player.c nångång
-int destroyGame(Game theGame); // Function for easily destroying the application.
-void updateScoreFlag(Game theGame, bool cond);
-void setLocalID(Game theGame, int id);
-int getLocalID(Game theGame);
+Game createWindow();                                          // Struct for app initialization
+SDL_Texture *loadTextures(Game theGame, char fileLocation[]); // Load any image from the resources/ folder!
+void gameUpdate(Game theGame);                                // Game-loop
+void updateScoreFlag(Game theGame, bool cond);                // Refresh GUI if set to true
+void setLocalID(Game theGame, int id);                        // Set playerIDlocal
+int getLocalID(Game theGame);                                 // Get playerIDlocal
+int destroyGame(Game theGame);                                // Cleanup and destroy the application
 #endif

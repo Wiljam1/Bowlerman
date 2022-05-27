@@ -18,6 +18,6 @@ void playDeath(Sounds s);
 void playBomb(Sounds s);
 // Remove sounds from memory
 void destroySoundFiles();
-void muteOrStartMusic();
+void toggleMusic();
 
 #endif

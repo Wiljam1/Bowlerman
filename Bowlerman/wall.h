@@ -13,7 +13,7 @@ typedef struct wall Wall; //Skrivet i game.h också? Kolla på i framtiden
 
 void renderWalls(Game theGame);                     //Render walls.
 void initAllWalls(Game theGame);                    //Create all wall objects used in the game.
-Wall initWalls(int amount, float width, float height);  //How many walls are going to be used
+Wall initWalls(int id, float width, float height);  //Create a wall
 Wall wallPlace(float xPos, float yPos);             //Place a wall in the window on X/Y-pos given in the function.
 void wallDelete(int id);                            //Delete a placed wall (not implemented)
 float getWallXPosition(Wall w);                       //Returns X position of wall.

@@ -23,17 +23,16 @@
 #include "player.h"
 #include "menu.h"
 
-#define PUBLIC /* empty */
-#define PRIVATE static
 #define LENGTH 100
-void menu();
-void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame, Player *player);
-void checkEvents(Game theGame, Player p[], bool *quitGame);
-void collisionDetect(Game theGame, Sounds s, Player p[]);
-void showScoreboard(Game theGame, Player p[], bool *quitGame);
-void process(Game theGame, Sounds s, Player p[]);
-void checkGameOver(Game theGame, Player p[], bool *quitGame);
-// initializes game-window
+
+//Prototypes in .c file to avoid circular inclusion
+PRIVATE void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame, Player *player); //Initialise game values
+PRIVATE void process(Game theGame, Sounds s, Player p[]);                                                    //Process time-based events
+PRIVATE void checkEvents(Game theGame, Player p[], bool *quitGame);                                          //Check if something happened (collisiondetection etc)
+PRIVATE void checkGameOver(Game theGame, Player p[], bool *quitGame);                                        //Check if every player except one is dead.
+PRIVATE void showScoreboard(Game theGame, Player p[], bool *quitGame);                                       //Used for displaying the scoreboard.
+
+// initialises game-window
 PUBLIC Game createWindow()
 {
     Game theGame = malloc(sizeof(struct game_type));
@@ -54,8 +53,7 @@ PUBLIC Game createWindow()
     return theGame;
 }
 
-// initializes startvalues for game
-void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame, Player *player)
+PRIVATE void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGame, Player *player)
 {
     
     loadAllTextures(theGame);  // Loading textures from file
@@ -97,8 +95,7 @@ void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool *quitGa
     theGame->delayInMS=10;
 }
 
-// handles processes, like keyboard-inputs etc
-void checkEvents(Game theGame, Player player[], bool *quitGame)
+PRIVATE void checkEvents(Game theGame, Player player[], bool *quitGame)
 {
     // Manag. movement inputs
     int id = getLocalID(theGame);
@@ -162,7 +159,7 @@ void checkEvents(Game theGame, Player player[], bool *quitGame)
                 Sounds sounds = initSoundFiles();
                 break;
             case SDLK_m:
-                muteOrStartMusic();
+                toggleMusic();
             default:
                 break;
             }
@@ -173,8 +170,7 @@ void checkEvents(Game theGame, Player player[], bool *quitGame)
     //return quitGame;
 }
 
-// game loop
-PUBLIC void gameUpdate(Game theGame)
+void gameUpdate(Game theGame)
 {
     // Initialize
     bool quitGame = false;
@@ -219,7 +215,7 @@ PUBLIC void gameUpdate(Game theGame)
     free(player);
 }
 
-void checkGameOver(Game theGame, Player player[], bool *quitGame)
+PRIVATE void checkGameOver(Game theGame, Player player[], bool *quitGame)
 {
     int totallyDeadPlayers = 0;
     for(int i = 0; i < playerGetPlayerCount(player, 0); i++){  //USING CONSTANT BECAUSE OF BUG
@@ -232,7 +228,7 @@ void checkGameOver(Game theGame, Player player[], bool *quitGame)
     }
 }
 
-void showScoreboard(Game theGame, Player player[], bool *quitGame) //Måste skriva om den här snyggare
+PRIVATE void showScoreboard(Game theGame, Player player[], bool *quitGame)
 {
     int x = WIDTH / 2;
     int width = WIDTH / 3;
@@ -248,15 +244,14 @@ void showScoreboard(Game theGame, Player player[], bool *quitGame) //Måste skri
     
     //Determine player with most score
     static int highestScore = 0, highestScoreID = 0;
-    highestScore = playerGetScore(player, id);
-    for(int i = 0; i < PLAYERAMOUNT; i++){           //Constant since theGame->playeramount is not working properly
+    for(int i = 0; i < PLAYERAMOUNT; i++){  
         if(playerGetScore(player, i) > highestScore){    //Basic max-value sorting
             highestScore = playerGetScore(player, i);
             highestScoreID = i;
         }
     }
     printf("Highest score is from player %d\n", highestScoreID+1);
-    char buf1[1024];
+    char buf1[LEN];
     char tmpstr1[LEN] = "Player ";
     sprintf(buf1, "%d", highestScoreID+1);
     strcat(tmpstr1, strcat(buf1, " wins!"));
@@ -275,12 +270,13 @@ void showScoreboard(Game theGame, Player player[], bool *quitGame) //Måste skri
     char tmpstr7[LEN] = "Player 4: "; 
     createLabel(theGame, 6, tmpstr7, playerGetScore(player, 3), black);
 
-    for(int i = 0; i < 7; i++){
+    for(int i = 0; i < 7; i++){                                                  //Render every label
         SDL_Rect textRect = {WIDTH/3, i*100, width, height};
         SDL_RenderCopy(theGame->renderer, theGame->labels[i], NULL, &textRect);
     }
-    SDL_RenderPresent(theGame->renderer); // present renderer
+    SDL_RenderPresent(theGame->renderer);
     
+    //Wait for exit or reset
     while (loop)
     {
         while(SDL_PollEvent(&theGame->window_event))
@@ -304,25 +300,25 @@ void showScoreboard(Game theGame, Player player[], bool *quitGame) //Måste skri
                     switch(event.key.keysym.sym)
                     {
                         case SDLK_3:
-                            printf("\nQUIT SCOREBOARD\n");      //QUIT TO MENU AND RESET GAME VARIABLES IN THE FUTURE?
+                            printf("\nQUIT SCOREBOARD\n");      //QUIT TO MENU AND RESET GAME VARIABLES
                             initAllPlayers(theGame, player);
+                            initAllWalls(theGame);
                             loop = false;
                             break;
                         case SDLK_m:
-                            muteOrStartMusic();
+                            toggleMusic();
                         break;
                     }
             }  
         }
-        SDL_Delay(10);
+        SDL_Delay(50);
     }
     for(int i = 0; i < 7; i++){
         SDL_DestroyTexture(theGame->labels[i]);
     }
 }
 
-//som en game loop för bomber, kollar timer för explosioner samt bomber
-void process(Game theGame, Sounds s, Player *player)
+PRIVATE void process(Game theGame, Sounds s, Player *player)
 {
     //kollar bombernas timer, är den klar försvinner bomben och explosionstimer initieras
     for (int i = 0; i < MAXBOMBAMOUNT; i++){
@@ -381,9 +377,7 @@ void process(Game theGame, Sounds s, Player *player)
     }
 }
 
-
-// renders background and players etc.
-PUBLIC int destroyGame(Game theGame)
+int destroyGame(Game theGame)
 {
     SDL_DestroyTexture(theGame->background);
     for (int i = 0; i < 4; i++)
@@ -408,10 +402,12 @@ PUBLIC int destroyGame(Game theGame)
     SDL_Quit();
     return 0;
 }
+
 void updateScoreFlag(Game theGame, bool cond)
 {
     theGame->updateFlag = cond;
 }
+
 void setLocalID(Game theGame, int id)
 {
     theGame->playerIDLocal = id;
