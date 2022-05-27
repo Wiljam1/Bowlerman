@@ -77,13 +77,13 @@ PUBLIC Player initPlayer(int initX, int initY, int playerID)
 
 void initAllPlayers(Game theGame, Player player[])
 {
-    int i;
     player[0] = initPlayer(LEFT_X, TOP_Y, 0); // Initierar spelares positioner och sätter deras id.
     player[1] = initPlayer(RIGHT_X, TOP_Y, 1);
     player[2] = initPlayer(LEFT_X, BOTTOM_Y, 2);
     player[3] = initPlayer(RIGHT_X, BOTTOM_Y, 3);
     printf("Player Amount is: %d\n", theGame->playerAmount);
 
+    int i;
     for (i = 0; i < PLAYERAMOUNT; i++) {        // initierar alla möjliga spelare till döda då man inte kan döda något spöke ifall man spelar färre än 4
         theGame->invulnerabiltyFlag[i] = true;
         playerSetInvulnerability(player, i, true);
@@ -208,11 +208,6 @@ void UpdatePlayerTextures(Game theGame, Player player[])
         }
     }
 }
-
-/* PUBLIC Player playerGetLocalPlayer(Player p[], int id)
-{
-    return p;
-} */
 
 PUBLIC void playerSetDead(Player p[], int id)
 {
