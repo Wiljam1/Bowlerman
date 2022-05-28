@@ -220,7 +220,7 @@ PRIVATE void checkGameOver(Game theGame, Player player[], bool *quitGame)
             totallyDeadPlayers++;
         }
     }
-    if(totallyDeadPlayers == playerGetPlayerCount(player, 0) -1){ 
+    if(totallyDeadPlayers >= (playerGetPlayerCount(player, 0)-1) && playerGetPlayerCount(player, 0) != 1){ 
         showScoreboard(theGame, player, quitGame);
     }
 }
