@@ -4,17 +4,20 @@
 #include "game.h"
 #include "player.h"
 
-//void collisionDetect(Game theGame, Sounds *sounds);
-//typedef struct playerController *Player;
 
-PUBLIC void collisionDetect(Game theGame, Sounds s, Player p[]);
-void playerStandingOnBomb(Game theGame, Player p[]);                                            //kollar om spelare står på en bomb
-//int testCollisionWithDestroyableWalls(Game theGame, Player p, int k, int j);                  //testar om explosioner träffar förstörbar vägg och förstör den */
+
+//all collision detections in the game loop
+PUBLIC void collisionDetect(Game theGame, Sounds s, Player p[]);                                            
+//collision detection between explosion and destroyable wall
 int testCollisionWithDestroyableWalls(Game theGame, Player player[], int k, int j);
-int testCollisionExplosionWithWalls(Game theGame, int k);                           //testar explosion med oförstörbara väggar så att ingen explosion hamnar fel
-int testPossibilityToExplode(Game theGame, int playerID, int i);                    //testar explosioner åt sidorna om man kan lägga en xplosion där
-int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i);    //kollar collision mellan explosioner och förstörbara väggar
-void testPossibilityToExplodeWithBombs(Game theGame, int j);                        //kollar collision med andra bomber
+//collision detection between explosion and walls so the explosion doesnt get placed wrong
+int testCollisionExplosionWithWalls(Game theGame, int k);              
+//Collision detection with undestroyable walls and if the explosion can be placed there             
+int testPossibilityToExplode(Game theGame, int playerID, int i);  
+//Collision detection with destroyable walls and if the explosion can be placed there                  
+int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i); 
+//collision detection with explosions and bombs if it should create a chain reaction of explosions 
+void testPossibilityToExplodeWithBombs(Game theGame, int j);                        
 
 
 

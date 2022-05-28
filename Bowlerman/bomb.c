@@ -15,8 +15,6 @@
 #define TILESIZE (WIDTH / 17)
 #define DIFF (WIDTH / 595)
 
-PUBLIC Bowlingball initBomb();
-
 PUBLIC Bowlingball initBomb()
 {
     //malloc(sizeof(struct bowling_ball));

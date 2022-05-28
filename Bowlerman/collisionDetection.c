@@ -14,14 +14,20 @@
 
 #define YOFFSET (WIDTH/39.5)
 
+//collision detection with the walls around the map
 void collisionWithWallsAround(Game theGame, Player p[]);
+//collision detection between bombs and players
 void testCollisionWithBombs(Game theGame, Player p[]);
+//collision detection between players and walls in the middle of the map
 void testCollisionWithWalls(Game theGame, Player p[]);
+//collision detection between player and explosions
 void testCollisionWithExplosion(Game theGame, Sounds s, Player p[]);
+//collision detection with players and powerups
 void playerCollisionWithPowerup(Game theGame, Player p[]);
+//collision detection between explosions and powerups
 void explosionCollisionWithPowerup(Game theGame);
-//void playerStandingOnBomb(Game theGame, Player p[]);                                            //kollar om spelare står på en bomb
-int testCollisionWithDestroyableWalls(Game theGame, Player p[], int k, int j);                  //testar om explosioner träffar förstörbar vägg och förstör den
+//collision detection for players standing on recently droped bomb
+void playerStandingOnBomb(Game theGame, Player p[]);                 
 
 PUBLIC void collisionDetect(Game theGame, Sounds sounds, Player players[])
 {
