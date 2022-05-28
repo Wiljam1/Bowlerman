@@ -17,7 +17,6 @@
 
 PUBLIC Bowlingball initBomb()
 {
-    //malloc(sizeof(struct bowling_ball));
     Bowlingball b;
     b.position.y = 0;
     b.position.x = 0;
@@ -34,8 +33,6 @@ PUBLIC Bowlingball initBomb()
     return b;
 }
 
-//timer för bomberna, går kanske att göras med SDL_ADDTimer
-//och sedan SDL_TimerID
 int initbowlingballtimer(int startTime, int timeAmount, int playerID)
 {
     static int lastTime[MAXBOMBAMOUNT] = {0}, currentTime[MAXBOMBAMOUNT] = {0};
@@ -46,14 +43,11 @@ int initbowlingballtimer(int startTime, int timeAmount, int playerID)
     currentTime[playerID] = SDL_GetTicks();
     if (currentTime[playerID] > lastTime[playerID] + timeAmount)
     {
-        //lastTime[playerID] = currentTime[playerID];
         return 1;               //returnar 1 om tiden är ute
     }
     return 0;
 }
 
-//försöker lägga ut en bomb, går det så görs det även.
-//tar platsen från spelaren samt initierar timer
 void tryToPlaceBomb(Game theGame, int playerID, Player player[])
 {
     int amount = 0;
@@ -90,7 +84,6 @@ void tryToPlaceBomb(Game theGame, int playerID, Player player[])
     }
 }
 
-//sorterar bomber så att sprängda bomber åker iväg, funkar inte helt med timer dock
 void sortBombsArray(Game theGame,int i, Player player[])
 {
     Bowlingball tmp;
@@ -109,8 +102,6 @@ void sortBombsArray(Game theGame,int i, Player player[])
                     theGame->bombs[i+j*4] = tmp;
                     theGame->bombs[i+j*4-4].isPlaced == 1;
                     theGame->bombs[i+j*4].isPlaced == 0;
-                    //initExplosionPosition(theGame, i+j*4);
-                    //initExplosionPosition(theGame, i+j*4-4);
                     int a=0;
                     theGame->explosionPosition[i+j*4-4][a] = theGame->explosionPosition[i+j*4][a];
                     for(int l=0;l<playerGetExplosionPower(player, i);l++)
@@ -130,7 +121,6 @@ void sortBombsArray(Game theGame,int i, Player player[])
     }
 }
 
-//sätter positionerna för explosionen efter vart bomben legat
 void initExplosionPosition(Game theGame, int playerID, Player *player)
 {
     int tilesize = (TILESIZE - 4), diff=2;
@@ -192,7 +182,6 @@ void initExplosionPosition(Game theGame, int playerID, Player *player)
     }
 }
 
-//centrerar bombernas position, i för inkommande possition, j och k för tillfälliga variabler 
 int correctBowlingBallPosx(int i)
 {
     int size = WIDTH / 17;

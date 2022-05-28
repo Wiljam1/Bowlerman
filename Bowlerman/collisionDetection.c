@@ -36,7 +36,7 @@ PUBLIC void collisionDetect(Game theGame, Sounds sounds, Player players[])
     testCollisionWithWalls(theGame, players);
     testCollisionWithExplosion(theGame, sounds, players);
     playerCollisionWithPowerup(theGame, players);
-    explosionCollisionWithPowerup(theGame);       //för att förstöra powerups med explosioner
+    explosionCollisionWithPowerup(theGame);       
 }
 
 //collision with outer walls and the screen size
@@ -102,8 +102,6 @@ void collisionWithWallsAround(Game theGame, Player player[])
     }
 }
 
-// collison detection mellan bomber och spelare
-// i är för antal spelare, j för antal bomber
 void testCollisionWithBombs(Game theGame, Player player[])
 {
     for (int i=0;i<MAXBOMBAMOUNT;i++)
@@ -154,7 +152,6 @@ void testCollisionWithBombs(Game theGame, Player player[])
     }
 }
 
-// collison detection mellan spelare och explosioner
 // i är för antal spelare, j för antal bomber och k för de olika rectanglar som explosionerna finns på
 void testCollisionWithExplosion(Game theGame, Sounds s, Player player[])
 {
@@ -167,7 +164,7 @@ void testCollisionWithExplosion(Game theGame, Sounds s, Player player[])
             float playerX = playerGetXPosition(player, i), playerY = playerGetYPosition(player, i);
             for (int j=0;j<MAXBOMBAMOUNT;j++)
             {
-                if(BombGetExplosionInit(theGame->bombs[j]) == 0) // J kan användas vid Score sen
+                if(BombGetExplosionInit(theGame->bombs[j]) == 0) 
                 {
                     for (int l = 0; l < PLAYERAMOUNT; l++)
                     {
@@ -206,7 +203,6 @@ void testCollisionWithExplosion(Game theGame, Sounds s, Player player[])
     }
 }
 
-// om spelare släpper bomb så är kollision avstängt mellan spelaren och bomben tills man kliver av bomben
 void playerStandingOnBomb(Game theGame, Player player[])
 {
     for(int playerID=0;playerID<theGame->playerAmount;playerID++) 
@@ -233,7 +229,6 @@ void playerStandingOnBomb(Game theGame, Player player[])
     }
 }
 
-//kollar så att en spelare inte går in i väggar i mitten av spelplanen
 void testCollisionWithWalls(Game theGame, Player player[])
 {
 
@@ -254,12 +249,10 @@ void testCollisionWithWalls(Game theGame, Player player[])
                 {
                     if(playerY + YOFFSET < wallY + wallH && playerY > wallY){
                         //correct y
-                        //theGame->player[i].yPos = wallY + wallH - YOFFSET;
                         playerSetYPos(player, i, wallY + wallH - YOFFSET);
                     }
                     if(playerY + playerH > wallY && playerY < wallY){
                         //correct y
-                        //theGame->player[i].yPos = wallY - playerH;
                         playerSetYPos(player, i, wallY - playerH);
                     }
                 }
@@ -270,12 +263,10 @@ void testCollisionWithWalls(Game theGame, Player player[])
                 {
                     if(playerX < wallX + wallW && playerX > wallX){
                         //Correct x
-                        //theGame->player[i].xPos = wallX + wallW;
                         playerSetXPos(player, i, wallX + wallW);
                     }
                     if(playerX + playerW > wallX && playerX < wallX){
                         //Correct x
-                        //theGame->player[i].xPos = wallX - playerW;
                         playerSetXPos(player, i, wallX - playerW);
                     }
                 }
@@ -285,7 +276,6 @@ void testCollisionWithWalls(Game theGame, Player player[])
 
 }
 
-//gör så att explosioner inte går in i väggar
 int testCollisionExplosionWithWalls(Game theGame, int k)
 {
     for(int j=0;j<MAXBOMBAMOUNT;j++)
@@ -307,7 +297,6 @@ int testCollisionExplosionWithWalls(Game theGame, int k)
     return 0;
 }
 
-//testar om väggen explosionen träffar kan förstöras och förstör den isåfall
 int testCollisionWithDestroyableWalls(Game theGame, Player player[], int k, int j)
 {
     float wallXPos = getWallXPosition(theGame->wall[k]), wallYPos = getWallYPosition(theGame->wall[k]),
@@ -326,7 +315,6 @@ int testCollisionWithDestroyableWalls(Game theGame, Player player[], int k, int 
     return 0;
 }
 
-//testar om det går att explodera åt sidorna samt upp o ner med oförstörbara väggar
 int testPossibilityToExplode(Game theGame, int playerID, int i)
 {
     for(int k=0;k<136;k++)
@@ -345,7 +333,6 @@ int testPossibilityToExplode(Game theGame, int playerID, int i)
     return 1;
 }
 
-//testar om det går att explodera åt sidorna samt upp o ner med förstörbara väggar
 int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i)
 {
     for(int k=139;k<250;k++)
@@ -367,8 +354,6 @@ int testPossibilityToExplodeDestroyableWalls(Game theGame, int playerID, int i)
     return 1;
 }
 
-
-//testar explosion med bomber
 void testPossibilityToExplodeWithBombs(Game theGame, int j)
 {
     
@@ -395,7 +380,6 @@ void testPossibilityToExplodeWithBombs(Game theGame, int j)
         }
     }
 }
-
 
 //test collision with powerup
 void playerCollisionWithPowerup(Game theGame, Player player[])
@@ -425,8 +409,6 @@ void playerCollisionWithPowerup(Game theGame, Player player[])
     }
 }
 
-//collision mellan powerups och explosioner
-//funkar inte ännu, måste ändra något så att explosionerna inte tar ut powerups direkt
 void explosionCollisionWithPowerup(Game theGame)
 {
     for(int i=0;i<POWERUPAMOUNT;i++) 
@@ -443,8 +425,7 @@ void explosionCollisionWithPowerup(Game theGame)
                         theGame->explosionPosition[j][k].x + theGame->explosionPosition[j][k].w > powerUpX + powerUpW &&
                         theGame->explosionPosition[j][k].y < powerUpY &&
                         theGame->explosionPosition[j][k].h + theGame->explosionPosition[j][k].y > powerUpY + powerUpH)
-                    {    
-                        //theGame->powerups[i].indestructable = timerForPowerups(0, 1500, i);     
+                    {         
                         if(timerForPowerups(0, 1500, i) == false && BombGetExplosionInit(theGame->bombs[j]) == 0)
                         {
                             PowerUpSetIsPickedUp(&theGame->powerups[i], true);
