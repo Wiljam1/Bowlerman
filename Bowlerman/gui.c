@@ -18,7 +18,7 @@ void initGUI(Game theGame)
 {
     TTF_Init(); //Init font system
     theGame->font = TTF_OpenFont("resources/fonts/abduction2002.ttf", FONTSIZE); //Set font
-    theGame->updateFlag = true;
+    updateFlagSet(theGame, true);
 }
 
 void updateGUI(Game theGame, Player player[])
@@ -33,7 +33,7 @@ void updateGUI(Game theGame, Player player[])
         playerColor = red;
     else if(id == 3)
         playerColor = yellow;
-    if(theGame->updateFlag == true){            //TEMPORÄR LÖSNING, FORTFARANDE MEMORY LEAK MEN TEXTEN
+    if(updateFlagGet(theGame)){            //TEMPORÄR LÖSNING, FORTFARANDE MEMORY LEAK MEN TEXTEN
                                                 //UPPDATERAS ENDAST NÄR ETT VÄRDE ÄNDRAS
         char tmpstr[LEN] = "Speed: ";
         createLabel(theGame, 0, tmpstr, playerGetSpeedDisplay(player, id), playerColor);  // Går att skrivas till bättre så man inte behöver hårdkoda siffror                                     
@@ -51,7 +51,7 @@ void updateGUI(Game theGame, Player player[])
         createLabel(theGame, 6, tmpstr7, playerGetScore(player, 2), red); 
         char tmpstr8[LEN] = "Player 4: ";
         createLabel(theGame, 7, tmpstr8, playerGetScore(player, 3), yellow); 
-        theGame->updateFlag = false;
+        updateFlagSet(theGame, false);
     }
 
     // char tmpstr4[LEN] = "Lives: ";
@@ -86,7 +86,7 @@ void drawGUI(Game theGame)         // Kanske ska ändra hur de renderas i framti
         SDL_RenderCopy(renderer, theGame->labels[i], NULL, &textRect);     
     }
     //Render scores (Only renders based on amount of players joined)
-    for(int i = TOP_ROW_LABELS; i < TOP_ROW_LABELS+theGame->playerAmount; i++){
+    for(int i = TOP_ROW_LABELS; i < TOP_ROW_LABELS+gameGetPlayerAmount(theGame); i++){
         SDL_Rect textRect = {(i-4)*XVALUE+(i-4)*50, YVALUE*10, theGame->labelW[i], theGame->labelH[i]};
         SDL_RenderCopy(renderer, theGame->labels[i], NULL, &textRect);
     }

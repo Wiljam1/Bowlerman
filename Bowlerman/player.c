@@ -70,28 +70,28 @@ PUBLIC Player initPlayer(int initX, int initY, int playerID)
     p->noOfLives = 3; // OM du ändrar här måste du ändra till samma i UDPDataReset!!
     p->score = 0;
 
-    p->noOfPlayers = 4;
+    p->noOfPlayers = 4;     // Spelarantal för diverse funktioner
 
     return p;
 }
 
 void initAllPlayers(Game theGame, Player player[])
 {
-    player[0] = initPlayer(LEFT_X, TOP_Y, 0); // Initierar spelares positioner och sätter deras id.
+    player[0] = initPlayer(LEFT_X, TOP_Y, 0); // Init all possible players positions and IDs.
     player[1] = initPlayer(RIGHT_X, TOP_Y, 1);
     player[2] = initPlayer(LEFT_X, BOTTOM_Y, 2);
     player[3] = initPlayer(RIGHT_X, BOTTOM_Y, 3);
-    printf("Player Amount is: %d\n", theGame->playerAmount);
+    printf("Player Amount is: %d\n", gameGetPlayerAmount(theGame));
 
     int i;
-    for (i = 0; i < PLAYERAMOUNT; i++) {        // initierar alla möjliga spelare till döda då man inte kan döda något spöke ifall man spelar färre än 4
-        theGame->invulnerabiltyFlag[i] = true;
+    for (i = 0; i < PLAYERAMOUNT; i++) {        // Init all possible players to dead
+        gameSetInvulFlag(theGame, i, true);
         playerSetInvulnerability(player, i, true);
         playerSetDead(player, i);
-        playerSetPlayerCount(player, theGame->playerAmount, i);
+        playerSetPlayerCount(player, theGame->playerAmount, i); // Setting the player count in the player struct for other functions.
     }
-    for (i = 0; i < theGame->playerAmount; i++) {   // initerare de faktiskt antalet spelare till vid liv
-        theGame->invulnerabiltyFlag[i] = false;
+    for (i = 0; i < theGame->playerAmount; i++) {   // Setting the actual amount of players to alive
+        gameSetInvulFlag(theGame, i, false);
         playerSetInvulnerability(player, i, false);
         playerSetAlive(player, i);
     }
@@ -102,7 +102,6 @@ void manageMovementInputs(Game theGame, Player player[])
     double velX = 0, velY = 0;
     int id = getLocalID(theGame);
     char direction;
-
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (!playerGetIsDead(player, id))
     {
@@ -145,11 +144,11 @@ void UpdatePlayerTextures(Game theGame, Player player[])
     /*Keeps track of what sprites to load and at what timing*/
     static Uint8 updateSprite[4] = {0};
     static Uint8 spriteTimer[4] = {0};
-    Uint8 spriteChoice[4] = {0}; 
+    Uint8 spriteChoice[4] = {0};
     
     /*Init all player rectangles*/
     SDL_Rect playerRect[4];
-    for(int i=0; i<theGame->playerAmount; i++)
+    for(int i=0; i < gameGetPlayerAmount(theGame); i++)
     {
         playerRect[i].x = playerGetXPosition(player, i);
         playerRect[i].y = playerGetYPosition(player, i);
@@ -157,7 +156,7 @@ void UpdatePlayerTextures(Game theGame, Player player[])
         playerRect[i].h = playerGetHeight(player, i);
     }
     /*Managing sprite updates*/
-    for(int i=0; i < theGame->playerAmount; i++)
+    for(int i=0; i < gameGetPlayerAmount(theGame); i++)
     {
         if (playerGetIsInvulnerable(player, i) == false && playerGetNoOfLives(player, i) > 0){
             if (spriteTimer[i] > 10){ //Slowing down sprite updates
@@ -195,11 +194,7 @@ void UpdatePlayerTextures(Game theGame, Player player[])
             rotate += 10;
             if(rotate > 360)
                 rotate = 0;
-            if (i % 2 == 0)
-                SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], rotate, 0, 0);
-            else
-                SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], rotate, 0, 0);
-            //playerSetDead(player, i);
+            SDL_RenderCopyEx(theGame->renderer, theGame->player_texture[i][spriteChoice[i]], &theGame->pSprites.BowlerManVert[0], &playerRect[i], rotate, 0, 0);
         }
         else if (playerGetNoOfLives(player, i) <= 0)
         {
@@ -339,28 +334,6 @@ PUBLIC int playerGetSpeedDisplay(Player p[], int id)
     return p[id]->speedDisplay;
 }
 
-PUBLIC void getStartPos(Player p[], int id)
-{
-    switch (p[id]->id)
-    {
-        case 0:
-            p[id]->xPos = LEFT_X;
-            p[id]->yPos = TOP_Y;
-            break;
-        case 1:
-            p[id]->xPos = RIGHT_X;
-            p[id]->yPos = TOP_Y;
-            break;
-        case 2:
-            p[id]->xPos = LEFT_X;
-            p[id]->yPos = BOTTOM_Y;
-            break;
-        case 3:
-            p[id]->xPos = RIGHT_X;
-            p[id]->yPos = BOTTOM_Y;
-            break;
-    }
-}
 PUBLIC int playerGetAmountOfBombsPlaced(Player p[], int id)
 {
     return p[id]->amountOfBombsPlaced;
@@ -435,7 +408,7 @@ void playerDeathTimer(Game theGame, Player player[])
 {
         for (int i = 0; i < playerGetPlayerCount(player, i); i++)
         {
-            if (theGame->invulnerabiltyFlag[i] == true)
+            if (gameGetInvulFlag(theGame, i))
             {
                 printf("Player %d invulnerability is: %s\n", i, playerGetIsInvulnerable(player, i) ? "On" : "Off");
                 SDL_TimerID timerID = SDL_AddTimer(INVULNERABILITYTIME, pDeathCallback, player); // Funktionen körs efter antal ms som INVULTIME är satt till (ny tråd)
@@ -446,7 +419,7 @@ void playerDeathTimer(Game theGame, Player player[])
                 else {
                     printf("Timer id for player %d: %d\n", i, timerID);
                 }
-                theGame->invulnerabiltyFlag[i] = false;
+                gameSetInvulFlag(theGame, i, false);
             }
         }
 }
@@ -466,16 +439,14 @@ Uint32 pDeathCallback(Uint32 interval, Player player[])
 
 void setPlayerDeathFlags(Game theGame, Player player[], int i)
 {
-    theGame->updateFlag = true;
+    updateFlagSet(theGame, true);
     int lives = playerGetNoOfLives(player, i);
-    if(lives > 0)
-        lives--;
+    if(lives > 0) lives--;
     playerSetNoOfLives(player, i, lives);
     printf("Lives left for player %d: %d\n", i, playerGetNoOfLives(player, i));
-    if(lives == 0)
-        playerSetDead(player, i);
+    if(lives == 0) playerSetDead(player, i);
     playerSetInvulnerability(player, i , true);
-    theGame->invulnerabiltyFlag[i] = true; /*Flagga för att inte komma in i timern mer en än gång*/
+    gameSetInvulFlag(theGame, i, true); /*Flagga för att inte komma in i timern mer en än gång*/
 }
 
 PlayerSprites GetPlayerSprite()

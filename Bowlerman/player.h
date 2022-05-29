@@ -111,9 +111,7 @@ void setPlayerDeathFlags(Game theGame, Player p[], int i);
 /*Manages movements of a player*/
 void manageMovementInputs(Game theGame, Player p[]);
 
-/*Get a players start pos*/ // Vet inte om denna används
-void getStartPos(Player p[], int id);
-// Vet inte om denna används
-void initPlayerRect(SDL_Rect *playerRect, Player player); 
+/* // Vet inte om denna används
+void initPlayerRect(SDL_Rect *playerRect, Player player); */ 
 
 #endif

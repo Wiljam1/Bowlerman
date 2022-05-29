@@ -183,8 +183,8 @@ void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues){
             printf("playerID: %d\n", theGame->playerIDLocal);
 			printf("playerammount: %d\n", threadStruct.playerAmmount);
 			printf("startflag: %d\n", threadStruct.startflag);
-            theGame->playerAmount=threadStruct.playerAmmount; //set playerAmount in theGamestruct to the value returned from the thread listening to TCP
-			//get playerammount & start game (exit breakLoop)
+			gameSetPlayerAmount(theGame, threadStruct.playerAmmount); //set playerAmount in theGamestruct to the value returned from the thread listening to TCP
+            //get playerammount & start game (exit breakLoop)
 			//thread=NULL;  //closes thread
             running = false;
 			break;

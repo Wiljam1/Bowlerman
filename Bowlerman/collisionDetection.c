@@ -187,7 +187,7 @@ void testCollisionWithExplosion(Game theGame, Sounds s, Player player[])
                                             playerAddScore(player, count, 3);
                                         }
                                     }
-                                    updateScoreFlag(theGame, true);
+                                    updateFlagSet(theGame, true);
                                     setPlayerDeathFlags(theGame, player, i);
                                     playerDeathTimer(theGame, player);
                                     playDeath(s);

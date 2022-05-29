@@ -35,7 +35,8 @@ PRIVATE void checkEvents(Game theGame, Player p[], bool *quitGame);
 //Check if every player except one is dead.
 PRIVATE void checkGameOver(Game theGame, Player p[], bool *quitGame);                                        
 //Check if every player except one is dead.
-PRIVATE void showScoreboard(Game theGame, Player p[], bool *quitGame);                                       
+PRIVATE void showScoreboard(Game theGame, Player p[], bool *quitGame);
+                               
 
 // initialises game-window
 PUBLIC Game createWindow()
@@ -53,7 +54,7 @@ PUBLIC Game createWindow()
 
     theGame->renderer = SDL_CreateRenderer(theGame->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     theGame->window_surface = SDL_GetWindowSurface(theGame->window);
-    theGame->playerAmount = 1;                                          // Sets players to minumum amount
+    gameSetPlayerAmount(theGame, 1);                                          // Sets players to minumum amount
     theGame->powerupsNotSent = 0;                                       // Initierar antal powerups att skicka
     return theGame;
 }
@@ -119,7 +120,7 @@ PRIVATE void checkEvents(Game theGame, Player player[], bool *quitGame)
             switch (event.key.keysym.sym)
             {
             case SDLK_SPACE:
-                tryToPlaceBomb(theGame, theGame->playerIDLocal, player);
+                tryToPlaceBomb(theGame, id, player);
                 break;
             case SDLK_ESCAPE:
                 *quitGame = true;
@@ -127,28 +128,28 @@ PRIVATE void checkEvents(Game theGame, Player player[], bool *quitGame)
             case SDLK_t:
                 //Testing
                 playerIncreaseSpeed(player, id);
-                updateScoreFlag(theGame, true);
+                updateFlagSet(theGame, true);
                 break;
             case SDLK_y:
                 //Testing
                 playerAddExplosionPower(player, id, 1);
-                updateScoreFlag(theGame, true);
+                updateFlagSet(theGame, true);
                 break;
             case SDLK_u:
                 //Testing
                 playerAddAmountOfBombs(player, id, 1);
-                updateScoreFlag(theGame, true);
+                updateFlagSet(theGame, true);
                 break;
             case SDLK_i:
+                //Testing
                 playerAddLives(player, id, 1);
                 playerSetAlive(player, id);
                 playerSetInvulnerability(player, id, false);
-                updateScoreFlag(theGame, true);
+                updateFlagSet(theGame, true);
                 break;
             case SDLK_p:                                            /*!!! P = RESET-BUTTON!!! (only works when testing alone I think)*/
                 //Testing
                 quitGame = false;
-                //Player player[MAXPLAYERS]; // declares x-amounts of players
                 UDPStruct udpValues = createUDPstruct();     //returns a struct for udp-init-struct. Like IP-adress etc.
                 UDPData udpData = UDPDataReset();    //Resets data struct, Like player x,y -positions etc.
                 initGame(theGame, &udpData, &udpValues, quitGame, player);         // initializes startvalues. coordinates etc.
@@ -183,7 +184,7 @@ void gameUpdate(Game theGame)
     while (!quitGame)
     {
         // start background music
-        playBackroundMusic(sounds);
+        //playBackroundMusic(sounds);
     
         // Process events (time based events)
         process(theGame, sounds, player);
@@ -352,9 +353,9 @@ PRIVATE void process(Game theGame, Sounds s, Player *player)
                 if(WallGetDestroyedWall(theGame->wall[j]) == 0){
                     WallSetDestroyedWall(&theGame->wall[j], testCollisionWithDestroyableWalls(theGame, player, j, i));
                     if(WallGetDestroyedWall(theGame->wall[j])){ //If wall is destroyed...
-                        if(returnarray[i] == theGame->playerIDLocal){
+                        if(returnarray[i] == getLocalID(theGame)){
                             playerAddScore(player, theGame->bombs[i].whoPlacedID, 1);
-                            theGame->updateFlag = true;
+                            updateFlagSet(theGame, true);
                             theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, theGame->wall[j].x, theGame->wall[j].y);
                             theGame->powerupsNotSent++;       
                         }
@@ -400,12 +401,36 @@ int destroyGame(Game theGame)
     return 0;
 }
 
-void updateScoreFlag(Game theGame, bool cond)
+void updateFlagSet(Game theGame, bool cond)
 {
     theGame->updateFlag = cond;
+}
+
+bool updateFlagGet(Game theGame)
+{
+    return theGame->updateFlag;
 }
 
 void setLocalID(Game theGame, int id)
 {
     theGame->playerIDLocal = id;
+}
+
+int gameGetPlayerAmount(Game theGame)
+{
+    return theGame->playerAmount;
+}
+
+void gameSetPlayerAmount(Game theGame, int amount)
+{
+    theGame->playerAmount = amount;
+}
+
+void gameSetInvulFlag(Game theGame, int id, bool cond)
+{
+    theGame->invulnerabiltyFlag[id] = cond;
+}
+bool gameGetInvulFlag(Game theGame, int id)
+{
+    return theGame->invulnerabiltyFlag[id];
 }
