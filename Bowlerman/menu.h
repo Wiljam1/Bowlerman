@@ -10,12 +10,9 @@
 #define PUBLIC /* empty */
 #define PRIVATE static
 
-void changeMenu();
-void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues);
-void checkClickEvent();
-int updateMenu();
-void join();
-void clearString();
+void menu(Game theGame, bool *quitGame, UDPStruct *udpvalues); //runs the menu and checks for events
+int updateMenu(); // changes menu tab and updates the buttons
+void clearString(); // used to clear the ip string so that whenever the user can input, the ip the array is empty
 
 
 #endif
