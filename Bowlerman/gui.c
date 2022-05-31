@@ -18,13 +18,13 @@ void initGUI(Game theGame)
 {
     TTF_Init(); //Init font system
     theGame->font = TTF_OpenFont("resources/fonts/abduction2002.ttf", FONTSIZE); //Set font
-    updateFlagSet(theGame, true);
+    gameUpdateFlagSet(theGame, true);
 }
 
 void updateGUI(Game theGame, Player player[])
 {   
     SDL_Color playerColor;
-    int id = getLocalID(theGame);
+    int id = gameGetLocalID(theGame);
     if(id == 0)
         playerColor = blue;
     else if(id == 1)
@@ -33,11 +33,11 @@ void updateGUI(Game theGame, Player player[])
         playerColor = red;
     else if(id == 3)
         playerColor = yellow;
-    if(updateFlagGet(theGame)){            //TEMPORÄR LÖSNING, FORTFARANDE MEMORY LEAK MEN TEXTEN
-                                                //UPPDATERAS ENDAST NÄR ETT VÄRDE ÄNDRAS
+    if(gameUpdateFlagGet(theGame)){          
+                                                //Only updates when a value changes, flag has to be set to true
         char tmpstr[LEN] = "Speed: ";
-        createLabel(theGame, 0, tmpstr, playerGetSpeedDisplay(player, id), playerColor);  // Går att skrivas till bättre så man inte behöver hårdkoda siffror                                     
-        char tmpstr2[LEN] = "Power: ";                                                         // Vet inte hur man skickar strings direkt i parametrarna (som i printf();) men det här fungerar
+        createLabel(theGame, 0, tmpstr, playerGetSpeedDisplay(player, id), playerColor);                                     
+        char tmpstr2[LEN] = "Power: ";                                                         
         createLabel(theGame, 1, tmpstr2, playerGetExplosionPower(player, id), playerColor);
         char tmpstr3[LEN] = "Bombs: ";
         createLabel(theGame, 2, tmpstr3, playerGetAmountOfBombs(player, id), playerColor); 
@@ -51,11 +51,8 @@ void updateGUI(Game theGame, Player player[])
         createLabel(theGame, 6, tmpstr7, playerGetScore(player, 2), red); 
         char tmpstr8[LEN] = "Player 4: ";
         createLabel(theGame, 7, tmpstr8, playerGetScore(player, 3), yellow); 
-        updateFlagSet(theGame, false);
+        gameUpdateFlagSet(theGame, false);
     }
-
-    // char tmpstr4[LEN] = "Lives: ";
-    // createLabel(theGame, 3,tmpstr4, theGame->player[theGame->playerIDLocal].lives, white);
 }
 
 void createLabel(Game theGame, int labelID, char text[], float value, SDL_Color color)
@@ -73,11 +70,9 @@ void createLabel(Game theGame, int labelID, char text[], float value, SDL_Color 
     theGame->labelH[labelID] = tmp->h;
     theGame->labels[labelID] = SDL_CreateTextureFromSurface(theGame->renderer, tmp); //Save label for rendering
     SDL_FreeSurface(tmp);
-
-    //SDL_QueryTexture(theGame->labels[labelID], NULL, NULL, &tmp->w, &tmp->h);
 }
 
-void drawGUI(Game theGame)         // Kanske ska ändra hur de renderas i framtiden
+void drawGUI(Game theGame) 
 {
     SDL_Renderer *renderer = theGame->renderer;
     //Render top row of labels

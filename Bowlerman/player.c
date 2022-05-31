@@ -100,7 +100,7 @@ void initAllPlayers(Game theGame, Player player[])
 void manageMovementInputs(Game theGame, Player player[])
 {
     double velX = 0, velY = 0;
-    int id = getLocalID(theGame);
+    int id = gameGetLocalID(theGame);
     char direction;
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (!playerGetIsDead(player, id))
@@ -290,10 +290,6 @@ PUBLIC double getPlayerSpeed(Player p[], int id)
 {
     return p[id]->speed;
 }
-PUBLIC int getLocalID(Game theGame)
-{
-    return theGame->playerIDLocal;
-}
 
 PUBLIC int playerGetNoOfLives(Player p[], int id)
 {
@@ -439,7 +435,7 @@ Uint32 pDeathCallback(Uint32 interval, Player player[])
 
 void setPlayerDeathFlags(Game theGame, Player player[], int i)
 {
-    updateFlagSet(theGame, true);
+    gameUpdateFlagSet(theGame, true);
     int lives = playerGetNoOfLives(player, i);
     if(lives > 0) lives--;
     playerSetNoOfLives(player, i, lives);

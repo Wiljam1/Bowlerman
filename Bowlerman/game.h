@@ -131,12 +131,12 @@ typedef struct game_type *Game;
 Game createWindow();                                          // Struct for app initialization
 SDL_Texture *loadTextures(Game theGame, char fileLocation[]); // Load any image from the resources/ folder!
 void gameUpdate(Game theGame);                                // Game-loop
-void updateFlagSet(Game theGame, bool cond);                // Refresh GUI if set to true
-bool updateFlagGet(Game theGame);
-void setLocalID(Game theGame, int id);                        // Set playerIDlocal
-int getLocalID(Game theGame);                                 // Get playerIDlocal
-int destroyGame(Game theGame);                                // Cleanup and destroy the application
-int gameGetPlayerAmount(Game theGame);                        // Gets amount of players
+void gameUpdateFlagSet(Game theGame, bool cond);              // Refresh GUI if set to true
+bool gameUpdateFlagGet(Game theGame);
+void gameSetLocalID(Game theGame, int id);                     // Set playerIDlocal
+int  gameGetLocalID(Game theGame);                             // Get playerIDlocal
+int  destroyGame(Game theGame);                                // Cleanup and destroy the application
+int  gameGetPlayerAmount(Game theGame);                        // Gets amount of players
 void gameSetPlayerAmount(Game theGame, int amount);           // Sets amount of players
 void gameSetInvulFlag(Game theGame, int id, bool cond);       // Set flag for invulnerability check
 bool gameGetInvulFlag(Game theGame, int id);

@@ -95,7 +95,7 @@ PRIVATE void initGame(Game theGame, UDPData *udpData, UDPStruct *udpValues, bool
 PRIVATE void checkEvents(Game theGame, Player player[], bool *quitGame)
 {
     // Manag. movement inputs
-    int id = getLocalID(theGame);
+    int id = gameGetLocalID(theGame);
     manageMovementInputs(theGame, player);
     // Enter game loop (SDL_PollEvent)
     //bool quitGame = false;
@@ -128,24 +128,24 @@ PRIVATE void checkEvents(Game theGame, Player player[], bool *quitGame)
             case SDLK_t:
                 //Testing
                 playerIncreaseSpeed(player, id);
-                updateFlagSet(theGame, true);
+                gameUpdateFlagSet(theGame, true);
                 break;
             case SDLK_y:
                 //Testing
                 playerAddExplosionPower(player, id, 1);
-                updateFlagSet(theGame, true);
+                gameUpdateFlagSet(theGame, true);
                 break;
             case SDLK_u:
                 //Testing
                 playerAddAmountOfBombs(player, id, 1);
-                updateFlagSet(theGame, true);
+                gameUpdateFlagSet(theGame, true);
                 break;
             case SDLK_i:
                 //Testing
                 playerAddLives(player, id, 1);
                 playerSetAlive(player, id);
                 playerSetInvulnerability(player, id, false);
-                updateFlagSet(theGame, true);
+                gameUpdateFlagSet(theGame, true);
                 break;
             case SDLK_p:                                            /*!!! P = RESET-BUTTON!!! (only works when testing alone I think)*/
                 //Testing
@@ -232,7 +232,6 @@ PRIVATE void showScoreboard(Game theGame, Player player[], bool *quitGame)
     int width = WIDTH / 3;
     int height = WIDTH / 11.7;
     int y1 = HEIGHT/7, y2 = HEIGHT / 6, y3 = HEIGHT / 5, y4 = HEIGHT / 4, y5 = HEIGHT / 3, y6 = HEIGHT / 2, y7 = HEIGHT;
-    int id = getLocalID(theGame);
     bool loop = true;
     int status;
     SDL_Color black = {0, 0, 0, 0};
@@ -353,9 +352,9 @@ PRIVATE void process(Game theGame, Sounds s, Player *player)
                 if(WallGetDestroyedWall(theGame->wall[j]) == 0){
                     WallSetDestroyedWall(&theGame->wall[j], testCollisionWithDestroyableWalls(theGame, player, j, i));
                     if(WallGetDestroyedWall(theGame->wall[j])){ //If wall is destroyed...
-                        if(returnarray[i] == getLocalID(theGame)){
+                        if(returnarray[i] == gameGetLocalID(theGame)){
                             playerAddScore(player, theGame->bombs[i].whoPlacedID, 1);
-                            updateFlagSet(theGame, true);
+                            gameUpdateFlagSet(theGame, true);
                             theGame->powerups[currentPowerup] = rollForPowerup(&currentPowerup, currentPowerup, theGame->wall[j].x, theGame->wall[j].y);
                             theGame->powerupsNotSent++;       
                         }
@@ -401,17 +400,22 @@ int destroyGame(Game theGame)
     return 0;
 }
 
-void updateFlagSet(Game theGame, bool cond)
+void gameUpdateFlagSet(Game theGame, bool cond)
 {
     theGame->updateFlag = cond;
 }
 
-bool updateFlagGet(Game theGame)
+bool gameUpdateFlagGet(Game theGame)
 {
     return theGame->updateFlag;
 }
 
-void setLocalID(Game theGame, int id)
+int gameGetLocalID(Game theGame)
+{
+    return theGame->playerIDLocal;
+}
+
+void gameSetLocalID(Game theGame, int id)
 {
     theGame->playerIDLocal = id;
 }

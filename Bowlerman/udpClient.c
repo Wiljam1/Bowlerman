@@ -20,12 +20,12 @@ PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
     static int doPlaceBomb=0;
     static int flagSendBomb[5]={0};
 
-    for(int i=0; i<MAXAMMOUNTOFBOMBS; i++)   //for-loop för vi vill kunna släppa upp till 5 bomber
+    for(int i=0; i<MAXAMMOUNTOFBOMBS; i++)
     {
         if(theGame->bombs[playerID+i*4].isPlaced==1){  
-            if(flagSendBomb[i]==0)    //vi ser till att skicka 1 packets, för om vi skickar för mycket blir det buggigt pga delay med UDP i slutet
+            //Use flag to not send too many packets and cause lag with UDP
+            if(flagSendBomb[i]==0)  
             {
-                printf("flagSendBomb[%d] set to true!\n", i);
                 flagSendBomb[i]=1;
                 doPlaceBomb=1;
             }
@@ -53,16 +53,14 @@ PRIVATE void sendBomb(Game theGame, UDPData *udpData, UDPStruct *udpValues)
         {
             doPlaceBomb=0;
             udpData->placeBomb=1;
-            //printf("Placebomb set to true!\n");
         }
     }
 }
 
-
 //Send Data
 PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *flagPlayerNowStandingStill, int *flagSendOnStartup, Player player[])
 {
-    int playerID = getLocalID(theGame);
+    int playerID = gameGetLocalID(theGame);
     int x_posOld = playerGetOldXpos(player, playerID);
     int y_posOld = playerGetOldYPos(player, playerID);
     float x_pos = playerGetXPosition(player, playerID);
@@ -114,6 +112,7 @@ PRIVATE void sendUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, int *f
         }
     }
 }
+
 //Recieve Data
 PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, Player player[])
 {
@@ -140,7 +139,7 @@ PRIVATE void receiveUDP(Game theGame,UDPData *udpData, UDPStruct *udpValues, Pla
         playerSetScore(player, playerID, udpData->score[playerID]);
         for(int i = 0; i < 4; i++){
             if(udpData->score[i] != oldScore[i]){
-                updateFlagSet(theGame, true);
+                gameUpdateFlagSet(theGame, true);
                 oldScore[i] = UDPGetScore(udpData, i);
             }    
         }
@@ -152,7 +151,7 @@ PUBLIC void manageUDP(Game theGame, UDPData *udpData, UDPStruct *udpValues, Play
     static int flagPlayerNowStandingStill=0;
     static int flagPlayerHasWalked=0;
     
-    int playerID = getLocalID(theGame);
+    int playerID = gameGetLocalID(theGame);
     playerSetMoveDirection(player, playerID, playerGetMoveDirection(player, playerID));
 
     static char moveDirectionLocal = '0';
@@ -230,7 +229,7 @@ PUBLIC void getPlayerIDviaUDP(Game theGame, UDPData *udpData, UDPStruct *udpValu
     while (!SDLNet_UDP_Recv(udpValues->sd, udpValues->p2))
         ; // spin-lock tills received info from UDP-server
     memcpy(udpData, (char *)udpValues->p2->data, sizeof(UDPData));
-    setLocalID(theGame, udpData->playerID);
+    gameSetLocalID(theGame, udpData->playerID);
     printf("Player ID: %d\n", theGame->playerIDLocal);
 }
 
