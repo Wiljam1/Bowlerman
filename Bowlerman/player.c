@@ -255,9 +255,9 @@ PUBLIC void playerSetPlayerCount(Player *p, int n, int id)
     p[id]->noOfPlayers = n;
 }
 
-PUBLIC int playerGetPlayerCount(Player *p, int id)
+PUBLIC int playerGetPlayerCount(Player *p)
 {
-    return p[id]->noOfPlayers;
+    return p[0]->noOfPlayers;
 }
 
 PUBLIC void playerSetID(Player p[], int id)
@@ -402,27 +402,27 @@ void playerAddScore(Player p[], int id, int score)
 
 void playerDeathTimer(Game theGame, Player player[])
 {
-        for (int i = 0; i < playerGetPlayerCount(player, i); i++)
+    for (int i = 0; i < playerGetPlayerCount(player); i++)
+    {
+        if (gameGetInvulFlag(theGame, i))
         {
-            if (gameGetInvulFlag(theGame, i))
-            {
-                printf("Player %d invulnerability is: %s\n", i, playerGetIsInvulnerable(player, i) ? "On" : "Off");
-                SDL_TimerID timerID = SDL_AddTimer(INVULNERABILITYTIME, pDeathCallback, player); // Funktionen körs efter antal ms som INVULTIME är satt till (ny tråd)
-                if (!timerID) {
-                    SDL_RemoveTimer(timerID);
-                    printf("Timer failed\n");
-                }
-                else {
-                    printf("Timer id for player %d: %d\n", i, timerID);
-                }
-                gameSetInvulFlag(theGame, i, false);
+            printf("Player %d invulnerability is: %s\n", i, playerGetIsInvulnerable(player, i) ? "On" : "Off");
+            SDL_TimerID timerID = SDL_AddTimer(INVULNERABILITYTIME, pDeathCallback, player); // Funktionen körs efter antal ms som INVULTIME är satt till (ny tråd)
+            if (!timerID) {
+                SDL_RemoveTimer(timerID);
+                printf("Timer failed\n");
             }
+            else {
+                printf("Timer id for player %d: %d\n", i, timerID);
+            }
+            gameSetInvulFlag(theGame, i, false);
         }
+    }
 }
 
 Uint32 pDeathCallback(Uint32 interval, Player player[])
 {
-    for (int i = 0; i < playerGetPlayerCount(player, i); i++)
+    for (int i = 0; i < playerGetPlayerCount(player); i++)
     {
         if(playerGetIsInvulnerable(player, i) == true)
         {
@@ -529,25 +529,3 @@ PlayerSprites GetPlayerSprite()
     p.BowlerManHori[7].y = 0;
     return p;
 }
-
-// REplaced by different movement-implementation
-
-// PUBLIC void determinePlayerVelocity(Player p)
-// {
-//     p[id]->xVel=0;
-//     p[id]->yVel=0;
-//     if(p[id]->up && !p[id]->down) p[id]->yVel = -p[id]->speed;
-//     if(p[id]->down && !p[id]->up) p[id]->yVel = p[id]->speed;
-//     if(p[id]->left && !p[id]->right) p[id]->xVel = -p[id]->speed;
-//     if(p[id]->right && !p[id]->left) p[id]->xVel = p[id]->speed;
-// }
-// PUBLIC void updatePlayerClientPosition(Player p)
-// {
-//     p[id]->xPos += p[id]->xVel;
-//     p[id]->yPos += p[id]->yVel;
-// }
-
-// PUBLIC void destroyPlayer(Player player)
-// {
-
-// }

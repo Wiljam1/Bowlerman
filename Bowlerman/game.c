@@ -216,12 +216,12 @@ void gameUpdate(Game theGame)
 PRIVATE void checkGameOver(Game theGame, Player player[], bool *quitGame)
 {
     int totallyDeadPlayers = 0;
-    for(int i = 0; i < playerGetPlayerCount(player, 0); i++){  
+    for(int i = 0; i < playerGetPlayerCount(player); i++){  
         if(playerGetNoOfLives(player, i) <= 0){ 
             totallyDeadPlayers++;
         }
     }
-    if(totallyDeadPlayers >= (playerGetPlayerCount(player, 0)-1) && playerGetPlayerCount(player, 0) != 1){ 
+    if(totallyDeadPlayers >= (playerGetPlayerCount(player)-1) && playerGetPlayerCount(player) != 1){ 
         showScoreboard(theGame, player, quitGame);
     }
 }

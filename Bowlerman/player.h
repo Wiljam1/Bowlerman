@@ -103,7 +103,7 @@ void updatePlayerYPosition(Player p[], int id, double velY);
 /*Set amount of players from the player amount variable*/
 void playerSetPlayerCount(Player *p, int n, int id);
 /*Get amount of players from the player amount variable*/
-int playerGetPlayerCount(Player *p, int id);
+int playerGetPlayerCount(Player *p);
 /*Start the timer after a player has died*/
 void playerDeathTimer(Game theGame, Player p[]);
 /*Set neccesary flags after a players death*/
